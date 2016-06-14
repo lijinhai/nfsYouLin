@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>floorB1-2</key>
+	<string>B1栋2单元</string>
+	<key>floorB1-1</key>
+	<string>B1栋1单元</string>
+	<key>floorA2-2</key>
+	<string>A2栋2单元</string>
+	<key>floorA2-1</key>
+	<string>A2栋1单元</string>
+	<key>floorA1-2</key>
+	<string>A1栋2单元</string>
+	<key>floorA1-1</key>
+	<string>A1栋1单元</string>
+</dict>
+</plist>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>doorplate1</key>
+	<string>0101</string>
+	<key>doorplate2</key>
+	<string>0102</string>
+	<key>doorplate3</key>
+	<string>0201</string>
+	<key>doorplate4</key>
+	<string>0202</string>
+	<key>doorplate5</key>
+	<string>0301</string>
+	<key>doorplate6</key>
+	<string>0302</string>
+</dict>
+</plist>
