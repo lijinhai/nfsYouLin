@@ -14,6 +14,7 @@
     NSMutableArray *dataSource;
     
 }
+@property(nonatomic,retain) NSString *addressFlag;
 @property (nonatomic, strong) UIView *innerView;
 @property (nonatomic, weak)UIViewController *parentVC;
 @property (nonatomic ,readwrite) NSInteger celltag;

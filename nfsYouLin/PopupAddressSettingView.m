@@ -13,6 +13,7 @@
 #import "familyAddressViewController.h"
 #import "myCommunityViewController.h"
 #import "FMDB.h"
+#import "MBProgressHUD.h"
 #define UIColorFromRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 @implementation PopupAddressSettingView{
     
@@ -27,7 +28,7 @@
 
 - (id)initWithFrame:(CGRect)frame clickFieldValue:(NSInteger) flagValue
 {
-    self = [super initWithFrame:frame];
+   self = [super initWithFrame:frame];
     if(flagValue==2)//审核失败
     {
       [dataSource removeAllObjects];
@@ -43,7 +44,7 @@
  
      [dataSource removeAllObjects];
       dataSource=[NSMutableArray arrayWithObjects:@"修改地址",@"删除地址",@"取消",nil];
-        addressSettingTable = [[UITableView alloc] initWithFrame:frame];
+      addressSettingTable = [[UITableView alloc] initWithFrame:frame];
     
     }else if(flagValue==0){//等待审核
         
@@ -59,11 +60,7 @@
     [addressSettingTable setSeparatorInset:UIEdgeInsetsZero];
     [addressSettingTable setLayoutMargins:UIEdgeInsetsZero];
     [self addSubview:addressSettingTable];
-    /*跳转至填写家庭住址界面*/
-    UIStoryboard* storyBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-    familyAddressController = [storyBoard instantiateViewControllerWithIdentifier:@"familyAddressController"];
-
-    return self;
+     return self;
 }
 
 
@@ -71,12 +68,18 @@
     return [[PopupAddressSettingView alloc]initWithFrame:frame clickFieldValue:flagValue];
 }
 
--(void) dismissMyTable{
+-(void) updateSetMyTable{
     
-    [addressInfomationController.addressTableView reloadData];
+     self.addressFlag=@"justnow";
+    //[addressInfomationController.addressTableView reloadData];
     [_parentVC lew_dismissPopupViewWithanimation:[LewPopupViewAnimationRight new]];
 }
 
+-(void)updateModifyMyTable{
+
+    [addressInfomationController.addressTableView reloadData];
+    [_parentVC lew_dismissPopupViewWithanimation:[LewPopupViewAnimationRight new]];
+}
 
 //指定有多少个分区(Section)，默认为1
 
@@ -140,7 +143,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-    navigationController = (UINavigationController *)self.window.rootViewController;
+
 
     /*通过RGB来定义背景色*/
     UIColor *ycolor = UIColorFromRGB(0xFFBA02);
@@ -151,16 +154,25 @@
      NSLog(@"celltag is  %ld",self.celltag);
     if([cell.textLabel.text isEqualToString:@"设为当前地址"]){
         
+        
         [self setCurrentAddress:self.celltag];
+        [self updateSetMyTable];
     
     }else if([cell.textLabel.text isEqualToString:@"修改地址"]){
+        /*跳转至填写家庭住址界面*/
+        UIStoryboard* storyBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+        familyAddressController = [storyBoard instantiateViewControllerWithIdentifier:@"familyAddressController"];
         
+        navigationController = (UINavigationController *)self.window.rootViewController;
         naviItem = [[UIBarButtonItem alloc] initWithTitle:@"填写家庭住址" style:UIBarButtonItemStylePlain target:nil action:nil];
-        navigationController.navigationItem.title=@"填写家庭住址";
-        //[navigationController.navigationItem setBackBarButtonItem:naviItem];
         familyAddressController.changeAddressArry=[self changeFamliyAddress:self.celltag];
+        if(familyAddressController.changeAddressArry!=NULL)
+        {
         [familyAddressController.myfamilyAddressTableView reloadData];
+        [navigationController.navigationItem setBackBarButtonItem:naviItem];
         [navigationController pushViewController:familyAddressController animated:YES];
+        }
+        [self updateModifyMyTable];
         
     }else if([cell.textLabel.text isEqualToString:@"删除地址"]){
         
@@ -175,12 +187,51 @@
         [self cancelAddressOprTable];
     }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    [self dismissMyTable];
+    
+}
+- (void)textToast:(NSString *)tips {
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.window  animated:YES];
+    
+    // Set the annular determinate mode to show task progress.navigationController.view
+    hud.mode = MBProgressHUDModeText;
+    hud.bezelView.backgroundColor=[UIColor blackColor];
+    hud.bezelView.alpha = 1;
+    hud.minSize=CGSizeMake(50, 50);
+    hud.label.text = NSLocalizedString(tips, @"HUD message title");
+    
+    hud.label.textColor = [UIColor whiteColor];
+    hud.label.font= [UIFont systemFontOfSize:15];
+    // Move to bottm center.
+    hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
+    
+    [hud hideAnimated:YES afterDelay:0.8f];
 }
 
 /*设置当前地址*/
 - (void) setCurrentAddress:(NSInteger) _id
 {
+    
+    NSArray* paths = NSSearchPathForDirectoriesInDomains( NSDocumentDirectory ,  NSUserDomainMask ,  YES );
+    NSString* documentPath = [ paths objectAtIndex: 0 ];
+    NSString* dbPath = [ documentPath stringByAppendingPathComponent: @"neighbors.db" ];
+    FMDatabase* database = [ FMDatabase databaseWithPath: dbPath ];
+    if ( ![ database open ] )
+    {
+        NSLog(@"打开数据库失败");
+    }
+    // 查找表
+    NSString *updateSQL1 = [[NSString alloc] initWithFormat:@"UPDATE table_all_family SET primary_flag = '%d' where _id = '%ld'", 1,_id];
+    NSString *updateSQL2 = [[NSString alloc] initWithFormat:@"UPDATE table_all_family SET primary_flag = '%d' where _id != '%ld'", 0,_id];
+    [database executeUpdate:updateSQL2];
+    BOOL res = [database executeUpdate:updateSQL1];
+    // 逐行读取数据
+    if (!res) {
+        NSLog(@"error when update db table");
+    } else {
+        NSLog(@"success to update db table");
+    }
+    [ database close ];
+
     
 }
 
@@ -208,7 +259,13 @@
         NSString* addressCommunity = [ resultSet stringForColumn: @"family_community" ];
         NSString* addressPortrait=[ resultSet stringForColumn: @"family_portrait" ];
         NSString* addressAptNum=[ resultSet stringForColumn: @"family_apt_num" ];
+        NSInteger entityTypeFlag=[ resultSet intForColumn: @"entity_type" ];
+        NSLog(@"entity_type is %ld",entityTypeFlag);
+        if(entityTypeFlag==1){
         
+            [self textToast:@"审核通过的地址不能修改" ];
+             return NULL;
+        }
         NSMutableDictionary *dic=[[NSMutableDictionary alloc]init];
         
         [dic setValue:addressCity forKey:@"keycity"];
@@ -240,6 +297,6 @@
 /*取消*/
 -(void) cancelAddressOprTable{
 
-    [self dismissMyTable];
+    [self updateModifyMyTable];
 }
 @end

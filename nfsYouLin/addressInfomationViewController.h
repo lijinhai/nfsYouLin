@@ -10,7 +10,6 @@
 @interface addressInfomationViewController :UIViewController<UITableViewDelegate,UITableViewDataSource>
 @property (strong, nonatomic) UITableView *addressTableView;
 @property (strong, nonatomic) NSArray *addressArray;
-
 @property (weak, nonatomic) IBOutlet UILabel *labelInfo;
 @property (weak, nonatomic) IBOutlet UIButton *writeAddressBtn;
 @property (weak, nonatomic) IBOutlet UILabel *labelTip;

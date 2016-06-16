@@ -211,7 +211,6 @@
 		8F648DEB1D005D1500E3B155 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F648DEA1D005D1500E3B155 /* ImageIO.framework */; };
 		8F64912C1D05435100E3B155 /* NDetailTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F64912B1D05435100E3B155 /* NDetailTableViewController.m */; };
 		8F6491321D0653CB00E3B155 /* NDetailTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F6491311D0653CB00E3B155 /* NDetailTableViewCell.m */; };
-		8F6491781D066B0400E3B155 /* FirstTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F6491771D066B0400E3B155 /* FirstTabBarController.m */; };
 		8FF22DA41CE1733800EAE9BA /* forgetViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FF22DA31CE1733800EAE9BA /* forgetViewController.m */; };
 		AF1DBD7F1CEAEA5100557E43 /* inputRegisterInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AF1DBD7E1CEAEA5100557E43 /* inputRegisterInfoViewController.m */; };
 		AF1DBD941CED4D8500557E43 /* chooseCityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AF1DBD931CED4D8500557E43 /* chooseCityViewController.m */; };
@@ -219,6 +218,11 @@
 		AF1DBD9A1CF1DC5600557E43 /* familyAddressViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AF1DBD991CF1DC5600557E43 /* familyAddressViewController.m */; };
 		AF4B4F1A1D07AAF60039BE42 /* PopupAddressSettingView.m in Sources */ = {isa = PBXBuildFile; fileRef = AF4B4F191D07AAF60039BE42 /* PopupAddressSettingView.m */; };
 		AF4B4F1D1D07ACF90039BE42 /* LewPopupViewAnimationRight.m in Sources */ = {isa = PBXBuildFile; fileRef = AF4B4F1C1D07ACF90039BE42 /* LewPopupViewAnimationRight.m */; };
+		AF5293C81D1295DF00503975 /* ChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AF5293C71D1295DF00503975 /* ChatViewController.m */; };
+		AF5293D31D1297DC00503975 /* FirstTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = AF5293D21D1297DC00503975 /* FirstTabBarController.m */; };
+		AF5293D61D12982800503975 /* NewTopicViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AF5293D51D12982800503975 /* NewTopicViewController.m */; };
+		AF5293DC1D12985400503975 /* ListTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = AF5293D91D12985400503975 /* ListTableView.m */; };
+		AF5293DD1D12985400503975 /* BackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = AF5293DB1D12985400503975 /* BackgroundView.m */; };
 		AF54103B1CE1BE850037673F /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = AF54103A1CE1BE850037673F /* MBProgressHUD.m */; };
 		AF54103E1CE2BF960037673F /* registerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AF54103D1CE2BF960037673F /* registerViewController.m */; };
 		AF5410441CE3072E0037673F /* redrawTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = AF5410431CE3072E0037673F /* redrawTextField.m */; };
@@ -666,8 +670,6 @@
 		8F6491301D0653CB00E3B155 /* NDetailTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NDetailTableViewCell.h; sourceTree = "<group>"; };
 		8F6491311D0653CB00E3B155 /* NDetailTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NDetailTableViewCell.m; sourceTree = "<group>"; };
 		8F6491361D065B9E00E3B155 /* NCellDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NCellDelegate.h; sourceTree = "<group>"; };
-		8F6491761D066B0400E3B155 /* FirstTabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FirstTabBarController.h; sourceTree = "<group>"; };
-		8F6491771D066B0400E3B155 /* FirstTabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FirstTabBarController.m; sourceTree = "<group>"; };
 		8FF22DA21CE1733800EAE9BA /* forgetViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = forgetViewController.h; sourceTree = "<group>"; };
 		8FF22DA31CE1733800EAE9BA /* forgetViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = forgetViewController.m; sourceTree = "<group>"; };
 		AF1DBD7D1CEAEA5100557E43 /* inputRegisterInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = inputRegisterInfoViewController.h; sourceTree = "<group>"; };
@@ -682,6 +684,16 @@
 		AF4B4F191D07AAF60039BE42 /* PopupAddressSettingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PopupAddressSettingView.m; sourceTree = "<group>"; };
 		AF4B4F1B1D07ACF90039BE42 /* LewPopupViewAnimationRight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LewPopupViewAnimationRight.h; sourceTree = "<group>"; };
 		AF4B4F1C1D07ACF90039BE42 /* LewPopupViewAnimationRight.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LewPopupViewAnimationRight.m; sourceTree = "<group>"; };
+		AF5293C61D1295DF00503975 /* ChatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ChatViewController.h; path = ../../../../Volumes/UUI/nfsYouLin1/ChatView/ChatViewController.h; sourceTree = "<group>"; };
+		AF5293C71D1295DF00503975 /* ChatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ChatViewController.m; path = ../../../../Volumes/UUI/nfsYouLin1/ChatView/ChatViewController.m; sourceTree = "<group>"; };
+		AF5293D21D1297DC00503975 /* FirstTabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FirstTabBarController.m; sourceTree = "<group>"; };
+		AF5293D41D12982000503975 /* NewTopicViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NewTopicViewController.h; sourceTree = "<group>"; };
+		AF5293D51D12982800503975 /* NewTopicViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewTopicViewController.m; sourceTree = "<group>"; };
+		AF5293D71D12982E00503975 /* FirstTabBarController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FirstTabBarController.h; sourceTree = "<group>"; };
+		AF5293D81D12985400503975 /* ListTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ListTableView.h; sourceTree = "<group>"; };
+		AF5293D91D12985400503975 /* ListTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ListTableView.m; sourceTree = "<group>"; };
+		AF5293DA1D12985400503975 /* BackgroundView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BackgroundView.h; sourceTree = "<group>"; };
+		AF5293DB1D12985400503975 /* BackgroundView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BackgroundView.m; sourceTree = "<group>"; };
 		AF5410391CE1BE850037673F /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
 		AF54103A1CE1BE850037673F /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
 		AF54103C1CE2BF960037673F /* registerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = registerViewController.h; sourceTree = "<group>"; };
@@ -1640,6 +1652,26 @@
 			name = youLinNeighborModule;
 			sourceTree = "<group>";
 		};
+		AF5293C51D12925200503975 /* ChatView */ = {
+			isa = PBXGroup;
+			children = (
+				AF5293C61D1295DF00503975 /* ChatViewController.h */,
+				AF5293C71D1295DF00503975 /* ChatViewController.m */,
+			);
+			name = ChatView;
+			sourceTree = "<group>";
+		};
+		AF5293C91D12964E00503975 /* Gloable */ = {
+			isa = PBXGroup;
+			children = (
+				AF5293D71D12982E00503975 /* FirstTabBarController.h */,
+				AF5293D41D12982000503975 /* NewTopicViewController.h */,
+				AF5293D51D12982800503975 /* NewTopicViewController.m */,
+				AF5293D21D1297DC00503975 /* FirstTabBarController.m */,
+			);
+			name = Gloable;
+			sourceTree = "<group>";
+		};
 		AF7850071CFFC587009F6982 /* FMDB */ = {
 			isa = PBXGroup;
 			children = (
@@ -1661,6 +1693,7 @@
 		AFCE1F881CDAD1B20085F10F = {
 			isa = PBXGroup;
 			children = (
+				AF5293C51D12925200503975 /* ChatView */,
 				8F648DEA1D005D1500E3B155 /* ImageIO.framework */,
 				8F648D591D00549E00E3B155 /* Resource */,
 				8F648D571D00548C00E3B155 /* EaseUIResource.bundle */,
@@ -1697,11 +1730,10 @@
 		AFCE1F931CDAD1B20085F10F /* nfsYouLin */ = {
 			isa = PBXGroup;
 			children = (
+				AF5293C91D12964E00503975 /* Gloable */,
 				8F6491361D065B9E00E3B155 /* NCellDelegate.h */,
 				AFCE1F971CDAD1B20085F10F /* AppDelegate.h */,
 				AFCE1F981CDAD1B20085F10F /* AppDelegate.m */,
-				8F6491761D066B0400E3B155 /* FirstTabBarController.h */,
-				8F6491771D066B0400E3B155 /* FirstTabBarController.m */,
 				AFCE1F9A1CDAD1B20085F10F /* ViewController.h */,
 				AFCE1F9B1CDAD1B20085F10F /* ViewController.m */,
 				AFE569451CFE652A00C0F745 /* HeaderFile.h */,
@@ -1788,6 +1820,10 @@
 		AFE569351CFE642300C0F745 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				AF5293D81D12985400503975 /* ListTableView.h */,
+				AF5293D91D12985400503975 /* ListTableView.m */,
+				AF5293DA1D12985400503975 /* BackgroundView.h */,
+				AF5293DB1D12985400503975 /* BackgroundView.m */,
 				AFE569361CFE643C00C0F745 /* ShowImageView.h */,
 				AFE569371CFE643C00C0F745 /* ShowImageView.m */,
 			);
@@ -2039,6 +2075,7 @@
 				8F648CE81D00547900E3B155 /* EMCDDeviceManagerBase.m in Sources */,
 				8F648D2E1D00547A00E3B155 /* NSDate+Category.m in Sources */,
 				8F648D231D00547A00E3B155 /* PSTCollectionViewLayout.m in Sources */,
+				AF5293DC1D12985400503975 /* ListTableView.m in Sources */,
 				8F648D4D1D00547A00E3B155 /* EaseBubbleView.m in Sources */,
 				8F648D021D00547A00E3B155 /* UIView+MJExtension.m in Sources */,
 				AFE569331CFE62F500C0F745 /* NeighborData.m in Sources */,
@@ -2046,6 +2083,7 @@
 				8F648D561D00547A00E3B155 /* EaseConversationCell.m in Sources */,
 				AF7850131CFFC5C8009F6982 /* FMDatabase.m in Sources */,
 				AFE5693D1CFE649200C0F745 /* iViewController.m in Sources */,
+				AF5293DD1D12985400503975 /* BackgroundView.m in Sources */,
 				8F648D241D00547A00E3B155 /* PSTCollectionViewUpdateItem.m in Sources */,
 				8F648D361D00547A00E3B155 /* EaseEmoji.m in Sources */,
 				8F648D481D00547A00E3B155 /* EaseBubbleView+Image.m in Sources */,
@@ -2064,8 +2102,10 @@
 				8F648D341D00547A00E3B155 /* EaseConvertToCommonEmoticonsHelper.m in Sources */,
 				8F648D2D1D00547A00E3B155 /* EaseUserModel.m in Sources */,
 				8F648D4E1D00547A00E3B155 /* EaseChatToolbar.m in Sources */,
+				AF5293D61D12982800503975 /* NewTopicViewController.m in Sources */,
 				8F648D391D00547A00E3B155 /* EaseEmotionManager.m in Sources */,
 				8F648D1B1D00547A00E3B155 /* UIView+EMWebCacheOperation.m in Sources */,
+				AF5293D31D1297DC00503975 /* FirstTabBarController.m in Sources */,
 				8F648D4F1D00547A00E3B155 /* EaseChatToolbarItem.m in Sources */,
 				8F648D3B1D00547A00E3B155 /* EaseConversationListViewController.m in Sources */,
 				8F648D2B1D00547A00E3B155 /* EaseConversationModel.m in Sources */,
@@ -2102,7 +2142,6 @@
 				8F648D4C1D00547A00E3B155 /* EaseBubbleView+Voice.m in Sources */,
 				8F648D2A1D00547A00E3B155 /* EaseSDKHelper.m in Sources */,
 				8F648D261D00547A00E3B155 /* PSTGridLayoutItem.m in Sources */,
-				8F6491781D066B0400E3B155 /* FirstTabBarController.m in Sources */,
 				8F648CEA1D00547900E3B155 /* wav.mm in Sources */,
 				8F648D381D00547A00E3B155 /* EaseEmotionEscape.m in Sources */,
 				8F6491321D0653CB00E3B155 /* NDetailTableViewCell.m in Sources */,
@@ -2128,6 +2167,7 @@
 				8F648D2C1D00547A00E3B155 /* EaseMessageModel.m in Sources */,
 				AF54103B1CE1BE850037673F /* MBProgressHUD.m in Sources */,
 				AF7850161CFFC5C8009F6982 /* FMDatabaseQueue.m in Sources */,
+				AF5293C81D1295DF00503975 /* ChatViewController.m in Sources */,
 				AFE569321CFE62F500C0F745 /* NeighborTableViewCell.m in Sources */,
 				8F648D111D00547A00E3B155 /* EMSDWebImageManager.m in Sources */,
 				8F648CE21D00547900E3B155 /* EMAudioPlayerUtil.m in Sources */,

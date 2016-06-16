@@ -95,10 +95,10 @@
     }
 #pragma mark 点击行
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    UIBarButtonItem* neighborItem = [[UIBarButtonItem alloc] initWithTitle:@"填写家庭住址" style:UIBarButtonItemStylePlain target:nil action:nil];
+    UIBarButtonItem* writeFamliyItem = [[UIBarButtonItem alloc] initWithTitle:@"填写家庭住址" style:UIBarButtonItemStylePlain target:nil action:nil];
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     familyAddressController.communityNameValue=cell.textLabel.text;
-    [self.navigationItem setBackBarButtonItem:neighborItem];
+    [self.navigationItem setBackBarButtonItem:writeFamliyItem];
     NSInteger rowInSection = indexPath.row;
     NSLog(@"row %ld",rowInSection);
     NSLog(@"communityNameValue %@",familyAddressController.communityNameValue);

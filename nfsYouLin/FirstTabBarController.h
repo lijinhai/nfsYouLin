@@ -8,6 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
-@interface FirstTabBarController : UITabBarController
+@interface FirstTabBarController : UITabBarController 
+- (IBAction)noticeBar:(id)sender;
+
+- (IBAction)addBar:(id)sender;
+
+- (IBAction)searchBar:(id)sender;
+
+- (void) setTableViewHidden;
 
 @end

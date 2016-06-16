@@ -33,6 +33,7 @@
     NSString *flag1;
     NSString *successFlag;
     UIView *rightVeiw;
+    UIView *rightVeiw2;
 }
 
 - (void)viewDidLoad {
@@ -69,6 +70,7 @@
     UIImage *backButtonImage = [[UIImage imageNamed:@"mm_title_back.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 25, 0,0)];
     [[UIBarButtonItem appearance] setBackButtonBackgroundImage:backButtonImage forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
     [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
+    
     UIBarButtonItem *barrightBtn=[[UIBarButtonItem alloc]initWithTitle:@"完成" style:UIBarButtonItemStylePlain target:self action:@selector(selectCompleteAction)];
     self.navigationItem.rightBarButtonItem=barrightBtn;
     self.navigationItem.title=@"";
@@ -102,15 +104,15 @@
 
     UIBarButtonItem* neighborItem = [[UIBarButtonItem alloc] initWithTitle:@"地址信息" style:UIBarButtonItemStylePlain target:nil action:nil];
     [self.navigationItem setBackBarButtonItem:neighborItem];
-    //self.phoneTextField.rightView = rightVeiw;
-    //self.phoneTextField.rightViewMode = UITextFieldViewModeWhileEditing;
+    UITextField *doorPlateText = (UITextField *)[self.view viewWithTag:1002];
+    UITextField *floorText = (UITextField *)[self.view viewWithTag:1001];
     if([communityLabelView.text isEqualToString:@""]||[communityLabelView.text isEqualToString:@"未设置"])
     {
     
         [self textToast:@"请设置所在小区"];
         return;
     }
-    if([_floorNumView.text isEqualToString:@""])
+    if([floorText.text isEqualToString:@""])//_floorNumView.text
     {
         
         flag1=@"tag1001";
@@ -119,7 +121,7 @@
         [self textToast:@"请设置所在单元"];
         return;
     }
-    if([doorPlateNumView.text isEqualToString:@""])
+    if([doorPlateText.text isEqualToString:@""])//doorPlateNumView.text
     {
         
         flag1=@"tag1002";
@@ -154,11 +156,18 @@
                              TableSampleIdentifier];
     /*设置textField tips 图片*/
     rightVeiw = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 30, 20)];
+    rightVeiw2 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 30, 20)];
     UIImageView* xImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"tanhao"]];
+    UIImageView* x2ImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"tanhao"]];
     rightVeiw.tag=119;
+    rightVeiw2.tag=120;
     xImageView.userInteractionEnabled = YES;
     UITapGestureRecognizer *xImageViewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(xImageViewClick)];
     [xImageView addGestureRecognizer:xImageViewTap];
+    
+    x2ImageView.userInteractionEnabled = YES;
+    UITapGestureRecognizer *x2ImageViewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(xImageViewClick)];
+    [x2ImageView addGestureRecognizer:x2ImageViewTap];
     
     if (cell == nil) {
         cell = [[UITableViewCell alloc]
@@ -283,26 +292,34 @@
                 flag1=nil;
             
         }else if(self.floorNumValue==NULL&&rowNumber==2&&[_floorNumView.text length] == 0&&[flag1 isEqualToString:@"tag1001"]){
-                NSLog(@"floorNumValue one once");
                 UILabel *floorLabel = (UILabel *)[cell viewWithTag:30001];
-                if(floorLabel==nil)
+                UITextField *floorText = (UITextField *)[cell viewWithTag:1001];
+            
+                if(floorLabel==NULL&&[floorText.text isEqualToString:@""])
                 {
-                    
+                  NSLog(@" what is %@",floorText.text);
                  [_floorNumView addSubview:floorLabelView];
                  [cell.contentView addSubview:_floorNumView];
                 }
                 if([successFlag isEqualToString:@"floorView"])
                 {
                     NSLog(@"floorView");
+                    UIView *viewTanHao = (UIView *)[cell viewWithTag:119];
+                    if(viewTanHao==NULL)
+                    {
                     xImageView.frame = CGRectMake(307,22,15,15);
                     [rightVeiw addSubview:xImageView];
                     [cell.contentView addSubview:rightVeiw];
+                    }
                     successFlag=@"";
                 }
         }
     
     /*相关限制条件待补充*/
+ 
     self.floorNumValue = [defaults valueForKey:@"floorKey"];
+    
+    UITextField *doorPlateText = (UITextField *)[cell viewWithTag:1002];
     if(self.floorNumValue!=NULL&&rowNumber==3&&[flag1 isEqualToString:@"tag1002"])
     {
         NSLog(@"new begin1");
@@ -311,21 +328,23 @@
         doorPlateNumView.text=self.floorNumValue;
         doorPlateNumView.textColor=[UIColor blackColor];
         doorPlateNumView.font=[UIFont systemFontOfSize:15];
-        UIView *imageTanHao = (UIView *)[cell viewWithTag:119];
+        UIView *imageTanHao = (UIView *)[cell viewWithTag:120];
         [imageTanHao removeFromSuperview];
         [cell.contentView addSubview:doorPlateNumView];
         [defaults removeObjectForKey:@"floorKey"];
         
-    }else if(self.floorNumValue==NULL&&rowNumber==3&&[doorPlateNumView.text length] == 0){
+    }else if(self.floorNumValue==NULL&&rowNumber==3&&[doorPlateText.text length] == 0){
         NSLog(@"new begin2");
         if([successFlag isEqualToString:@"doorView"])
         {
             NSLog(@"doorView");
-            UITextField *doorPlateText = (UITextField *)[cell viewWithTag:1002];
-            [doorPlateText removeFromSuperview];
-            xImageView.frame = CGRectMake(307,24,15,15);
-            [rightVeiw addSubview:xImageView];
-            [cell.contentView addSubview:rightVeiw];
+            UIView *viewTanHao = (UIView *)[cell viewWithTag:120];
+            if(viewTanHao==NULL)
+            {
+            x2ImageView.frame = CGRectMake(307,24,15,15);
+            [rightVeiw2 addSubview:x2ImageView];
+            [cell.contentView addSubview:rightVeiw2];
+            }
             successFlag=@"";
         }
     }
@@ -333,7 +352,6 @@
    /*修改家庭住址时初始化*/
     if([_changeAddressArry count]!=0)
     {
-        //NSLog(@"I am a good boy");
         /*设置小区*/
         [communityLabelView setText:[[_changeAddressArry objectAtIndex:0]objectForKey:@"keycommunity"]];
         /*初始化楼栋号*/
@@ -358,11 +376,6 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     NSInteger rowInSection = indexPath.row;
     NSLog(@"row %ld",rowInSection);
-//    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-//    if((UILabel *)[cell viewWithTag:30001]==nil)
-//    {
-//        [_floorNumView addSubview:floorLabelView];
-//    }
 
     UIBarButtonItem* neighborCommunityItem = [[UIBarButtonItem alloc] initWithTitle:@"我的小区" style:UIBarButtonItemStylePlain target:nil action:nil];
     UIBarButtonItem* neighborCityItem = [[UIBarButtonItem alloc] initWithTitle:@"请选择城市" style:UIBarButtonItemStylePlain target:nil action:nil];
@@ -422,9 +435,9 @@
 - (BOOL)textFieldShouldBeginEditing:(UITextField *)textField{
     [_changeAddressArry removeAllObjects];
     if (textField.tag == 1001&&[communityLabelView.text compare:@"未设置" ]) {
-        if(rightVeiw!=nil)
+        UIView *imageTanHao = (UIView *)[self.myfamilyAddressTableView viewWithTag:119];
+        if(imageTanHao!=NULL)
         {
-            UIView *imageTanHao = (UIView *)[self.myfamilyAddressTableView viewWithTag:119];
             [imageTanHao removeFromSuperview];
         }
         NSLog(@"textFieldShouldBeginEditing1");
@@ -441,11 +454,11 @@
         return NO;
     }
     if (textField.tag == 1002&&[communityLabelView.text compare:@"未设置" ]) {
-        
-        if(rightVeiw!=nil)
+        UIView *imageTanHao2 = (UIView *)[self.myfamilyAddressTableView viewWithTag:120];
+        if(imageTanHao2!=NULL)
         {
-            UIView *imageTanHao = (UIView *)[self.myfamilyAddressTableView viewWithTag:119];
-            [imageTanHao removeFromSuperview];
+            
+            [imageTanHao2 removeFromSuperview];
         }
         PopupView *view = [PopupView defaultPopupView:1002];
         view.parentVC = self;

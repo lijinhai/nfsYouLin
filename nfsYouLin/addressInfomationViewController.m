@@ -20,6 +20,8 @@
     familyAddressViewController *jumpFamilyAddressController;
     NSMutableArray *_addressAndStatuArray;
     NSMutableArray *_saveAddressArray;
+    NSString *flag;
+    NSUInteger num;
     float tHeight;
 }
 
@@ -86,11 +88,11 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView
          cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    /*读取数据库，获取用户地址信息*/
-    _addressAndStatuArray=[self getAddressList];
-    static NSString *CellIdentifier = @"addressid";
+
     UIImageView* xImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"btn_xuanzhong_a"]];
+    xImageView.tag=521;
     /** NOTE: This method can return nil so you need to account for that in code */
+     static NSString *CellIdentifier = @"addressid";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     NSUInteger rowNumber=[indexPath row];
     UILabel *auditLabel=[[UILabel alloc] initWithFrame:CGRectMake(0, 5, 100, 32)];
@@ -100,6 +102,7 @@
     {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        /*地址表初始化*/
         if([[[_addressAndStatuArray objectAtIndex:rowNumber]objectForKey:@"keyaudit"] isEqualToString:@"0"])
         {
             auditLabel.text=@"【等待审核】";
@@ -115,11 +118,10 @@
             [cell.contentView addSubview:auditLabel];
             [self startAnimationIfNeeded:moveLable];
             
-            NSLog(@"saaaa %@",[[_addressAndStatuArray objectAtIndex:rowNumber]objectForKey:@"keyaddress"]);
-            
         }else if([[[_addressAndStatuArray objectAtIndex:rowNumber]objectForKey:@"keyaudit"] isEqualToString:@"1"]){
             
             if([[[_addressAndStatuArray objectAtIndex:rowNumber]objectForKey:@"keyprimary"] isEqualToString:@"1"]){
+                
                 cell.textLabel.font=[UIFont fontWithName:@"Verdana" size:15];
                 cell.textLabel.text=[[_addressAndStatuArray objectAtIndex:rowNumber]objectForKey:@"keyaddress"];
                 xImageView.frame = CGRectMake(375,14,16,16);
@@ -127,6 +129,7 @@
                 [cell.contentView addSubview:xImageView];
                 
             }else{
+                
                 cell.textLabel.font=[UIFont fontWithName:@"Verdana" size:15];
                 cell.textLabel.text=[[_addressAndStatuArray objectAtIndex:rowNumber]objectForKey:@"keyaddress"];
                 cell.contentView.tag=[[[_addressAndStatuArray objectAtIndex:rowNumber] objectForKey:@"key_id"] intValue];
@@ -134,7 +137,6 @@
             }
         }else if([[[_addressAndStatuArray objectAtIndex:rowNumber]objectForKey:@"keyaudit"] isEqualToString:@"2"]){
             
-            NSLog(@"sccc %@",[[_addressAndStatuArray objectAtIndex:rowNumber]objectForKey:@"keyaddress"]);
             auditLabel.text=@"【审核失败】";
             auditLabel.textColor=[UIColor redColor];
             auditLabel.font=[UIFont systemFontOfSize:15];
@@ -146,10 +148,70 @@
             [cell.contentView addSubview:moveLable];
             [cell.contentView addSubview:auditLabel];
             [self startAnimationIfNeeded:moveLable];
-
         }
 
     }
+        /*设置当前地址后更新地址表*/
+    //NSLog(@"come on %@",self.addressFlag);
+
+    if([flag isEqualToString:@"update" ]&&rowNumber==num){
+        
+        /*读取数据库，获取用户地址信息*/
+        _addressAndStatuArray=[self getAddressList];
+       
+        if([[[_addressAndStatuArray objectAtIndex:rowNumber]objectForKey:@"keyaudit"] isEqualToString:@"0"])
+        {
+
+            NSLog(@"【等待审核】");
+            UIImageView *selectedView = (UIImageView *)[cell viewWithTag:521];
+            NSLog(@"%@",selectedView);
+//            if(selectedView!=NULL)
+//            {
+//             [selectedView removeFromSuperview];
+//                
+//            }else{
+            
+                [selectedView removeFromSuperview];
+                xImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"btn_xuanzhong_a"]];
+                xImageView.tag=521;
+                xImageView.frame = CGRectMake(375,14,16,16);
+                [cell.contentView addSubview:xImageView];
+         //   }
+            
+        }else if([[[_addressAndStatuArray objectAtIndex:rowNumber]objectForKey:@"keyaudit"] isEqualToString:@"1"]){
+                 NSLog(@"【审核成功】");
+                UIImageView *selectedView = (UIImageView *)[cell viewWithTag:521];
+                NSLog(@"%@",selectedView);
+        
+                    [selectedView removeFromSuperview];
+                    xImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"btn_xuanzhong_a"]];
+                    xImageView.tag=521;
+                    xImageView.frame = CGRectMake(375,14,16,16);
+                    [cell.contentView addSubview:xImageView];
+   
+        }else if([[[_addressAndStatuArray objectAtIndex:rowNumber]objectForKey:@"keyaudit"] isEqualToString:@"2"]){
+            
+            NSLog(@"审核失败");
+            UIImageView *selectedView = (UIImageView *)[cell viewWithTag:521];
+            NSLog(@"%@",selectedView);
+            if(selectedView!=NULL)
+            {
+                [selectedView removeFromSuperview];
+                
+            }else{
+                
+                [selectedView removeFromSuperview];
+                xImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"btn_xuanzhong_a"]];
+                xImageView.tag=521;
+                xImageView.frame = CGRectMake(375,14,16,16);
+                [cell.contentView addSubview:xImageView];
+            }
+
+        }
+        flag=@"";
+    }
+    /*删除地址后更新地址表*/
+    
     return cell;
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -162,6 +224,12 @@
         view.parentVC = self;
         view.celltag=cell.contentView.tag;
         [self lew_presentPopupView:view animation:[LewPopupViewAnimationRight new] dismissed:^{
+            if([view.addressFlag isEqualToString:@"justnow"])
+            {
+                flag=@"update";
+                num=indexPath.row;
+                [self.addressTableView reloadData];
+            }
             NSLog(@"动画结束");
         }];
 
@@ -173,6 +241,12 @@
             view.parentVC = self;
             view.celltag=cell.contentView.tag;
             [self lew_presentPopupView:view animation:[LewPopupViewAnimationRight new] dismissed:^{
+                if([view.addressFlag isEqualToString:@"justnow"])
+                {
+                    flag=@"update";
+                    num=indexPath.row;
+                    [self.addressTableView reloadData];
+                }
                 NSLog(@"动画结束");
             }];
         
@@ -181,8 +255,17 @@
             PopupAddressSettingView *view = [PopupAddressSettingView defaultPopupView:1 tFrame:CGRectMake(0, 0, 320, tHeight)];
             view.parentVC = self;
             view.celltag=cell.contentView.tag;
+           
             [self lew_presentPopupView:view animation:[LewPopupViewAnimationRight new] dismissed:^{
-                NSLog(@"动画结束");
+                NSLog(@"%@",view.addressFlag);
+                if([view.addressFlag isEqualToString:@"justnow"])
+                {
+                     flag=@"update";
+                     num=indexPath.row;
+                     [self.addressTableView reloadData];
+                }
+                     NSLog(@"success动画结束");
+                        
             }];
 
         }
@@ -193,6 +276,12 @@
         view.parentVC = self;
         view.celltag=cell.contentView.tag;
         [self lew_presentPopupView:view animation:[LewPopupViewAnimationRight new] dismissed:^{
+            if([view.addressFlag isEqualToString:@"justnow"])
+            {
+                flag=@"update";
+                num=indexPath.row;
+                [self.addressTableView reloadData];
+            }
             NSLog(@"动画结束");
         }];
 
