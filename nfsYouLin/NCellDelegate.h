@@ -15,8 +15,10 @@
 
 - (void)showCircularImageViewWithImage:(UIImage*) image;
 - (void)showImageViewWithImageViews:(NSArray *)imageViews byClickWhich:(NSInteger)clickTag;
+// 查看全文
 - (void)readTotalInformation:(NSInteger)sectionNum;
-
+// 帖子类别切换
+- (void)reloadShowByTitle: (NSString* )text;
 @end
 
 

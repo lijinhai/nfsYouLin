@@ -293,6 +293,7 @@
     _currentIndex = sender.tag;
     sender.backgroundColor = [UIColor grayColor];
     NSLog(@"%@",sender.titleLabel.text);
+    [_delegate reloadShowByTitle:sender.titleLabel.text];
 }
 
 // 点击回复

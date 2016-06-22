@@ -43,7 +43,13 @@
     UIColor* _color;
     
     NDetailTableViewController* _detailController;
+    
+    // 等待动画变量
+    NSTimer* _imageTimer;
+    int _sectionNum;
+    NSInteger _imageCount;
 
+    UIImageView* _waitImageView;
 }
 
 static int sectionCount = 6;
@@ -152,6 +158,16 @@ static int sectionCount = 6;
     
 //    UIStoryboard* storyBoard = [UIStoryboard storyboardWithName:@"Neighbour" bundle:nil];
 //    _detailController = [storyBoard instantiateViewControllerWithIdentifier:@"details"];
+    
+    [self initWaitImageAnimate];
+    
+}
+
+- (void)initWaitImageAnimate
+{
+    CGFloat waitW = self.view.bounds.size.width / 3;
+    _waitImageView = [[UIImageView alloc] initWithFrame:CGRectMake(waitW, CGRectGetMidY(self.view.bounds) - waitW, waitW, waitW)];
+    _waitImageView.image = [UIImage animatedImageNamed:@"pd_topic_0" duration:1];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -685,6 +701,34 @@ static BOOL upState = YES;
         
     }];
     
+}
+
+// 帖子切换回调
+- (void)reloadShowByTitle: (NSString* )text
+{
+    NSLog(@"reloadShowByTitle");
+    _imageCount = 0;
+    _sectionNum = sectionCount;
+    sectionCount = 1;
+    [self.tableView reloadData];
+    _imageTimer = [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(imageChange) userInfo:nil repeats:YES];
+    
+    [self.view addSubview:_waitImageView];
+}
+
+
+- (void) imageChange
+{
+     NSLog(@"imageChange 正在执行第%ld次任务",_imageCount++);
+    if(_imageCount == 50)
+    {
+        [_imageTimer invalidate];
+        sectionCount = _sectionNum;
+        _imageCount = 0;
+        [_waitImageView removeFromSuperview];
+        [self.tableView reloadData];
+
+    }
 }
 
 // 查看全文回调事件

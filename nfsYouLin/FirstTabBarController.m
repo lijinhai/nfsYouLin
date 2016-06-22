@@ -29,7 +29,6 @@
 //    [self.navigationController.navigationBar addSubview:statusView];
     
 
-    
     UINavigationController* navigationController = self.navigationController;
     _listTableView = [[ListTableView alloc] initWithFrame:CGRectMake(self.view.frame.size.width - 150, CGRectGetMaxY(self.navigationController.navigationBar.frame), 150, 200)];
     
@@ -55,13 +54,6 @@
 //    self.automaticallyAdjustsScrollViewInsets = false;
     
 }
-
-- (IBAction)searchBar:(id)sender {
-    NSLog(@"search");
-
-}
-
-
 
 - (IBAction)addBar:(id)sender {
     NSLog(@"addBar");
