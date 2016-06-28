@@ -13,5 +13,6 @@
 @property (strong, nonatomic) IBOutlet UITextField *passwordTextField;
 - (IBAction)forgetAction:(UIButton *)sender;
 - (IBAction)registerAction:(UIButton *)sender;
+- (IBAction)loginAction:(id)sender;
 
 @end
