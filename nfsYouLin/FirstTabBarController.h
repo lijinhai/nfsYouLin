@@ -13,7 +13,6 @@
 
 - (IBAction)addBar:(id)sender;
 
-- (IBAction)searchBar:(id)sender;
 
 - (void) setTableViewHidden;
 

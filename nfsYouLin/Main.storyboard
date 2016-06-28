@@ -557,7 +557,7 @@
                             <barButtonItem image="title_icon_search" id="Uio-3t-pEo">
                                 <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <connections>
-                                    <action selector="searchBar:" destination="PA5-0d-iO2" id="UeF-yb-ZJL"/>
+                                    <segue destination="vpc-Iq-TIK" kind="push" id="bkM-Sf-hCc"/>
                                 </connections>
                             </barButtonItem>
                         </rightBarButtonItems>
@@ -576,7 +576,36 @@
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cmS-5t-RiR" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-891" y="437"/>
+            <point key="canvasLocation" x="-2425" y="419"/>
+        </scene>
+        <!--Search Table View Controller-->
+        <scene sceneID="Rh9-Ro-2uc">
+            <objects>
+                <tableViewController id="vpc-Iq-TIK" customClass="SearchTableViewController" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="eSo-j1-07I">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="0XA-g2-YOg">
+                                <rect key="frame" x="0.0" y="92" width="414" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="0XA-g2-YOg" id="Y1x-N1-bJt">
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="43"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="vpc-Iq-TIK" id="21Y-iR-Jpx"/>
+                            <outlet property="delegate" destination="vpc-Iq-TIK" id="hol-lA-fW1"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" id="5Ia-Cc-Gu5"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dTx-M5-WOr" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1729" y="-26"/>
         </scene>
         <!--作用条-->
         <scene sceneID="a8b-qH-MLf">
@@ -604,7 +633,7 @@
                 </viewControllerPlaceholder>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Zjh-sb-44O" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="110" y="355"/>
+            <point key="canvasLocation" x="-1890" y="591"/>
         </scene>
         <!--Me-->
         <scene sceneID="FjX-9N-zea">
@@ -614,7 +643,7 @@
                 </viewControllerPlaceholder>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="R0m-OZ-49R" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="89.5" y="499"/>
+            <point key="canvasLocation" x="-1910.5" y="701"/>
         </scene>
         <!--Neighbour-->
         <scene sceneID="et3-tt-QRr">
@@ -624,7 +653,7 @@
                 </viewControllerPlaceholder>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="TzZ-s1-2AN" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="110" y="204"/>
+            <point key="canvasLocation" x="-1888" y="410"/>
         </scene>
         <!--扫描二维码-->
         <scene sceneID="e01-aT-jqV">

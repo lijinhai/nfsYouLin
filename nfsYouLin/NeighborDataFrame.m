@@ -82,6 +82,7 @@
         readButtonH = 0;
     }
     
+    
     self.readFrame = CGRectMake(readButtonX, readButtonY, readButtonW, readButtonH);
     
     // 创建图片位置
