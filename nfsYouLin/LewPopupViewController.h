@@ -12,5 +12,7 @@
 #import "UIViewController+LewPopupViewController.h"
 #import "LewPopupViewAnimationDrop.h"
 #import "LewPopupViewAnimationRight.h"
+#import "LewPopupViewAnimationFade.h"
+#import "LewPopupViewAnimationSlide.h"
 
 #endif /* LewPopupViewController_h */

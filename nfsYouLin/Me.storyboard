@@ -40,11 +40,108 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lOe-Ai-YyB" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="673" y="236"/>
+            <point key="canvasLocation" x="169" y="200"/>
+        </scene>
+        <!--Feedback View Controller-->
+        <scene sceneID="kF3-59-AcO">
+            <objects>
+                <viewController storyboardIdentifier="feedbackcontroller" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Gil-a7-9xB" customClass="FeedbackViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="ly3-ba-TyI"/>
+                        <viewControllerLayoutGuide type="bottom" id="0Vh-af-Wdi"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="xNI-CL-zVc">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JVf-eN-WTc">
+                                <rect key="frame" x="69" y="410" width="277" height="30"/>
+                                <state key="normal" title="提交" backgroundImage="btn_yanzhengma_n">
+                                    <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="0.79964978450000002" colorSpace="calibratedRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="submitAction:" destination="Gil-a7-9xB" eventType="touchUpInside" id="KOd-h6-cvp"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina55"/>
+                    <connections>
+                        <outlet property="submitBtn" destination="JVf-eN-WTc" id="Mnv-bV-dXD"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="IWw-Ph-5bI" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="598" y="200"/>
+        </scene>
+        <!--设置-->
+        <scene sceneID="RR7-EM-cCC">
+            <objects>
+                <viewController storyboardIdentifier="isettingcontroller" title="设置" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Lwr-kz-72l" customClass="ISettingViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="jaZ-8e-mY5"/>
+                        <viewControllerLayoutGuide type="bottom" id="ect-A7-a1k"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="yAc-Rb-9rp">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Kx5-Te-85l">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="539"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <connections>
+                                    <outlet property="dataSource" destination="Lwr-kz-72l" id="fOR-Dd-dcy"/>
+                                    <outlet property="delegate" destination="Lwr-kz-72l" id="eb6-4d-Nb6"/>
+                                </connections>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina55"/>
+                    <connections>
+                        <outlet property="tableView" destination="Kx5-Te-85l" id="J74-E2-5s7"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="UFi-dd-YMm" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1038" y="200"/>
+        </scene>
+        <!--黑名单-->
+        <scene sceneID="MhH-pP-qRg">
+            <objects>
+                <viewController storyboardIdentifier="blacklistcontroller" title="黑名单" useStoryboardIdentifierAsRestorationIdentifier="YES" id="hqu-SJ-BlH" customClass="BlackListViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="zHV-Pw-L6Y"/>
+                        <viewControllerLayoutGuide type="bottom" id="vKj-5z-kKc"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="T4a-Ca-hKz">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="lp1-YF-aZw">
+                                <rect key="frame" x="0.0" y="47" width="320" height="521"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <connections>
+                                    <outlet property="dataSource" destination="hqu-SJ-BlH" id="I2k-6v-nrp"/>
+                                    <outlet property="delegate" destination="hqu-SJ-BlH" id="8YM-5C-Oy9"/>
+                                </connections>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <connections>
+                        <outlet property="blackListTable" destination="lp1-YF-aZw" id="gE8-mg-zRl"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Aev-MF-opT" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1462" y="121"/>
         </scene>
     </scenes>
     <resources>
         <image name="btn_wo_a" width="48" height="48"/>
         <image name="btn_wo_b" width="48" height="48"/>
+        <image name="btn_yanzhengma_n" width="115" height="53"/>
     </resources>
 </document>

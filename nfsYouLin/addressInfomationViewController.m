@@ -57,6 +57,7 @@
     _addressTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 60, self.view.frame.size.width, self.view.frame.size.height) style:UITableViewStylePlain];
     _addressTableView.dataSource=self;
     _addressTableView.delegate=self;
+    _addressTableView.scrollEnabled=NO;
     _addressTableView.tableHeaderView=[[UIView alloc]initWithFrame:CGRectMake(0, 0, _addressTableView.bounds.size.width, 0.01)];
     [_addressTableView setSeparatorInset:UIEdgeInsetsZero];
     [_addressTableView setLayoutMargins:UIEdgeInsetsZero];
