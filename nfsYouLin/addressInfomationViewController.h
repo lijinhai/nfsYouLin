@@ -14,4 +14,5 @@
 @property (weak, nonatomic) IBOutlet UIButton *writeAddressBtn;
 @property (weak, nonatomic) IBOutlet UILabel *labelTip;
 - (IBAction)writeAddressAction:(id)sender;
+-(void) refreshTable;
 @end

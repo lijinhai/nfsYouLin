@@ -15,6 +15,7 @@
     
 }
 @property(nonatomic,retain) NSString *addressFlag;
+@property(nonatomic,retain) NSMutableArray *changeAddressArray;
 @property (nonatomic, strong) UIView *innerView;
 @property (nonatomic, weak)UIViewController *parentVC;
 @property (nonatomic ,readwrite) NSInteger celltag;

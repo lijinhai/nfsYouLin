@@ -9,6 +9,7 @@
 #import "homeViewController.h"
 #import "forgetViewController.h"
 #import "registerViewController.h"
+#import "FirstTabBarController.h"
 
 @interface homeViewController ()
 
@@ -18,6 +19,8 @@
 {
     forgetViewController* _forgetController;
     registerViewController* _registerController;
+    FirstTabBarController* _FirstTabBarController;
+    UINavigationController *newNavigationController;
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -41,7 +44,9 @@
     UIStoryboard* storyBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     _forgetController = [storyBoard instantiateViewControllerWithIdentifier:@"forgetController"];
     _registerController = [storyBoard instantiateViewControllerWithIdentifier:@"registerController"];
-    
+    _FirstTabBarController = [storyBoard instantiateViewControllerWithIdentifier:@"homeTabView"];
+    newNavigationController = [storyBoard instantiateViewControllerWithIdentifier:@"viewID"];
+
 }
 
 
@@ -113,6 +118,12 @@
     UIBarButtonItem* neighborItem = [[UIBarButtonItem alloc] initWithTitle:@"快速注册" style:UIBarButtonItemStylePlain target:nil action:nil];
     [self.navigationItem setBackBarButtonItem:neighborItem];
     [self.navigationController pushViewController:_registerController animated:YES];
+}
+
+- (IBAction)loginAction:(id)sender {
+    
+   [self presentViewController:newNavigationController animated:YES completion:nil];
+
 }
 
 @end

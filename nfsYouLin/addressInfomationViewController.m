@@ -11,6 +11,8 @@
 #import "FMDB.h"
 #import "LewPopupViewController.h"
 #import "PopupAddressSettingView.h"
+#import "MBProgressHUD.h"
+#import "addressVerificationViewController.h"
 @interface addressInfomationViewController ()<UITableViewDelegate,UITableViewDataSource>
 
 @end
@@ -18,22 +20,25 @@
 @implementation addressInfomationViewController{
 
     familyAddressViewController *jumpFamilyAddressController;
+    addressVerificationViewController *jumpAddressVerificationController;
     NSMutableArray *_addressAndStatuArray;
     NSMutableArray *_saveAddressArray;
     NSString *flag;
     NSUInteger num;
+    UILabel *moveLable;
     float tHeight;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    //self.automaticallyAdjustsScrollViewInsets = NO;
     // Do any additional setup after loading the view.
 }
 - (void)viewWillAppear:(BOOL)animated
 {
     /*设置导航*/
     self.navigationController.navigationBarHidden = NO;
+    self.automaticallyAdjustsScrollViewInsets = false;
     /*自定义导航返回箭头*/
     UIImage *backButtonImage = [[UIImage imageNamed:@"mm_title_back.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 25, 0,0)];
     [[UIBarButtonItem appearance] setBackButtonBackgroundImage:backButtonImage forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
@@ -44,27 +49,28 @@
     /*跳转至家庭地址信息*/
     UIStoryboard* storyBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     jumpFamilyAddressController=[storyBoard instantiateViewControllerWithIdentifier:@"familyAddressController"];
+    /*跳转至地址验证页面*/
+    jumpAddressVerificationController=[storyBoard instantiateViewControllerWithIdentifier:@"addressVerificationController"];
     /*加载相关地址的TableView*/
     /*读取数据库，获取用户地址信息*/
     _addressAndStatuArray=[self getAddressList];
     _addressTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 60, self.view.frame.size.width, self.view.frame.size.height) style:UITableViewStylePlain];
     _addressTableView.dataSource=self;
     _addressTableView.delegate=self;
-    //_addressTableView.scrollEnabled = NO;
+    _addressTableView.scrollEnabled=NO;
+    _addressTableView.tableHeaderView=[[UIView alloc]initWithFrame:CGRectMake(0, 0, _addressTableView.bounds.size.width, 0.01)];
     [_addressTableView setSeparatorInset:UIEdgeInsetsZero];
     [_addressTableView setLayoutMargins:UIEdgeInsetsZero];
     // 设置数据源
     NSLog(@"addressArray length is %ld",[_addressAndStatuArray count]);
     if([_addressAndStatuArray count]!=0)
     {
-     
-     //[_addressTableView reloadData];
      [self.view addSubview:_addressTableView];
     }else{
-        //[self.view addSubview:_addressTableView];
         [_addressTableView removeFromSuperview];
     
     }
+    
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -88,21 +94,62 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView
          cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-
+    //self.addressTableView.hidden = NO;
+    
+        NSLog(@"*******delete address info!!!!********");
+    UIView *rightVeiw = [[UIView alloc] initWithFrame:CGRectMake(0,0,15,15)];
+    rightVeiw.tag=3000;
     UIImageView* xImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"btn_xuanzhong_a"]];
-    xImageView.tag=521;
+    xImageView.frame = CGRectMake(375,14,15,15);
+    [rightVeiw addSubview:xImageView];
+    //xImageView.tag=521;
     /** NOTE: This method can return nil so you need to account for that in code */
      static NSString *CellIdentifier = @"addressid";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     NSUInteger rowNumber=[indexPath row];
     UILabel *auditLabel=[[UILabel alloc] initWithFrame:CGRectMake(0, 5, 100, 32)];
-    UILabel *moveLable=[[UILabel alloc] initWithFrame:CGRectMake(120, 5, 100, 32)];
+    moveLable=[[UILabel alloc] initWithFrame:CGRectMake(120, 5, 100, 32)];
     // NOTE: Add some code like this to create a new cell if there are none to reuse
-    if(cell == nil)
-    {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    
+    
+    /*设置标记当前地址*/
+    if([flag isEqualToString:@"update" ]&&rowNumber==num){
+        
+        NSLog(@"rowNumber is %ld",num);
+        
+        /*读取数据库，获取用户地址信息*/
+        _addressAndStatuArray=[self getAddressList];
+        
+        if([[[_addressAndStatuArray objectAtIndex:rowNumber]objectForKey:@"keyaudit"] isEqualToString:@"0"])
+        {
+            
+            NSLog(@"【等待审核】");
+            UIView *selectedView = (UIView *)[self.view viewWithTag:3000];
+            NSLog(@"%@",selectedView);
+            [selectedView removeFromSuperview];
+            [self textToast:@"该地址信息未通过审核!\n不能为你显示邻居"];
+            
+        }else if([[[_addressAndStatuArray objectAtIndex:rowNumber]objectForKey:@"keyaudit"] isEqualToString:@"1"]){
+            NSLog(@"【审核成功】");
+            UIView *selectedView = (UIView *)[self.view viewWithTag:3000];
+            NSLog(@"%@",selectedView);
+            [selectedView removeFromSuperview];
+            
+        }else if([[[_addressAndStatuArray objectAtIndex:rowNumber]objectForKey:@"keyaudit"] isEqualToString:@"2"]){
+            
+            NSLog(@"审核失败");
+            UIView *selectedView = (UIView *)[self.view viewWithTag:3000];
+            NSLog(@"%@",selectedView);
+            [selectedView removeFromSuperview];
+            [self textToast:@"该地址信息未通过审核!\n不能为你显示邻居"];
+        }
+        flag=@"";
+        
+    }
         /*地址表初始化*/
+        _addressAndStatuArray=[self getAddressList];
         if([[[_addressAndStatuArray objectAtIndex:rowNumber]objectForKey:@"keyaudit"] isEqualToString:@"0"])
         {
             auditLabel.text=@"【等待审核】";
@@ -112,6 +159,10 @@
             
             moveLable.font=[UIFont systemFontOfSize:15];
             moveLable.text=[[_addressAndStatuArray objectAtIndex:rowNumber]objectForKey:@"keyaddress"];
+            moveLable.tag=rowNumber;
+            if([[[_addressAndStatuArray objectAtIndex:rowNumber]objectForKey:@"keyprimary"] isEqualToString:@"1"]){
+                [cell.contentView addSubview:rightVeiw];
+            }
             cell.contentView.tag=[[[_addressAndStatuArray objectAtIndex:rowNumber] objectForKey:@"key_id"] intValue];
             NSLog(@" tag is  %ld",cell.contentView.tag);
             [cell.contentView addSubview:moveLable];
@@ -124,9 +175,9 @@
                 
                 cell.textLabel.font=[UIFont fontWithName:@"Verdana" size:15];
                 cell.textLabel.text=[[_addressAndStatuArray objectAtIndex:rowNumber]objectForKey:@"keyaddress"];
-                xImageView.frame = CGRectMake(375,14,16,16);
+
                 cell.contentView.tag=[[[_addressAndStatuArray objectAtIndex:rowNumber] objectForKey:@"key_id"] intValue];
-                [cell.contentView addSubview:xImageView];
+                [cell.contentView addSubview:rightVeiw];
                 
             }else{
                 
@@ -144,72 +195,22 @@
             
             moveLable.font=[UIFont systemFontOfSize:15];
             moveLable.text=[[_addressAndStatuArray objectAtIndex:rowNumber]objectForKey:@"keyaddress"];
+            moveLable.tag=rowNumber;
+            NSLog(@"moveLable.tag equal  %ld",moveLable.tag);
+            if([[[_addressAndStatuArray objectAtIndex:rowNumber]objectForKey:@"keyprimary"] isEqualToString:@"1"]){
+                [cell.contentView addSubview:rightVeiw];
+            }
             cell.contentView.tag=[[[_addressAndStatuArray objectAtIndex:rowNumber] objectForKey:@"key_id"] intValue];
             [cell.contentView addSubview:moveLable];
             [cell.contentView addSubview:auditLabel];
             [self startAnimationIfNeeded:moveLable];
+            /*设置线程           
+             NSThread *thread=[[NSThread alloc]initWithTarget:self selector:@selector(refreshTable:) object:@(rowNumber)];
+            thread.name=[NSString stringWithFormat:@"myThread%ld",rowNumber];
+             [thread start];*/
+
         }
-
-    }
-        /*设置当前地址后更新地址表*/
-    //NSLog(@"come on %@",self.addressFlag);
-
-    if([flag isEqualToString:@"update" ]&&rowNumber==num){
-        
-        /*读取数据库，获取用户地址信息*/
-        _addressAndStatuArray=[self getAddressList];
-       
-        if([[[_addressAndStatuArray objectAtIndex:rowNumber]objectForKey:@"keyaudit"] isEqualToString:@"0"])
-        {
-
-            NSLog(@"【等待审核】");
-            UIImageView *selectedView = (UIImageView *)[cell viewWithTag:521];
-            NSLog(@"%@",selectedView);
-//            if(selectedView!=NULL)
-//            {
-//             [selectedView removeFromSuperview];
-//                
-//            }else{
-            
-                [selectedView removeFromSuperview];
-                xImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"btn_xuanzhong_a"]];
-                xImageView.tag=521;
-                xImageView.frame = CGRectMake(375,14,16,16);
-                [cell.contentView addSubview:xImageView];
-         //   }
-            
-        }else if([[[_addressAndStatuArray objectAtIndex:rowNumber]objectForKey:@"keyaudit"] isEqualToString:@"1"]){
-                 NSLog(@"【审核成功】");
-                UIImageView *selectedView = (UIImageView *)[cell viewWithTag:521];
-                NSLog(@"%@",selectedView);
-        
-                    [selectedView removeFromSuperview];
-                    xImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"btn_xuanzhong_a"]];
-                    xImageView.tag=521;
-                    xImageView.frame = CGRectMake(375,14,16,16);
-                    [cell.contentView addSubview:xImageView];
    
-        }else if([[[_addressAndStatuArray objectAtIndex:rowNumber]objectForKey:@"keyaudit"] isEqualToString:@"2"]){
-            
-            NSLog(@"审核失败");
-            UIImageView *selectedView = (UIImageView *)[cell viewWithTag:521];
-            NSLog(@"%@",selectedView);
-            if(selectedView!=NULL)
-            {
-                [selectedView removeFromSuperview];
-                
-            }else{
-                
-                [selectedView removeFromSuperview];
-                xImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"btn_xuanzhong_a"]];
-                xImageView.tag=521;
-                xImageView.frame = CGRectMake(375,14,16,16);
-                [cell.contentView addSubview:xImageView];
-            }
-
-        }
-        flag=@"";
-    }
     /*删除地址后更新地址表*/
     
     return cell;
@@ -219,8 +220,9 @@
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     if([[[_addressAndStatuArray objectAtIndex:rowInSection]objectForKey:@"keyaudit"] isEqualToString:@"0"])
     {
-        tHeight=250;
-        PopupAddressSettingView *view = [PopupAddressSettingView defaultPopupView: 0 tFrame:CGRectMake(0, 0, 320, tHeight)];
+        if([[[_addressAndStatuArray objectAtIndex:rowInSection]objectForKey:@"keyprimary"] isEqualToString:@"1"]){
+        tHeight=200;
+        PopupAddressSettingView *view = [PopupAddressSettingView defaultPopupView:4 tFrame:CGRectMake(0, 0, 320, tHeight)];
         view.parentVC = self;
         view.celltag=cell.contentView.tag;
         [self lew_presentPopupView:view animation:[LewPopupViewAnimationRight new] dismissed:^{
@@ -229,9 +231,65 @@
                 flag=@"update";
                 num=indexPath.row;
                 [self.addressTableView reloadData];
+                [self.addressTableView layoutIfNeeded];
+            }else if ([view.addressFlag isEqualToString:@"jumpAddressInfo"]){
+                
+                NSLog(@"进入跳转页面");
+                jumpFamilyAddressController.changeAddressArry=view.changeAddressArray;
+                [jumpFamilyAddressController.myfamilyAddressTableView reloadData];
+                UIBarButtonItem* neighborItem = [[UIBarButtonItem alloc] initWithTitle:@"填写家庭住址" style:UIBarButtonItemStylePlain target:nil action:nil];
+                [self.navigationItem setBackBarButtonItem:neighborItem];
+                [self.navigationController pushViewController:jumpFamilyAddressController animated:YES];
+                
+            }else if([view.addressFlag isEqualToString:@"valiyaddress"]){
+              
+                UIBarButtonItem* neighborItem = [[UIBarButtonItem alloc] initWithTitle:@"住址验证" style:UIBarButtonItemStylePlain target:nil action:nil];
+                [self.navigationItem setBackBarButtonItem:neighborItem];
+                [self.navigationController pushViewController:jumpAddressVerificationController animated:YES];
+              
+            }else if([view.addressFlag isEqualToString:@"deleteAddressInfo"]){
+                
+                [_addressAndStatuArray removeObjectAtIndex:indexPath.row];
+                [self.addressTableView reloadData];
             }
             NSLog(@"动画结束");
-        }];
+        }];}else{
+            //等待审核
+            tHeight=250;
+            PopupAddressSettingView *view = [PopupAddressSettingView defaultPopupView:0 tFrame:CGRectMake(0, 0, 320, tHeight)];
+            view.parentVC = self;
+            view.celltag=cell.contentView.tag;
+            
+            [self lew_presentPopupView:view animation:[LewPopupViewAnimationRight new] dismissed:^{
+                NSLog(@"%@",view.addressFlag);
+                if([view.addressFlag isEqualToString:@"justnow"])
+                {
+                    flag=@"update";
+                    num=indexPath.row;
+                    //self.addressTableView.hidden = YES;
+                    [self.addressTableView reloadData];
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        NSLog(@"刷新完成");
+                    });
+                }else if ([view.addressFlag isEqualToString:@"jumpAddressInfo"]){
+                    
+                    NSLog(@"进入跳转页面");
+                    jumpFamilyAddressController.changeAddressArry=view.changeAddressArray;
+                    [jumpFamilyAddressController.myfamilyAddressTableView reloadData];
+                    UIBarButtonItem* neighborItem = [[UIBarButtonItem alloc] initWithTitle:@"填写家庭住址" style:UIBarButtonItemStylePlain target:nil action:nil];
+                    [self.navigationItem setBackBarButtonItem:neighborItem];
+                    [self.navigationController pushViewController:jumpFamilyAddressController animated:YES];
+                }else if([view.addressFlag isEqualToString:@"deleteAddressInfo"]){
+                    
+                    [_addressAndStatuArray removeObjectAtIndex:indexPath.row];
+                    [self.addressTableView reloadData];
+                }
+
+                NSLog(@"success动画结束");
+             
+            }];
+            
+        }
 
     }else if([[[_addressAndStatuArray objectAtIndex:rowInSection]objectForKey:@"keyaudit"] isEqualToString:@"1"]){
         
@@ -246,7 +304,9 @@
                     flag=@"update";
                     num=indexPath.row;
                     [self.addressTableView reloadData];
-                }
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        NSLog(@"刷新完成");
+                    });                }
                 NSLog(@"动画结束");
             }];
         
@@ -263,6 +323,13 @@
                      flag=@"update";
                      num=indexPath.row;
                      [self.addressTableView reloadData];
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        NSLog(@"刷新完成");
+                    });
+                }else if([view.addressFlag isEqualToString:@"deleteAddressInfo"]){
+                    
+                    [_addressAndStatuArray removeObjectAtIndex:indexPath.row];
+                    [self.addressTableView reloadData];
                 }
                      NSLog(@"success动画结束");
                         
@@ -270,29 +337,111 @@
 
         }
         
-    }else if([[[_addressAndStatuArray objectAtIndex:rowInSection]objectForKey:@"keyaudit"] isEqualToString:@"2"]){
-        tHeight=250;
-        PopupAddressSettingView *view = [PopupAddressSettingView defaultPopupView:2 tFrame:CGRectMake(0, 0, 320, tHeight)];
-        view.parentVC = self;
-        view.celltag=cell.contentView.tag;
-        [self lew_presentPopupView:view animation:[LewPopupViewAnimationRight new] dismissed:^{
-            if([view.addressFlag isEqualToString:@"justnow"])
-            {
-                flag=@"update";
-                num=indexPath.row;
-                [self.addressTableView reloadData];
-            }
-            NSLog(@"动画结束");
-        }];
+    }else if([[[_addressAndStatuArray objectAtIndex:rowInSection]objectForKey:@"keyaudit"] isEqualToString:@"2"]){//审核失败
+        if([[[_addressAndStatuArray objectAtIndex:rowInSection]objectForKey:@"keyprimary"] isEqualToString:@"1"]){
+            tHeight=200;
+            PopupAddressSettingView *view = [PopupAddressSettingView defaultPopupView:5 tFrame:CGRectMake(0, 0, 320, tHeight)];
+            view.parentVC = self;
+            view.celltag=cell.contentView.tag;
+            [self lew_presentPopupView:view animation:[LewPopupViewAnimationRight new] dismissed:^{
+                if([view.addressFlag isEqualToString:@"justnow"])
+                {
+                    flag=@"update";
+                    num=indexPath.row;
+                    [self.addressTableView reloadData];
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        NSLog(@"刷新完成");
+                    });
+                }else if ([view.addressFlag isEqualToString:@"jumpAddressInfo"]){
+                
+                    NSLog(@"进入跳转页面");
+                    jumpFamilyAddressController.changeAddressArry=view.changeAddressArray;
+                    [jumpFamilyAddressController.myfamilyAddressTableView reloadData];
+                    UIBarButtonItem* neighborItem = [[UIBarButtonItem alloc] initWithTitle:@"填写家庭住址" style:UIBarButtonItemStylePlain target:nil action:nil];
+                    [self.navigationItem setBackBarButtonItem:neighborItem];
+                    [self.navigationController pushViewController:jumpFamilyAddressController animated:YES];
 
+                }else if([view.addressFlag isEqualToString:@"valiyaddress"]){
+                    
+                    UIBarButtonItem* neighborItem = [[UIBarButtonItem alloc] initWithTitle:@"住址验证" style:UIBarButtonItemStylePlain target:nil action:nil];
+                    [self.navigationItem setBackBarButtonItem:neighborItem];
+                    [self.navigationController pushViewController:jumpAddressVerificationController animated:YES];
+                    
+                }else if([view.addressFlag isEqualToString:@"deleteAddressInfo"]){
+                    
+                    [_addressAndStatuArray removeObjectAtIndex:indexPath.row];
+                    [self.addressTableView reloadData];
+                }
+
+                NSLog(@"动画结束");
+            }];
+
+                }else{
+                    tHeight=250;
+                    PopupAddressSettingView *view = [PopupAddressSettingView defaultPopupView:2 tFrame:CGRectMake(0, 0, 320, tHeight)];
+                    view.parentVC = self;
+                    view.celltag=cell.contentView.tag;
+                    [self lew_presentPopupView:view animation:[LewPopupViewAnimationRight new] dismissed:^{
+                        if([view.addressFlag isEqualToString:@"justnow"])
+                        {
+                            flag=@"update";
+                            num=indexPath.row;
+                            [self.addressTableView reloadData];
+                            dispatch_async(dispatch_get_main_queue(), ^{
+                                NSLog(@"刷新完成");
+                            });}else if ([view.addressFlag isEqualToString:@"jumpAddressInfo"]){
+                                
+                                NSLog(@"进入跳转页面");
+                                jumpFamilyAddressController.changeAddressArry=view.changeAddressArray;
+                                [jumpFamilyAddressController.myfamilyAddressTableView reloadData];
+                                UIBarButtonItem* neighborItem = [[UIBarButtonItem alloc] initWithTitle:@"填写家庭住址" style:UIBarButtonItemStylePlain target:nil action:nil];
+                                [self.navigationItem setBackBarButtonItem:neighborItem];
+                                [self.navigationController pushViewController:jumpFamilyAddressController animated:YES];
+                                
+                            }else if([view.addressFlag isEqualToString:@"deleteAddressInfo"]){
+                            
+                                [_addressAndStatuArray removeObjectAtIndex:indexPath.row];
+                                [self.addressTableView reloadData];
+                            }
+                            NSLog(@"动画结束");
+                    }];}
     }
-    //[tableView deselectRowAtIndexPath:indexPath animated:YES];
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+/*
+NSThread *thread=[[NSThread alloc]initWithTarget:self selector:@selector(refreshTable) object:@(rowNumber)];
+thread.name=[NSString stringWithFormat:@"myThread%ld",rowNumber];
+[thread start];*/
+- (void) refreshTable{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [_addressTableView reloadData];
+    });
+    NSLog(@"执行我了么");
+}
+- (void)textToast:(NSString *)tips {
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.parentViewController.view    animated:YES];
+    
+    // Set the annular determinate mode to show task progress.navigationController.view
+    hud.mode = MBProgressHUDModeText;
+    hud.bezelView.backgroundColor=[UIColor blackColor];
+    hud.bezelView.alpha = 1;
+    hud.minSize=CGSizeMake(50, 50);
+    hud.label.text = NSLocalizedString(tips, @"HUD message title");
+    hud.label.numberOfLines=0;
+    hud.label.textColor = [UIColor whiteColor];
+    hud.label.font= [UIFont systemFontOfSize:15];
+    // Move to bottm center.
+    hud.offset = CGPointMake(0.f, 0.f);
+    
+    [hud hideAnimated:YES afterDelay:1.f];
 }
 
-
--(void)startAnimationIfNeeded:(UILabel *)moveLabel{
+-(void)startAnimationIfNeeded:(UILabel*)moveLabel{
     //取消、停止所有的动画
-    [moveLabel.layer removeAllAnimations];
+    //NSLog(@"move label is %d",[sender intValue]);
+    //UILabel *moveLabel=[(UILabel *)self.view viewWithTag:[sender intValue]];
+    
+   //[moveLabel.layer removeAllAnimations];
     NSDictionary *dict = [[NSDictionary alloc] initWithObjectsAndKeys: moveLabel.font,NSFontAttributeName,nil];
     CGSize textSize = [moveLabel.text sizeWithAttributes:dict];
     CGRect lframe = moveLabel.frame;

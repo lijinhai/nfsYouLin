@@ -7,8 +7,9 @@
 //
 
 #import "iViewController.h"
-
-
+#import "addressInfomationViewController.h"
+#import "FeedbackViewController.h"
+#import "ISettingViewController.h"
 @interface iViewController ()
 
 @end
@@ -18,6 +19,10 @@
     UIColor* _viewColor;
     NSArray* _images;
     NSArray* _cellNames;
+    addressInfomationViewController *_addressInfomationController;
+    FeedbackViewController *FeedbackController;
+    ISettingViewController *ISettingController;
+    UIBarButtonItem* backItemTitle;
 
 }
 
@@ -49,6 +54,14 @@
 
     _images = @[@"dizhixinxi.png", @"yijianfankui.png", @"shezhi.png", @"guanyu.png"];
     _cellNames = @[@"地址信息", @"意见反馈", @"设置", @"关于"];
+    /*跳转至地址信息页面*/
+    UIStoryboard* storyBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    _addressInfomationController=[storyBoard instantiateViewControllerWithIdentifier:@"addressInfomationController"];
+    backItemTitle = [[UIBarButtonItem alloc] initWithTitle:@"地址信息" style:UIBarButtonItemStylePlain target:nil action:nil];
+    UIStoryboard* iStoryBoard = [UIStoryboard storyboardWithName:@"Me" bundle:nil];
+    FeedbackController=[iStoryBoard instantiateViewControllerWithIdentifier:@"feedbackcontroller"];
+    ISettingController=[iStoryBoard instantiateViewControllerWithIdentifier:@"isettingcontroller"];
+
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -195,6 +208,60 @@
         }
     }
    
+}
+- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSInteger rowInSection = indexPath.row;
+    NSInteger section = indexPath.section;
+       switch (section) {
+        case 0:
+        {
+            NSLog(@"SECTION 0");
+            break;
+        }
+        case 1:
+        {
+            switch (rowInSection) {
+                case 0:
+                {
+                    // 地址信息
+                    backItemTitle = [[UIBarButtonItem alloc] initWithTitle:@"地址信息" style:UIBarButtonItemStylePlain target:nil action:nil];
+                    [self.parentViewController.navigationItem setBackBarButtonItem:backItemTitle];
+                    [self.parentViewController.navigationController pushViewController:_addressInfomationController animated:YES];
+                    break;
+                }
+                case 1:
+                {
+                     // 意见反馈
+                    backItemTitle = [[UIBarButtonItem alloc] initWithTitle:@"意见反馈" style:UIBarButtonItemStylePlain target:nil action:nil];
+                     [self.parentViewController.navigationItem setBackBarButtonItem:backItemTitle];
+                     [self.navigationController pushViewController:FeedbackController animated:YES];
+                    break;
+                }
+                case 2:
+                {
+                    // 设置
+                    backItemTitle = [[UIBarButtonItem alloc] initWithTitle:@"设置" style:UIBarButtonItemStylePlain target:nil action:nil];
+                    [self.parentViewController.navigationItem setBackBarButtonItem:backItemTitle];
+                    [self.navigationController pushViewController:ISettingController animated:YES];
+                    break;
+                }
+                case 3:
+                {
+                    // 关于
+                    backItemTitle = [[UIBarButtonItem alloc] initWithTitle:@"关于优邻" style:UIBarButtonItemStylePlain target:nil action:nil];
+                    [self.parentViewController.navigationItem setBackBarButtonItem:backItemTitle];
+                    break;
+                }
+                default:
+                    break;
+            }
+
+            break;
+        }
+    default:
+            break;
+    }
 }
 
 #pragma mark - 圆形头像点击事件回调
