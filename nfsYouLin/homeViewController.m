@@ -69,7 +69,6 @@
     tmpView.backgroundColor = [UIColor blackColor];
     [self.view addSubview:tmpView];
     
-    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -128,6 +127,10 @@
     
    [self presentViewController:newNavigationController animated:YES completion:nil];
 
+}
+
+- (IBAction)finishEdit:(id)sender {
+    [sender resignFirstResponder];
 }
 
 

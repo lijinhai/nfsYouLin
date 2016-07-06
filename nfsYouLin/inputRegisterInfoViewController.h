@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import <CoreGraphics/CoreGraphics.h>
-@interface inputRegisterInfoViewController : UIViewController
+@interface inputRegisterInfoViewController : UIViewController <UITextFieldDelegate>
 @property (weak, nonatomic) IBOutlet UIImageView *selectBoyRadio;
 @property (weak, nonatomic) IBOutlet UIImageView *selectGirlRadio;
 

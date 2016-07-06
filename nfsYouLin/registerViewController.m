@@ -115,6 +115,7 @@
 {
 
     /*设置导航*/
+    [super viewWillAppear:animated];
     self.navigationController.navigationBarHidden = NO;
     UIBarButtonItem *barrightBtn=[[UIBarButtonItem alloc]initWithTitle:@"下一步" style:UIBarButtonItemStylePlain target:self action:@selector(selectNextAction:)];
     self.navigationItem.rightBarButtonItem=barrightBtn;
@@ -130,9 +131,21 @@
     {
         [self clearTextField];
     }
+    
+    [self setTextFieldEnabled:NO];
+    
+}
 
+
+
+- (void) viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    [self setTextFieldEnabled:YES];
 
 }
+
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -166,9 +179,16 @@
 -(void)selectNextAction:(id)sender
 {
     NSLog(@"下一步");
+    
+    //   测试代码
+//    UIBarButtonItem* neighborItem = [[UIBarButtonItem alloc] initWithTitle:@"详细信息" style:UIBarButtonItemStylePlain target:nil action:nil];
+//    [self.navigationItem setBackBarButtonItem:neighborItem];
+//    [self.navigationController pushViewController:inputRegisterInfoController animated:YES];
+//    return;
+    
+    
     NSLog(@"验证码 = %@",self.verifyTextField.text);
-   
-    [self textFieldResignResponder];
+    [self.view endEditing:YES];
     NSString* phoneNum = self.phoneTextField.text;
     NSString* verifyCode = self.verifyTextField.text;
     NSString* inviteCode = self.inviteTextField.text;
@@ -288,14 +308,14 @@
 
 - (void) touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
 {
-    [self textFieldResignResponder];
+    [self.view endEditing:YES];
 }
 
 // 获取验证码
 - (IBAction)getVerificationCode:(id)sender {
     NSLog(@"获取验证码");
 
-    [self textFieldResignResponder];
+    [self.view endEditing:YES];
     NSString* phoneNum = self.phoneTextField.text;
     NSLog(@"phoneNum = %@",self.phoneTextField.text);
     
@@ -350,10 +370,9 @@
             [phoneLineField lineConvertToGray];
             
             timeLabel.text = @"60";
-            
             [self.verifyBtn addSubview:timeLabel];
             [self.verifyBtn addSubview:titleLabel];
-            
+
             _timer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(getVerifyCode) userInfo:nil repeats:YES];
             
             //  获取短信验证码
@@ -446,12 +465,13 @@
     self.inviteTextField.text = @"";
 }
 
-- (void) textFieldResignResponder
+- (void) setTextFieldEnabled:(BOOL)flag
 {
-    [self.phoneTextField resignFirstResponder];
-    [self.verifyTextField resignFirstResponder];
-    [self.inviteTextField resignFirstResponder];
-
+    if(!timeLabel.superview)
+        [self.phoneTextField setEnabled:flag];
+    
+    [self.verifyTextField setEnabled:flag];
+    [self.inviteTextField setEnabled:flag];
 }
 
 @end

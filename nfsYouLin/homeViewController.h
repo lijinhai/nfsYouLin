@@ -14,5 +14,6 @@
 - (IBAction)forgetAction:(UIButton *)sender;
 - (IBAction)registerAction:(UIButton *)sender;
 - (IBAction)loginAction:(id)sender;
+- (IBAction)finishEdit:(id)sender;
 
 @end

@@ -58,7 +58,10 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="allCharacters" autocorrectionType="no" secureTextEntry="YES"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="allCharacters" autocorrectionType="no" returnKeyType="done" enablesReturnKeyAutomatically="YES" secureTextEntry="YES"/>
+                                <connections>
+                                    <action selector="finishEdit:" destination="XEv-u7-nL0" eventType="editingDidEndOnExit" id="Npg-rJ-aIN"/>
+                                </connections>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="61H-Fi-ujF">
                                 <rect key="frame" x="339" y="369" width="60" height="30"/>
@@ -430,23 +433,12 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" image="btn_yanzhengma_n" id="Omj-gN-yZT">
-                                <rect key="frame" x="240" y="85" width="115" height="53"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="获取验证码" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="XwA-g8-4Vy">
-                                <rect key="frame" x="240" y="86" width="115" height="51"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="  请输入手机号" textAlignment="natural" minimumFontSize="17" id="XVg-XC-zUo">
                                 <rect key="frame" x="23" y="87" width="202" height="51"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                <textInputTraits key="textInputTraits"/>
+                                <textInputTraits key="textInputTraits" returnKeyType="done" enablesReturnKeyAutomatically="YES"/>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
                                         <integer key="value" value="5"/>
@@ -454,31 +446,46 @@
                                 </userDefinedRuntimeAttributes>
                             </textField>
                             <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" image="bg_1" id="9zA-uz-lzf">
-                                <rect key="frame" x="23" y="170" width="335" height="151"/>
+                                <rect key="frame" x="23" y="170" width="371" height="151"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
                             <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" image="fenggexianchang" id="gFE-eZ-axj" userLabel="fenggexianchang1">
-                                <rect key="frame" x="23" y="217" width="335" height="9"/>
+                                <rect key="frame" x="23" y="217" width="371" height="9"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
                             <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" image="fenggexianchang" id="WbE-o4-n6d" userLabel="fenggexianchang2">
-                                <rect key="frame" x="23" y="266" width="335" height="9"/>
+                                <rect key="frame" x="23" y="266" width="371" height="9"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="  请再次输入新密码" textAlignment="natural" minimumFontSize="17" id="ECX-HG-RpN">
-                                <rect key="frame" x="23" y="271" width="338" height="50"/>
+                                <rect key="frame" x="23" y="271" width="371" height="50"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                <textInputTraits key="textInputTraits"/>
-                            </textField>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="  请输入验证码" textAlignment="natural" minimumFontSize="17" id="mI8-rc-DZV">
-                                <rect key="frame" x="23" y="170" width="335" height="53"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                <textInputTraits key="textInputTraits"/>
+                                <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
                             </textField>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="  请输入6到16位新密码" textAlignment="natural" minimumFontSize="17" id="HSu-1D-LpP">
-                                <rect key="frame" x="23" y="225" width="338" height="44"/>
+                                <rect key="frame" x="23" y="225" width="371" height="44"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
+                            </textField>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="dOa-Bi-Q5Z">
+                                <rect key="frame" x="267" y="87" width="127" height="51"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="获取验证码" backgroundImage="btn_yanzhengma_n">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="4"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="verifyAction:" destination="sJ6-ri-8Pb" eventType="touchUpInside" id="rL5-Kf-ADY"/>
+                                </connections>
+                            </button>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="  请输入验证码" textAlignment="natural" minimumFontSize="17" id="mI8-rc-DZV">
+                                <rect key="frame" x="23" y="170" width="371" height="53"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <textInputTraits key="textInputTraits"/>
@@ -489,11 +496,11 @@
                     <navigationItem key="navigationItem" id="Hbl-dL-k2S"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina55"/>
                     <connections>
-                        <outlet property="getCaptchaBtn" destination="XwA-g8-4Vy" id="hVO-6e-A0L"/>
-                        <outlet property="inputCaptcha" destination="mI8-rc-DZV" id="Uy9-0c-Brb"/>
-                        <outlet property="inputNewPassword" destination="HSu-1D-LpP" id="tj5-P2-INB"/>
-                        <outlet property="inputPhoneNumber" destination="XVg-XC-zUo" id="tYq-ly-O7s"/>
-                        <outlet property="inputRepeatPassword" destination="ECX-HG-RpN" id="hEZ-eh-Xqh"/>
+                        <outlet property="againPWDTF" destination="ECX-HG-RpN" id="aAC-9j-a3h"/>
+                        <outlet property="passwordTF" destination="HSu-1D-LpP" id="CvM-Ao-p2N"/>
+                        <outlet property="phoneNumTF" destination="XVg-XC-zUo" id="d3P-E8-9AO"/>
+                        <outlet property="verifyBtn" destination="dOa-Bi-Q5Z" id="K5U-eC-RqV"/>
+                        <outlet property="verifyCodeTF" destination="mI8-rc-DZV" id="3gb-N2-4fd"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="PSt-ux-fAm" userLabel="First Responder" sceneMemberID="firstResponder"/>

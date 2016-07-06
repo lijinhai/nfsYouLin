@@ -200,8 +200,6 @@
         {
             // 邻居
             UIBarButtonItem* neighborItem = [[UIBarButtonItem alloc] initWithTitle:@"邻居" style:UIBarButtonItemStylePlain target:nil action:nil];
-
-          
             [self.parentViewController.navigationItem setBackBarButtonItem:neighborItem];
             [self.navigationController pushViewController:_friendsController animated:YES];
             

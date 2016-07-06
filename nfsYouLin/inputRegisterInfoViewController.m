@@ -30,7 +30,7 @@
     UIBarButtonItem *finishItem=[[UIBarButtonItem alloc]initWithTitle:@"完成" style:UIBarButtonItemStylePlain target:self action:@selector(finishAction)];
     self.navigationItem.rightBarButtonItem = finishItem;
     self.navigationItem.title = @"";
-    /*xImageView 添加点击事件*/
+    /*ImageView 添加点击事件*/
     self.selectBoyRadio.userInteractionEnabled = YES;
     self.selectBoyRadio.tag = 1;
     UITapGestureRecognizer *bImageViewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(selectRadioClick:)];
@@ -50,6 +50,8 @@
     self.nickNameTextField.placeholder = @"请输入昵称（2~10个字）";
     self.nickNameTextField.leftView = paddingView0;
     self.nickNameTextField.leftViewMode = UITextFieldViewModeAlways;
+    self.nickNameTextField.returnKeyType = UIReturnKeyNext;
+    self.nickNameTextField.delegate = self;
     [self.nickNameTextField addTarget:self action:@selector(TextFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
     
     
@@ -63,6 +65,8 @@
     self.passwordTextField.leftView = paddingView1;
     self.passwordTextField.leftViewMode = UITextFieldViewModeAlways;
     self.passwordTextField.secureTextEntry = YES;
+    self.passwordTextField.returnKeyType = UIReturnKeyNext;
+    self.passwordTextField.delegate = self;
     [self.passwordTextField addTarget:self action:@selector(TextFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
     
     redrawTextField *passwordTextfield=[[redrawTextField alloc] init:CGRectMake(20,228, 374, 51) addTextField:self.passwordTextField];
@@ -77,6 +81,8 @@
     self.comfirmPWDTextField.leftView = paddingView2;
     self.comfirmPWDTextField.leftViewMode = UITextFieldViewModeAlways;
     self.comfirmPWDTextField.secureTextEntry = YES;
+    self.comfirmPWDTextField.returnKeyType = UIReturnKeyDone;
+    self.comfirmPWDTextField.delegate = self;
     [self.comfirmPWDTextField addTarget:self action:@selector(TextFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
     
     
@@ -104,11 +110,19 @@
     [[UIBarButtonItem appearance] setBackButtonBackgroundImage:backButtonImage forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
     
     [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
-    //UIBarButtonItem *barleftBtn=[[UIBarButtonItem alloc]initWithTitle:@"详细信息" style:UIBarButtonItemStylePlain target:self action:nil];
-    //self.navigationItem.leftBarButtonItem=barleftBtn;
-   
+    
+    [self setTextFieldEnabled:NO];
     
 }
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    [self setTextFieldEnabled:YES];
+
+}
+
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -119,13 +133,7 @@
     NSString* password = self.passwordTextField.text;
     NSString* comfirmPWD = self.comfirmPWDTextField.text;
     NSString* gender = [NSString stringWithFormat:@"%ld",self.genderSelected];
-    [self textFieldResignResponder];
-
-//    if(self.inviteCode.integerValue == 0)
-//    {
-//        self.inviteCode = @"";
-//    }
-    
+    [self.view endEditing:NO];
     if(self.genderSelected == -1)
     {
         [MBProgressHUBTool textToast:self.view Tip:@"请选择性别"];
@@ -236,7 +244,7 @@
 
 - (void) touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
 {
-    [self textFieldResignResponder];
+    [self.view endEditing:NO];
 }
 
 - (void) setInviteCode:(NSString *)inviteCode
@@ -252,11 +260,30 @@
 }
 
 
-- (void) textFieldResignResponder
+
+- (void) setTextFieldEnabled:(BOOL)flag
 {
-    [self.nickNameTextField resignFirstResponder];
-    [self.passwordTextField resignFirstResponder];
-    [self.comfirmPWDTextField resignFirstResponder];
+    [self.nickNameTextField setEnabled:flag];
+    [self.passwordTextField setEnabled:flag];
+    [self.comfirmPWDTextField setEnabled:flag];
+}
+
+// <UITextFieldDelegat >协议方法
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    if(textField == self.nickNameTextField)
+    {
+        [self.passwordTextField becomeFirstResponder];
+    }
+    else if (textField == self.passwordTextField)
+    {
+        [self.comfirmPWDTextField becomeFirstResponder];
+    }
+    else if(textField == self.comfirmPWDTextField)
+    {
+        [self.comfirmPWDTextField resignFirstResponder];
+    }
+    return YES;
 }
 
 @end
