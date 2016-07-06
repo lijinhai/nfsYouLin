@@ -15,7 +15,7 @@
 #import "AFHTTPSessionManager.h"
 #import "HeaderFile.h"
 #import "MBProgressHUBTool.h"
-
+#import "StringMD5.h"
 
 @interface registerViewController()
 
@@ -208,12 +208,18 @@
     [manager.securityPolicy setValidatesDomainName:NO];
 //    manager.requestSerializer = [AFJSONRequestSerializer serializer];
 //    manager.responseSerializer = [AFJSONResponseSerializer serializer];
+    NSString* MD5String = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"phone%@iosioscode%@",phoneNum,verifyCode]];
+    NSString* hashString = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"%@1", MD5String]];
+    
     NSDictionary* parameter = @{@"phone" : phoneNum,
                                 @"ios" : @"ios",
                                 @"apitype" : @"users",
                                 @"tag" : @"mobverify",
                                 @"code" : verifyCode,
-                                @"access" : @"9527" };
+                                @"salt" : @"1",
+                                @"hash" : hashString,
+                                @"keyset" : @"phone:ios:code:",
+                            };
     
     [manager POST:POST_URL parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
         
@@ -281,11 +287,16 @@
     AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
     manager.securityPolicy.allowInvalidCertificates = YES;
     [manager.securityPolicy setValidatesDomainName:NO];
-  
+    NSString* MD5String = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"phonenum%@",phoneNum]];
+    NSString* hashString = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"%@1",MD5String]];
+    
     NSDictionary* parameter = @{@"phonenum" : phoneNum,
                                 @"apitype" : @"users",
                                 @"tag" : @"check",
-                                @"access" : @"9527" };
+                                @"salt" : @"1",
+                                @"hash" : hashString,
+                                @"keyset" : @"phonenum:"
+                                };
     
     [manager POST:POST_URL parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
         

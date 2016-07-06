@@ -25,7 +25,7 @@
     self = [self initWithFrame:frame addTextField:inputInfoText];
     if (self)
     {
-        NSLog(@"Init called1");
+
     }
     return self;
 }
@@ -35,7 +35,6 @@
     if (self)
     {
         
-        NSLog(@"Init called2");
         self.backgroundColor=[UIColor clearColor];
         [self addSubview:inputInfoText];
         
