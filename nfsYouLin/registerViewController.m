@@ -41,7 +41,8 @@
     // Do any additional setup after loading the view.
     UIStoryboard* storyBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     aboutTermsController = [storyBoard instantiateViewControllerWithIdentifier:@"aboutController"];
-    inputRegisterInfoController=[storyBoard instantiateViewControllerWithIdentifier:@"registerInfoController"];
+
+    inputRegisterInfoController = [storyBoard instantiateViewControllerWithIdentifier:@"registerInfoController"];
 
     
     _isClick=YES;
@@ -127,10 +128,7 @@
     
     if(self.verifyBtn.enabled)
     {
-        self.phoneTextField.text = @"";
-        self.verifyTextField.text = @"";
-        self.inviteTextField.text = @"";
-
+        [self clearTextField];
     }
 
 
@@ -169,12 +167,11 @@
 {
     NSLog(@"下一步");
     NSLog(@"验证码 = %@",self.verifyTextField.text);
-    [self.phoneTextField resignFirstResponder];
-    [self.verifyTextField resignFirstResponder];
-    [self.inviteTextField resignFirstResponder];
+   
+    [self textFieldResignResponder];
     NSString* phoneNum = self.phoneTextField.text;
     NSString* verifyCode = self.verifyTextField.text;
-    
+    NSString* inviteCode = self.inviteTextField.text;
     if(phoneNum.length == 0)
     {
         [MBProgressHUBTool textToast:self.view Tip:@"手机号不能为空"];
@@ -229,9 +226,7 @@
         if(flag == 200)
         {
             NSLog(@"验证码比对正确，跳转页面");
-            UIBarButtonItem* neighborItem = [[UIBarButtonItem alloc] initWithTitle:@"详细信息" style:UIBarButtonItemStylePlain target:nil action:nil];
-            [self.navigationItem setBackBarButtonItem:neighborItem];
-            [self.navigationController pushViewController:inputRegisterInfoController animated:YES];
+            [self inviteNetwork:phoneNum inviteCode:inviteCode];
         }
         else
         {
@@ -241,30 +236,67 @@
             self.inviteTextField.text = @"";
             [MBProgressHUBTool textToast:self.view Tip:@"验证码错误,请正确填写"];
         }
+        return;
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         NSLog(@"请求失败:%@", error.description);
+        return;
     }];
 }
 
+- (void) inviteNetwork:(NSString*)phoneNum inviteCode:(NSString *)inviteCode
+{
+    
+        // 发起邀请码比对网络请求
+        AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
+        manager.securityPolicy.allowInvalidCertificates = YES;
+        [manager.securityPolicy setValidatesDomainName:NO];
+ 
+        NSString* MD5String = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"inv_phone%@inv_code%@",phoneNum,inviteCode]];
+        NSString* hashString = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"%@1", MD5String]];
+    
+        NSDictionary* parameter = @{@"inv_phone" : phoneNum,
+                                    @"inv_code" : inviteCode,
+                                    @"apitype" : @"users",
+                                    @"tag" : @"checkinvstatus",
+                                    @"salt" : @"1",
+                                    @"hash" : hashString,
+                                    @"keyset" : @"inv_phone:inv_code:",
+                                };
+    
+        [manager POST:POST_URL parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
+    
+        } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+            NSLog(@"请求成功:%@", responseObject);
+            NSString* flag = [responseObject valueForKey:@"flag"];
+            
+            if([flag isEqualToString:@"ok"])
+            {
+                UIBarButtonItem* neighborItem = [[UIBarButtonItem alloc] initWithTitle:@"详细信息" style:UIBarButtonItemStylePlain target:nil action:nil];
+                [self.navigationItem setBackBarButtonItem:neighborItem];
+                inputRegisterInfoController.inviteCode = [responseObject valueForKey:@"type"];
+                inputRegisterInfoController.phoneNum = phoneNum;
+                
+                [self.navigationController pushViewController:inputRegisterInfoController animated:YES];
+            }
+        } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+            NSLog(@"请求失败:%@", error.description);
+        }];
 
+}
 
 
 
 - (void) touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
 {
-    [self.phoneTextField resignFirstResponder];
-    [self.verifyTextField resignFirstResponder];
-    [self.inviteTextField resignFirstResponder];
+    [self textFieldResignResponder];
 }
 
 // 获取验证码
 - (IBAction)getVerificationCode:(id)sender {
     NSLog(@"获取验证码");
 
+    [self textFieldResignResponder];
     NSString* phoneNum = self.phoneTextField.text;
-    [self.phoneTextField resignFirstResponder];
-    [self.verifyTextField resignFirstResponder];
-    [self.inviteTextField resignFirstResponder];
     NSLog(@"phoneNum = %@",self.phoneTextField.text);
     
     if(phoneNum.length == 0)
@@ -330,6 +362,8 @@
                  if (!error)
                  {
                      NSLog(@"获取验证码成功");
+                     [self overTimer];
+
                  }
                  else
                  {
@@ -345,9 +379,8 @@
         return;
     }];
 
-    
-    
 }
+
 
 
 
@@ -382,6 +415,15 @@
 
     if(_secTime == 0)
     {
+        [self overTimer];
+        [self clearTextField];
+    }
+}
+
+- (void) overTimer
+{
+    if(_timer)
+    {
         [_timer invalidate];
         _timer = nil;
         _secTime = 60;
@@ -390,15 +432,27 @@
         self.phoneTextField.textColor = [UIColor blackColor];
         [phoneLineField lineConvertToBlack];
 
-        self.phoneTextField.text = @"";
-        self.verifyTextField.text = @"";
-        self.inviteTextField.text = @"";
         timeLabel.textAlignment = NSTextAlignmentLeft;
         [timeLabel removeFromSuperview];
         [titleLabel removeFromSuperview];
+
     }
 }
 
+- (void) clearTextField
+{
+    self.phoneTextField.text = @"";
+    self.verifyTextField.text = @"";
+    self.inviteTextField.text = @"";
+}
+
+- (void) textFieldResignResponder
+{
+    [self.phoneTextField resignFirstResponder];
+    [self.verifyTextField resignFirstResponder];
+    [self.inviteTextField resignFirstResponder];
+
+}
 
 @end
 

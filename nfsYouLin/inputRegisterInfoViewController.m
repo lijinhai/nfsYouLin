@@ -9,6 +9,10 @@
 #import "inputRegisterInfoViewController.h"
 #import "chooseCityViewController.h"
 #import "redrawTextField.h"
+#import "StringMD5.h"
+#import "MBProgressHUBTool.h"
+#import "AFHTTPSessionManager.h"
+#import "HeaderFile.h"
 
 @interface inputRegisterInfoViewController ()
 
@@ -22,6 +26,73 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+        
+    UIBarButtonItem *finishItem=[[UIBarButtonItem alloc]initWithTitle:@"完成" style:UIBarButtonItemStylePlain target:self action:@selector(finishAction)];
+    self.navigationItem.rightBarButtonItem = finishItem;
+    self.navigationItem.title = @"";
+    /*xImageView 添加点击事件*/
+    self.selectBoyRadio.userInteractionEnabled = YES;
+    self.selectBoyRadio.tag = 1;
+    UITapGestureRecognizer *bImageViewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(selectRadioClick:)];
+    [self.selectBoyRadio addGestureRecognizer:bImageViewTap];
+    
+    self.selectGirlRadio.userInteractionEnabled = YES;
+    self.selectGirlRadio.tag = 2;
+    UITapGestureRecognizer *gImageViewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(selectRadioClick:)];
+    [self.selectGirlRadio addGestureRecognizer:gImageViewTap];
+    
+    
+    // 添加昵称输入框
+    self.nickNameTextField = [[UITextField alloc] initWithFrame:CGRectZero];
+    UIView *paddingView0 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 10, 30)];
+    self.nickNameTextField.frame = CGRectMake(3, -1, 240, 49);
+    self.nickNameTextField.backgroundColor = [UIColor whiteColor];
+    self.nickNameTextField.placeholder = @"请输入昵称（2~10个字）";
+    self.nickNameTextField.leftView = paddingView0;
+    self.nickNameTextField.leftViewMode = UITextFieldViewModeAlways;
+    [self.nickNameTextField addTarget:self action:@selector(TextFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+    
+    
+    redrawTextField *nickNameTextfield=[[redrawTextField alloc] init:CGRectMake(20, 174, 374, 51) addTextField:self.nickNameTextField];
+    // 添加设置密码输入框
+    self.passwordTextField = [[UITextField alloc] initWithFrame:CGRectZero];
+    UIView *paddingView1 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 10, 30)];
+    self.passwordTextField.frame = CGRectMake(3, -1, 368, 49);
+    self.passwordTextField.backgroundColor = [UIColor whiteColor];
+    self.passwordTextField.placeholder=@"请输入密码（6-16个字符）";
+    self.passwordTextField.leftView = paddingView1;
+    self.passwordTextField.leftViewMode = UITextFieldViewModeAlways;
+    self.passwordTextField.secureTextEntry = YES;
+    [self.passwordTextField addTarget:self action:@selector(TextFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+    
+    redrawTextField *passwordTextfield=[[redrawTextField alloc] init:CGRectMake(20,228, 374, 51) addTextField:self.passwordTextField];
+    
+    // 添加确认密码输入框
+    
+    self.comfirmPWDTextField = [[UITextField alloc] initWithFrame:CGRectZero];
+    UIView *paddingView2 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 10, 30)];
+    self.comfirmPWDTextField.frame = CGRectMake(3, -1, 368, 49);
+    self.comfirmPWDTextField.backgroundColor = [UIColor whiteColor];
+    self.comfirmPWDTextField.placeholder = @"请确认密码（6-16个字符）";
+    self.comfirmPWDTextField.leftView = paddingView2;
+    self.comfirmPWDTextField.leftViewMode = UITextFieldViewModeAlways;
+    self.comfirmPWDTextField.secureTextEntry = YES;
+    [self.comfirmPWDTextField addTarget:self action:@selector(TextFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+    
+    
+    redrawTextField *confirmPasswordTextfield=[[redrawTextField alloc] init:CGRectMake(20,287, 374, 51) addTextField:self.comfirmPWDTextField];
+    
+    [self.view addSubview:nickNameTextfield];
+    [self.view addSubview:passwordTextfield];
+    [self.view addSubview:confirmPasswordTextfield];
+    
+    self.genderSelected = -1;
+    
+    /*跳转至选择城市界面*/
+    UIStoryboard* storyBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    cityController = [storyBoard instantiateViewControllerWithIdentifier:@"cityController"];
+    
+    
 }
 - (void)viewWillAppear:(BOOL)animated
 {
@@ -35,83 +106,157 @@
     [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
     //UIBarButtonItem *barleftBtn=[[UIBarButtonItem alloc]initWithTitle:@"详细信息" style:UIBarButtonItemStylePlain target:self action:nil];
     //self.navigationItem.leftBarButtonItem=barleftBtn;
-    UIBarButtonItem *barrightBtn=[[UIBarButtonItem alloc]initWithTitle:@"完成" style:UIBarButtonItemStylePlain target:self action:@selector(selectCompleteAction)];
-    self.navigationItem.rightBarButtonItem=barrightBtn;
-    self.navigationItem.title=@"";
-    /*xImageView 添加点击事件*/
-    _selectBoyRadio.userInteractionEnabled = YES;
-    _selectBoyRadio.tag=1;
-    UITapGestureRecognizer *xImageViewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(selectRadioClick:)];
-    [_selectBoyRadio addGestureRecognizer:xImageViewTap];
-    
-    _selectGirlRadio.userInteractionEnabled = YES;
-    _selectGirlRadio.tag=2;
-   UITapGestureRecognizer *xImageViewTap2 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(selectRadioClick:)];
-    [_selectGirlRadio addGestureRecognizer:xImageViewTap2];
-    /*添加重绘的文本框*/
-    /*添加昵称输入框*/
-    UITextField *inputNickNameField = [[UITextField alloc] initWithFrame:CGRectZero];
-    UIView *paddingView0 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 10, 30)];
-    inputNickNameField.frame = CGRectMake(3, -1, 240, 49);
-    inputNickNameField.backgroundColor = [UIColor whiteColor];
-    inputNickNameField.placeholder=@"请输入昵称（2~10个字）";
-    inputNickNameField.leftView=paddingView0;
-    inputNickNameField.leftViewMode=UITextFieldViewModeAlways;
-    [inputNickNameField becomeFirstResponder];
-    redrawTextField *nickNameTextfield=[[redrawTextField alloc] init:CGRectMake(20, 174, 374, 51) addTextField:inputNickNameField];
-    /*添加设置密码输入框*/
-    UITextField *inputPasswordField = [[UITextField alloc] initWithFrame:CGRectZero];
-    UIView *paddingView1 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 10, 30)];
-    inputPasswordField.frame = CGRectMake(3, -1, 368, 49);
-    inputPasswordField.backgroundColor = [UIColor whiteColor];
-    inputPasswordField.placeholder=@"请输入密码（6-16个字符）";
-    inputPasswordField.leftView=paddingView1;
-    inputPasswordField.leftViewMode=UITextFieldViewModeAlways;
-    redrawTextField *passwordTextfield=[[redrawTextField alloc] init:CGRectMake(20,228, 374, 51) addTextField:inputPasswordField];
-    /*添加确认密码输入框*/
-    UITextField *inputConfirmPasswordInfoField = [[UITextField alloc] initWithFrame:CGRectZero];
-    UIView *paddingView2 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 10, 30)];
-    inputConfirmPasswordInfoField.frame = CGRectMake(3, -1, 368, 49);
-    inputConfirmPasswordInfoField.backgroundColor = [UIColor whiteColor];
-    inputConfirmPasswordInfoField.placeholder=@"请确认密码（6-16个字符）";
-    inputConfirmPasswordInfoField.leftView=paddingView2;
-    inputConfirmPasswordInfoField.leftViewMode=UITextFieldViewModeAlways;
-    
-    redrawTextField *confirmPasswordTextfield=[[redrawTextField alloc] init:CGRectMake(20,287, 374, 51) addTextField:inputConfirmPasswordInfoField];
-    
-    [self.view addSubview:nickNameTextfield];
-    [self.view addSubview:passwordTextfield];
-    [self.view addSubview:confirmPasswordTextfield];
-    /*跳转至选择城市界面*/
-    UIStoryboard* storyBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-    cityController = [storyBoard instantiateViewControllerWithIdentifier:@"cityController"];
+   
     
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
--(void)selectCompleteAction{
+-(void)finishAction{
 
-    /*添加相关逻辑判断*/
-    UIBarButtonItem* neighborItem = [[UIBarButtonItem alloc] initWithTitle:@"请选择城市" style:UIBarButtonItemStylePlain target:nil action:nil];
-    [self.navigationItem setBackBarButtonItem:neighborItem];
-    [self.navigationController pushViewController:cityController animated:YES];
+    NSString* nickName = self.nickNameTextField.text;
+    NSString* password = self.passwordTextField.text;
+    NSString* comfirmPWD = self.comfirmPWDTextField.text;
+    NSString* gender = [NSString stringWithFormat:@"%ld",self.genderSelected];
+    [self textFieldResignResponder];
+
+//    if(self.inviteCode.integerValue == 0)
+//    {
+//        self.inviteCode = @"";
+//    }
+    
+    if(self.genderSelected == -1)
+    {
+        [MBProgressHUBTool textToast:self.view Tip:@"请选择性别"];
+        return;
+    }
+    
+    if(nickName.length == 0)
+    {
+        [MBProgressHUBTool textToast:self.view Tip:@"名字不能为空"];
+        return;
+    }
+    
+    if(nickName.length < 2)
+    {
+        [MBProgressHUBTool textToast:self.view Tip:@"名字格式不正确"];
+        return;
+    }
+    
+    if(password.length < 6 || comfirmPWD.length < 6)
+    {
+        [MBProgressHUBTool textToast:self.view Tip:@"输入密码格式不正确"];
+        return;
+    }
+    
+    if(![password isEqualToString:comfirmPWD])
+    {
+        [MBProgressHUBTool textToast:self.view Tip:@"密码不一致,请重新填写"];
+        return;
+    }
+    
+    
+    
+    // 发起用户注册网络请求
+    AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
+    manager.securityPolicy.allowInvalidCertificates = YES;
+    [manager.securityPolicy setValidatesDomainName:NO];
+    NSString* MD5String = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"gender%@nick%@phonenum%@password%@recommend%@",gender,nickName,self.phoneNum,password,self.inviteCode]];
+    NSString* hashString = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"%@1",MD5String]];
+    
+    NSDictionary* parameter = @{@"gender"   : gender,
+                                @"nick"     : nickName,
+                                @"phonenum" : self.phoneNum,
+                                @"password" : password,
+                                @"recommend": self.inviteCode,
+                                @"tag"      : @"regist",
+                                @"apitype"  : @"users",
+                                @"salt"     : @"1",
+                                @"hash"     : hashString,
+                                @"keyset"   : @"gender:nick:phonenum:password:recommend:"
+                                
+                                };
+    
+    [manager POST:POST_URL parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSLog(@"请求成功:%@", responseObject);
+        NSInteger flag = [[responseObject valueForKey:@"flag"] integerValue];
+        if(flag == 1)
+        {
+            NSLog(@"注册成功");
+            UIBarButtonItem* neighborItem = [[UIBarButtonItem alloc] initWithTitle:@"请选择城市" style:UIBarButtonItemStylePlain target:nil action:nil];
+            [self.navigationItem setBackBarButtonItem:neighborItem];
+            [self.navigationController pushViewController:cityController animated:YES];
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"请求失败:%@", error.description);
+        return;
+    }];
+
+    
 }
 
 -(void)selectRadioClick:(UITapGestureRecognizer*)sender{
-    UIImage *image1= [UIImage imageNamed:@"checked_sex"];
-    UIImage *image2= [UIImage imageNamed:@"uncheck_sex"];
+    UIImage *selectedImage = [UIImage imageNamed:@"checked_sex"];
+    UIImage *emptyImage = [UIImage imageNamed:@"uncheck_sex"];
     NSLog(@"%ld", sender.view.tag);
-    if(sender.view.tag==1)
+    self.genderSelected = sender.view.tag;
+    if(sender.view.tag == 1)
     {
-        _selectBoyRadio.image = image1;
-        _selectGirlRadio.image =image2;
-    }else{
-        _selectBoyRadio.image = image2;
-        _selectGirlRadio.image =image1;
+        self.selectBoyRadio.image = selectedImage;
+        self.selectGirlRadio.image = emptyImage;
+    }
+    else
+    {
+        self.selectBoyRadio.image = emptyImage;
+        self.selectGirlRadio.image = selectedImage;
     
     }
+}
+
+- (void)TextFieldDidChange:(UITextField *)textField
+{
+    if (textField == self.nickNameTextField)
+    {
+        if (textField.text.length > 10)
+        {
+            textField.text = [textField.text substringToIndex:10];
+        }
+    }
+    else if(textField == self.passwordTextField || textField == self.comfirmPWDTextField)
+    {
+        if(textField.text.length > 16)
+        {
+            textField.text = [textField.text substringToIndex:16];
+        }
+    }
+}
+
+- (void) touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
+{
+    [self textFieldResignResponder];
+}
+
+- (void) setInviteCode:(NSString *)inviteCode
+{
+    NSLog(@"setInviteCode = %@", inviteCode);
+    _inviteCode = inviteCode;
+}
+
+- (void) setPhoneNum:(NSString *)phoneNum
+{
+    NSLog(@"phoneNum = %@",phoneNum);
+    _phoneNum = phoneNum;
+}
+
+
+- (void) textFieldResignResponder
+{
+    [self.nickNameTextField resignFirstResponder];
+    [self.passwordTextField resignFirstResponder];
+    [self.comfirmPWDTextField resignFirstResponder];
 }
 
 @end
