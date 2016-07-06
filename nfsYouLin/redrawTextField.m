@@ -64,12 +64,11 @@
     // 开始绘图
     CGContextStrokePath(ctx);
 }
+
+
+
 -(void)getFieldFocus{
     
-    //NSLog(@"%ld",test1.tag);
-    //redrawTextField *testField=[_dict objectForKey:[NSString stringWithFormat:@"%ld",test1.tag]];
-    //NSLog(@"%ld",testField.place);
-    NSLog(@"得到了焦点");
     self.redValue=65.0f;
     self.greenValue=105.0f;
     self.blueValue=255.0f;
@@ -77,13 +76,31 @@
     //[self setNeedsFocusUpdate];
     //[self.view addSubview:testField];
 }
--(void)lostFieldFocus{
-    
-    NSLog(@"失去了焦点");
-    self.redValue=0.0f;
-    self.greenValue=0.0f;
-    self.blueValue=0.0f;
-    [self setNeedsDisplay];
-    //[self setNeedsFocusUpdate];
+
+-(void)lostFieldFocus
+{
+    [self lineConvertToBlack];
 }
+
+
+-(void)lineConvertToBlack
+{
+    self.redValue = 0.0f;
+    self.greenValue = 0.0f;
+    self.blueValue = 0.0f;
+    [self setNeedsDisplay];
+}
+
+
+- (void) lineConvertToGray
+{
+    self.redValue = 220.0f;
+    self.greenValue = 220.0f;
+    self.blueValue = 220.0f;
+    [self setNeedsDisplay];
+}
+
+
+
+
 @end

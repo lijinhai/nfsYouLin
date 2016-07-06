@@ -15,5 +15,5 @@
 #define screenHeight [UIScreen mainScreen].bounds.size.height
 
 #define imageTag 2000
-
+#define POST_URL @"https://123.57.9.62/youlin/api1.0/?"
 #endif /* HeaderFile_h */

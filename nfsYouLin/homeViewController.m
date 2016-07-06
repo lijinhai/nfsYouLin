@@ -32,9 +32,11 @@
     [rightVeiw addSubview:xImageView];
     self.phoneTextField.rightView = rightVeiw;
     self.phoneTextField.rightViewMode = UITextFieldViewModeWhileEditing;
+    self.phoneTextField.keyboardType = UIKeyboardTypeNumberPad;
+    [self.phoneTextField addTarget:self action:@selector(phoneTextFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+    self.phoneTextField.delegate = self;
     self.passwordTextField.rightView = rightVeiw;
     self.passwordTextField.rightViewMode = UITextFieldViewModeWhileEditing;
-    [self.phoneTextField addTarget:self action:@selector(phoneTextFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
     /*xImageView 添加点击事件*/
     xImageView.userInteractionEnabled = YES;
     UITapGestureRecognizer *xImageViewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(xImageViewClick:)];
@@ -44,6 +46,7 @@
     UIStoryboard* storyBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     _forgetController = [storyBoard instantiateViewControllerWithIdentifier:@"forgetController"];
     _registerController = [storyBoard instantiateViewControllerWithIdentifier:@"registerController"];
+//    _registerController = [[registerViewController alloc] init];
     _FirstTabBarController = [storyBoard instantiateViewControllerWithIdentifier:@"homeTabView"];
     newNavigationController = [storyBoard instantiateViewControllerWithIdentifier:@"viewID"];
 
@@ -95,16 +98,17 @@
     }
 }
 
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+// UITextFieldDelegate 限制输入框只能输入数字
+-(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
+    NSCharacterSet *cs;
+    cs = [[NSCharacterSet characterSetWithCharactersInString:@"0123456789\n"]invertedSet];
+    
+    NSString *filtered = [[string componentsSeparatedByCharactersInSet:cs]componentsJoinedByString:@""];
+    
+    BOOL canChange = [string isEqualToString:filtered];
+    
+    return canChange;
 }
-*/
 
 
 - (IBAction)forgetAction:(UIButton *)sender {

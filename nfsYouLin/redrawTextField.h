@@ -13,6 +13,9 @@
 @property (nonatomic,readwrite) CGFloat blueValue;
 @property (nonatomic,readwrite) CGFloat greenValue;
 
+-(void)lineConvertToBlack;
+- (void) lineConvertToGray;
+
 
 - (id)init:(CGRect)frame addTextField:(UITextField *)inputInfoText;
 @end

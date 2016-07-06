@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface homeViewController : UIViewController
+@interface homeViewController : UIViewController <UITextFieldDelegate>
 @property (strong, nonatomic) IBOutlet UITextField *phoneTextField;
 @property (strong, nonatomic) IBOutlet UITextField *passwordTextField;
 - (IBAction)forgetAction:(UIButton *)sender;

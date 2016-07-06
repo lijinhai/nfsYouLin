@@ -10,6 +10,11 @@
 #import "EMSDK.h"
 #import "FMDB.h"
 #import "Constants.h"
+#import <SMS_SDK/SMSSDK.h>
+
+#define appKey @"d3f836c7d14c"
+#define appSecret @"203b2509d7f89a3a97bb44ee489f5f38"
+
 
 @interface AppDelegate ()
 
@@ -20,6 +25,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    // 环信初始化
     EMOptions *options = [EMOptions optionsWithAppkey:@"walk#test"];
     [[EMClient sharedClient] initializeSDKWithOptions:options];
     EMError *error = [[EMClient sharedClient] loginWithUsername:@"test2" password:@"123456"];
@@ -27,6 +33,9 @@
     {
         NSLog(@"环信登陆成功");
     }
+    
+    // 短信验证初始化
+    [SMSSDK registerApp:appKey withSecret:appSecret];
 
     return YES;
 }
