@@ -11,4 +11,5 @@
 @interface StringMD5 : NSObject
 + (NSString*) stringAddMD5:(NSString *)input;
 + (NSString *)replaceUnicode:(NSString *)unicodeStr;
++ (CGSize) sizeWithString:(NSString *)str font:(UIFont *)font maxSize:(CGSize)maxSize;
 @end

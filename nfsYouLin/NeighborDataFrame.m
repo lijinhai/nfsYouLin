@@ -9,6 +9,7 @@
 
 
 #import "NeighborDataFrame.h"
+#import "StringMD5.h"
 
 @implementation NeighborDataFrame
 
@@ -26,7 +27,7 @@
     
     // 帖子标题位置大小
     CGFloat titleLabelX = CGRectGetMaxX(self.iconFrame) + PADDING;
-    CGSize titleLabelSize = [self sizeWithString:[NSString stringWithFormat:@"#%@#%@",self.neighborData.titleCategory,self.neighborData.titleName] font:[UIFont boldSystemFontOfSize:18] maxSize:CGSizeMake(MAXFLOAT,MAXFLOAT)];
+    CGSize titleLabelSize = [StringMD5 sizeWithString:[NSString stringWithFormat:@"#%@#%@",self.neighborData.titleCategory,self.neighborData.titleName] font:[UIFont boldSystemFontOfSize:18] maxSize:CGSizeMake(MAXFLOAT,MAXFLOAT)];
     CGFloat titleLabelY = iconViewY + PADDING / 2;
     CGFloat titleLabelW = titleLabelSize.width;
     CGFloat titleLabelH = titleLabelSize.height;
@@ -35,7 +36,7 @@
     // 用户信息位置大小
     CGFloat accountInfoLabelX = CGRectGetMaxX(self.iconFrame) + PADDING;
     CGFloat accountInfoLabelY = CGRectGetMaxY(self.titleFrame);
-    CGSize accountInfoLabelSize = [self sizeWithString:[NSString stringWithFormat:@"%@@%@",self.neighborData.accountName, self.neighborData.addressInfo] font:[UIFont systemFontOfSize:15] maxSize:CGSizeMake(MAXFLOAT, MAXFLOAT)];
+    CGSize accountInfoLabelSize = [StringMD5 sizeWithString:[NSString stringWithFormat:@"%@@%@",self.neighborData.accountName, self.neighborData.addressInfo] font:[UIFont systemFontOfSize:15] maxSize:CGSizeMake(MAXFLOAT, MAXFLOAT)];
     CGFloat accountInfoLabelW = accountInfoLabelSize.width;
     CGFloat accountInfoLabelH = accountInfoLabelSize.height;
     self.accountInfoFrame = CGRectMake(accountInfoLabelX, accountInfoLabelY, accountInfoLabelW, accountInfoLabelH);
@@ -45,7 +46,7 @@
     UIFont *font = [UIFont fontWithName:@"AppleGothic" size:16];
     CGFloat textLabelX = PADDING;
     CGFloat textLabelY = CGRectGetMaxY(self.iconFrame) + PADDING;
-    CGSize textLabelSize = [self sizeWithString:self.neighborData.publishText font:font maxSize:CGSizeMake(screenWidth - 2 * PADDING, MAXFLOAT)];
+    CGSize textLabelSize = [StringMD5 sizeWithString:self.neighborData.publishText font:font maxSize:CGSizeMake(screenWidth - 2 * PADDING, MAXFLOAT)];
    
     CGFloat textLabelW = textLabelSize.width;
     CGFloat textLabelH;
@@ -70,7 +71,7 @@
     {
         readButtonX = PADDING;
         readButtonY = CGRectGetMaxY(self.textFrame) + PADDING;
-        CGSize readButtonSize = [self sizeWithString:@"全看全文" font:[UIFont systemFontOfSize:20] maxSize:CGSizeMake(MAXFLOAT, MAXFLOAT)];
+        CGSize readButtonSize = [StringMD5 sizeWithString:@"全看全文" font:[UIFont systemFontOfSize:20] maxSize:CGSizeMake(MAXFLOAT, MAXFLOAT)];
         readButtonW = readButtonSize.width;
         readButtonH = readButtonSize.height;
     }
@@ -109,15 +110,7 @@
    
 }
 
-// 计算文本大小
--(CGSize) sizeWithString:(NSString *)str font:(UIFont *)font maxSize:(CGSize)maxSize
-{
-    NSDictionary *dict = @{NSFontAttributeName : font};
-    // 如果将来计算的文字的范围超出了指定的范围,返回的就是指定的范围
-    // 如果将来计算的文字的范围小于指定的范围, 返回的就是真实的范围
-    CGSize size = [str boundingRectWithSize:maxSize options:NSStringDrawingUsesLineFragmentOrigin attributes:dict context:nil].size;
-    return size;
-}
+
 
 -(NSMutableArray *)picturesFrame
 {

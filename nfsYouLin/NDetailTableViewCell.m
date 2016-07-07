@@ -7,6 +7,7 @@
 //
 
 #import "NDetailTableViewCell.h"
+#import "StringMD5.h"
 
 @implementation NDetailTableViewCell
 {
@@ -216,7 +217,7 @@
     self.iconView.image = [UIImage imageNamed:self.neighborData.iconName];
     
     CGRect accountFrame;
-    CGSize accountInfoLabelSize = [self sizeWithString:[NSString stringWithFormat:@"%@@%@",self.neighborData.accountName, self.neighborData.addressInfo] font:[UIFont systemFontOfSize:15] maxSize:CGSizeMake(MAXFLOAT, MAXFLOAT)];
+    CGSize accountInfoLabelSize = [StringMD5 sizeWithString:[NSString stringWithFormat:@"%@@%@",self.neighborData.accountName, self.neighborData.addressInfo] font:[UIFont systemFontOfSize:15] maxSize:CGSizeMake(MAXFLOAT, MAXFLOAT)];
     CGFloat accountInfoLabelW = accountInfoLabelSize.width;
     CGFloat accountInfoLabelH = accountInfoLabelSize.height;
     accountFrame = CGRectMake(CGRectGetMaxX(self.iconView.frame) +  PADDING / 2, PADDING / 2, accountInfoLabelW, accountInfoLabelH);
@@ -224,7 +225,7 @@
     self.accountInfoLabel.text = [NSString stringWithFormat:@"%@@%@",self.neighborData.accountName, self.neighborData.addressInfo];
     
     
-    CGSize timeLabelSize = [self sizeWithString:[NSString stringWithFormat:@"%@",self.neighborData.dateTime] font:[UIFont systemFontOfSize:12] maxSize:CGSizeMake(MAXFLOAT, MAXFLOAT)];
+    CGSize timeLabelSize = [StringMD5 sizeWithString:[NSString stringWithFormat:@"%@",self.neighborData.dateTime] font:[UIFont systemFontOfSize:12] maxSize:CGSizeMake(MAXFLOAT, MAXFLOAT)];
     CGFloat timeLabelW = timeLabelSize.width;
     CGFloat timeLabelH = timeLabelSize.height;
     self.timeLabel.frame = CGRectMake( CGRectGetMinX(self.accountInfoLabel.frame), CGRectGetMaxY(self.accountInfoLabel.frame), timeLabelW, timeLabelH);
@@ -235,13 +236,13 @@
 - (void) setFirstCellData
 {
     CGRect titleFrame;
-    CGSize titleSize = [self sizeWithString:[NSString stringWithFormat:@"标题:#%@#%@",self.neighborData.titleCategory,self.neighborData.titleName] font:[UIFont boldSystemFontOfSize:18] maxSize:CGSizeMake(MAXFLOAT, MAXFLOAT)];
+    CGSize titleSize = [StringMD5 sizeWithString:[NSString stringWithFormat:@"标题:#%@#%@",self.neighborData.titleCategory,self.neighborData.titleName] font:[UIFont boldSystemFontOfSize:18] maxSize:CGSizeMake(MAXFLOAT, MAXFLOAT)];
     titleFrame = CGRectMake(PADDING, PADDING, titleSize.width, titleSize.height);
     self.titleLabel.text = [NSString stringWithFormat:@"标题:#%@#%@",self.neighborData.titleCategory,self.neighborData.titleName];
     self.titleLabel.frame = titleFrame;
     
     CGRect textLabelFrame;
-    CGSize textLabelSize = [self sizeWithString:self.neighborData.publishText font:[UIFont fontWithName:@"AppleGothic" size:16] maxSize:CGSizeMake(screenWidth - 2 * PADDING, MAXFLOAT)];
+    CGSize textLabelSize = [StringMD5 sizeWithString:self.neighborData.publishText font:[UIFont fontWithName:@"AppleGothic" size:16] maxSize:CGSizeMake(screenWidth - 2 * PADDING, MAXFLOAT)];
     textLabelFrame = CGRectMake(PADDING, CGRectGetMaxY(self.titleLabel.frame) + PADDING, textLabelSize.width, textLabelSize.height);
     self.contentLabel.frame = textLabelFrame;
     self.contentLabel.text = self.neighborData.publishText;
@@ -277,7 +278,7 @@
     self.personView.image = [UIImage imageNamed:self.neighborData.iconName ];
     
     CGRect personLableFrame;
-    CGSize personLableLabelSize = [self sizeWithString:[NSString stringWithFormat:@"%@@%@",self.neighborData.accountName, self.neighborData.addressInfo] font:[UIFont systemFontOfSize:15] maxSize:CGSizeMake(MAXFLOAT, MAXFLOAT)];
+    CGSize personLableLabelSize = [StringMD5 sizeWithString:[NSString stringWithFormat:@"%@@%@",self.neighborData.accountName, self.neighborData.addressInfo] font:[UIFont systemFontOfSize:15] maxSize:CGSizeMake(MAXFLOAT, MAXFLOAT)];
     CGFloat personLabelW = personLableLabelSize.width;
     CGFloat personLabelH = personLableLabelSize.height;
     personLableFrame = CGRectMake(CGRectGetMaxX(self.personView.frame) +  PADDING, PADDING, personLabelW, personLabelH);
@@ -286,7 +287,7 @@
     
     
     CGRect replyTimeFrame;
-    CGSize replyTimeSize = [self sizeWithString:@"刚刚" font:[UIFont systemFontOfSize:12] maxSize:CGSizeMake(MAXFLOAT, MAXFLOAT)];
+    CGSize replyTimeSize = [StringMD5 sizeWithString:@"刚刚" font:[UIFont systemFontOfSize:12] maxSize:CGSizeMake(MAXFLOAT, MAXFLOAT)];
     replyTimeFrame = CGRectMake(screenWidth - PADDING - replyTimeSize.width, PADDING, replyTimeSize.width, replyTimeSize.height);
     self.replyTimeLabel.text = @"刚刚";
     self.replyTimeLabel.frame = replyTimeFrame;
@@ -297,7 +298,7 @@
     
     
     CGRect otherButtonFrame;
-    CGSize otherButtonSize = [self sizeWithString:@"回复" font:[UIFont systemFontOfSize:20] maxSize:CGSizeMake(MAXFLOAT, MAXFLOAT)];
+    CGSize otherButtonSize = [StringMD5 sizeWithString:@"回复" font:[UIFont systemFontOfSize:20] maxSize:CGSizeMake(MAXFLOAT, MAXFLOAT)];
     otherButtonFrame = CGRectMake(screenWidth - PADDING - otherButtonSize.width,CGRectGetMaxY(self.repleyText.frame) + 2 * PADDING, otherButtonSize.width, otherButtonSize.height);
     [self.otherButton setTitle:@"回复" forState:UIControlStateNormal];
     self.otherButton.frame = otherButtonFrame;
@@ -305,15 +306,7 @@
 
 }
 
-// 计算文本大小
--(CGSize) sizeWithString:(NSString *)str font:(UIFont *)font maxSize:(CGSize)maxSize
-{
-    NSDictionary *dict = @{NSFontAttributeName : font};
-    // 如果将来计算的文字的范围超出了指定的范围,返回的就是指定的范围
-    // 如果将来计算的文字的范围小于指定的范围, 返回的就是真实的范围
-    CGSize size = [str boundingRectWithSize:maxSize options:NSStringDrawingUsesLineFragmentOrigin attributes:dict context:nil].size;
-    return size;
-}
+
 
 
 

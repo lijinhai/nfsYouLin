@@ -36,6 +36,10 @@
     
     // 短信验证初始化
     [SMSSDK registerApp:appKey withSecret:appSecret];
+    
+    NSLog(@"创建数据库");
+    self.dbPath = [self dataFilePath];
+    [self createTable];
 
     return YES;
 }
@@ -60,7 +64,9 @@
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
-- (NSString *) dataFilePath//应用程序的沙盒路径
+
+//应用程序的沙盒路径
+- (NSString *) dataFilePath
 {
     NSArray *path = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *document = [path objectAtIndex:0];

@@ -7,6 +7,7 @@
 //
 
 #import "SearchBarView.h"
+#import "StringMD5.h"
 
 @implementation SearchBarView
 
@@ -52,7 +53,7 @@
 
 - (void) setupDefaultLeftView
 {
-    CGSize leftButtonSize =  [self sizeWithString:@"搜全部" font:[UIFont systemFontOfSize:14] maxSize:CGSizeMake(MAXFLOAT,MAXFLOAT)];
+    CGSize leftButtonSize =  [StringMD5 sizeWithString:@"搜全部" font:[UIFont systemFontOfSize:14] maxSize:CGSizeMake(MAXFLOAT,MAXFLOAT)];
     
     
     UIView* leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, leftButtonSize.width + 20, self.bounds.size.height)];
@@ -94,16 +95,6 @@
 - (void) setBackGroundView:(UIImage *)backGroundImage
 {
     [self.backGroundView setImage:backGroundImage];
-}
-
-// 计算文本大小
--(CGSize) sizeWithString:(NSString *)str font:(UIFont *)font maxSize:(CGSize)maxSize
-{
-    NSDictionary *dict = @{NSFontAttributeName : font};
-    // 如果将来计算的文字的范围超出了指定的范围,返回的就是指定的范围
-    // 如果将来计算的文字的范围小于指定的范围, 返回的就是真实的范围
-    CGSize size = [str boundingRectWithSize:maxSize options:NSStringDrawingUsesLineFragmentOrigin attributes:dict context:nil].size;
-    return size;
 }
 
 

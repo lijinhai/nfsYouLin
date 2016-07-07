@@ -133,7 +133,12 @@
     NSString* password = self.passwordTextField.text;
     NSString* comfirmPWD = self.comfirmPWDTextField.text;
     NSString* gender = [NSString stringWithFormat:@"%ld",self.genderSelected];
+    // 测试代码
     [self.view endEditing:NO];
+    UIBarButtonItem* neighborItem = [[UIBarButtonItem alloc] initWithTitle:@"请选择城市" style:UIBarButtonItemStylePlain target:nil action:nil];
+    [self.navigationItem setBackBarButtonItem:neighborItem];
+    [self.navigationController pushViewController:cityController animated:YES];
+    return;
     if(self.genderSelected == -1)
     {
         [MBProgressHUBTool textToast:self.view Tip:@"请选择性别"];
@@ -194,8 +199,8 @@
         if(flag == 1)
         {
             NSLog(@"注册成功");
-            UIBarButtonItem* neighborItem = [[UIBarButtonItem alloc] initWithTitle:@"请选择城市" style:UIBarButtonItemStylePlain target:nil action:nil];
-            [self.navigationItem setBackBarButtonItem:neighborItem];
+//            UIBarButtonItem* neighborItem = [[UIBarButtonItem alloc] initWithTitle:@"请选择城市" style:UIBarButtonItemStylePlain target:nil action:nil];
+//            [self.navigationItem setBackBarButtonItem:neighborItem];
             [self.navigationController pushViewController:cityController animated:YES];
         }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {

@@ -8,6 +8,7 @@
 
 #import "NDetailTableViewController.h"
 #import "NDetailTableViewCell.h"
+#import "StringMD5.h"
 
 @interface NDetailTableViewController ()
 
@@ -138,7 +139,7 @@
         }
         
         cell.replyString = _replyText[indexPath.row - 3];
-        cell.replySize = [self sizeWithString: _replyText[indexPath.row - 3] font:[UIFont fontWithName:@"AppleGothic" size:16] maxSize:CGSizeMake(screenWidth - 6 * PADDING, MAXFLOAT)];
+        cell.replySize = [StringMD5 sizeWithString: _replyText[indexPath.row - 3] font:[UIFont fontWithName:@"AppleGothic" size:16] maxSize:CGSizeMake(screenWidth - 6 * PADDING, MAXFLOAT)];
     }
     
     cell.rowNum = indexPath.row;
@@ -232,8 +233,8 @@
 - (CGFloat) heightOfOtherRow: (NSString*)replyText
 {
     CGFloat cellHeight = 5 * PADDING + 25;
-    cellHeight +=  [self sizeWithString:[NSString stringWithFormat:@"%@@%@",self.neighborData.accountName, self.neighborData.addressInfo] font:[UIFont systemFontOfSize:15] maxSize:CGSizeMake(MAXFLOAT, MAXFLOAT)].height;
-    cellHeight += [self sizeWithString:replyText font:[UIFont fontWithName:@"AppleGothic" size:16] maxSize:CGSizeMake(screenWidth - 6 * PADDING, MAXFLOAT)].height;
+    cellHeight +=  [StringMD5 sizeWithString:[NSString stringWithFormat:@"%@@%@",self.neighborData.accountName, self.neighborData.addressInfo] font:[UIFont systemFontOfSize:15] maxSize:CGSizeMake(MAXFLOAT, MAXFLOAT)].height;
+    cellHeight += [StringMD5 sizeWithString:replyText font:[UIFont fontWithName:@"AppleGothic" size:16] maxSize:CGSizeMake(screenWidth - 6 * PADDING, MAXFLOAT)].height;
     return cellHeight;
 }
 
@@ -241,9 +242,9 @@
 - (CGFloat) heightOfScondRow
 {
     CGFloat cellHeight = 4 * PADDING;
-    cellHeight += [self sizeWithString:[NSString stringWithFormat:@"标题:#%@#%@",self.neighborData.titleCategory,self.neighborData.titleName] font:[UIFont boldSystemFontOfSize:18] maxSize:CGSizeMake(MAXFLOAT, MAXFLOAT)].height;
+    cellHeight += [StringMD5 sizeWithString:[NSString stringWithFormat:@"标题:#%@#%@",self.neighborData.titleCategory,self.neighborData.titleName] font:[UIFont boldSystemFontOfSize:18] maxSize:CGSizeMake(MAXFLOAT, MAXFLOAT)].height;
     
-    cellHeight += [self sizeWithString:self.neighborData.publishText font:[UIFont fontWithName:@"AppleGothic" size:16] maxSize:CGSizeMake(screenWidth - 2 * PADDING, MAXFLOAT)].height;
+    cellHeight += [StringMD5 sizeWithString:self.neighborData.publishText font:[UIFont fontWithName:@"AppleGothic" size:16] maxSize:CGSizeMake(screenWidth - 2 * PADDING, MAXFLOAT)].height;
     NSInteger count = self.neighborData.picturesArray.count;
     CGFloat pictureH = (screenWidth - PADDING ) / 3 - (PADDING / 2);
     if(0 < count && self.neighborData.picturesArray.count <= 3)
@@ -262,15 +263,6 @@
     return cellHeight;
 }
 
-// 计算文本大小
--(CGSize) sizeWithString:(NSString *)str font:(UIFont *)font maxSize:(CGSize)maxSize
-{
-    NSDictionary *dict = @{NSFontAttributeName : font};
-    // 如果将来计算的文字的范围超出了指定的范围,返回的就是指定的范围
-    // 如果将来计算的文字的范围小于指定的范围, 返回的就是真实的范围
-    CGSize size = [str boundingRectWithSize:maxSize options:NSStringDrawingUsesLineFragmentOrigin attributes:dict context:nil].size;
-    return size;
-}
 
 
 // 	圆形头像点击事件回调
