@@ -243,6 +243,9 @@
 		AF4B30281D2F909B00CBF257 /* NickNameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AF4B30271D2F909B00CBF257 /* NickNameViewController.m */; };
 		AF4B302B1D2F90AA00CBF257 /* ModifyPasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AF4B302A1D2F90AA00CBF257 /* ModifyPasswordViewController.m */; };
 		AF4B302E1D2F90D600CBF257 /* AboutYouLinViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AF4B302D1D2F90D600CBF257 /* AboutYouLinViewController.m */; };
+		AF4B30311D2F930000CBF257 /* scanQrCodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AF4B30301D2F930000CBF257 /* scanQrCodeViewController.m */; };
+		AF4B30341D2F932500CBF257 /* fillVerifyCodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AF4B30331D2F932500CBF257 /* fillVerifyCodeViewController.m */; };
+		AF4B30371D2F935700CBF257 /* addressVerificationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AF4B30361D2F935700CBF257 /* addressVerificationViewController.m */; };
 		AF4B4F1A1D07AAF60039BE42 /* PopupAddressSettingView.m in Sources */ = {isa = PBXBuildFile; fileRef = AF4B4F191D07AAF60039BE42 /* PopupAddressSettingView.m */; };
 		AF4B4F1D1D07ACF90039BE42 /* LewPopupViewAnimationRight.m in Sources */ = {isa = PBXBuildFile; fileRef = AF4B4F1C1D07ACF90039BE42 /* LewPopupViewAnimationRight.m */; };
 		AF5293D31D1297DC00503975 /* FirstTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = AF5293D21D1297DC00503975 /* FirstTabBarController.m */; };
@@ -754,6 +757,12 @@
 		AF4B302A1D2F90AA00CBF257 /* ModifyPasswordViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ModifyPasswordViewController.m; sourceTree = "<group>"; };
 		AF4B302C1D2F90D600CBF257 /* AboutYouLinViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AboutYouLinViewController.h; sourceTree = "<group>"; };
 		AF4B302D1D2F90D600CBF257 /* AboutYouLinViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AboutYouLinViewController.m; sourceTree = "<group>"; };
+		AF4B302F1D2F930000CBF257 /* scanQrCodeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = scanQrCodeViewController.h; sourceTree = "<group>"; };
+		AF4B30301D2F930000CBF257 /* scanQrCodeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = scanQrCodeViewController.m; sourceTree = "<group>"; };
+		AF4B30321D2F932500CBF257 /* fillVerifyCodeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fillVerifyCodeViewController.h; sourceTree = "<group>"; };
+		AF4B30331D2F932500CBF257 /* fillVerifyCodeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = fillVerifyCodeViewController.m; sourceTree = "<group>"; };
+		AF4B30351D2F935700CBF257 /* addressVerificationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = addressVerificationViewController.h; sourceTree = "<group>"; };
+		AF4B30361D2F935700CBF257 /* addressVerificationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = addressVerificationViewController.m; sourceTree = "<group>"; };
 		AF4B4F181D07AAF60039BE42 /* PopupAddressSettingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PopupAddressSettingView.h; sourceTree = "<group>"; };
 		AF4B4F191D07AAF60039BE42 /* PopupAddressSettingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PopupAddressSettingView.m; sourceTree = "<group>"; };
 		AF4B4F1B1D07ACF90039BE42 /* LewPopupViewAnimationRight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LewPopupViewAnimationRight.h; sourceTree = "<group>"; };
@@ -937,6 +946,12 @@
 				AF1DBD991CF1DC5600557E43 /* familyAddressViewController.m */,
 				AFE569231CFD793400C0F745 /* addressInfomationViewController.h */,
 				AFE569241CFD793400C0F745 /* addressInfomationViewController.m */,
+				AF4B30351D2F935700CBF257 /* addressVerificationViewController.h */,
+				AF4B30361D2F935700CBF257 /* addressVerificationViewController.m */,
+				AF4B30321D2F932500CBF257 /* fillVerifyCodeViewController.h */,
+				AF4B30331D2F932500CBF257 /* fillVerifyCodeViewController.m */,
+				AF4B302F1D2F930000CBF257 /* scanQrCodeViewController.h */,
+				AF4B30301D2F930000CBF257 /* scanQrCodeViewController.m */,
 			);
 			name = youLinMain;
 			sourceTree = "<group>";
@@ -2210,6 +2225,7 @@
 				AFCE1F9C1CDAD1B20085F10F /* ViewController.m in Sources */,
 				8F73C8C11D2A545A009C83C2 /* StringMD5.m in Sources */,
 				8F648CF81D00547A00E3B155 /* MJRefreshBackGifFooter.m in Sources */,
+				AF4B30341D2F932500CBF257 /* fillVerifyCodeViewController.m in Sources */,
 				8F648CE41D00547900E3B155 /* EMCDDeviceManager+Media.m in Sources */,
 				8F648CE91D00547900E3B155 /* amrFileCodec.mm in Sources */,
 				8F648CF91D00547A00E3B155 /* MJRefreshBackNormalFooter.m in Sources */,
@@ -2311,6 +2327,7 @@
 				8F648D181D00547A00E3B155 /* UIImage+EMWebP.m in Sources */,
 				8F648D281D00547A00E3B155 /* PSTGridLayoutSection.m in Sources */,
 				8F648D4C1D00547A00E3B155 /* EaseBubbleView+Voice.m in Sources */,
+				AF4B30311D2F930000CBF257 /* scanQrCodeViewController.m in Sources */,
 				8F648D2A1D00547A00E3B155 /* EaseSDKHelper.m in Sources */,
 				8F648D261D00547A00E3B155 /* PSTGridLayoutItem.m in Sources */,
 				8F648CEA1D00547900E3B155 /* wav.mm in Sources */,
@@ -2344,6 +2361,7 @@
 				AFE569321CFE62F500C0F745 /* NeighborTableViewCell.m in Sources */,
 				8F648D111D00547A00E3B155 /* EMSDWebImageManager.m in Sources */,
 				8F648CE21D00547900E3B155 /* EMAudioPlayerUtil.m in Sources */,
+				AF4B30371D2F935700CBF257 /* addressVerificationViewController.m in Sources */,
 				8F648D531D00547A00E3B155 /* EaseFacialView.m in Sources */,
 				8F648D141D00547A00E3B155 /* NSData+EMImageContentType.m in Sources */,
 				8F5303851CDB45B50078FD64 /* discoveryController.m in Sources */,
