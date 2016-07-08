@@ -10,6 +10,7 @@
 		8F0BFBDA1D137DC200C9FF8B /* libHyphenateFullSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F0BFBD91D137DC200C9FF8B /* libHyphenateFullSDK.a */; };
 		8F0F1B4E1D191F7E00404C46 /* SearchTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F0F1B4D1D191F7E00404C46 /* SearchTableViewController.m */; };
 		8F0F1B511D19247900404C46 /* SearchBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F0F1B501D19247900404C46 /* SearchBarView.m */; };
+		8F51E1E71D2E945B0094A4E5 /* SqlDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F51E1E61D2E945B0094A4E5 /* SqlDictionary.m */; };
 		8F5303821CDB440F0078FD64 /* Discovery.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8F5303811CDB440F0078FD64 /* Discovery.storyboard */; };
 		8F5303851CDB45B50078FD64 /* discoveryController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F5303841CDB45B50078FD64 /* discoveryController.m */; };
 		8F5304491CDB7A8B0078FD64 /* homeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F5304481CDB7A8B0078FD64 /* homeViewController.m */; };
@@ -305,6 +306,8 @@
 		8F0F1B4D1D191F7E00404C46 /* SearchTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchTableViewController.m; sourceTree = "<group>"; };
 		8F0F1B4F1D19247900404C46 /* SearchBarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchBarView.h; sourceTree = "<group>"; };
 		8F0F1B501D19247900404C46 /* SearchBarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchBarView.m; sourceTree = "<group>"; };
+		8F51E1E51D2E945B0094A4E5 /* SqlDictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SqlDictionary.h; sourceTree = "<group>"; };
+		8F51E1E61D2E945B0094A4E5 /* SqlDictionary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SqlDictionary.m; sourceTree = "<group>"; };
 		8F5303811CDB440F0078FD64 /* Discovery.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Discovery.storyboard; sourceTree = "<group>"; };
 		8F5303831CDB45B50078FD64 /* discoveryController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = discoveryController.h; sourceTree = "<group>"; };
 		8F5303841CDB45B50078FD64 /* discoveryController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = discoveryController.m; sourceTree = "<group>"; };
@@ -758,7 +761,6 @@
 		AF7850101CFFC5C8009F6982 /* FMDB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDB.h; sourceTree = "<group>"; };
 		AF7850111CFFC5C8009F6982 /* FMResultSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMResultSet.h; sourceTree = "<group>"; };
 		AF7850121CFFC5C8009F6982 /* FMResultSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMResultSet.m; sourceTree = "<group>"; };
-		AF7850181CFFCE58009F6982 /* libsqlite3.0.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.0.tbd; path = usr/lib/libsqlite3.0.tbd; sourceTree = SDKROOT; };
 		AF78501A1CFFCF0B009F6982 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = /usr/lib/libsqlite3.dylib; sourceTree = "<absolute>"; };
 		AF78501C1D00153D009F6982 /* Constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
 		AFCE1F911CDAD1B20085F10F /* nfsYouLin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = nfsYouLin.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1703,7 +1705,6 @@
 				8F648B821D00533C00E3B155 /* libz.tbd */,
 				8F648B801D00533000E3B155 /* libc++.tbd */,
 				AF78501A1CFFCF0B009F6982 /* libsqlite3.dylib */,
-				AF7850181CFFCE58009F6982 /* libsqlite3.0.tbd */,
 				8F823D6B1D2A3B0000178B01 /* libicucore.tbd */,
 				8F823D671D2A3A8600178B01 /* MOBFoundation.framework */,
 				8F823D681D2A3A8600178B01 /* SMS_SDK.framework */,
@@ -1780,6 +1781,8 @@
 		AF5293C91D12964E00503975 /* Gloable */ = {
 			isa = PBXGroup;
 			children = (
+				8F51E1E51D2E945B0094A4E5 /* SqlDictionary.h */,
+				8F51E1E61D2E945B0094A4E5 /* SqlDictionary.m */,
 				8F6491361D065B9E00E3B155 /* NCellDelegate.h */,
 				AFCE1F971CDAD1B20085F10F /* AppDelegate.h */,
 				AFCE1F981CDAD1B20085F10F /* AppDelegate.m */,
@@ -1790,6 +1793,7 @@
 				AF5293D21D1297DC00503975 /* FirstTabBarController.m */,
 				AF5293D71D12982E00503975 /* FirstTabBarController.h */,
 				AF5293D51D12982800503975 /* NewTopicViewController.m */,
+				AF78501C1D00153D009F6982 /* Constants.h */,
 				8F73C8BF1D2A545A009C83C2 /* StringMD5.h */,
 				8F73C8C01D2A545A009C83C2 /* StringMD5.m */,
 				8F0F1B4B1D191F4200404C46 /* Search */,
@@ -1865,7 +1869,6 @@
 			isa = PBXGroup;
 			children = (
 				AFE5690B1CF2CB8000C0F745 /* Assets.xcassets */,
-				AF78501C1D00153D009F6982 /* Constants.h */,
 				AFE5693F1CFE652A00C0F745 /* dog.png */,
 				AFE569401CFE652A00C0F745 /* duck.png */,
 				AFE569411CFE652A00C0F745 /* elephant.png */,
@@ -2224,6 +2227,7 @@
 				8F648D391D00547A00E3B155 /* EaseEmotionManager.m in Sources */,
 				8F648D1B1D00547A00E3B155 /* UIView+EMWebCacheOperation.m in Sources */,
 				8F73C8D41D2B53E6009C83C2 /* AFURLResponseSerialization.m in Sources */,
+				8F51E1E71D2E945B0094A4E5 /* SqlDictionary.m in Sources */,
 				AF5293D31D1297DC00503975 /* FirstTabBarController.m in Sources */,
 				8F648D4F1D00547A00E3B155 /* EaseChatToolbarItem.m in Sources */,
 				8F648D3B1D00547A00E3B155 /* EaseConversationListViewController.m in Sources */,

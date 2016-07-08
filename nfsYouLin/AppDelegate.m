@@ -8,9 +8,9 @@
 
 #import "AppDelegate.h"
 #import "EMSDK.h"
+#import <SMS_SDK/SMSSDK.h>
 #import "FMDB.h"
 #import "Constants.h"
-#import <SMS_SDK/SMSSDK.h>
 
 #define appKey @"d3f836c7d14c"
 #define appSecret @"203b2509d7f89a3a97bb44ee489f5f38"
@@ -71,7 +71,7 @@
     NSArray *path = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *document = [path objectAtIndex:0];
     NSLog(@"%@",document);
-    return [document stringByAppendingPathComponent:@"neighbors.db"];
+    return [document stringByAppendingPathComponent:@"youLin-IOS.db"];
 }
 
 - (void)createTable
@@ -79,7 +79,7 @@
     AppDelegate *myDelegate = [[UIApplication sharedApplication] delegate];
     NSFileManager *fileManager = [NSFileManager defaultManager];
     FMDatabase *db = [FMDatabase databaseWithPath:myDelegate.dbPath];
-    NSLog(@"CREATE_TABLE_NEWS_RECEIVE id %@",CREATE_TABLE_NEWS_RECEIVE);
+//    NSLog(@"INSERT_USERS_TABLE =  %@",INSERT_USERS_TABLE);
 
     if (![fileManager fileExistsAtPath:myDelegate.dbPath]) {
         NSLog(@"还未创建数据库，现在正在创建数据库");

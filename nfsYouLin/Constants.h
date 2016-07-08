@@ -9,21 +9,28 @@
 #ifndef Constants_h
 #define Constants_h
 #pragma clang diagnostic ignored "-Wextern-initializer"
-extern const int DB_VERSION = 1;
+static const int DB_VERSION = 1;
 /*定义表名*/
-extern NSString * const TABLE_NAME_USERS          = @"table_users";
-extern NSString * const TABLE_ALL_FAMILY          = @"table_all_family";
-extern NSString * const TABLE_NAME_NEIGHBOR       = @"table_neighbor";
-extern NSString * const TABLE_NAME_NEIGHBOR_GROUP = @"table_neighbor_group";
-extern NSString * const TABLE_NAME_FORUM_TOPIC    = @"table_forum_topic";
-extern NSString * const TABLE_NAME_FORUM_COMMENT  = @"table_forum_comment";
-extern NSString * const TABLE_NAME_FORUM_MEDIA    = @"table_forum_media" ;
-extern NSString * const TABLE_NAME_ALL_NOTE       = @"table_all_note";
-extern NSString * const TABLE_NAME_SEARCH_HISTORY = @"table_search_history";
-extern NSString * const TABLE_DOOR_PLATE          = @"tabel_doorplate";
-extern NSString * const TABLE_PUSH_RECORD         = @"table_push_record";
-extern NSString * const TABLE_NEWS_RECEIVE         = @"table_news_receive";
+static NSString * const TABLE_NAME_USERS          = @"table_users";
+static NSString * const TABLE_ALL_FAMILY          = @"table_all_family";
+static NSString * const TABLE_NAME_NEIGHBOR       = @"table_neighbor";
+static NSString * const TABLE_NAME_NEIGHBOR_GROUP = @"table_neighbor_group";
+static NSString * const TABLE_NAME_FORUM_TOPIC    = @"table_forum_topic";
+static NSString * const TABLE_NAME_FORUM_COMMENT  = @"table_forum_comment";
+static NSString * const TABLE_NAME_FORUM_MEDIA    = @"table_forum_media" ;
+static NSString * const TABLE_NAME_ALL_NOTE       = @"table_all_note";
+static NSString * const TABLE_NAME_SEARCH_HISTORY = @"table_search_history";
+static NSString * const TABLE_DOOR_PLATE          = @"tabel_doorplate";
+static NSString * const TABLE_PUSH_RECORD         = @"table_push_record";
+static NSString * const TABLE_NEWS_RECEIVE         = @"table_news_receive";
+
+
+
+
 /*创建表-宏定义*/
+
+
+
 #define CREATE_TABLE_NEWS_RECEIVE [NSString stringWithFormat:@"%@%@%@%@%@%@%@%@%@%@%@%@%@%@",@"CREATE TABLE if not exists ",TABLE_NEWS_RECEIVE,@" (",@"_id integer primary key autoincrement, ",@"news_first integer, ",@"news_title text, ",@"news_pic text, ",@"news_url text, ",@"news_belongs integer, ",@"news_id integer, ",@"news_send_time integer, ",@"news_push_time integer, ",@"news_others text, ",@"table_version integer)"]
 
 #define CREATE_INDEX_NEWS_RECEIVE_LA  [NSString stringWithFormat:@"%@%@%@",@"CREATE INDEX news_belongs_index on ", TABLE_NEWS_RECEIVE,@"(news_belongs)"]
@@ -32,7 +39,7 @@ extern NSString * const TABLE_NEWS_RECEIVE         = @"table_news_receive";
 
 #define CREATE_INDEX_PUSH_LA [NSString stringWithFormat:@"%@%@%@",@"CREATE INDEX push_record_index on ",TABLE_PUSH_RECORD,@"(login_account)"]
 
-#define CREATE_TABLE_USERS [NSString stringWithFormat:@"%@%@%@%@%@%@%@%@%@%@%@%@%@%@%@%@%@%@%@%@%@",@"CREATE TABLE if not exists ",TABLE_NAME_USERS,@" (",@"id integer primary key autoincrement, ",@"user_public_status integer default 0, ",@"user_vocation text, ",@"user_level text, ",@"user_id bigint, ",@"user_name text, ",@"user_portrait text, ",@"user_gender integer default 3, ",@"user_phone_number text, ",@"user_family_id bigint, ",@"user_family_address text, ",@"user_birthday integer, ",@"user_email text, ",@"user_type integer default 0, ",@"user_time bigint default 0, ",@"user_json text, ",@"login_account bigint, ",@"table_version integer)"]
+#define CREATE_TABLE_USERS [NSString stringWithFormat:@"%@%@%@%@%@%@%@%@%@%@%@%@%@%@%@%@%@%@%@%@%@",@"CREATE TABLE if not exists ",TABLE_NAME_USERS,@" (",@"id integer primary key autoincrement, ",@"user_public_status integer default 0, ",@"user_vocation text, ",@"user_level text, ",@"user_id bigint, ",@"user_name text, ",@"user_portrait text, ",@"user_gender integer default 3, ",@"user_phone_number text, ",@"user_family_id bigint, ",@"user_family_address text, ",@"user_birthday integer default 0, ",@"user_email text, ",@"user_type integer default 0, ",@"user_time bigint default 0, ",@"user_json text, ",@"login_account bigint, ",@"table_version integer)"]
 
 #define CREATE_INDEX_USERS_LA [NSString stringWithFormat:@"%@%@%@",@"CREATE INDEX account_index on ",TABLE_NAME_USERS,@"(login_account)"]
 
@@ -85,5 +92,8 @@ extern NSString * const TABLE_NEWS_RECEIVE         = @"table_news_receive";
 #define CREATE_TABLE_SEARCH_HISTORY [NSString stringWithFormat:@"%@%@%@%@%@%@%@%@%@%@",@"CREATE TABLE if not exists ",TABLE_NAME_SEARCH_HISTORY,@" (",@"_id integer primary key autoincrement, ",@"search_type integer, ",@"search_object_id bigint, ",@"search_word text, ",@"search_time bigint, ",@"login_account bigint, ",@"table_version integer)"]
 
 #define CREATE_INDEX_SEARCH_HISTORY_LA [NSString stringWithFormat:@"%@%@%@", @"CREATE INDEX search_history_index on ",TABLE_NAME_SEARCH_HISTORY,@"(login_account)"]
+
+// 插入
+#define INSERT_USERS_TABLE [NSString stringWithFormat:@"INSERT INTO %@ (user_public_status, user_vocation, user_level, user_id, user_name, user_portrait, user_gender, user_phone_number, user_family_id, user_family_address, user_birthday, user_email, user_type, user_time, user_json, login_account, table_version) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",TABLE_NAME_USERS]
 
 #endif /* Constants_h */

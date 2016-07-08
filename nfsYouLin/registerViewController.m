@@ -181,10 +181,11 @@
     NSLog(@"下一步");
     
 //       测试代码
-    UIBarButtonItem* neighborItem = [[UIBarButtonItem alloc] initWithTitle:@"详细信息" style:UIBarButtonItemStylePlain target:nil action:nil];
-    [self.navigationItem setBackBarButtonItem:neighborItem];
-    [self.navigationController pushViewController:inputRegisterInfoController animated:YES];
-    return;
+//    UIBarButtonItem* neighborItem = [[UIBarButtonItem alloc] initWithTitle:@"详细信息" style:UIBarButtonItemStylePlain target:nil action:nil];
+//    [self.navigationItem setBackBarButtonItem:neighborItem];
+//    inputRegisterInfoController.phoneNum = @"11111";
+//    [self.navigationController pushViewController:inputRegisterInfoController animated:YES];
+//    return;
     
     
     NSLog(@"验证码 = %@",self.verifyTextField.text);
