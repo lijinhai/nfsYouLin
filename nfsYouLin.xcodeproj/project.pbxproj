@@ -246,6 +246,7 @@
 		AF4B30311D2F930000CBF257 /* scanQrCodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AF4B30301D2F930000CBF257 /* scanQrCodeViewController.m */; };
 		AF4B30341D2F932500CBF257 /* fillVerifyCodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AF4B30331D2F932500CBF257 /* fillVerifyCodeViewController.m */; };
 		AF4B30371D2F935700CBF257 /* addressVerificationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AF4B30361D2F935700CBF257 /* addressVerificationViewController.m */; };
+		AF4B30391D2F952B00CBF257 /* Me.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AF4B30381D2F952B00CBF257 /* Me.storyboard */; };
 		AF4B4F1A1D07AAF60039BE42 /* PopupAddressSettingView.m in Sources */ = {isa = PBXBuildFile; fileRef = AF4B4F191D07AAF60039BE42 /* PopupAddressSettingView.m */; };
 		AF4B4F1D1D07ACF90039BE42 /* LewPopupViewAnimationRight.m in Sources */ = {isa = PBXBuildFile; fileRef = AF4B4F1C1D07ACF90039BE42 /* LewPopupViewAnimationRight.m */; };
 		AF5293D31D1297DC00503975 /* FirstTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = AF5293D21D1297DC00503975 /* FirstTabBarController.m */; };
@@ -291,7 +292,6 @@
 		AFE5694A1CFE652A00C0F745 /* mouse.png in Resources */ = {isa = PBXBuildFile; fileRef = AFE569431CFE652A00C0F745 /* mouse.png */; };
 		AFE5694B1CFE652A00C0F745 /* rabbit.png in Resources */ = {isa = PBXBuildFile; fileRef = AFE569441CFE652A00C0F745 /* rabbit.png */; };
 		AFE5694D1CFE65D900C0F745 /* Neighbour.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AFE5694C1CFE65D900C0F745 /* Neighbour.storyboard */; };
-		AFE5694F1CFE663200C0F745 /* Me.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AFE5694E1CFE663200C0F745 /* Me.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -763,6 +763,7 @@
 		AF4B30331D2F932500CBF257 /* fillVerifyCodeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = fillVerifyCodeViewController.m; sourceTree = "<group>"; };
 		AF4B30351D2F935700CBF257 /* addressVerificationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = addressVerificationViewController.h; sourceTree = "<group>"; };
 		AF4B30361D2F935700CBF257 /* addressVerificationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = addressVerificationViewController.m; sourceTree = "<group>"; };
+		AF4B30381D2F952B00CBF257 /* Me.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Me.storyboard; sourceTree = "<group>"; };
 		AF4B4F181D07AAF60039BE42 /* PopupAddressSettingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PopupAddressSettingView.h; sourceTree = "<group>"; };
 		AF4B4F191D07AAF60039BE42 /* PopupAddressSettingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PopupAddressSettingView.m; sourceTree = "<group>"; };
 		AF4B4F1B1D07ACF90039BE42 /* LewPopupViewAnimationRight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LewPopupViewAnimationRight.h; sourceTree = "<group>"; };
@@ -847,7 +848,6 @@
 		AFE569441CFE652A00C0F745 /* rabbit.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = rabbit.png; sourceTree = "<group>"; };
 		AFE569451CFE652A00C0F745 /* HeaderFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HeaderFile.h; sourceTree = "<group>"; };
 		AFE5694C1CFE65D900C0F745 /* Neighbour.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Neighbour.storyboard; sourceTree = "<group>"; };
-		AFE5694E1CFE663200C0F745 /* Me.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Me.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -915,7 +915,7 @@
 			children = (
 				AFCE1FC71CDAD2020085F10F /* Main.storyboard */,
 				8F5303811CDB440F0078FD64 /* Discovery.storyboard */,
-				AFE5694E1CFE663200C0F745 /* Me.storyboard */,
+				AF4B30381D2F952B00CBF257 /* Me.storyboard */,
 				AFE5694C1CFE65D900C0F745 /* Neighbour.storyboard */,
 			);
 			name = youLinStroyboard;
@@ -2130,6 +2130,7 @@
 				8F648DDF1D00549E00E3B155 /* VoiceSearchFeedback020@2x.png in Resources */,
 				8F648DA41D00549E00E3B155 /* arrow@2x.png in Resources */,
 				8F648CFE1D00547A00E3B155 /* MJRefresh.bundle in Resources */,
+				AF4B30391D2F952B00CBF257 /* Me.storyboard in Resources */,
 				8F648DCD1D00549E00E3B155 /* VoiceSearchFeedback002@2x.png in Resources */,
 				AFE569471CFE652A00C0F745 /* duck.png in Resources */,
 				8F648DAD1D00549E00E3B155 /* chatBar_colorMore_location@2x.png in Resources */,
@@ -2175,7 +2176,6 @@
 				8F648DBA1D00549E00E3B155 /* chatBar_moreSelected@2x.png in Resources */,
 				8F648DC71D00549E00E3B155 /* chat_receiver_audio_playing001@2x.png in Resources */,
 				8F648DCB1D00549E00E3B155 /* chat_receiver_bg@2x.png in Resources */,
-				AFE5694F1CFE663200C0F745 /* Me.storyboard in Resources */,
 				8F648DD91D00549E00E3B155 /* VoiceSearchFeedback014@2x.png in Resources */,
 				8F648DA81D00549E00E3B155 /* chat_location_preview@2x.png in Resources */,
 				8F648DE21D00549E00E3B155 /* chat_sender_audio_playing_002@2x.png in Resources */,
