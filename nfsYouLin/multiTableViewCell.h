@@ -16,7 +16,9 @@
 //@end
 
 
-@interface multiTableViewCell : UITableViewCell <NSURLSessionDataDelegate>
+@interface multiTableViewCell : UITableViewCell
+
+
 @property(strong, nonatomic) UILabel* nameLabel;
 @property(strong, nonatomic) UILabel* phoneLabel;
 @property(strong, nonatomic) UIImageView* headIV;

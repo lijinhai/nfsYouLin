@@ -310,7 +310,7 @@
 {
     user = [[Users alloc] init];
     
-     AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+    AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
     FMDatabase *db = delegate.db;
     
     if([db open])
@@ -329,7 +329,7 @@
             NSLog(@"userPortrait = %@",user.userPortrait);
         }
         [db close];
-        
+    
     }
     else
     {
