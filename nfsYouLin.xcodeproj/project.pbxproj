@@ -28,6 +28,8 @@
 		8F51E2881D338FBF0094A4E5 /* UIImageView+HighlightedWebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F51E2761D338FBF0094A4E5 /* UIImageView+HighlightedWebCache.m */; };
 		8F51E2891D338FBF0094A4E5 /* UIImageView+WebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F51E2781D338FBF0094A4E5 /* UIImageView+WebCache.m */; };
 		8F51E28A1D338FBF0094A4E5 /* UIView+WebCacheOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F51E27A1D338FBF0094A4E5 /* UIView+WebCacheOperation.m */; };
+		8F51E28D1D33952F0094A4E5 /* LoginNC.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F51E28C1D33952F0094A4E5 /* LoginNC.m */; };
+		8F51E2901D33C0080094A4E5 /* StartVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F51E28F1D33C0080094A4E5 /* StartVC.m */; };
 		8F5303821CDB440F0078FD64 /* Discovery.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8F5303811CDB440F0078FD64 /* Discovery.storyboard */; };
 		8F5303851CDB45B50078FD64 /* discoveryController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F5303841CDB45B50078FD64 /* discoveryController.m */; };
 		8F5304491CDB7A8B0078FD64 /* homeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F5304481CDB7A8B0078FD64 /* homeViewController.m */; };
@@ -382,6 +384,10 @@
 		8F51E2781D338FBF0094A4E5 /* UIImageView+WebCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+WebCache.m"; sourceTree = "<group>"; };
 		8F51E2791D338FBF0094A4E5 /* UIView+WebCacheOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+WebCacheOperation.h"; sourceTree = "<group>"; };
 		8F51E27A1D338FBF0094A4E5 /* UIView+WebCacheOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+WebCacheOperation.m"; sourceTree = "<group>"; };
+		8F51E28B1D33952F0094A4E5 /* LoginNC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginNC.h; sourceTree = "<group>"; };
+		8F51E28C1D33952F0094A4E5 /* LoginNC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginNC.m; sourceTree = "<group>"; };
+		8F51E28E1D33C0080094A4E5 /* StartVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StartVC.h; sourceTree = "<group>"; };
+		8F51E28F1D33C0080094A4E5 /* StartVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StartVC.m; sourceTree = "<group>"; };
 		8F5303811CDB440F0078FD64 /* Discovery.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Discovery.storyboard; sourceTree = "<group>"; };
 		8F5303831CDB45B50078FD64 /* discoveryController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = discoveryController.h; sourceTree = "<group>"; };
 		8F5303841CDB45B50078FD64 /* discoveryController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = discoveryController.m; sourceTree = "<group>"; };
@@ -1978,6 +1984,10 @@
 		AF5293C91D12964E00503975 /* Gloable */ = {
 			isa = PBXGroup;
 			children = (
+				8F51E28E1D33C0080094A4E5 /* StartVC.h */,
+				8F51E28F1D33C0080094A4E5 /* StartVC.m */,
+				8F51E28B1D33952F0094A4E5 /* LoginNC.h */,
+				8F51E28C1D33952F0094A4E5 /* LoginNC.m */,
 				8F51E1E51D2E945B0094A4E5 /* SqlDictionary.h */,
 				8F51E1E61D2E945B0094A4E5 /* SqlDictionary.m */,
 				8F6491361D065B9E00E3B155 /* NCellDelegate.h */,
@@ -2418,6 +2428,7 @@
 				8F648D2E1D00547A00E3B155 /* NSDate+Category.m in Sources */,
 				8F648D231D00547A00E3B155 /* PSTCollectionViewLayout.m in Sources */,
 				AF5293DC1D12985400503975 /* ListTableView.m in Sources */,
+				8F51E2901D33C0080094A4E5 /* StartVC.m in Sources */,
 				AF4B302B1D2F90AA00CBF257 /* ModifyPasswordViewController.m in Sources */,
 				8F73C8D01D2B53E6009C83C2 /* AFHTTPSessionManager.m in Sources */,
 				8F648D4D1D00547A00E3B155 /* EaseBubbleView.m in Sources */,
@@ -2540,6 +2551,7 @@
 				AF4B305D1D332A6700CBF257 /* LewPopupViewAnimationSlide.m in Sources */,
 				8F648CFB1D00547A00E3B155 /* MJRefreshGifHeader.m in Sources */,
 				8F648D2C1D00547A00E3B155 /* EaseMessageModel.m in Sources */,
+				8F51E28D1D33952F0094A4E5 /* LoginNC.m in Sources */,
 				AF54103B1CE1BE850037673F /* MBProgressHUD.m in Sources */,
 				AF7850161CFFC5C8009F6982 /* FMDatabaseQueue.m in Sources */,
 				AFE569321CFE62F500C0F745 /* NeighborTableViewCell.m in Sources */,

@@ -10,9 +10,13 @@
 #import "EMSDK.h"
 #import <SMS_SDK/SMSSDK.h>
 #import "Constants.h"
+#import "MBProgressHUBTool.h"
+
+#import "AFNetworkReachabilityManager.h"
 
 #define appKey @"d3f836c7d14c"
 #define appSecret @"203b2509d7f89a3a97bb44ee489f5f38"
+
 
 
 @interface AppDelegate ()
@@ -20,10 +24,16 @@
 @end
 
 @implementation AppDelegate
+{
+    
+}
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    //监听网络变化
+    [self listenNetwork];
+    
     // 环信初始化
     EMOptions *options = [EMOptions optionsWithAppkey:@"walk#test"];
     [[EMClient sharedClient] initializeSDKWithOptions:options];
@@ -39,7 +49,7 @@
     NSLog(@"创建数据库");
     self.dbPath = [self dataFilePath];
     [self createTable];
-
+    
     return YES;
 }
 - (void)applicationWillResignActive:(UIApplication *)application {
@@ -155,6 +165,45 @@
     NSLog(@"FMDatabase:---------%@",self.db);
 }
 
+
+- (void) listenNetwork
+{
+    // 1.获得网络监控的管理者
+    AFNetworkReachabilityManager *manager = [AFNetworkReachabilityManager sharedManager];
+    
+    // 2.设置网络状态改变后的处理
+    [manager setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
+        // 当网络状态改变了, 就会调用这个block
+        switch (status) {
+            case AFNetworkReachabilityStatusUnknown:
+                // 未知网络
+                NSLog(@"未知网络");
+                break;
+                
+            case AFNetworkReachabilityStatusNotReachable:
+            {
+                // 没有网络(断网)
+                NSLog(@"没有网络(断网)");
+                UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"提醒" message:@"网络连接异常" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+                [alert show];
+
+                break;
+            }
+            case AFNetworkReachabilityStatusReachableViaWWAN:
+                // 手机自带网络
+                NSLog(@"手机自带网络");
+                break;
+                
+            case AFNetworkReachabilityStatusReachableViaWiFi:
+                // WIFI
+                NSLog(@"WIFI");
+                break;
+        }
+    }];
+    
+    // 3.开始监控
+    [manager startMonitoring];
+}
 
 @end
 
