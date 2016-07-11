@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Users.h"
 #import "NCellDelegate.h"
 
 //@protocol cellDelegate <NSObject>
@@ -15,9 +16,12 @@
 //@end
 
 
-@interface multiTableViewCell : UITableViewCell
+@interface multiTableViewCell : UITableViewCell <NSURLSessionDataDelegate>
 @property(strong, nonatomic) UILabel* nameLabel;
 @property(strong, nonatomic) UILabel* phoneLabel;
+@property(strong, nonatomic) UIImageView* headIV;
+
+
 // 签到按钮
 @property(strong, nonatomic) UIButton* signButton;
 
@@ -35,5 +39,8 @@
 @property(nonatomic, assign) NSInteger favoriteCount;
 
 @property (nonatomic,assign) id<cellDelegate> delegate;
+
+
+@property (nonatomic, strong) Users* userData;
 
 @end

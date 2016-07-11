@@ -7,6 +7,8 @@
 //
 
 #import "multiTableViewCell.h"
+#import "StringMD5.h"
+#import "UIImageView+WebCache.h"
 
 @implementation multiTableViewCell
 
@@ -113,30 +115,29 @@
     else if([reuseIdentifier isEqualToString:@"cellZero"])
     {
         /*处理头像*/
-        self.imageView.image = [UIImage imageNamed:@"account.png"];
-        self.imageView.userInteractionEnabled = YES;
+        
+        self.headIV = [[UIImageView alloc] initWithFrame:CGRectMake(10, 10, 80, 80)];
+        self.headIV.userInteractionEnabled = YES;
         UITapGestureRecognizer* tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(headTapAction:)];
-        [self.imageView addGestureRecognizer:tapGesture];
+        [self.headIV addGestureRecognizer:tapGesture];
+        [self.contentView addSubview:self.headIV];
+        
+        
+        UIView* view = [[UIView alloc] initWithFrame:CGRectMake(100, 25, 400, 50)];
+        
+        UILabel* nameLabel = [[UILabel alloc] init];
+        UILabel* phoneLabel = [[UILabel alloc] init];
 
-        
-        
-        UIView* view = [[UIView alloc] initWithFrame:CGRectMake(100, self.contentView.frame.size.height, 400, self.contentView.frame.size.height)];
-        [self.imageView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin];
-        
-        self.nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 15, 10)];
-        self.nameLabel.text = @"姓名";
-        self.phoneLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 15, 120, 15)];
-        self.phoneLabel.text = @"15114599422";
-        self.phoneLabel.enabled = NO;
-        [self.nameLabel setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
-        [view setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin];
-        self.signButton = [[UIButton alloc] initWithFrame:CGRectMake(200, -10, 40, 40)];
+        self.signButton = [[UIButton alloc] initWithFrame:CGRectMake(220, 5, 40, 40)];
         self.signButton.layer.cornerRadius = self.signButton.frame.size.width / 2;
         self.signButton.layer.masksToBounds = YES;
         [self.signButton setBackgroundImage:[UIImage imageNamed:@"btn_qiandao.png"] forState:UIControlStateNormal];
-        [view addSubview:self.nameLabel];
-        [view addSubview:self.phoneLabel];
+        [view addSubview:nameLabel];
+        [view addSubview:phoneLabel];
         [view addSubview:self.signButton];
+        self.nameLabel = nameLabel;
+        self.phoneLabel = phoneLabel;
+        
         [self.contentView addSubview:view];
     }
     return self;
@@ -186,7 +187,34 @@
 
 - (void) headTapAction: (UITapGestureRecognizer*) recognizer
 {
-    [_delegate showCircularImageViewWithImage:self.imageView.image];
+    [_delegate showCircularImageViewWithImage:self.headIV.image];
 }
+
+- (void) setUserData:(Users *)userData
+{
+    
+    _userData = userData;
+    if(_userData)
+    {
+  
+        NSURL* url = [NSURL URLWithString:_userData.userPortrait];
+
+        [self.self.headIV sd_setImageWithURL:url placeholderImage:[UIImage imageNamed:@"default"] options:SDWebImageAllowInvalidSSLCertificates];
+        
+        CGSize phoneSize = [StringMD5 sizeWithString:_userData.phoneNum font:[UIFont systemFontOfSize:17] maxSize:CGSizeMake(MAXFLOAT, MAXFLOAT)];
+        
+        CGSize nameSize = [StringMD5 sizeWithString:_userData.userName font:[UIFont systemFontOfSize:17] maxSize:CGSizeMake(MAXFLOAT, MAXFLOAT)];
+        self.nameLabel.frame = CGRectMake(0, 0, nameSize.width, nameSize.height);
+         self.phoneLabel.frame = CGRectMake(0, nameSize.height, phoneSize.width, phoneSize.height);
+        self.phoneLabel.text = _userData.phoneNum;
+        self.nameLabel.text = _userData.userName;
+        
+        
+        
+
+        
+    }
+}
+
 
 @end

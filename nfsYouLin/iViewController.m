@@ -10,6 +10,9 @@
 #import "addressInfomationViewController.h"
 #import "FeedbackViewController.h"
 #import "ISettingViewController.h"
+#import "Users.h"
+#import "AppDelegate.h"
+
 @interface iViewController ()
 
 @end
@@ -23,12 +26,12 @@
     FeedbackViewController *FeedbackController;
     ISettingViewController *ISettingController;
     UIBarButtonItem* backItemTitle;
-
+    Users* user;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    [self initUser];
     /*改变BarItem 图片系统颜色为 自定义颜色 ffba20 */
     UIImage *iImageA = [UIImage imageNamed:@"btn_wo_a.png"];
     iImageA = [iImageA imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
@@ -108,6 +111,7 @@
             }
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             cell.delegate = self;
+            cell.userData = user;
             
         }
         else if(rowNo == 1)
@@ -289,6 +293,41 @@
          
      }];
 
+}
+
+- (BOOL) initUser
+{
+    user = [[Users alloc] init];
+    
+     AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+    FMDatabase *db = delegate.db;
+    
+    if([db open])
+    {
+        NSLog(@"iVC: db open success!");
+        FMResultSet *result = [db executeQuery:@"SELECT user_name, user_portrait, user_phone_number FROM table_users WHERE id = 1"];
+        while ([result next]) {
+            NSString *name = [result stringForColumn:@"user_name"];
+            NSString *phoneNum = [result stringForColumn:@"user_phone_number"];
+            NSString *portrait = [result stringForColumn:@"user_portrait"];
+            user.userName = name;
+            user.phoneNum = phoneNum;
+            user.userPortrait = portrait;
+            NSLog(@"name = %@",user.userName);
+            NSLog(@"phoneNum = %@",user.phoneNum);
+            NSLog(@"userPortrait = %@",user.userPortrait);
+        }
+        [db close];
+        
+    }
+    else
+    {
+        NSLog(@"iVC: db open error!");
+        return NO;
+    }
+    
+    
+    return YES;
 }
 
 @end

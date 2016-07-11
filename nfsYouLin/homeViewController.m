@@ -124,7 +124,6 @@
 }
 
 - (IBAction)loginAction:(id)sender {
-    
    [self presentViewController:newNavigationController animated:YES completion:nil];
 
 }

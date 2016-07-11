@@ -141,10 +141,9 @@
     NSString* password = self.passwordTextField.text;
     NSString* comfirmPWD = self.comfirmPWDTextField.text;
     NSString* gender = [NSString stringWithFormat:@"%ld",self.genderSelected];
-    // 测试代码
+//     测试代码
 //    [self.view endEditing:NO];
-//    UIBarButtonItem* neighborItem = [[UIBarButtonItem alloc] initWithTitle:@"请选择城市" style:UIBarButtonItemStylePlain target:nil action:nil];
-//    [self.navigationItem setBackBarButtonItem:neighborItem];
+//  
 //    [self.navigationController pushViewController:cityController animated:YES];
 //    return;
     if(self.genderSelected == -1)
@@ -182,8 +181,10 @@
     personInfoDic[@"user_name"] = nickName;
     personInfoDic[@"user_gender"] = [NSNumber numberWithInteger:self.genderSelected];
     
-    
-  
+//    personInfoDic[@"user_id"] = [NSNumber numberWithLong:88];
+//    personInfoDic[@"user_portrait"] = @"/sss/eee/333/dfdf.png";
+//    [self insertSqlite:personInfoDic];
+//  
 //    return;
     // 发起用户注册网络请求
     AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
@@ -313,56 +314,56 @@
 
 - (BOOL) insertSqlite: (NSMutableDictionary *) dict
 {
-    NSLog(@"insertSqlite = %@",dict);
     if(!dict)
         return NO;
     AppDelegate* app = [[UIApplication sharedApplication] delegate];
-    NSString* filePath = app.dbPath;
-    
-    NSFileManager* fileManager = [NSFileManager defaultManager];
-    if([fileManager fileExistsAtPath:filePath])
+    FMDatabase* db = app.db;
+    if ([db open])
     {
-        FMDatabase* db = [FMDatabase databaseWithPath:filePath];
-        if ([db open])
-        {
-            [db executeUpdate:INSERT_USERS_TABLE,
-                personInfoDic[@"user_public_status"] ,
-                personInfoDic[@"user_vocation"] ,
-                personInfoDic[@"user_level"] ,
-                personInfoDic[@"user_id"],
-                personInfoDic[@"user_name"] ,
-                personInfoDic[@"user_portrait"],
-                personInfoDic[@"user_gender"] ,
-                personInfoDic[@"user_phone_number"] ,
-                personInfoDic[@"user_family_id"],
-                personInfoDic[@"user_family_address"] ,
-                personInfoDic[@"user_birthday"],
-                personInfoDic[@"user_email"] ,
-                personInfoDic[@"user_type"] ,
-                personInfoDic[@"user_time"],
-                personInfoDic[@"user_json"] ,
-                personInfoDic[@"login_account"] ,
-                personInfoDic[@"table_version"] ];
-        }
-        else
-        {
-            NSLog(@"数据库打开失败");
-            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"错误信息" message:@"数据库打开失败" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
-            [alert show];
-            [db close];
-            return NO;
-        }
-        [db close];
-
+        [db executeUpdate:INSERT_USERS_TABLE,
+         personInfoDic[@"user_public_status"] ,
+         personInfoDic[@"user_vocation"] ,
+         personInfoDic[@"user_level"] ,
+         personInfoDic[@"user_id"],
+         personInfoDic[@"user_name"] ,
+         personInfoDic[@"user_portrait"],
+         personInfoDic[@"user_gender"] ,
+         personInfoDic[@"user_phone_number"] ,
+         personInfoDic[@"user_family_id"],
+         personInfoDic[@"user_family_address"] ,
+         personInfoDic[@"user_birthday"],
+         personInfoDic[@"user_email"] ,
+         personInfoDic[@"user_type"] ,
+         personInfoDic[@"user_time"],
+         personInfoDic[@"user_json"] ,
+         personInfoDic[@"login_account"] ,
+         personInfoDic[@"table_version"] ];
     }
     else
     {
-        NSLog(@"数据库不存在");
-        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"错误信息" message:@"数据写入错误" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
+        NSLog(@"数据库打开失败");
+        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"错误信息" message:@"数据库打开失败" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
         [alert show];
+        [db close];
         return NO;
-
     }
+    
+//    FMResultSet *result = [db executeQuery:@"SELECT * FROM table_users"];
+//    while ([result next]) {
+//        NSString *name = [result stringForColumn:@"user_name"];
+//        NSString *phoneNum = [result stringForColumn:@"user_phone_number"];
+//        NSString *portrait = [result stringForColumn:@"user_portrait"];
+//       
+//        NSLog(@"id = %d",[result intForColumn:@"id"]);
+//        NSLog(@"name = %@",name);
+//        NSLog(@"phoneNum = %@",phoneNum);
+//        NSLog(@"userPortrait = %@",portrait);
+//    }
+
+    
+    
+    [db close];
+
     
     return YES;
 

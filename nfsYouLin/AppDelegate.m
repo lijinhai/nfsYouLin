@@ -9,7 +9,6 @@
 #import "AppDelegate.h"
 #import "EMSDK.h"
 #import <SMS_SDK/SMSSDK.h>
-#import "FMDB.h"
 #import "Constants.h"
 
 #define appKey @"d3f836c7d14c"
@@ -78,81 +77,82 @@
 {
     AppDelegate *myDelegate = [[UIApplication sharedApplication] delegate];
     NSFileManager *fileManager = [NSFileManager defaultManager];
-    FMDatabase *db = [FMDatabase databaseWithPath:myDelegate.dbPath];
+    self.db = [FMDatabase databaseWithPath:myDelegate.dbPath];
+
+
 //    NSLog(@"INSERT_USERS_TABLE =  %@",INSERT_USERS_TABLE);
 
     if (![fileManager fileExistsAtPath:myDelegate.dbPath]) {
         NSLog(@"还未创建数据库，现在正在创建数据库");
-        if ([db open]) {
+        if ([self.db open]) {
             /*创建新闻接收表*/
-            [db executeUpdate:CREATE_TABLE_NEWS_RECEIVE];
+            [self.db executeUpdate:CREATE_TABLE_NEWS_RECEIVE];
             /*创建推送记录表*/
-            [db executeUpdate:CREATE_INDEX_NEWS_RECEIVE_LA];
+            [self.db executeUpdate:CREATE_INDEX_NEWS_RECEIVE_LA];
             /*创建接收新闻索引*/
-            [db executeUpdate:CREATE_TABLE_PUSH_RECORD];
+            [self.db executeUpdate:CREATE_TABLE_PUSH_RECORD];
             /*创建推送记录索引*/
-            [db executeUpdate:CREATE_INDEX_PUSH_LA];
+            [self.db executeUpdate:CREATE_INDEX_PUSH_LA];
             /*创建用户表*/
-            [db executeUpdate:CREATE_TABLE_USERS];
+            [self.db executeUpdate:CREATE_TABLE_USERS];
             /*创建账户索引*/
-            [db executeUpdate:CREATE_INDEX_USERS_LA];
+            [self.db executeUpdate:CREATE_INDEX_USERS_LA];
             /*创建用户索引*/
-            [db executeUpdate:CREATE_INDEX_USERS_LU];
+            [self.db executeUpdate:CREATE_INDEX_USERS_LU];
             /*创建家庭信息表*/
-            [db executeUpdate:CREATE_TABLE_ALL_FAMILY];
+            [self.db executeUpdate:CREATE_TABLE_ALL_FAMILY];
             /*创建门牌信息表*/
-            [db executeUpdate:CREATE_DOORPLATE];
+            [self.db executeUpdate:CREATE_DOORPLATE];
             /*创建门牌索引*/
-            [db executeUpdate:CREATE_INDEX_DOOR_LA];
+            [self.db executeUpdate:CREATE_INDEX_DOOR_LA];
             /*创建家庭信息索引LA*/
-            [db executeUpdate:CREATE_INDEX_ALL_FAMILY_LA];
+            [self.db executeUpdate:CREATE_INDEX_ALL_FAMILY_LA];
             /*创建家庭信息索引LU*/
-            [db executeUpdate:CREATE_INDEX_ALL_FAMILY_LU];
+            [self.db executeUpdate:CREATE_INDEX_ALL_FAMILY_LU];
             /*创建邻居表*/
-            [db executeUpdate:CREATE_TABLE_NEIGHBOR];
+            [self.db executeUpdate:CREATE_TABLE_NEIGHBOR];
             /*创建邻居群组表*/
-            [db executeUpdate:CREATE_TABLE_NEIGHBOR_GROUP];
+            [self.db executeUpdate:CREATE_TABLE_NEIGHBOR_GROUP];
             /*创建邻居群组索引LA*/
-            [db executeUpdate:CREATE_INDEX_NEIGHBOR_GROUP_LA];
+            [self.db executeUpdate:CREATE_INDEX_NEIGHBOR_GROUP_LA];
             /*创建邻居群组索引LU*/
-            [db executeUpdate:CREATE_INDEX_NEIGHBOR_GROUP_LU];
+            [self.db executeUpdate:CREATE_INDEX_NEIGHBOR_GROUP_LU];
             /*创建论坛主题表*/
-            [db executeUpdate:CREATE_TABLE_FORUM_TOPIC];
+            [self.db executeUpdate:CREATE_TABLE_FORUM_TOPIC];
             /*创建论坛主题表索引LA*/
-            [db executeUpdate:CREATE_INDEX_FORUM_TOPIC_LA];
+            [self.db executeUpdate:CREATE_INDEX_FORUM_TOPIC_LA];
             /*创建论坛主题表索引LU*/
-            [db executeUpdate:CREATE_INDEX_FORUM_TOPIC_LU];
+            [self.db executeUpdate:CREATE_INDEX_FORUM_TOPIC_LU];
             /*创建论坛主题表索引LC*/
-            [db executeUpdate:CREATE_INDEX_FORUM_TOPIC_LC];
+            [self.db executeUpdate:CREATE_INDEX_FORUM_TOPIC_LC];
             /*创建论坛主题表触发器*/
-            [db executeUpdate:CREATE_TRIGGER_FORUM_TOPIC];
+            [self.db executeUpdate:CREATE_TRIGGER_FORUM_TOPIC];
             /*创建论坛中多媒体信息表*/
-            [db executeUpdate:CREATE_TABLE_FORUM_MEDIA];
+            [self.db executeUpdate:CREATE_TABLE_FORUM_MEDIA];
             /*创建论坛中多媒体索引LA*/
-            [db executeUpdate:CREATE_INDEX_FORUM_MEDIA_LA];
+            [self.db executeUpdate:CREATE_INDEX_FORUM_MEDIA_LA];
             /*创建论坛评论表*/
-            [db executeUpdate:CREATE_TABLE_FORUM_COMMENT];
+            [self.db executeUpdate:CREATE_TABLE_FORUM_COMMENT];
             /*创建论坛评论表索引LA*/
-            [db executeUpdate:CREATE_INDEX_FORUM_COMMENT_LA];
+            [self.db executeUpdate:CREATE_INDEX_FORUM_COMMENT_LA];
             /*创建全部NOTE表*/
-            [db executeUpdate:CREATE_TABLE_ALL_NOTE];
+            [self.db executeUpdate:CREATE_TABLE_ALL_NOTE];
             /*创建NOTE表索引LA*/
-            [db executeUpdate:CREATE_INDEX_ALL_NOTE_LA];
+            [self.db executeUpdate:CREATE_INDEX_ALL_NOTE_LA];
             /*创建NOTE表索引LU*/
-            [db executeUpdate:CREATE_INDEX_ALL_NOTE_LU];
+            [self.db executeUpdate:CREATE_INDEX_ALL_NOTE_LU];
             /*创建NOTE表索引LC*/
-            [db executeUpdate:CREATE_INDEX_ALL_NOTE_LC];
+            [self.db executeUpdate:CREATE_INDEX_ALL_NOTE_LC];
             /*创建搜索历史表*/
-            [db executeUpdate:CREATE_TABLE_SEARCH_HISTORY];
+            [self.db executeUpdate:CREATE_TABLE_SEARCH_HISTORY];
             /*创建搜索历史表索引LA*/
-            [db executeUpdate:CREATE_INDEX_SEARCH_HISTORY_LA];
-            
-            [db close];
+            [self.db executeUpdate:CREATE_INDEX_SEARCH_HISTORY_LA];
+            [self.db close];
         }else{
             NSLog(@"database open error");
         }
     }
-    NSLog(@"FMDatabase:---------%@",db);
+    NSLog(@"FMDatabase:---------%@",self.db);
 }
 
 
