@@ -25,6 +25,9 @@
     addressInfomationViewController *_addressInfomationController;
     FeedbackViewController *FeedbackController;
     ISettingViewController *ISettingController;
+    AboutYouLinViewController *AboutYouLinController;
+    PersonalInformationViewController *PersonalInformationController;
+    
     UIBarButtonItem* backItemTitle;
     Users* user;
 }
@@ -40,7 +43,7 @@
     UIColor *fontColor= [UIColor colorWithRed:255/255.0 green:186/255.0 blue:2/255.0 alpha:1];
     
     [self.iTabBarItem setTitleTextAttributes:@{NSFontAttributeName : [UIFont fontWithName:@"HelveticaNeue-Bold" size:10.0f],NSForegroundColorAttributeName : fontColor
-                                                      } forState:UIControlStateSelected];
+                                               } forState:UIControlStateSelected];
     
     
     _viewColor = [UIColor colorWithRed:243/255.0 green:243/255.0 blue:240/255.0 alpha:1];
@@ -54,7 +57,7 @@
     if ([self.tableView respondsToSelector:@selector(setLayoutMargins:)]) {
         [self.tableView setLayoutMargins:UIEdgeInsetsZero];
     }
-
+    
     _images = @[@"dizhixinxi.png", @"yijianfankui.png", @"shezhi.png", @"guanyu.png"];
     _cellNames = @[@"地址信息", @"意见反馈", @"设置", @"关于"];
     /*跳转至地址信息页面*/
@@ -64,7 +67,9 @@
     UIStoryboard* iStoryBoard = [UIStoryboard storyboardWithName:@"Me" bundle:nil];
     FeedbackController=[iStoryBoard instantiateViewControllerWithIdentifier:@"feedbackcontroller"];
     ISettingController=[iStoryBoard instantiateViewControllerWithIdentifier:@"isettingcontroller"];
-
+    AboutYouLinController=[iStoryBoard instantiateViewControllerWithIdentifier:@"aboutyoulincontroller"];
+    PersonalInformationController=[iStoryBoard instantiateViewControllerWithIdentifier:@"personalinformationcontroller"];
+    
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -157,9 +162,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    //    if (section == 3) {
-    //        return 80.f;
-    //    }else
+    
     return 8.0f;
 }
 
@@ -211,16 +214,21 @@
             [cell setLayoutMargins:UIEdgeInsetsZero];
         }
     }
-   
+    
 }
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSInteger rowInSection = indexPath.row;
     NSInteger section = indexPath.section;
-       switch (section) {
+    switch (section) {
         case 0:
         {
             NSLog(@"SECTION 0");
+            
+            //个人信息
+            backItemTitle = [[UIBarButtonItem alloc] initWithTitle:@"个人信息" style:UIBarButtonItemStylePlain target:nil action:nil];
+            [self.parentViewController.navigationItem setBackBarButtonItem:backItemTitle];
+            [self.parentViewController.navigationController pushViewController:PersonalInformationController animated:YES];
             break;
         }
         case 1:
@@ -236,10 +244,10 @@
                 }
                 case 1:
                 {
-                     // 意见反馈
+                    // 意见反馈
                     backItemTitle = [[UIBarButtonItem alloc] initWithTitle:@"意见反馈" style:UIBarButtonItemStylePlain target:nil action:nil];
-                     [self.parentViewController.navigationItem setBackBarButtonItem:backItemTitle];
-                     [self.navigationController pushViewController:FeedbackController animated:YES];
+                    [self.parentViewController.navigationItem setBackBarButtonItem:backItemTitle];
+                    [self.navigationController pushViewController:FeedbackController animated:YES];
                     break;
                 }
                 case 2:
@@ -255,15 +263,16 @@
                     // 关于
                     backItemTitle = [[UIBarButtonItem alloc] initWithTitle:@"关于优邻" style:UIBarButtonItemStylePlain target:nil action:nil];
                     [self.parentViewController.navigationItem setBackBarButtonItem:backItemTitle];
+                    [self.navigationController pushViewController:AboutYouLinController animated:YES];
                     break;
                 }
                 default:
                     break;
             }
-
+            
             break;
         }
-    default:
+        default:
             break;
     }
 }
@@ -272,12 +281,12 @@
 - (void)showCircularImageViewWithImage:(UIImage*) image
 {
     
-//    UIView* addView = [[UIView alloc] initWithFrame:self.view.bounds];
+    //    UIView* addView = [[UIView alloc] initWithFrame:self.view.bounds];
     UIView* addView = [[UIView alloc] initWithFrame:self.parentViewController.parentViewController.view.bounds];
     addView.alpha = 1.0;
     addView.backgroundColor = [UIColor whiteColor];
     [self.parentViewController.parentViewController.view addSubview:addView];
-//    [self.view addSubview:addView];
+    //    [self.view addSubview:addView];
     ShowImageView* showImage = [[ShowImageView alloc] initWithFrame:self.view.frame circularImage:image];
     [showImage show:addView didFinish:^()
      {
@@ -292,7 +301,7 @@
          }];
          
      }];
-
+    
 }
 
 - (BOOL) initUser

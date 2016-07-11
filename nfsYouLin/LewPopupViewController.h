@@ -14,5 +14,6 @@
 #import "LewPopupViewAnimationRight.h"
 #import "LewPopupViewAnimationFade.h"
 #import "LewPopupViewAnimationSlide.h"
+#import "LewPopupViewAnimationDownSlide.h"
 
 #endif /* LewPopupViewController_h */
