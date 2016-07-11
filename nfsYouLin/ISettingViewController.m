@@ -34,6 +34,7 @@
 - (void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    self.navigationItem.title=@"";
     switchNoticeButton = [[UISwitch alloc] initWithFrame:CGRectMake(_tableView.frame.size.width-70, 20, 40, 5)];
     [switchNoticeButton setOn:YES];
     [switchNoticeButton addTarget:self action:@selector(switchNoticeAction) forControlEvents:UIControlEventValueChanged];
@@ -99,9 +100,8 @@
         NSLog(@"开启");
     }
 
-    
-
 }
+
 - (void)switchShockAction
 {
 
