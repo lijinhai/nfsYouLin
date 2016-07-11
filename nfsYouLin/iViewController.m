@@ -12,7 +12,8 @@
 #import "ISettingViewController.h"
 #import "Users.h"
 #import "AppDelegate.h"
-
+#import "AboutYouLinViewController.h"
+#import "PersonalInformationViewController.h"
 @interface iViewController ()
 
 @end
@@ -30,6 +31,7 @@
     
     UIBarButtonItem* backItemTitle;
     Users* user;
+    
 }
 
 - (void)viewDidLoad {
