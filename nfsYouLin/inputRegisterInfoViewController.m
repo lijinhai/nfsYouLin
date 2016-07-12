@@ -17,6 +17,8 @@
 #import "SqlDictionary.h"
 #import "FMDB.h"
 #import "Constants.h"
+#import "SqliteOperation.h"
+
 
 @interface inputRegisterInfoViewController ()
 
@@ -216,7 +218,7 @@
             NSLog(@"注册成功");
             personInfoDic[@"user_id"] = [responseObject valueForKey:@"user_id"];
             personInfoDic[@"user_portrait"] = [responseObject valueForKey:@"user_avatr"];
-            if([self insertSqlite:personInfoDic])
+            if([SqliteOperation insertUsersSqlite:personInfoDic View:self.view])
             {
                 NSLog(@"页面跳转");
                 [self.navigationController pushViewController:cityController animated:YES];
@@ -312,62 +314,6 @@
     return YES;
 }
 
-- (BOOL) insertSqlite: (NSMutableDictionary *) dict
-{
-    if(!dict)
-        return NO;
-    AppDelegate* app = [[UIApplication sharedApplication] delegate];
-    FMDatabase* db = app.db;
-    if ([db open])
-    {
-        [db executeUpdate:INSERT_USERS_TABLE,
-         personInfoDic[@"user_public_status"] ,
-         personInfoDic[@"user_vocation"] ,
-         personInfoDic[@"user_level"] ,
-         personInfoDic[@"user_id"],
-         personInfoDic[@"user_name"] ,
-         personInfoDic[@"user_portrait"],
-         personInfoDic[@"user_gender"] ,
-         personInfoDic[@"user_phone_number"] ,
-         personInfoDic[@"user_family_id"],
-         personInfoDic[@"user_family_address"] ,
-         personInfoDic[@"user_birthday"],
-         personInfoDic[@"user_email"] ,
-         personInfoDic[@"user_type"] ,
-         personInfoDic[@"user_time"],
-         personInfoDic[@"user_json"] ,
-         personInfoDic[@"login_account"] ,
-         personInfoDic[@"table_version"] ];
-    }
-    else
-    {
-        NSLog(@"数据库打开失败");
-        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"错误信息" message:@"数据库打开失败" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
-        [alert show];
-        [db close];
-        return NO;
-    }
-    
-//    FMResultSet *result = [db executeQuery:@"SELECT * FROM table_users"];
-//    while ([result next]) {
-//        NSString *name = [result stringForColumn:@"user_name"];
-//        NSString *phoneNum = [result stringForColumn:@"user_phone_number"];
-//        NSString *portrait = [result stringForColumn:@"user_portrait"];
-//       
-//        NSLog(@"id = %d",[result intForColumn:@"id"]);
-//        NSLog(@"name = %@",name);
-//        NSLog(@"phoneNum = %@",phoneNum);
-//        NSLog(@"userPortrait = %@",portrait);
-//    }
-
-    
-    
-    [db close];
-
-    
-    return YES;
-
-}
 
 
 @end

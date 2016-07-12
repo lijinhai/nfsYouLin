@@ -117,6 +117,9 @@
         /*处理头像*/
         
         self.headIV = [[UIImageView alloc] initWithFrame:CGRectMake(10, 10, 80, 80)];
+        
+        self.headIV.layer.masksToBounds = YES;
+        self.headIV.layer.cornerRadius = 40;
         self.headIV.userInteractionEnabled = YES;
         UITapGestureRecognizer* tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(headTapAction:)];
         [self.headIV addGestureRecognizer:tapGesture];
