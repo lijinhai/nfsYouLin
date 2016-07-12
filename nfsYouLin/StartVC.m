@@ -39,15 +39,15 @@
     NSLog(@"手机序列号: %@",identifierNumber);
     
     
-    NSString* MD5String = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"imei%@",identifierNumber]];
+    NSString* MD5String = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"imei%@addr_cache0",identifierNumber]];
     NSString* hashString = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"%@1", MD5String]];
-    
     NSDictionary* parameter = @{@"imei" : identifierNumber,
                                 @"apitype" : @"users",
                                 @"tag" : @"token",
+                                @"addr_cache" : @"0",
                                 @"salt" : @"1",
                                 @"hash" : hashString,
-                                @"keyset" : @"imei:",
+                                @"keyset" : @"imei:addr_cache:",
                                 };
     
     [manager POST:POST_URL parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
@@ -64,6 +64,8 @@
         else if([flag isEqualToString:@"no"])
         {
             NSLog(@"flag == no");
+            NSString* shareInfo = [StringMD5 replaceUnicode:[responseObject valueForKey:@"share_info"]];
+            NSLog(@"shareInfo = %@",shareInfo);
             [self presentViewController:_loginNC animated:YES completion:nil];
         }
         else

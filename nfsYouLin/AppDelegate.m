@@ -10,9 +10,10 @@
 #import "EMSDK.h"
 #import <SMS_SDK/SMSSDK.h>
 #import "Constants.h"
+#import "AFNetworkReachabilityManager.h"
+#import "HeaderFile.h"
 #import "MBProgressHUBTool.h"
 
-#import "AFNetworkReachabilityManager.h"
 
 #define appKey @"d3f836c7d14c"
 #define appSecret @"203b2509d7f89a3a97bb44ee489f5f38"
@@ -31,8 +32,15 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
-    //监听网络变化
+    
+    //监听服务器网络变化
     [self listenNetwork];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:kReachabilityChangedNotification object:nil];
+//    Reachability* reach = [Reachability reachabilityWithHostName:@"http://123.57.9.62"];
+//    Reachability* reach = [Reachability reachabilityWithHostName:@"www.baidu.com"];
+//    Reachability* reach = [Reachability reachabilityWithHostName:@"123.57.9.12"];
+//    [reach startNotifier];
+    
     
     // 环信初始化
     EMOptions *options = [EMOptions optionsWithAppkey:@"walk#test"];
@@ -165,6 +173,19 @@
     NSLog(@"FMDatabase:---------%@",self.db);
 }
 
+//- (void) reachabilityChanged: (NSNotification *)note
+//{
+//    Reachability* curReach = [note object];
+//    NetworkStatus status = [curReach currentReachabilityStatus];
+//    NSLog(@"reachabilityChanged = %ld",status);
+//    if(status == NotReachable)
+//    {
+////        [MBProgressHUBTool textToast:self Tip:@"网络连接异常"];
+//        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"提醒" message:@"服务器网络连接异常" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+//        [alert show];
+//    }
+//    
+//}
 
 - (void) listenNetwork
 {
@@ -186,7 +207,7 @@
                 NSLog(@"没有网络(断网)");
                 UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"提醒" message:@"网络连接异常" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
                 [alert show];
-
+                
                 break;
             }
             case AFNetworkReachabilityStatusReachableViaWWAN:
@@ -204,6 +225,7 @@
     // 3.开始监控
     [manager startMonitoring];
 }
+
 
 @end
 
