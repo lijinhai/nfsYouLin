@@ -12,13 +12,6 @@
 #import "NeighborData.h"
 #import "NCellDelegate.h"
 
-//@protocol cellDelegate <NSObject>
-//
-//- (void)showCircularImageViewWithImage:(UIImage*) image;
-//- (void)showImageViewWithImageViews:(NSArray *)imageViews byClickWhich:(NSInteger)clickTag;
-//- (void)readTotalInformation:(NSInteger)sectionNum;
-//
-//@end
 
 @interface NeighborTableViewCell : UITableViewCell<UIScrollViewDelegate>
 
@@ -49,6 +42,8 @@
 @property (weak, nonatomic)UIImageView *iconView;        // 头像
 @property (weak, nonatomic)UILabel *titleLabel;          // 帖子标题
 @property (weak, nonatomic)UILabel *accountInfoLabel;    // 用户信息标题
+@property (weak, nonatomic)UILabel *timeInterval;        // 时间间隔
+
 @property (weak, nonatomic)UILabel *contentLabel;        // 帖子内容
 @property (strong, nonatomic)UIButton* readButton;       // 查看全文按钮
 @property (strong,nonatomic)NSMutableArray *picturesView;   // 发表的图片

@@ -27,19 +27,40 @@
     
     // 帖子标题位置大小
     CGFloat titleLabelX = CGRectGetMaxX(self.iconFrame) + PADDING;
-    CGSize titleLabelSize = [StringMD5 sizeWithString:[NSString stringWithFormat:@"#%@#%@",self.neighborData.titleCategory,self.neighborData.titleName] font:[UIFont boldSystemFontOfSize:18] maxSize:CGSizeMake(MAXFLOAT,MAXFLOAT)];
+//    CGSize titleLabelSize = [StringMD5 sizeWithString:[NSString stringWithFormat:@"#%@#%@",self.neighborData.titleCategory,self.neighborData.titleName] font:[UIFont boldSystemFontOfSize:18] maxSize:CGSizeMake(MAXFLOAT,MAXFLOAT)];
+    
+    CGSize titleLabelSize = [StringMD5 sizeWithString:[NSString stringWithFormat:@"%@",self.neighborData.titleName] font:[UIFont boldSystemFontOfSize:18] maxSize:CGSizeMake(MAXFLOAT,MAXFLOAT)];
+
+    
     CGFloat titleLabelY = iconViewY + PADDING / 2;
     CGFloat titleLabelW = titleLabelSize.width;
     CGFloat titleLabelH = titleLabelSize.height;
     self.titleFrame = CGRectMake(titleLabelX, titleLabelY, titleLabelW, titleLabelH);
     
+    
+    // 时间间隔位置大小
+    
+    NSString* internalString = [StringMD5 calculateTimeInternal:[self.neighborData.systemTime integerValue] / 1000 old:[self.neighborData.topicTime integerValue] / 1000];
+    CGSize internalSize = [StringMD5 sizeWithString:[NSString stringWithFormat:@"%@",internalString] font:[UIFont systemFontOfSize:10] maxSize:CGSizeMake(MAXFLOAT,MAXFLOAT)];
+    CGFloat internalX = screenWidth - internalSize.width - PADDING;
+    CGFloat internalY = PADDING;
+    self.intervalFrame = CGRectMake(internalX, internalY, internalSize.width, internalSize.height);
+    
+    
     // 用户信息位置大小
     CGFloat accountInfoLabelX = CGRectGetMaxX(self.iconFrame) + PADDING;
     CGFloat accountInfoLabelY = CGRectGetMaxY(self.titleFrame);
-    CGSize accountInfoLabelSize = [StringMD5 sizeWithString:[NSString stringWithFormat:@"%@@%@",self.neighborData.accountName, self.neighborData.addressInfo] font:[UIFont systemFontOfSize:15] maxSize:CGSizeMake(MAXFLOAT, MAXFLOAT)];
+//    CGSize accountInfoLabelSize = [StringMD5 sizeWithString:[NSString stringWithFormat:@"%@@%@",self.neighborData.accountName, self.neighborData.addressInfo] font:[UIFont systemFontOfSize:15] maxSize:CGSizeMake(MAXFLOAT, MAXFLOAT)];
+    
+    CGSize accountInfoLabelSize = [StringMD5 sizeWithString:[NSString stringWithFormat:@"%@",self.neighborData.accountName] font:[UIFont systemFontOfSize:15] maxSize:CGSizeMake(MAXFLOAT, MAXFLOAT)];
+    
     CGFloat accountInfoLabelW = accountInfoLabelSize.width;
     CGFloat accountInfoLabelH = accountInfoLabelSize.height;
     self.accountInfoFrame = CGRectMake(accountInfoLabelX, accountInfoLabelY, accountInfoLabelW, accountInfoLabelH);
+    
+    
+    
+    
     
     // 帖子内容位置大小
 //    UIFont *font = [UIFont systemFontOfSize:16];
@@ -106,7 +127,7 @@
         self.cellHeight = CGRectGetMaxY(self.textFrame) + readButtonH +PADDING;
     }
 
-    
+    self.cellHeight += 2 * PADDING;
    
 }
 

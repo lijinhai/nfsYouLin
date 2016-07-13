@@ -8,6 +8,8 @@
 
 #import "NeighborTableViewCell.h"
 #import "NDetailTableViewController.h"
+#import "UIImageView+WebCache.h"
+#import "StringMD5.h"
 
 @implementation NeighborTableViewCell
 {
@@ -59,8 +61,14 @@
             self.iconView.userInteractionEnabled = YES;
             [self.iconView addGestureRecognizer:tapGesture];
 
-            
-            
+            // 创建时间间隔
+            UILabel* timeInterval = [[UILabel alloc] init];
+            timeInterval.textAlignment = NSTextAlignmentLeft;
+            timeInterval.font = [UIFont systemFontOfSize:10];
+            timeInterval.enabled = NO;
+            [self.contentView addSubview:timeInterval];
+            self.timeInterval = timeInterval;
+
             // 创建帖子标题 #帖子类别# + 帖子名称
             
             UILabel* titleLabel = [[UILabel alloc] init];
@@ -355,11 +363,19 @@
 {
     NSLog(@"setData");
     NeighborData* neighborData = self.neighborDataFrame.neighborData;
-    self.iconView.image = [UIImage imageNamed:neighborData.iconName];
-    self.titleLabel.text = [NSString stringWithFormat:@"#%@#%@",neighborData.titleCategory,neighborData.titleName];
-    self.accountInfoLabel.text = [NSString stringWithFormat:@"%@@%@",neighborData.accountName, neighborData.addressInfo];
-    self.contentLabel.text = neighborData.publishText;
+    NSURL* url = [NSURL URLWithString:neighborData.iconName];
+    [self.iconView sd_setImageWithURL:url placeholderImage:[UIImage imageNamed:@"default"] options:SDWebImageAllowInvalidSSLCertificates];
+    self.titleLabel.text = [NSString stringWithFormat:@"%@",neighborData.titleName];
     
+    self.timeInterval.text = [StringMD5 calculateTimeInternal:[neighborData.systemTime integerValue] / 1000 old:[neighborData.topicTime integerValue] / 1000];
+    
+     self.accountInfoLabel.text = [NSString stringWithFormat:@"%@", neighborData.accountName];
+    
+    
+    NSAttributedString *attrStr = [[NSAttributedString alloc] initWithData:[neighborData.publishText dataUsingEncoding:NSUnicodeStringEncoding] options:@{ NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType } documentAttributes:nil error:nil];
+    
+    self.contentLabel.text = neighborData.publishText;
+    self.contentLabel.attributedText = attrStr;
     
     //创建配图
     for (int i = 0; i < [neighborData.picturesArray count]; i++)
@@ -372,7 +388,9 @@
         
         [self.contentView addSubview:pictureView];
         [self.picturesView addObject:pictureView];
-        ((UIImageView *)[self.picturesView objectAtIndex:i]).image = [UIImage imageNamed:[neighborData.picturesArray objectAtIndex:i]];
+        UIImageView* imageView = ((UIImageView *)[self.picturesView objectAtIndex:i]);
+        NSURL* url = [NSURL URLWithString:[[neighborData.picturesArray objectAtIndex:i] valueForKey:@"resPath"]];
+        [imageView sd_setImageWithURL:url placeholderImage:[UIImage imageNamed:@"default"] options:SDWebImageAllowInvalidSSLCertificates];
     }
 
     
@@ -384,6 +402,9 @@
     self.iconView.frame = self.neighborDataFrame.iconFrame;
     self.titleLabel.frame = self.neighborDataFrame.titleFrame;
     self.accountInfoLabel.frame = self.neighborDataFrame.accountInfoFrame;
+    
+    self.timeInterval.frame = self.neighborDataFrame.intervalFrame;
+    
     self.contentLabel.frame = self.neighborDataFrame.textFrame;
     
     self.readButton.frame = self.neighborDataFrame.readFrame;
@@ -441,7 +462,12 @@
 
 - (void)tapImageView: (UITapGestureRecognizer*) recognizer
 {
-      [_delegate showImageViewWithImageViews:_neighborDataFrame.neighborData.picturesArray byClickWhich:recognizer.view.tag];
+    NSMutableArray* imageArray = [[NSMutableArray alloc] init];
+    
+    for (int i = 0; i < [_neighborDataFrame.neighborData.picturesArray count]; i++) {
+        [imageArray addObject:[[_neighborDataFrame.neighborData.picturesArray objectAtIndex:i] valueForKey:@"resPath"]];
+    }
+    [_delegate showImageViewWithImageViews:imageArray byClickWhich:recognizer.view.tag];
 }
 
 // 点击全文按钮

@@ -8,7 +8,9 @@
 
 #import "NTableViewController.h"
 #import "NDetailTableViewController.h"
-
+#import "AFHTTPSessionManager.h"
+#import "StringMD5.h"
+#import "MBProgressHUBTool.h"
 
 @interface NTableViewController ()
 
@@ -50,9 +52,10 @@
     NSInteger _imageCount;
 
     UIImageView* _waitImageView;
+    
 }
 
-static int sectionCount = 6;
+static int sectionCount = 1;
 
 - (void)viewWillAppear:(BOOL)animated
 {
@@ -60,8 +63,8 @@ static int sectionCount = 6;
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
-    contentOffsetY = 0;
     
+    contentOffsetY = 0;
     // 改变BarItem 图片系统颜色为 自定义颜色 ffba20 
     UIImage *neighborImageA = [UIImage imageNamed:@"btn_linjuquan_a.png"];
     neighborImageA = [neighborImageA imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
@@ -72,13 +75,12 @@ static int sectionCount = 6;
     [self.neighborTabBarItem setTitleTextAttributes:@{NSFontAttributeName : [UIFont fontWithName:@"HelveticaNeue-Bold" size:10.0f],NSForegroundColorAttributeName : _color} forState:UIControlStateSelected];
     // 修改导航栏颜色
     [self.navigationController.navigationBar setBarTintColor:_color];
-    //self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
     UIView * tmpView = [[UIView alloc]initWithFrame:CGRectMake(0, -20, self.view.frame.size.width, 20)];
     tmpView.backgroundColor = [UIColor blackColor];
     [self.navigationController.navigationBar addSubview:tmpView];
-    
     self.tableView.bounces = NO;
-    _neighborDataArray = [[NSMutableArray alloc] init];
+    self.neighborDataArray = [[NSMutableArray alloc] init];
+
     _downView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.navigationController.navigationBar.frame.size.width, self.navigationController.navigationBar.frame.size.height)];
     _downView.backgroundColor = _color;
     _downLabel = [[UILabel alloc] init];
@@ -160,14 +162,18 @@ static int sectionCount = 6;
 //    _detailController = [storyBoard instantiateViewControllerWithIdentifier:@"details"];
     
     [self initWaitImageAnimate];
+    [self.view addSubview:_waitImageView];
     
+    [self getAllTopicNet];
+   
+
 }
 
 - (void)initWaitImageAnimate
 {
     CGFloat waitW = self.view.bounds.size.width / 3;
     _waitImageView = [[UIImageView alloc] initWithFrame:CGRectMake(waitW, CGRectGetMidY(self.view.bounds) - waitW, waitW, waitW)];
-    _waitImageView.image = [UIImage animatedImageNamed:@"pd_topic_0" duration:1];
+    _waitImageView.image = [UIImage animatedImageNamed:@"pd_topic_0" duration:0.5];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -229,8 +235,10 @@ static int sectionCount = 6;
                 cell = [[NeighborTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellOther];
             
             }
-            cell.neighborDataFrame = self.neighborDataArray[indexPath.section];
-            
+            if([self.neighborDataArray count] != 0)
+            {
+                cell.neighborDataFrame = self.neighborDataArray[indexPath.section - 1];
+            }
         }
         // 评论 赞 查看
         else if(indexPath.row == 1)
@@ -262,7 +270,7 @@ static int sectionCount = 6;
     }
     else
     {
-        NeighborDataFrame *frame = self.neighborDataArray[indexPath.section];
+        NeighborDataFrame *frame = self.neighborDataArray[indexPath.section - 1];
         NSInteger height = frame.cellHeight + 1;
         return height;
     }
@@ -524,129 +532,6 @@ static BOOL upState = YES;
     }
 }
 
-// 帖子表格数据来源
-- (NSMutableArray *)neighborDataArray
-{
-  
-    [_neighborDataArray removeAllObjects];
-    
-    NSDate* date = [NSDate  date];
-    NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"MM月dd日 HH:mm"];
-    NSString* timeString = [dateFormatter stringFromDate:date];
-    
-    for(int i = 0; i < sectionCount; i ++)
-    {
-        NSDictionary* dict;
-        if(i == 1)
-        {
-            dict = @{@"titleCategory" : @"话题",
-                     @"iconName" : @"default_normal_avatar",
-                     @"titleName" : [NSString stringWithFormat:@"跳跳-%d",i],
-                     @"accountName" : @"动物园",
-                     @"addressInfo" : @"保利清华园",
-                     @"publishTime" : @"1小时前",
-                     @"dateTime"    : timeString,
-                     @"publishText" : @"在欧洲，古罗马时已有动物园的雏型。最初的动物园雏形起源于是古代国王、皇帝和王公贵族们的一种嗜好，从各地收集来的珍禽异兽圈在皇宫里供其玩赏，像黄金、珠宝一样，是他们这些人财富和地位的象征，当时的动物园和普通百姓一点关系都没有。一开始，这种收集行为比较随意，碰上什么就抓什么，后来渐渐地对动物有了一些了解，才开始有一些计划性和组织性。不过那时的动物都关在笼子里，并不考虑它们舒不舒服，只考虑如何让参观者看得更清楚一些。公元前2300年前的一块石匾上就有对当时在美索不达米亚南部苏美尔的重要城市乌尔收集珍稀动物的描述，这可能是人类有记载的最早动物采集行为。",
-                     @"picturesArray" : @[@"dog.png",
-                                          @"duck.png",
-                                          @"elephant.png",
-                                          @"frog.png",
-                                          @"mouse.png",
-                                          @"rabbit.png",
-                                          @"elephant.png",
-                                          @"dog.png",
-                                          @"duck.png"],
-                     };
-
-        }
-        else if(i == 2)
-        {
-            dict = @{@"titleCategory" : @"话题",
-                     @"iconName" : @"default_normal_avatar",
-                     @"titleName" : [NSString stringWithFormat:@"跳跳-%d",i],
-                     @"accountName" : @"walk",
-                     @"addressInfo" : @"保利清华园",
-                     @"publishTime" : @"1小时前",
-                     @"dateTime"    : timeString,
-                     @"publishText" : @"我家的宠物",
-                     @"picturesArray" : @[@"dog.png",
-                                          @"elephant.png",
-                                         ],
-                     };
-
-        }
-        else if (i == 3)
-        {
-            dict = @{@"titleCategory" : @"话题",
-                     @"iconName" : @"default_normal_avatar",
-                     @"titleName" : [NSString stringWithFormat:@"跳跳-%d",i],
-                     @"accountName" : @"金海",
-                     @"addressInfo" : @"保利清华园",
-                     @"publishTime" : @"1小时前",
-                     @"dateTime"    : timeString,
-                     @"publishText" : @"今天又买了好几个宠物 哈哈 就是有钱！！",
-                     @"picturesArray" : @[@"dog.png",
-                                          @"duck.png",
-                                          @"elephant.png",
-                                          @"frog.png",
-                                          @"mouse.png",
-                                         ],
-                     };
-
-        }
-        else if(i == 4)
-        {
-            dict = @{@"titleCategory" : @"话题",
-                     @"iconName" : @"default_normal_avatar",
-                     @"titleName" : [NSString stringWithFormat:@"跳跳-%d",i],
-                     @"accountName" : @"大神",
-                     @"addressInfo" : @"保利清华园",
-                     @"publishTime" : @"1小时前",
-                     @"dateTime"    : timeString,
-                     @"publishText" : @"来来 组队打刀塔",
-                     @"picturesArray" : @[@"dog.png",
-                                          @"duck.png",
-                                          @"elephant.png",
-                                          @"frog.png",
-                                          @"mouse.png",
-                                          @"rabbit.png",
-                                          @"elephant.png",
-                                          ],
-                     };
-
-        }
-        else
-        {
-            dict = @{@"titleCategory" : @"话题",
-                     @"iconName" : @"default_normal_avatar",
-                     @"titleName" : [NSString stringWithFormat:@"跳跳-%d",i],
-                     @"accountName" : @"动物世界",
-                     @"addressInfo" : @"保利清华园",
-                     @"publishTime" : @"1小时前",
-                     @"dateTime"    : timeString,
-                     @"publishText" : @"欢迎 欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎欢迎",
-                     @"picturesArray" : @[@"dog.png",
-                                          @"duck.png",
-                                          @"elephant.png",
-                                          @"frog.png",
-                                          @"mouse.png",
-                                          @"rabbit.png",
-                                          @"elephant.png",
-                                          @"dog.png",
-                                          @"duck.png"],
-                     };
-
-        }
-        NeighborData *neighborData = [[NeighborData alloc] initWithDict:dict];
-        NeighborDataFrame *neighborDataFrame = [[NeighborDataFrame alloc]init];
-        neighborDataFrame.neighborData = neighborData;
-        [_neighborDataArray addObject:neighborDataFrame];
-
-    }
-    return _neighborDataArray;
-}
-
 // 	圆形头像点击事件回调
 - (void)showCircularImageViewWithImage:(UIImage*) image
 {
@@ -734,16 +619,85 @@ static BOOL upState = YES;
 // 查看全文回调事件
 - (void)readTotalInformation:(NSInteger)sectionNum
 {
-    NeighborDataFrame* neighborDataFrame = _neighborDataArray[sectionNum];
+    NeighborDataFrame* neighborDataFrame = self.neighborDataArray[sectionNum - 1];
     NeighborData* neighborData = neighborDataFrame.neighborData;
     UIStoryboard* storyBoard = [UIStoryboard storyboardWithName:@"Neighbour" bundle:nil];
     _detailController= [storyBoard instantiateViewControllerWithIdentifier:@"details"];
     UIBarButtonItem* detailItem = [[UIBarButtonItem alloc] initWithTitle:@"详情" style:UIBarButtonItemStylePlain target:nil action:nil];
     [self.parentViewController.navigationItem setBackBarButtonItem:detailItem];
-    _detailController.sectionNum = sectionNum;
+    _detailController.sectionNum = sectionNum - 1;
     _detailController.neighborData = neighborData;
     [self.navigationController pushViewController:_detailController animated:YES];
     
 }
+
+
+// 发起获取所有帖子网络请求
+- (void) getAllTopicNet
+{
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSString* communityId = [defaults stringForKey:@"communityId"];
+    NSString* userId = [defaults stringForKey:@"userId"];
+    AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
+    manager.securityPolicy.allowInvalidCertificates = YES;
+    [manager.securityPolicy setValidatesDomainName:NO];
+    
+    
+    
+    
+    NSString* MD5String = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"user_id%@community_id%@topic_id0",userId,communityId]];
+    NSString* hashString = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"%@1", MD5String]];
+    
+    NSDictionary* parameter = @{@"user_id" : userId,
+                                @"community_id" : communityId,
+                                @"topic_id" : @"0",
+                                @"apitype" : @"comm",
+                                @"tag" : @"gettopic",
+                                @"salt" : @"1",
+                                @"hash" : hashString,
+                                @"keyset" : @"user_id:community_id:topic_id:",
+                                };
+    
+    [manager POST:POST_URL parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+        
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+//        NSLog(@"获取所有帖子网络请求:%@", responseObject);
+        for (int i = 0; i < [responseObject count]; i++,sectionCount++)
+        {
+            NSDictionary* responseDict = responseObject[i];
+            NSDictionary* dict;
+            dict = @{@"titleCategory" : @"话题",
+                     @"iconName" : responseDict[@"senderPortrait"],
+                     @"titleName" : responseDict[@"topicTitle"],
+                     @"accountName" : responseDict[@"displayName"],
+                     @"addressInfo" : @"保利清华园",
+                     @"publishTime" : @"1小时前",
+                     @"dateTime"    :@"11111",
+                     @"publishText" : responseDict[@"topicContent"],
+                     @"picturesArray" : responseDict[@"mediaFile"],
+                     @"topicTime" : responseDict[@"topicTime"],
+                     @"systemTime" : responseDict[@"systemTime"]
+                     };
+
+            NeighborData *neighborData = [[NeighborData alloc] initWithDict:dict];
+
+            NeighborDataFrame *neighborDataFrame = [[NeighborDataFrame alloc]init];
+
+            neighborDataFrame.neighborData = neighborData;
+
+            [self.neighborDataArray addObject:neighborDataFrame];
+
+        }
+        [_waitImageView removeFromSuperview];
+        [self.tableView reloadData];
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"请求失败:%@", error.description);
+        return;
+    }];
+    
+}
+
 
 @end

@@ -658,7 +658,7 @@
         <!--Neighbour-->
         <scene sceneID="et3-tt-QRr">
             <objects>
-                <viewControllerPlaceholder storyboardName="Neighbour" id="vdb-UN-QNV" sceneMemberID="viewController">
+                <viewControllerPlaceholder storyboardIdentifier="neighborVC" storyboardName="Neighbour" id="vdb-UN-QNV" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Item" id="1Yb-vS-FOh"/>
                 </viewControllerPlaceholder>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="TzZ-s1-2AN" userLabel="First Responder" sceneMemberID="firstResponder"/>

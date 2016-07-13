@@ -46,5 +46,39 @@
     CGSize size = [str boundingRectWithSize:maxSize options:NSStringDrawingUsesLineFragmentOrigin attributes:dict context:nil].size;
     return size;
 }
+
+// 计算时间间隔
++ (NSString *)calculateTimeInternal:(NSInteger) nowTime old:(NSInteger) oldTime
+{
+    NSString* internalString;
+    NSInteger internal = nowTime - oldTime;
+    if(internal < 60)
+    {
+        internalString = @"刚刚";
+    }
+    else if(internal >= 60 && internal < 60 * 60)
+    {
+        internalString = [NSString stringWithFormat:@"%ld分钟前", internal / 60];
+    }
+    else if(internal >= 60 * 60 && internal < 60 * 60 * 24)
+    {
+        internalString = [NSString stringWithFormat:@"%ld小时前", internal / (60 * 60)];
+    }
+    else if(internal >= 60 * 60 * 24 && internal< 60 * 60 * 24 * 30)
+    {
+        internalString = [NSString stringWithFormat:@"%ld天前", internal / (60 * 60 * 24)];
+    }
+    else if(internal >= 60 * 60 * 24 * 30 && internal < 60 * 60 * 24 * 30 * 12)
+    {
+        internalString = [NSString stringWithFormat:@"%ld月前", internal / (60 * 60 * 24 * 30)];
+    }
+    else if(internal >= 60 * 60 * 24 * 30 * 12)
+    {
+        internalString = [NSString stringWithFormat:@"%ld年前", internal / (60 * 60 * 24 * 30 * 12)];
+    }
+    return internalString;
+}
+
+
 @end
 

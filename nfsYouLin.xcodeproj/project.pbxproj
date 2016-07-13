@@ -30,6 +30,7 @@
 		8F51E28A1D338FBF0094A4E5 /* UIView+WebCacheOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F51E27A1D338FBF0094A4E5 /* UIView+WebCacheOperation.m */; };
 		8F51E28D1D33952F0094A4E5 /* LoginNC.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F51E28C1D33952F0094A4E5 /* LoginNC.m */; };
 		8F51E2901D33C0080094A4E5 /* StartVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F51E28F1D33C0080094A4E5 /* StartVC.m */; };
+		8F51E2A11D34D3CD0094A4E5 /* SqliteOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F51E2A01D34D3CD0094A4E5 /* SqliteOperation.m */; };
 		8F5303821CDB440F0078FD64 /* Discovery.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8F5303811CDB440F0078FD64 /* Discovery.storyboard */; };
 		8F5303851CDB45B50078FD64 /* discoveryController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F5303841CDB45B50078FD64 /* discoveryController.m */; };
 		8F5304491CDB7A8B0078FD64 /* homeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F5304481CDB7A8B0078FD64 /* homeViewController.m */; };
@@ -388,6 +389,8 @@
 		8F51E28C1D33952F0094A4E5 /* LoginNC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginNC.m; sourceTree = "<group>"; };
 		8F51E28E1D33C0080094A4E5 /* StartVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StartVC.h; sourceTree = "<group>"; };
 		8F51E28F1D33C0080094A4E5 /* StartVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StartVC.m; sourceTree = "<group>"; };
+		8F51E29F1D34D3CD0094A4E5 /* SqliteOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SqliteOperation.h; sourceTree = "<group>"; };
+		8F51E2A01D34D3CD0094A4E5 /* SqliteOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SqliteOperation.m; sourceTree = "<group>"; };
 		8F5303811CDB440F0078FD64 /* Discovery.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Discovery.storyboard; sourceTree = "<group>"; };
 		8F5303831CDB45B50078FD64 /* discoveryController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = discoveryController.h; sourceTree = "<group>"; };
 		8F5303841CDB45B50078FD64 /* discoveryController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = discoveryController.m; sourceTree = "<group>"; };
@@ -1984,6 +1987,8 @@
 		AF5293C91D12964E00503975 /* Gloable */ = {
 			isa = PBXGroup;
 			children = (
+				8F51E29F1D34D3CD0094A4E5 /* SqliteOperation.h */,
+				8F51E2A01D34D3CD0094A4E5 /* SqliteOperation.m */,
 				8F51E28E1D33C0080094A4E5 /* StartVC.h */,
 				8F51E28F1D33C0080094A4E5 /* StartVC.m */,
 				8F51E28B1D33952F0094A4E5 /* LoginNC.h */,
@@ -2235,6 +2240,7 @@
 				TargetAttributes = {
 					AFCE1F901CDAD1B20085F10F = {
 						CreatedOnToolsVersion = 7.3;
+						DevelopmentTeam = 2E4D9VDYX9;
 					};
 					AFCE1FA91CDAD1B20085F10F = {
 						CreatedOnToolsVersion = 7.3;
@@ -2563,6 +2569,7 @@
 				8F648D141D00547A00E3B155 /* NSData+EMImageContentType.m in Sources */,
 				8F5303851CDB45B50078FD64 /* discoveryController.m in Sources */,
 				8F648D011D00547A00E3B155 /* UIScrollView+MJRefresh.m in Sources */,
+				8F51E2A11D34D3CD0094A4E5 /* SqliteOperation.m in Sources */,
 				8F648D1D1D00547A00E3B155 /* PSTCollectionView.m in Sources */,
 				AF4B301C1D2F8FE200CBF257 /* LewPopupViewAnimationDownSlide.m in Sources */,
 				8F648D171D00547A00E3B155 /* UIImage+EMMultiFormat.m in Sources */,
@@ -2726,6 +2733,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2744,8 +2753,9 @@
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				OTHER_LIBTOOLFLAGS = "";
-				PRODUCT_BUNDLE_IDENTIFIER = nfs.nfsYouLin;
+				PRODUCT_BUNDLE_IDENTIFIER = walk.nfs.Youlin;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -2753,6 +2763,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2771,8 +2783,9 @@
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				OTHER_LIBTOOLFLAGS = "";
-				PRODUCT_BUNDLE_IDENTIFIER = nfs.nfsYouLin;
+				PRODUCT_BUNDLE_IDENTIFIER = walk.nfs.Youlin;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};

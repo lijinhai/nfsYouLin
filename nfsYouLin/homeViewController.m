@@ -17,6 +17,7 @@
 #import "SqliteOperation.h"
 #import "SqlDictionary.h"
 
+
 @interface homeViewController ()
 
 @end
@@ -26,6 +27,7 @@
     forgetViewController* _forgetController;
     registerViewController* _registerController;
     FirstTabBarController* _FirstTabBarController;
+    
     UINavigationController *newNavigationController;
     UIActivityIndicatorView* _indicator;
 }
@@ -62,9 +64,6 @@
 //    _registerController = [[registerViewController alloc] init];
     _FirstTabBarController = [storyBoard instantiateViewControllerWithIdentifier:@"homeTabView"];
     newNavigationController = [storyBoard instantiateViewControllerWithIdentifier:@"viewID"];
-    
-    
-    
 }
 
 
@@ -140,6 +139,7 @@
 
 - (IBAction)loginAction:(id)sender {
     
+    [self.view endEditing:YES];
     NSString* phoneNum = self.phoneTextField.text;
     NSString* password = self.passwordTextField.text;
     if(phoneNum.length == 0)
@@ -176,10 +176,14 @@
         NSLog(@"登录网络请求成功:%@", responseObject);
         if([responseObject isKindOfClass:[NSArray class]])
         {
-            NSLog(@"登录成功");
             NSDictionary* usersDict = [responseObject firstObject];
             NSInteger userId = [[usersDict valueForKey:@"pk"] integerValue];
             NSDictionary* personDic = [usersDict valueForKey:@"fields"];
+            
+            NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+            [defaults setInteger:[[personDic valueForKey:@"user_community_id"] integerValue] forKey:@"communityId"];
+            [defaults synchronize];
+            
             SqlDictionary* sqlDict = [[SqlDictionary alloc] init];
             NSMutableDictionary* personInfoDic = [sqlDict getInitUserDictionary];
             personInfoDic[@"user_public_status"] = personDic[@"user_public_status"];
@@ -304,7 +308,6 @@
 // 更改个人信息网络请求
 - (void) changePersonInfoNet: (NSInteger)userId
 {
-    // 发起验证码比对网络请求
     NSString* phoneNum = self.phoneTextField.text;
     AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
     manager.securityPolicy.allowInvalidCertificates = YES;
@@ -334,6 +337,11 @@
         if([flag isEqualToString:@"ok"])
         {
             NSLog(@"更改个人信息网络请求 成功");
+            NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+            [defaults setInteger:userId forKey:@"userId"];
+            [defaults setValue:phoneNum forKey:@"phoneNum"];
+            [defaults synchronize];
+
             [self presentViewController:newNavigationController animated:YES completion:nil];
         }
         else

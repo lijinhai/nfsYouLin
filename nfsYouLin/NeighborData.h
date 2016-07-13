@@ -16,6 +16,9 @@
 @property (strong, nonatomic) NSString* accountName;    // 账户昵称
 @property (strong, nonatomic) NSString* addressInfo;    // 地址信息
 @property (strong, nonatomic) NSString* publishTime;     // 发表时间
+@property (strong, nonatomic) NSString* topicTime;     // 发表时间
+@property (strong, nonatomic) NSString* systemTime;     // 系统时间
+
 @property (strong, nonatomic) NSString* dateTime;       // 发表日期时间
 @property (strong, nonatomic) NSString* publishText;     // 发表内容
 @property (strong, nonatomic) NSString* activityStart;  // 活动开始时间

@@ -8,6 +8,8 @@
 
 #import "NDetailTableViewCell.h"
 #import "StringMD5.h"
+#import "UIImageView+WebCache.h"
+
 
 @implementation NDetailTableViewCell
 {
@@ -214,31 +216,35 @@
 
 - (void) setZeroCellData
 {
-    self.iconView.image = [UIImage imageNamed:self.neighborData.iconName];
+    NSURL* url = [NSURL URLWithString:self.neighborData.iconName];
+    [self.iconView sd_setImageWithURL:url placeholderImage:[UIImage imageNamed:@"default"] options:SDWebImageAllowInvalidSSLCertificates];
     
     CGRect accountFrame;
-    CGSize accountInfoLabelSize = [StringMD5 sizeWithString:[NSString stringWithFormat:@"%@@%@",self.neighborData.accountName, self.neighborData.addressInfo] font:[UIFont systemFontOfSize:15] maxSize:CGSizeMake(MAXFLOAT, MAXFLOAT)];
+    CGSize accountInfoLabelSize = [StringMD5 sizeWithString:[NSString stringWithFormat:@"%@",self.neighborData.accountName] font:[UIFont systemFontOfSize:15] maxSize:CGSizeMake(MAXFLOAT, MAXFLOAT)];
     CGFloat accountInfoLabelW = accountInfoLabelSize.width;
     CGFloat accountInfoLabelH = accountInfoLabelSize.height;
     accountFrame = CGRectMake(CGRectGetMaxX(self.iconView.frame) +  PADDING / 2, PADDING / 2, accountInfoLabelW, accountInfoLabelH);
     self.accountInfoLabel.frame = accountFrame;
-    self.accountInfoLabel.text = [NSString stringWithFormat:@"%@@%@",self.neighborData.accountName, self.neighborData.addressInfo];
+    self.accountInfoLabel.text = [NSString stringWithFormat:@"%@",self.neighborData.accountName];
     
+    NSDate* topicTime = [NSDate dateWithTimeIntervalSince1970:[self.neighborData.topicTime integerValue] / 1000];
+    NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"MM月dd日 HH:mm"];
     
-    CGSize timeLabelSize = [StringMD5 sizeWithString:[NSString stringWithFormat:@"%@",self.neighborData.dateTime] font:[UIFont systemFontOfSize:12] maxSize:CGSizeMake(MAXFLOAT, MAXFLOAT)];
+    CGSize timeLabelSize = [StringMD5 sizeWithString:[NSString stringWithFormat:@"%@",[formatter stringFromDate:topicTime]] font:[UIFont systemFontOfSize:12] maxSize:CGSizeMake(MAXFLOAT, MAXFLOAT)];
     CGFloat timeLabelW = timeLabelSize.width;
     CGFloat timeLabelH = timeLabelSize.height;
     self.timeLabel.frame = CGRectMake( CGRectGetMinX(self.accountInfoLabel.frame), CGRectGetMaxY(self.accountInfoLabel.frame), timeLabelW, timeLabelH);
-    self.timeLabel.text = self.neighborData.dateTime;
+    self.timeLabel.text = [formatter stringFromDate:topicTime];
 
 }
 
 - (void) setFirstCellData
 {
     CGRect titleFrame;
-    CGSize titleSize = [StringMD5 sizeWithString:[NSString stringWithFormat:@"标题:#%@#%@",self.neighborData.titleCategory,self.neighborData.titleName] font:[UIFont boldSystemFontOfSize:18] maxSize:CGSizeMake(MAXFLOAT, MAXFLOAT)];
+    CGSize titleSize = [StringMD5 sizeWithString:[NSString stringWithFormat:@"标题:%@",self.neighborData.titleName] font:[UIFont boldSystemFontOfSize:18] maxSize:CGSizeMake(MAXFLOAT, MAXFLOAT)];
     titleFrame = CGRectMake(PADDING, PADDING, titleSize.width, titleSize.height);
-    self.titleLabel.text = [NSString stringWithFormat:@"标题:#%@#%@",self.neighborData.titleCategory,self.neighborData.titleName];
+    self.titleLabel.text = [NSString stringWithFormat:@"标题:%@",self.neighborData.titleName];
     self.titleLabel.frame = titleFrame;
     
     CGRect textLabelFrame;
@@ -246,6 +252,9 @@
     textLabelFrame = CGRectMake(PADDING, CGRectGetMaxY(self.titleLabel.frame) + PADDING, textLabelSize.width, textLabelSize.height);
     self.contentLabel.frame = textLabelFrame;
     self.contentLabel.text = self.neighborData.publishText;
+    NSAttributedString *attrStr = [[NSAttributedString alloc] initWithData:[self.neighborData.publishText dataUsingEncoding:NSUnicodeStringEncoding] options:@{ NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType } documentAttributes:nil error:nil];
+    self.contentLabel.attributedText = attrStr;
+
     
     //创建配图
     CGFloat picturesViewW = (screenWidth - PADDING ) / 3 - (PADDING / 2);
@@ -260,7 +269,11 @@
         CGFloat picturesViewX = PADDING + (i % 3)*(picturesViewW + PADDING / 2);
         CGFloat picturesViewY = CGRectGetMaxY(self.contentLabel.frame) + PADDING + (PADDING / 2 + picturesViewH) * (i / 3);
         CGRect pictureFrame = CGRectMake(picturesViewX, picturesViewY, picturesViewW, picturesViewH);
-        pictureView.image = [UIImage imageNamed:[self.neighborData.picturesArray objectAtIndex:i]];
+        
+        NSURL* url = [NSURL URLWithString:[[self.neighborData.picturesArray objectAtIndex:i] valueForKey:@"resPath"]];
+        
+        [pictureView sd_setImageWithURL:url placeholderImage:[UIImage imageNamed:@"default"] options:SDWebImageAllowInvalidSSLCertificates];
+        
         pictureView.frame = pictureFrame;
         [self.contentView addSubview:pictureView];
         [self.picturesView addObject:pictureView];
@@ -370,7 +383,15 @@
 
 - (void)tapImageView: (UITapGestureRecognizer*) recognizer
 {
-    [_delegate showImageViewWithImageViews:self.neighborData.picturesArray byClickWhich:recognizer.view.tag];
+    
+    
+    NSMutableArray* imageArray = [[NSMutableArray alloc] init];
+    
+    for (int i = 0; i < [self.neighborData.picturesArray count]; i++) {
+        [imageArray addObject:[[self.neighborData.picturesArray objectAtIndex:i] valueForKey:@"resPath"]];
+    }
+    
+    [_delegate showImageViewWithImageViews:imageArray byClickWhich:recognizer.view.tag];
 }
 
 
