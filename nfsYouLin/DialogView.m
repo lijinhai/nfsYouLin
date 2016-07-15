@@ -1,14 +1,14 @@
 //
-//  HiView.m
+//  DialogView.m
 //  nfsYouLin
 //
 //  Created by Macx on 16/7/15.
 //  Copyright © 2016年 jinhai. All rights reserved.
 //
 
-#import "HiView.h"
+#import "DialogView.h"
 
-@implementation HiView
+@implementation DialogView
 {
     NSInteger _numberOfLines;
     CGFloat _previousHeight;

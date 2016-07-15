@@ -11,7 +11,7 @@
 #import "AFHTTPSessionManager.h"
 #import "StringMD5.h"
 #import "MBProgressHUBTool.h"
-#import "HiView.h"
+#import "DialogView.h"
 
 @interface NTableViewController ()
 
@@ -645,7 +645,7 @@ static BOOL upState = YES;
 {
     
     NSLog(@"打招呼");
-    HiView* hiView = [[HiView alloc] initWithFrame:backgroundView.frame  View:backgroundView];
+    DialogView* hiView = [[DialogView alloc] initWithFrame:backgroundView.frame  View:backgroundView];
     hiView.textView.text = @"欢迎小宝宝来到本小区";
     [self.parentViewController.parentViewController.view  addSubview:backgroundView];
     [self.parentViewController.parentViewController.view  addSubview:hiView];

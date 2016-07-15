@@ -1,5 +1,5 @@
 //
-//  HiView.h
+//  DialogView.h
 //  nfsYouLin
 //
 //  Created by Macx on 16/7/15.
@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface HiView : UIView <UITextViewDelegate>
+@interface DialogView : UIView <UITextViewDelegate>
 
 @property(strong, nonatomic)UIView* backView;
 @property(strong, nonatomic)UIButton* send;

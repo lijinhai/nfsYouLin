@@ -249,6 +249,7 @@
 		8F823D701D2A3B2800178B01 /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F823D6F1D2A3B2800178B01 /* JavaScriptCore.framework */; };
 		8F823D721D2A3B3D00178B01 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F823D711D2A3B3D00178B01 /* AddressBook.framework */; };
 		8F823D741D2A3B4800178B01 /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F823D731D2A3B4800178B01 /* AddressBookUI.framework */; };
+		8F9220151D387A5200A72F90 /* DialogView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F9220141D387A5200A72F90 /* DialogView.m */; };
 		8FF22DA41CE1733800EAE9BA /* forgetViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FF22DA31CE1733800EAE9BA /* forgetViewController.m */; };
 		8FF7E9781D12A04D0026D07D /* ChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FF7E9771D12A04D0026D07D /* ChatViewController.m */; };
 		AF1DBD7F1CEAEA5100557E43 /* inputRegisterInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AF1DBD7E1CEAEA5100557E43 /* inputRegisterInfoViewController.m */; };
@@ -801,6 +802,8 @@
 		8F823D6F1D2A3B2800178B01 /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		8F823D711D2A3B3D00178B01 /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		8F823D731D2A3B4800178B01 /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
+		8F9220131D387A5200A72F90 /* DialogView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DialogView.h; sourceTree = "<group>"; };
+		8F9220141D387A5200A72F90 /* DialogView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DialogView.m; sourceTree = "<group>"; };
 		8FF22DA21CE1733800EAE9BA /* forgetViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = forgetViewController.h; sourceTree = "<group>"; };
 		8FF22DA31CE1733800EAE9BA /* forgetViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = forgetViewController.m; sourceTree = "<group>"; };
 		8FF7E9761D12A0470026D07D /* ChatViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ChatViewController.h; sourceTree = "<group>"; };
@@ -2169,6 +2172,8 @@
 				AF5293DB1D12985400503975 /* BackgroundView.m */,
 				AFE569361CFE643C00C0F745 /* ShowImageView.h */,
 				AFE569371CFE643C00C0F745 /* ShowImageView.m */,
+				8F9220131D387A5200A72F90 /* DialogView.h */,
+				8F9220141D387A5200A72F90 /* DialogView.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -2451,6 +2456,7 @@
 				8F648D241D00547A00E3B155 /* PSTCollectionViewUpdateItem.m in Sources */,
 				8F0F1B511D19247900404C46 /* SearchBarView.m in Sources */,
 				8F648D361D00547A00E3B155 /* EaseEmoji.m in Sources */,
+				8F9220151D387A5200A72F90 /* DialogView.m in Sources */,
 				8F648D481D00547A00E3B155 /* EaseBubbleView+Image.m in Sources */,
 				8F648D161D00547A00E3B155 /* UIImage+EMGIF.m in Sources */,
 				8F51E27E1D338FBF0094A4E5 /* SDWebImageCompat.m in Sources */,
