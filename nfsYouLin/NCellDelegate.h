@@ -19,6 +19,10 @@
 - (void)readTotalInformation:(NSInteger)sectionNum;
 // 帖子类别切换
 - (void)reloadShowByTitle: (NSString* )text;
+
+// 打招呼
+- (void)sayHi:(NSInteger)sectionNum;
+
 @end
 
 

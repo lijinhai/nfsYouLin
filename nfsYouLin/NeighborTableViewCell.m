@@ -69,11 +69,26 @@
             [self.contentView addSubview:timeInterval];
             self.timeInterval = timeInterval;
 
+            // 创建打招呼按钮
+            UIButton* hiBtn = [[UIButton alloc] init];
+            [hiBtn.layer setBorderWidth:1.0];
+            hiBtn.layer.borderColor=[UIColor grayColor].CGColor;
+            [hiBtn setTitle:@"打招呼" forState:UIControlStateNormal];
+            hiBtn.titleLabel.font = [UIFont systemFontOfSize:8];
+            hiBtn.contentHorizontalAlignment = UIControlContentVerticalAlignmentCenter | UIControlContentHorizontalAlignmentCenter;
+
+            [hiBtn setTitleColor:[UIColor colorWithRed:255/255.0 green:186/255.0 blue:2/255.0 alpha:1] forState:UIControlStateNormal];
+//            [self.contentView addSubview:hiBtn];
+            [hiBtn addTarget:self action:@selector(hiAction:) forControlEvents:UIControlEventTouchDown];
+            self.hiBtn = hiBtn;
+
+            
             // 创建帖子标题 #帖子类别# + 帖子名称
             
             UILabel* titleLabel = [[UILabel alloc] init];
             titleLabel.textAlignment = NSTextAlignmentLeft;
             titleLabel.font = [UIFont boldSystemFontOfSize:18];
+            titleLabel.numberOfLines = 0;
             [self.contentView addSubview:titleLabel];
             self.titleLabel = titleLabel;
 
@@ -392,7 +407,16 @@
         NSURL* url = [NSURL URLWithString:[[neighborData.picturesArray objectAtIndex:i] valueForKey:@"resPath"]];
         [imageView sd_setImageWithURL:url placeholderImage:[UIImage imageNamed:@"default"] options:SDWebImageAllowInvalidSSLCertificates];
     }
-
+    // 根据senderId 添加打招呼按钮
+    NSLog(@"senderId = %@",neighborData.senderId);
+    if([neighborData.senderId integerValue] == 1)
+    {
+        [self.contentView addSubview:self.hiBtn];
+    }
+    else
+    {
+        [self.hiBtn removeFromSuperview];
+    }
     
 }
 
@@ -402,9 +426,10 @@
     self.iconView.frame = self.neighborDataFrame.iconFrame;
     self.titleLabel.frame = self.neighborDataFrame.titleFrame;
     self.accountInfoLabel.frame = self.neighborDataFrame.accountInfoFrame;
-    
+    self.hiBtn.frame = self.neighborDataFrame.hiFrame;
+
     self.timeInterval.frame = self.neighborDataFrame.intervalFrame;
-    
+
     self.contentLabel.frame = self.neighborDataFrame.textFrame;
     
     self.readButton.frame = self.neighborDataFrame.readFrame;
@@ -415,6 +440,11 @@
         self.readButton.frame = self.neighborDataFrame.readFrame;
         [self.contentView addSubview:self.readButton];
     }
+    
+//    if([self.neighborDataFrame.neighborData.senderId integerValue] == 1)
+//    {
+//    }
+    
     
     for (int i = 0; i < [self.neighborDataFrame.picturesFrame count]; i++)
     {
@@ -475,6 +505,12 @@
 {
     [_delegate readTotalInformation:self.sectionNum];
 
+}
+
+- (void)hiAction:(id)sender
+{
+    NSLog(@"hiAction");
+    [_delegate sayHi:self.sectionNum];
 }
 
 @end

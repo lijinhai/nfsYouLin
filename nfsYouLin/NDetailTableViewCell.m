@@ -291,12 +291,12 @@
     self.personView.image = [UIImage imageNamed:self.neighborData.iconName ];
     
     CGRect personLableFrame;
-    CGSize personLableLabelSize = [StringMD5 sizeWithString:[NSString stringWithFormat:@"%@@%@",self.neighborData.accountName, self.neighborData.addressInfo] font:[UIFont systemFontOfSize:15] maxSize:CGSizeMake(MAXFLOAT, MAXFLOAT)];
+    CGSize personLableLabelSize = [StringMD5 sizeWithString:[NSString stringWithFormat:@"%@",self.neighborData.accountName] font:[UIFont systemFontOfSize:15] maxSize:CGSizeMake(MAXFLOAT, MAXFLOAT)];
     CGFloat personLabelW = personLableLabelSize.width;
     CGFloat personLabelH = personLableLabelSize.height;
     personLableFrame = CGRectMake(CGRectGetMaxX(self.personView.frame) +  PADDING, PADDING, personLabelW, personLabelH);
     self.personLable.frame = personLableFrame;
-    self.personLable.text = [NSString stringWithFormat:@"%@@%@",self.neighborData.accountName, self.neighborData.addressInfo];
+    self.personLable.text = [NSString stringWithFormat:@"%@",self.neighborData.accountName];
     
     
     CGRect replyTimeFrame;

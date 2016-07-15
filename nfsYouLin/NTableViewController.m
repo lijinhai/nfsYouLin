@@ -11,6 +11,7 @@
 #import "AFHTTPSessionManager.h"
 #import "StringMD5.h"
 #import "MBProgressHUBTool.h"
+#import "HiView.h"
 
 @interface NTableViewController ()
 
@@ -58,6 +59,8 @@
     
     BOOL downFlag;          // 下拉结束标志位
     BOOL upFlag;            // 上拉结束标志位
+    
+    UIView* backgroundView;
     
 }
 
@@ -166,6 +169,11 @@ static int sectionCount = 1;
     
 //    UIStoryboard* storyBoard = [UIStoryboard storyboardWithName:@"Neighbour" bundle:nil];
 //    _detailController = [storyBoard instantiateViewControllerWithIdentifier:@"details"];
+    
+    backgroundView = [[UIView alloc] initWithFrame:self.parentViewController.parentViewController.view.bounds];
+    backgroundView.backgroundColor = [UIColor grayColor];
+    backgroundView.alpha = 0.8;
+    
     
     downFlag = YES;
     upFlag = YES;
@@ -632,6 +640,16 @@ static BOOL upState = YES;
     
 }
 
+// 打招呼回调
+- (void)sayHi:(NSInteger)sectionNum
+{
+    
+    NSLog(@"打招呼");
+    HiView* hiView = [[HiView alloc] initWithFrame:backgroundView.frame  View:backgroundView];
+    hiView.textView.text = @"欢迎小宝宝来到本小区";
+    [self.parentViewController.parentViewController.view  addSubview:backgroundView];
+    [self.parentViewController.parentViewController.view  addSubview:hiView];
+}
 
 // 发起获取所有帖子网络请求
 - (void) getAllTopicNet
@@ -686,7 +704,8 @@ static BOOL upState = YES;
                      @"publishText" : responseDict[@"topicContent"],
                      @"picturesArray" : responseDict[@"mediaFile"],
                      @"topicTime" : responseDict[@"topicTime"],
-                     @"systemTime" : responseDict[@"systemTime"]
+                     @"systemTime" : responseDict[@"systemTime"],
+                     @"senderId" : responseDict[@"senderId"]
                      };
 
             NeighborData *neighborData = [[NeighborData alloc] initWithDict:dict];
@@ -755,7 +774,8 @@ static BOOL upState = YES;
                          @"publishText" : responseDict[@"topicContent"],
                          @"picturesArray" : responseDict[@"mediaFile"],
                          @"topicTime" : responseDict[@"topicTime"],
-                         @"systemTime" : responseDict[@"systemTime"]
+                         @"systemTime" : responseDict[@"systemTime"],
+                         @"senderId" : responseDict[@"senderId"]
                          };
                 if(i == [responseObject count] - 1)
                 {
@@ -834,7 +854,9 @@ static BOOL upState = YES;
                          @"publishText" : responseDict[@"topicContent"],
                          @"picturesArray" : responseDict[@"mediaFile"],
                          @"topicTime" : responseDict[@"topicTime"],
-                         @"systemTime" : responseDict[@"systemTime"]
+                         @"systemTime" : responseDict[@"systemTime"],
+                         @"senderId" : responseDict[@"senderId"]
+
                          };
                 
                 NeighborData *neighborData = [[NeighborData alloc] initWithDict:dict];

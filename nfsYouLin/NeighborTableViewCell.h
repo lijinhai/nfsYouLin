@@ -44,6 +44,9 @@
 @property (weak, nonatomic)UILabel *accountInfoLabel;    // 用户信息标题
 @property (weak, nonatomic)UILabel *timeInterval;        // 时间间隔
 
+@property (strong, nonatomic)UIButton *hiBtn;       // 打招呼按钮
+
+
 @property (weak, nonatomic)UILabel *contentLabel;        // 帖子内容
 @property (strong, nonatomic)UIButton* readButton;       // 查看全文按钮
 @property (strong,nonatomic)NSMutableArray *picturesView;   // 发表的图片

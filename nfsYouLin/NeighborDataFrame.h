@@ -20,6 +20,8 @@
 
 @property (nonatomic, assign) CGRect intervalFrame;   // 时间间隔位置大小
 
+@property (nonatomic, assign) CGRect hiFrame;   // 打招呼隔位置大小
+
 @property (nonatomic, assign) CGRect textFrame;             // 帖子内容位置大小
 @property (nonatomic, assign) NSInteger textCount;          // 帖子行数
 @property (nonatomic, assign) CGRect readFrame;             // 查看全文位置大小

@@ -10,21 +10,34 @@
 
 @interface NeighborData : NSObject
 
-@property (strong, nonatomic) NSString* titleCategory;  // 帖子类别
-@property (strong, nonatomic) NSString* iconName;       // 头像图片名字
-@property (strong, nonatomic) NSString* titleName;      // 帖子名称
-@property (strong, nonatomic) NSString* accountName;    // 账户昵称
-@property (strong, nonatomic) NSString* addressInfo;    // 地址信息
-@property (strong, nonatomic) NSString* publishTime;     // 发表时间
-@property (strong, nonatomic) NSString* topicTime;     // 发表时间
-@property (strong, nonatomic) NSString* systemTime;     // 系统时间
+// 头像图片名字
+@property (strong, nonatomic) NSString* iconName;
 
-@property (strong, nonatomic) NSString* dateTime;       // 发表日期时间
-@property (strong, nonatomic) NSString* publishText;     // 发表内容
-@property (strong, nonatomic) NSString* activityStart;  // 活动开始时间
-@property (strong, nonatomic) NSString* activityEnd;    // 活动结束时间
+// 帖子标题
+@property (strong, nonatomic) NSString* titleName;
 
+// 账户昵称
+@property (strong, nonatomic) NSString* accountName;
 
-@property (strong, nonatomic) NSArray* picturesArray;    // 发表图片
+// 帖子发表时间
+@property (strong, nonatomic) NSString* topicTime;
+
+// 系统时间
+@property (strong, nonatomic) NSString* systemTime;
+
+// 发布帖子内容
+@property (strong, nonatomic) NSString* publishText;
+
+// 活动开始时间
+@property (strong, nonatomic) NSString* activityStart;
+
+// 活动结束时间
+@property (strong, nonatomic) NSString* activityEnd;
+
+// 发表图片
+@property (strong, nonatomic) NSArray* picturesArray;
+
+// 欢迎帖子或userID
+@property (strong, nonatomic) NSString* senderId;
 - (id) initWithDict: (NSDictionary*) dict;
 @end
