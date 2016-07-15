@@ -119,6 +119,16 @@
             readButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
             self.readButton = readButton;
             [self.readButton addTarget:self action:@selector(readBtn) forControlEvents:UIControlEventTouchDown];
+            
+            // 删除按钮
+            UIButton* deleteButton = [[UIButton alloc] init];
+            [deleteButton setTitle:@"删除" forState:UIControlStateNormal];
+            
+            [deleteButton setTitleColor:[UIColor colorWithRed:0 / 255.0 green:128 / 255.0 blue:0 / 255.0 alpha:1] forState:UIControlStateNormal];
+            deleteButton.backgroundColor = [UIColor clearColor];
+            deleteButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+            self.deleteButton = deleteButton;
+            [self.deleteButton addTarget:self action:@selector(deleteBtn) forControlEvents:UIControlEventTouchDown];
 
         }
         else if([reuseIdentifier isEqualToString:@"cellTitle"])
@@ -418,6 +428,18 @@
         [self.hiBtn removeFromSuperview];
     }
     
+    // 添加删除按钮
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSString* userId = [defaults stringForKey:@"userId"];
+    if([neighborData.senderId integerValue] == [userId integerValue])
+    {
+        [self.contentView addSubview:self.deleteButton];
+    }
+    else
+    {
+        [self.deleteButton removeFromSuperview];
+    }
+    
 }
 
 - (void) settingDataFrame
@@ -433,6 +455,7 @@
     self.contentLabel.frame = self.neighborDataFrame.textFrame;
     
     self.readButton.frame = self.neighborDataFrame.readFrame;
+    self.deleteButton.frame = self.neighborDataFrame.deleteFrame;
     
     if(self.neighborDataFrame.textCount > 4)
     {
@@ -505,6 +528,15 @@
 {
     [_delegate readTotalInformation:self.sectionNum];
 
+}
+
+// 点击删除
+- (void) deleteBtn
+{
+    NSLog(@"删除!");
+    [_delegate deleteTopic:self.sectionNum];
+
+    
 }
 
 - (void)hiAction:(id)sender

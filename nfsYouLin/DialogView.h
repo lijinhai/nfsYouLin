@@ -15,8 +15,10 @@
 @property(strong, nonatomic)UIButton* cancel;
 @property(strong, nonatomic)UITextView* textView;
 
+@property(strong, nonatomic)UIButton* deleteYes;
+@property(strong, nonatomic)UIButton* deleteNo;
 
-- (id) initWithFrame:(CGRect)frame View:(UIView*) view;
+- (id) initWithFrame:(CGRect)frame View:(UIView*) view Flag:(NSString*) flag;
 
 
 

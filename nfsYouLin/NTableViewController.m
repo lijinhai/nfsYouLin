@@ -643,12 +643,20 @@ static BOOL upState = YES;
 // 打招呼回调
 - (void)sayHi:(NSInteger)sectionNum
 {
-    
     NSLog(@"打招呼");
-    DialogView* hiView = [[DialogView alloc] initWithFrame:backgroundView.frame  View:backgroundView];
+    DialogView* hiView = [[DialogView alloc] initWithFrame:backgroundView.frame  View:backgroundView Flag:@"sayHi"];
     hiView.textView.text = @"欢迎小宝宝来到本小区";
     [self.parentViewController.parentViewController.view  addSubview:backgroundView];
     [self.parentViewController.parentViewController.view  addSubview:hiView];
+}
+
+// 删除帖子回调
+- (void)deleteTopic:(NSInteger)sectionNum
+{
+    DialogView* deleteView = [[DialogView alloc] initWithFrame:backgroundView.frame  View:backgroundView Flag:@"delete"];
+    [self.parentViewController.parentViewController.view  addSubview:backgroundView];
+    [self.parentViewController.parentViewController.view  addSubview:deleteView];
+
 }
 
 // 发起获取所有帖子网络请求

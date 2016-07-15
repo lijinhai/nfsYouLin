@@ -133,6 +133,22 @@
     }
 
     self.cellHeight += 2 * PADDING;
+    
+    // 删除位置
+    CGFloat deleteX;
+    CGFloat deleteY;
+    CGFloat deleteW;
+    CGFloat deleteH;
+    CGSize deleteSize = [StringMD5 sizeWithString:@"删除" font:[UIFont systemFontOfSize:20] maxSize:CGSizeMake(MAXFLOAT, MAXFLOAT)];
+    deleteW = deleteSize.width;
+    deleteH = deleteSize.height;
+    
+    deleteX = screenWidth - deleteW - PADDING;
+    deleteY = self.cellHeight;
+    
+    self.deleteFrame = CGRectMake(deleteX, deleteY, deleteW, deleteH);
+    self.cellHeight = CGRectGetMaxY(self.deleteFrame) + 2 * PADDING;
+
    
 }
 

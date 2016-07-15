@@ -23,6 +23,10 @@
 // 打招呼
 - (void)sayHi:(NSInteger)sectionNum;
 
+
+// 删除按钮事件
+- (void)deleteTopic:(NSInteger)sectionNum;
+
 @end
 
 
