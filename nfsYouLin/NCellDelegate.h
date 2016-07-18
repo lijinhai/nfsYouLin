@@ -27,6 +27,9 @@
 // 删除按钮事件
 - (void)deleteTopic:(NSInteger)sectionNum;
 
+// 报名详情
+- (void)applyDetail:(NSInteger) sectionNum;
+
 @end
 
 

@@ -11,7 +11,7 @@
 #import "NeighborDataFrame.h"
 #import "NeighborData.h"
 #import "NCellDelegate.h"
-
+#import "ApplyDetailView.h"
 
 @interface NeighborTableViewCell : UITableViewCell<UIScrollViewDelegate>
 
@@ -54,6 +54,10 @@
 // 打招呼按钮
 @property (strong, nonatomic)UIButton *hiBtn;
 
+// 报名详情
+@property (strong, nonatomic)ApplyDetailView* applyView;
+
+
 // 帖子内容
 @property (weak, nonatomic)UILabel *contentLabel;
 
@@ -67,6 +71,9 @@
 
 // 发表的图片
 @property (strong,nonatomic)NSMutableArray *picturesView;
+
+// 活动过期图片
+@property (strong, nonatomic)UIImageView *pastImageView;
 
 @property (nonatomic,assign) id<cellDelegate> delegate;
 

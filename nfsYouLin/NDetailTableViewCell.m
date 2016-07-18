@@ -72,6 +72,15 @@
             [self.contentView addSubview:contentLabel];
             self.contentLabel = contentLabel;
 
+            // 创建删除
+            UIButton* deleteButton = [[UIButton alloc] init];
+            [deleteButton setTitle:@"删除" forState:UIControlStateNormal];
+            
+            [deleteButton setTitleColor:[UIColor colorWithRed:0 / 255.0 green:128 / 255.0 blue:0 / 255.0 alpha:1] forState:UIControlStateNormal];
+            deleteButton.backgroundColor = [UIColor clearColor];
+            deleteButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+            self.deleteButton = deleteButton;
+            [self.deleteButton addTarget:self action:@selector(deleteBtn) forControlEvents:UIControlEventTouchDown];
 
         }
         else if([reuseIdentifier isEqualToString:@"Two"])
@@ -241,6 +250,7 @@
 
 - (void) setFirstCellData
 {
+    CGFloat height;
     CGRect titleFrame;
     CGSize titleSize = [StringMD5 sizeWithString:[NSString stringWithFormat:@"标题:%@",self.neighborData.titleName] font:[UIFont boldSystemFontOfSize:18] maxSize:CGSizeMake(MAXFLOAT, MAXFLOAT)];
     titleFrame = CGRectMake(PADDING, PADDING, titleSize.width, titleSize.height);
@@ -255,6 +265,7 @@
     NSAttributedString *attrStr = [[NSAttributedString alloc] initWithData:[self.neighborData.publishText dataUsingEncoding:NSUnicodeStringEncoding] options:@{ NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType } documentAttributes:nil error:nil];
     self.contentLabel.attributedText = attrStr;
 
+    height = CGRectGetMaxY(self.contentLabel.frame);
     
     //创建配图
     CGFloat picturesViewW = (screenWidth - PADDING ) / 3 - (PADDING / 2);
@@ -277,7 +288,60 @@
         pictureView.frame = pictureFrame;
         [self.contentView addSubview:pictureView];
         [self.picturesView addObject:pictureView];
+        height = CGRectGetMaxY(pictureView.frame);
     }
+    
+    height += 2 * PADDING;
+    // 创建删除
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSString* userId = [defaults stringForKey:@"userId"];
+    CGSize deleteSize = [StringMD5 sizeWithString:@"删除" font:[UIFont systemFontOfSize:20] maxSize:CGSizeMake(MAXFLOAT, MAXFLOAT)];
+    CGFloat deleteX = screenWidth - deleteSize.width - PADDING;
+    CGFloat deleteY = height;
+    if([self.neighborData.senderId integerValue] == [userId integerValue])
+    {
+        self.deleteButton.frame = CGRectMake(deleteX, deleteY, deleteSize.width, deleteSize.height);
+        [self.contentView addSubview:self.deleteButton];
+        height = CGRectGetMaxY(self.deleteButton.frame) + PADDING;
+        
+    }
+    else
+    {
+        
+    }
+    
+    // 创建报名详情
+    self.applyView = [[ApplyDetailView alloc] init];
+    if([self.neighborData.topicCategory integerValue] == 1)
+    {
+        CGPoint point = CGPointMake(PADDING, height);
+        
+        NSDictionary* activityDict = self.neighborData.infoArray[0];
+        NSInteger endTime = [[activityDict valueForKey:@"endTime"] integerValue];
+        NSInteger systemTime = [self.neighborData.systemTime integerValue];
+        if(systemTime > endTime)
+        {
+            // 活动过期
+            self.applyView.applyLabel.enabled = NO;
+            self.applyView.applyNum.enabled = NO;
+        }
+       
+        
+        // 创建报名详情
+        if([self.neighborData.senderId integerValue] == [userId integerValue])
+        {
+            self.applyView.applyLabel.text = @"报名详情";
+        }
+        
+        [self.applyView initApplyView:point];
+        [self.contentView addSubview:self.applyView];
+    }
+    else
+    {
+        [self.applyView removeFromSuperview];
+    }
+
+    height += PADDING;
 
 }
 
@@ -394,5 +458,10 @@
     [_delegate showImageViewWithImageViews:imageArray byClickWhich:recognizer.view.tag];
 }
 
+- (void)deleteBtn
+{
+    [_delegate deleteTopic:1];
+    NSLog(@"delete detail!");
+}
 
 @end

@@ -21,13 +21,6 @@
     
     BOOL _praiseState; // 点赞状态
 
-//    // 评论cell
-//    UIImageView* _praiseImageView;
-//    UILabel* _praiseLabel;
-//    NSInteger _praiseCount; // 点赞数量
-//    
-//    UILabel* _watchLabel;
-//    NSInteger _watchCount; // 访问次数
 }
 
 - (void)awakeFromNib {
@@ -102,6 +95,11 @@
             [self.contentView addSubview:accountInfoLabel];
             self.accountInfoLabel = accountInfoLabel;
             
+            // 创建活动过期图片
+            UIImageView* pastImageView = [[UIImageView alloc] init];
+            pastImageView.image = [UIImage imageNamed:@"overline.png"];
+            self.pastImageView = pastImageView;
+            
             // 创建帖子内容
             UILabel* contentLabel = [[UILabel alloc] init];
             contentLabel.font = [UIFont fontWithName:@"AppleGothic" size:16];
@@ -120,6 +118,10 @@
             self.readButton = readButton;
             [self.readButton addTarget:self action:@selector(readBtn) forControlEvents:UIControlEventTouchDown];
             
+            // 创建报名详情
+            self.applyView = [[ApplyDetailView alloc] init];
+            [self.applyView addTarget:self action:@selector(applyAction:) forControlEvents:UIControlEventTouchDown];
+            
             // 删除按钮
             UIButton* deleteButton = [[UIButton alloc] init];
             [deleteButton setTitle:@"删除" forState:UIControlStateNormal];
@@ -129,6 +131,8 @@
             deleteButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
             self.deleteButton = deleteButton;
             [self.deleteButton addTarget:self action:@selector(deleteBtn) forControlEvents:UIControlEventTouchDown];
+            
+            
 
         }
         else if([reuseIdentifier isEqualToString:@"cellTitle"])
@@ -386,7 +390,6 @@
 
 - (void) settingData
 {
-    NSLog(@"setData");
     NeighborData* neighborData = self.neighborDataFrame.neighborData;
     NSURL* url = [NSURL URLWithString:neighborData.iconName];
     [self.iconView sd_setImageWithURL:url placeholderImage:[UIImage imageNamed:@"default"] options:SDWebImageAllowInvalidSSLCertificates];
@@ -417,57 +420,121 @@
         NSURL* url = [NSURL URLWithString:[[neighborData.picturesArray objectAtIndex:i] valueForKey:@"resPath"]];
         [imageView sd_setImageWithURL:url placeholderImage:[UIImage imageNamed:@"default"] options:SDWebImageAllowInvalidSSLCertificates];
     }
-    // 根据senderId 添加打招呼按钮
-    NSLog(@"senderId = %@",neighborData.senderId);
-    if([neighborData.senderId integerValue] == 1)
-    {
-        [self.contentView addSubview:self.hiBtn];
-    }
-    else
-    {
-        [self.hiBtn removeFromSuperview];
-    }
-    
-    // 添加删除按钮
-    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-    NSString* userId = [defaults stringForKey:@"userId"];
-    if([neighborData.senderId integerValue] == [userId integerValue])
-    {
-        [self.contentView addSubview:self.deleteButton];
-    }
-    else
-    {
-        [self.deleteButton removeFromSuperview];
-    }
     
 }
 
 - (void) settingDataFrame
 {
-    NSLog(@"setDataFrame");
+    
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSString* userId = [defaults stringForKey:@"userId"];
+    NSDictionary* activityDict = self.neighborDataFrame.neighborData.infoArray[0];
+
     self.iconView.frame = self.neighborDataFrame.iconFrame;
     self.titleLabel.frame = self.neighborDataFrame.titleFrame;
     self.accountInfoLabel.frame = self.neighborDataFrame.accountInfoFrame;
     self.hiBtn.frame = self.neighborDataFrame.hiFrame;
-
+    
     self.timeInterval.frame = self.neighborDataFrame.intervalFrame;
 
     self.contentLabel.frame = self.neighborDataFrame.textFrame;
-    
+
     self.readButton.frame = self.neighborDataFrame.readFrame;
+    
+    
+    if([self.neighborDataFrame.neighborData.topicCategory integerValue] == 1)
+    {
+        self.applyView.applyNum.text = [NSString stringWithFormat:@"%ld",[[activityDict valueForKey:@"enrollTotal"] integerValue]];
+        NSString *enrollFlag = [activityDict valueForKey:@"enrollFlag"];
+        
+        // 创建活动过期图片
+        NSInteger endTime = [[activityDict valueForKey:@"endTime"] integerValue];
+        NSInteger systemTime = [self.neighborDataFrame.neighborData.systemTime integerValue];
+        if(systemTime > endTime)
+        {
+            // 活动过期
+            self.pastImageView.frame = self.neighborDataFrame.pastIVFrame;
+            [self.contentView addSubview:self.pastImageView];
+            
+            self.applyView.applyLabel.enabled = NO;
+            self.applyView.applyNum.enabled = NO;
+        }
+        else
+        {
+            [self.pastImageView removeFromSuperview];
+        }
+        
+        // 创建报名详情
+        if([self.neighborDataFrame.neighborData.senderId integerValue] == [userId integerValue])
+        {
+            self.applyView.applyLabel.text = @"报名详情";
+        }
+        else
+        {
+            if([enrollFlag isEqualToString:@"false"])
+            {
+                self.applyView.applyLabel.text = @"我要报名";
+            }
+            else if([enrollFlag isEqualToString:@"true"])
+            {
+                self.applyView.applyLabel.text = @"取消报名";
+            }
+        }
+        
+        CGPoint point = self.neighborDataFrame.applyPoint;
+        [self.applyView initApplyView:point];
+        [self.contentView addSubview:self.applyView];
+        
+    }
+    else
+    {
+        [self.applyView removeFromSuperview];
+        [self.pastImageView removeFromSuperview];
+
+    }
+   
+    
+
+    
+    if([self.neighborDataFrame.neighborData.senderId integerValue] == [userId integerValue])
+    {
+        // 添加删除按钮
+        [self.contentView addSubview:self.deleteButton];
+    }
+    else
+    {
+        [self.deleteButton removeFromSuperview];
+
+    }
+
+    
     self.deleteButton.frame = self.neighborDataFrame.deleteFrame;
     
     if(self.neighborDataFrame.textCount > 4)
     {
-        NSLog(@"共 %ld 行", self.neighborDataFrame.textCount);
         self.readButton.frame = self.neighborDataFrame.readFrame;
         [self.contentView addSubview:self.readButton];
     }
     
-//    if([self.neighborDataFrame.neighborData.senderId integerValue] == 1)
-//    {
-//    }
+
+    // 根据senderId 添加打招呼按钮
     
+    if([self.neighborDataFrame.neighborData.senderId integerValue] == 1)
+    {
+        if([self.neighborDataFrame.neighborData.cacheKey integerValue] != [userId integerValue])
+        {
+            if([[activityDict valueForKey:@"sayHelloStatus"] integerValue] == 0)
+            {
+                [self.contentView addSubview:self.hiBtn];
+            }
+
+        }
+    }
+    else
+    {
+        [self.hiBtn removeFromSuperview];
+    }
+
     
     for (int i = 0; i < [self.neighborDataFrame.picturesFrame count]; i++)
     {
@@ -528,6 +595,15 @@
 {
     [_delegate readTotalInformation:self.sectionNum];
 
+}
+
+// 点击报名详情
+- (void)applyAction:(id) sender
+{
+    ApplyDetailView* detailView = (ApplyDetailView*) sender;
+    NSLog(@"detailView text = %@,num = %@",detailView.applyLabel.text, detailView.applyNum.text);
+    [_delegate applyDetail:self.sectionNum];
+    
 }
 
 // 点击删除

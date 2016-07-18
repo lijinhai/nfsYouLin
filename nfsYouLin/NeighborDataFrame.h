@@ -31,6 +31,10 @@
 // 打招呼隔位置大小
 @property (nonatomic, assign) CGRect hiFrame;
 
+// 活动过期图片位置
+@property (nonatomic, assign) CGRect pastIVFrame;
+
+
 // 帖子内容位置大小
 @property (nonatomic, assign) CGRect textFrame;
 
@@ -40,6 +44,9 @@
 
 // 查看全文位置大小
 @property (nonatomic, assign) CGRect readFrame;
+
+// 报名详情
+@property (nonatomic, assign) CGPoint applyPoint;
 
 // 删除位置大小
 @property (nonatomic, assign) CGRect deleteFrame;

@@ -87,6 +87,14 @@
     }
     self.textFrame = CGRectMake(textLabelX, textLabelY, textLabelW, textLabelH);
     
+    // 活动过期图片位置
+    CGFloat pastIVX = screenWidth - internalSize.width - 2 *PADDING- textLabelY;
+    CGFloat pastIVY = PADDING;
+    CGFloat pastIVH = textLabelY;
+    CGFloat pastIVW = pastIVH;
+    self.pastIVFrame = CGRectMake(pastIVX, pastIVY, pastIVH, pastIVW);
+    
+    
 
     // 查看全文位置大小
     CGFloat readButtonX;
@@ -134,21 +142,42 @@
 
     self.cellHeight += 2 * PADDING;
     
+    
+    // 报名详情
+     if([self.neighborData.topicCategory integerValue] == 1)
+     {
+         CGFloat applyH = 30;
+         CGFloat applyY = self.cellHeight;
+         self.applyPoint = CGPointMake(PADDING, applyY);
+         self.cellHeight += (2 * PADDING + applyH);
+     }
+    
+    
     // 删除位置
-    CGFloat deleteX;
-    CGFloat deleteY;
-    CGFloat deleteW;
-    CGFloat deleteH;
-    CGSize deleteSize = [StringMD5 sizeWithString:@"删除" font:[UIFont systemFontOfSize:20] maxSize:CGSizeMake(MAXFLOAT, MAXFLOAT)];
-    deleteW = deleteSize.width;
-    deleteH = deleteSize.height;
-    
-    deleteX = screenWidth - deleteW - PADDING;
-    deleteY = self.cellHeight;
-    
-    self.deleteFrame = CGRectMake(deleteX, deleteY, deleteW, deleteH);
-    self.cellHeight = CGRectGetMaxY(self.deleteFrame) + 2 * PADDING;
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSString* userId = [defaults stringForKey:@"userId"];
+    if([self.neighborData.senderId integerValue] == [userId integerValue])
+    {
+        CGFloat deleteX;
+        CGFloat deleteY;
+        CGFloat deleteW;
+        CGFloat deleteH;
+        CGSize deleteSize = [StringMD5 sizeWithString:@"删除" font:[UIFont systemFontOfSize:20] maxSize:CGSizeMake(MAXFLOAT, MAXFLOAT)];
+        deleteW = deleteSize.width;
+        deleteH = deleteSize.height;
+        
+        deleteX = screenWidth - deleteW - PADDING;
+        deleteY = self.cellHeight;
+        
+        self.deleteFrame = CGRectMake(deleteX, deleteY, deleteW, deleteH);
+        self.cellHeight = CGRectGetMaxY(self.deleteFrame) + 2 * PADDING;
+    }
+    else
+    {
+        self.deleteFrame = CGRectMake(0, 0, 0, 0);
+    }
 
+    
    
 }
 

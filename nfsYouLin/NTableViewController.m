@@ -327,7 +327,6 @@ static int sectionCount = 1;
 
 - (BOOL)scrollViewShouldScrollToTop:(UIScrollView *)scrollView
 {
-    NSLog(@"scrollViewShouldScrollToTop");
     return YES;
 }
 
@@ -335,7 +334,6 @@ static int sectionCount = 1;
 //滑动到下方内容 点击系统顶部导航 自动定位到顶部时触发
 - (void)scrollViewDidScrollToTop:(UIScrollView *)scrollView
 {
-    NSLog(@"scrollViewDidScrollToTop");
 }
 
 // 处理单元格的选中
@@ -347,14 +345,12 @@ static int sectionCount = 1;
 
 //拖动后开始滑行
 -(void)scrollViewWillBeginDecelerating:(UIScrollView *)scrollView{
-    NSLog(@"scrollViewWillBeginDecelerating");
 }
 
 
  //拖动后滑行结束
 // 滚动停止时，触发该函数
 -(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
-    NSLog(@"scrollViewDidEndDecelerating");
 }
 
 // scrollView 已经滑动
@@ -365,17 +361,16 @@ static int sectionCount = 1;
 
 // 触摸屏幕并拖拽画面，再松开，最后停止时，触发该函数
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
-    NSLog(@"scrollViewDidEndDragging");
 
 }
 
 //开始拖拽
 -(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
-    NSLog(@"scrollViewWillBeginDragging 开始拖拽 y=%f",self.tableView.contentOffset.y);
+//    NSLog(@"scrollViewWillBeginDragging 开始拖拽 y=%f",self.tableView.contentOffset.y);
 }
 
 - (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView {
-    NSLog(@"scrollViewDidEndScrollingAnimation");
+//    NSLog(@"scrollViewDidEndScrollingAnimation");
 }
 
 
@@ -394,11 +389,11 @@ static BOOL upState = YES;
     
     if(gesture.state == UIGestureRecognizerStateBegan)
     {
-        NSLog(@"began contentOffsetY = %f",contentOffsetY);
+//        NSLog(@"began contentOffsetY = %f",contentOffsetY);
         // 顶部下拉条件
         if(translation.y > 0 && self.tableView.contentOffset.y == contentOffsetY && downState)
         {
-            NSLog(@"began 下拉");
+//            NSLog(@"began 下拉");
             downState = NO;
 //            [self.navigationController.navigationBar setBarTintColor:[UIColor blackColor]];
             [self.navigationController.navigationBar addSubview:_downView];
@@ -406,7 +401,6 @@ static BOOL upState = YES;
         // 底部上拉条件
         else if(translation.y < 0 && (self.tableView.contentSize.height == self.tableView.contentOffset.y + self.tableView.frame.size.height))
         {
-            NSLog(@"底部上拉条件");
             _footerView.frame = CGRectMake(0, 0, CGRectGetWidth(self.tableView.frame), 94);
             self.tableView.tableFooterView = _footerView;
             upState = NO;
@@ -453,7 +447,7 @@ static BOOL upState = YES;
     }
     else if(gesture.state == UIGestureRecognizerStateEnded)
     {
-        NSLog(@"end");
+//        NSLog(@"end");
         // 下拉拖拽结束
         if(!downState)
         {
@@ -625,6 +619,12 @@ static BOOL upState = YES;
     }
 }
 
+
+- (void) applyDetail:(NSInteger)sectionNum
+{
+    NSLog(@"报名详情");
+}
+
 // 查看全文回调事件
 - (void)readTotalInformation:(NSInteger)sectionNum
 {
@@ -713,7 +713,10 @@ static BOOL upState = YES;
                      @"picturesArray" : responseDict[@"mediaFile"],
                      @"topicTime" : responseDict[@"topicTime"],
                      @"systemTime" : responseDict[@"systemTime"],
-                     @"senderId" : responseDict[@"senderId"]
+                     @"senderId" : responseDict[@"senderId"],
+                     @"cacheKey" : responseDict[@"cacheKey"],
+                     @"topicCategory" : responseDict[@"objectType"],
+                     @"infoArray" : responseDict[@"objectData"]
                      };
 
             NeighborData *neighborData = [[NeighborData alloc] initWithDict:dict];
@@ -783,7 +786,11 @@ static BOOL upState = YES;
                          @"picturesArray" : responseDict[@"mediaFile"],
                          @"topicTime" : responseDict[@"topicTime"],
                          @"systemTime" : responseDict[@"systemTime"],
-                         @"senderId" : responseDict[@"senderId"]
+                         @"senderId" : responseDict[@"senderId"],
+                         @"cacheKey" : responseDict[@"cacheKey"],
+                         @"topicCategory" : responseDict[@"objectType"],
+                         @"infoArray" : responseDict[@"objectData"]
+
                          };
                 if(i == [responseObject count] - 1)
                 {
@@ -800,7 +807,7 @@ static BOOL upState = YES;
         else if([responseObject isKindOfClass:[NSDictionary class]])
         {
             NSString* flag = [responseObject valueForKey:@"flag"];
-            NSLog(@"下拉 flag = %@",flag);
+//            NSLog(@"下拉 flag = %@",flag);
         }
         downFlag = NO;
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
@@ -863,7 +870,11 @@ static BOOL upState = YES;
                          @"picturesArray" : responseDict[@"mediaFile"],
                          @"topicTime" : responseDict[@"topicTime"],
                          @"systemTime" : responseDict[@"systemTime"],
-                         @"senderId" : responseDict[@"senderId"]
+                         @"senderId" : responseDict[@"senderId"],
+                         @"cacheKey" : responseDict[@"cacheKey"],
+                         @"topicCategory" : responseDict[@"objectType"],
+                         @"infoArray" : responseDict[@"objectData"]
+
 
                          };
                 
@@ -881,7 +892,7 @@ static BOOL upState = YES;
         else if([responseObject isKindOfClass:[NSDictionary class]])
         {
             NSString* flag = [responseObject valueForKey:@"flag"];
-            NSLog(@"上拉 flag = %@",flag);
+//            NSLog(@"上拉 flag = %@",flag);
         }
         upFlag = NO;
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {

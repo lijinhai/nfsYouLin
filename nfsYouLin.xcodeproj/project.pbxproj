@@ -250,6 +250,7 @@
 		8F823D721D2A3B3D00178B01 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F823D711D2A3B3D00178B01 /* AddressBook.framework */; };
 		8F823D741D2A3B4800178B01 /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F823D731D2A3B4800178B01 /* AddressBookUI.framework */; };
 		8F9220151D387A5200A72F90 /* DialogView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F9220141D387A5200A72F90 /* DialogView.m */; };
+		8F9220181D38C6AC00A72F90 /* ApplyDetailView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F9220171D38C6AC00A72F90 /* ApplyDetailView.m */; };
 		8FF22DA41CE1733800EAE9BA /* forgetViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FF22DA31CE1733800EAE9BA /* forgetViewController.m */; };
 		8FF7E9781D12A04D0026D07D /* ChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FF7E9771D12A04D0026D07D /* ChatViewController.m */; };
 		AF1DBD7F1CEAEA5100557E43 /* inputRegisterInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AF1DBD7E1CEAEA5100557E43 /* inputRegisterInfoViewController.m */; };
@@ -804,6 +805,8 @@
 		8F823D731D2A3B4800178B01 /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
 		8F9220131D387A5200A72F90 /* DialogView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DialogView.h; sourceTree = "<group>"; };
 		8F9220141D387A5200A72F90 /* DialogView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DialogView.m; sourceTree = "<group>"; };
+		8F9220161D38C6AC00A72F90 /* ApplyDetailView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApplyDetailView.h; sourceTree = "<group>"; };
+		8F9220171D38C6AC00A72F90 /* ApplyDetailView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApplyDetailView.m; sourceTree = "<group>"; };
 		8FF22DA21CE1733800EAE9BA /* forgetViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = forgetViewController.h; sourceTree = "<group>"; };
 		8FF22DA31CE1733800EAE9BA /* forgetViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = forgetViewController.m; sourceTree = "<group>"; };
 		8FF7E9761D12A0470026D07D /* ChatViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ChatViewController.h; sourceTree = "<group>"; };
@@ -2174,6 +2177,8 @@
 				AFE569371CFE643C00C0F745 /* ShowImageView.m */,
 				8F9220131D387A5200A72F90 /* DialogView.h */,
 				8F9220141D387A5200A72F90 /* DialogView.m */,
+				8F9220161D38C6AC00A72F90 /* ApplyDetailView.h */,
+				8F9220171D38C6AC00A72F90 /* ApplyDetailView.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -2583,6 +2588,7 @@
 				8F648D431D00547A00E3B155 /* EaseCustomMessageCell.m in Sources */,
 				8F648CF71D00547A00E3B155 /* MJRefreshAutoStateFooter.m in Sources */,
 				AFE569141CF4442500C0F745 /* LewPopupViewAnimationDrop.m in Sources */,
+				8F9220181D38C6AC00A72F90 /* ApplyDetailView.m in Sources */,
 				8F648CE71D00547900E3B155 /* EMCDDeviceManager+Remind.m in Sources */,
 				8F648D451D00547A00E3B155 /* EaseMessageTimeCell.m in Sources */,
 				8F648D0D1D00547A00E3B155 /* EMSDWebImageCompat.m in Sources */,

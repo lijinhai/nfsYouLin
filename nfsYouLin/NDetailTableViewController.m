@@ -9,7 +9,7 @@
 #import "NDetailTableViewController.h"
 #import "NDetailTableViewCell.h"
 #import "StringMD5.h"
-
+#import "DialogView.h"
 @interface NDetailTableViewController ()
 
 @end
@@ -20,7 +20,7 @@
     UIView* _footerView;
     CGFloat _cellHeight;        // 第二个表格行高度
     NSMutableArray* _cellOtherHeight;   // 回复表格行高度
-
+    UIView* backgroundView;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -57,6 +57,10 @@
     self.tableView.separatorColor = [UIColor colorWithRed:245/255.0 green:245/255.0 blue:245/255.0 alpha:1];
     [self initInputView];
    
+    backgroundView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    backgroundView.backgroundColor = [UIColor grayColor];
+    backgroundView.alpha = 0.8;
+
 }
 
 - (void)didReceiveMemoryWarning {
@@ -260,6 +264,24 @@
         cellHeight += 3 * pictureH + PADDING;
     }
     
+    cellHeight += 2 * PADDING;
+    
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSString* userId = [defaults stringForKey:@"userId"];
+    if([self.neighborData.senderId integerValue] == [userId integerValue])
+    {
+        cellHeight += [StringMD5 sizeWithString:@"删除" font:[UIFont systemFontOfSize:20] maxSize:CGSizeMake(MAXFLOAT, MAXFLOAT)].height + PADDING;
+
+    }
+
+    if([self.neighborData.topicCategory integerValue] == 1)
+    {
+        cellHeight += 30;
+    }
+    
+    cellHeight += PADDING;
+
+    
     return cellHeight;
 }
 
@@ -314,6 +336,18 @@
         }];
         
     }];
+    
+}
+
+// 删除帖子回调
+- (void)deleteTopic:(NSInteger)sectionNum
+{
+    NSLog(@"Detail 删除帖子回调");
+    DialogView* deleteView = [[DialogView alloc] initWithFrame:backgroundView.frame  View:backgroundView Flag:@"delete"];
+    [self.parentViewController.view addSubview:backgroundView];
+    [self.parentViewController.view addSubview:deleteView];
+
+//    [self.parentViewController.parentViewController.parentViewController.view  addSubview:deleteView];
     
 }
 

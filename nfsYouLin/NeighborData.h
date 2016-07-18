@@ -28,16 +28,27 @@
 // 发布帖子内容
 @property (strong, nonatomic) NSString* publishText;
 
+// 帖子类别
+@property (strong, nonatomic) NSString* topicCategory;
+
+
 // 活动开始时间
 @property (strong, nonatomic) NSString* activityStart;
 
 // 活动结束时间
 @property (strong, nonatomic) NSString* activityEnd;
 
+// 帖子信息(例:活动开始时间和结束时间等)
+@property(strong, nonatomic) NSArray* infoArray;
+
 // 发表图片
 @property (strong, nonatomic) NSArray* picturesArray;
 
 // 欢迎帖子或userID
 @property (strong, nonatomic) NSString* senderId;
+
+// 欢迎帖子是否为·userID
+@property (strong, nonatomic) NSString* cacheKey;
+
 - (id) initWithDict: (NSDictionary*) dict;
 @end
