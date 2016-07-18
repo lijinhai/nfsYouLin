@@ -47,7 +47,7 @@
     NDetailTableViewController* _detailController;
     
     // 等待动画变量
-    NSTimer* _imageTimer;
+    NSTimer* _changeTimer;
     int _sectionNum;
     NSInteger _imageCount;
 
@@ -57,8 +57,19 @@
     NSString* newTopicId;
     NSString* oldTopicId;
     
-    BOOL downFlag;          // 下拉结束标志位
-    BOOL upFlag;            // 上拉结束标志位
+    //全部:1 话题:2 3:活动 4:公告 5:建议 6:闲品会
+    NSInteger category;
+    NSString* Tag;
+    
+    // 下拉结束标志
+    BOOL downFlag;
+    
+    // 上拉结束标志
+    BOOL upFlag;
+    
+    //  帖子切换结束标志
+    BOOL topicFlag;
+    
     
     UIView* backgroundView;
     
@@ -177,11 +188,13 @@ static int sectionCount = 1;
     
     downFlag = YES;
     upFlag = YES;
-    
+    topicFlag = YES;
+    Tag = @"gettopic";
+    category = 1;
     [self initWaitImageAnimate];
     [self.view addSubview:_waitImageView];
     
-    [self getAllTopicNet];
+    [self getTopicNet];
     
 
 }
@@ -427,7 +440,14 @@ static BOOL upState = YES;
                 _viewXCount = 0;
                 gesture.enabled = NO;
                 _downTimer = [NSTimer scheduledTimerWithTimeInterval:0.005 target:self selector:@selector(refreshDownData) userInfo:nil repeats:YES];
-                [self downAllTopicNet];
+                if(category == 3 || category == 5)
+                {
+                    [self downRefreshNoticeAndAdviceNet:[NSString stringWithFormat:@"%ld", category]];
+                }
+                else
+                {
+                    [self downRefreshNet];
+                }
                 return;
             }
         }
@@ -441,7 +461,14 @@ static BOOL upState = YES;
             {
                 _panGesture.enabled = NO;
                 _upTimer = [NSTimer scheduledTimerWithTimeInterval:0.005 target:self selector:@selector(refreshUpData) userInfo:nil repeats:YES];
-                [self upAllTopicNet];
+                if(category == 3 || category == 5)
+                {
+                    [self upRefreshNoticeAndAdviceNet:[NSString stringWithFormat:@"%ld", category]];
+                }
+                else
+                {
+                    [self upRefreshNet];
+                }
             }
         }
     }
@@ -594,28 +621,69 @@ static BOOL upState = YES;
 // 帖子切换回调
 - (void)reloadShowByTitle: (NSString* )text
 {
-    NSLog(@"reloadShowByTitle");
-    _imageCount = 0;
-    _sectionNum = sectionCount;
     sectionCount = 1;
+    topicFlag = YES;
+    [self.neighborDataArray removeAllObjects];
     [self.tableView reloadData];
-    _imageTimer = [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(imageChange) userInfo:nil repeats:YES];
     
+    _changeTimer = [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(topicChange) userInfo:nil repeats:YES];
     [self.view addSubview:_waitImageView];
+
+    
+    if([text isEqualToString:@"全部"])
+    {
+        Tag = @"gettopic";
+        category = 1;
+        [self getTopicNet];
+
+    }
+    else if([text isEqualToString:@"话题"])
+    {
+        category = 2;
+        Tag = @"singletopic";
+        [self getTopicNet];
+
+    }
+    else if([text isEqualToString:@"活动"])
+    {
+        category = 3;
+        Tag = @"singleactivity";
+        [self getTopicNet];
+
+    }
+    else if([text isEqualToString:@"公告"])
+    {
+        category = 4;
+        Tag = @"getnotice";
+        [self getNoticeAndAdviceNet:@"3"];
+
+    }
+    else if([text isEqualToString:@"建议"])
+    {
+        category = 5;
+        Tag = @"getsuggest";
+        [self getNoticeAndAdviceNet:@"5"];
+    }
+    else if([text isEqualToString:@"闲品会"])
+    {
+        Tag = @"singlebarter";
+        [self getTopicNet];
+
+    }
+
+    
+
 }
 
 
-- (void) imageChange
+- (void) topicChange
 {
-     NSLog(@"imageChange 正在执行第%ld次任务",_imageCount++);
-    if(_imageCount == 50)
+    if(!topicFlag)
     {
-        [_imageTimer invalidate];
-        sectionCount = _sectionNum;
-        _imageCount = 0;
+        [_changeTimer invalidate];
         [_waitImageView removeFromSuperview];
         [self.tableView reloadData];
-
+        topicFlag = YES;
     }
 }
 
@@ -659,8 +727,8 @@ static BOOL upState = YES;
 
 }
 
-// 发起获取所有帖子网络请求
-- (void) getAllTopicNet
+// 发起获取帖子网络请求 全部 话题 活动
+- (void) getTopicNet
 {
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     NSString* communityId = [defaults stringForKey:@"communityId"];
@@ -670,8 +738,6 @@ static BOOL upState = YES;
     [manager.securityPolicy setValidatesDomainName:NO];
     
     
-    
-    
     NSString* MD5String = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"user_id%@community_id%@topic_id0",userId,communityId]];
     NSString* hashString = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"%@1", MD5String]];
     
@@ -679,7 +745,7 @@ static BOOL upState = YES;
                                 @"community_id" : communityId,
                                 @"topic_id" : @"0",
                                 @"apitype" : @"comm",
-                                @"tag" : @"gettopic",
+                                @"tag" : Tag,
                                 @"salt" : @"1",
                                 @"hash" : hashString,
                                 @"keyset" : @"user_id:community_id:topic_id:",
@@ -694,7 +760,6 @@ static BOOL upState = YES;
         for (int i = 0; i < [responseObject count]; i++,sectionCount++)
         {
             NSDictionary* responseDict = responseObject[i];
-            NSDictionary* dict;
             if(i == 0)
             {
                 newTopicId = responseDict[@"topicId"];
@@ -705,20 +770,9 @@ static BOOL upState = YES;
                 oldTopicId = responseDict[@"topicId"];
             }
             
-            dict = @{
-                     @"iconName" : responseDict[@"senderPortrait"],
-                     @"titleName" : responseDict[@"topicTitle"],
-                     @"accountName" : responseDict[@"displayName"],
-                     @"publishText" : responseDict[@"topicContent"],
-                     @"picturesArray" : responseDict[@"mediaFile"],
-                     @"topicTime" : responseDict[@"topicTime"],
-                     @"systemTime" : responseDict[@"systemTime"],
-                     @"senderId" : responseDict[@"senderId"],
-                     @"cacheKey" : responseDict[@"cacheKey"],
-                     @"topicCategory" : responseDict[@"objectType"],
-                     @"infoArray" : responseDict[@"objectData"]
-                     };
-
+            NSDictionary* dict = [self getResponseDictionary:responseObject[i]];
+            
+            
             NeighborData *neighborData = [[NeighborData alloc] initWithDict:dict];
 
             NeighborDataFrame *neighborDataFrame = [[NeighborDataFrame alloc]init];
@@ -729,6 +783,7 @@ static BOOL upState = YES;
 
         }
         [_waitImageView removeFromSuperview];
+        topicFlag = NO;
         [self.tableView reloadData];
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         NSLog(@"请求失败:%@", error.description);
@@ -738,9 +793,77 @@ static BOOL upState = YES;
 }
 
 
-// 发起获取下拉所有帖子网络请求
-- (void) downAllTopicNet
+// 发起获取帖子网络请求 公告 建议
+- (void) getNoticeAndAdviceNet:(NSString*)type
 {
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSString* communityId = [defaults stringForKey:@"communityId"];
+    NSString* userId = [defaults stringForKey:@"userId"];
+    AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
+    manager.securityPolicy.allowInvalidCertificates = YES;
+    [manager.securityPolicy setValidatesDomainName:NO];
+    
+    
+    NSString* MD5String = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"user_id%@community_id%@topic_id0",userId,communityId]];
+    NSString* hashString = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"%@1", MD5String]];
+    
+    NSDictionary* parameter = @{@"user_id" : userId,
+                                @"community_id" : communityId,
+                                @"topic_id" : @"0",
+                                @"apitype" : @"apiproperty",
+                                @"category_type" : type,
+                                @"tag" : Tag,
+                                @"salt" : @"1",
+                                @"hash" : hashString,
+                                @"keyset" : @"user_id:community_id:topic_id:",
+                                };
+    
+    [manager POST:POST_URL parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+        
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        //        NSLog(@"获取所有帖子网络请求:%@", responseObject);
+        for (int i = 0; i < [responseObject count]; i++,sectionCount++)
+        {
+            NSDictionary* responseDict = responseObject[i];
+            if(i == 0)
+            {
+                newTopicId = responseDict[@"topicId"];
+            }
+            
+            if(i == ([responseObject count] - 1))
+            {
+                oldTopicId = responseDict[@"topicId"];
+            }
+            
+            NSDictionary* dict = [self getResponseDictionary:responseObject[i]];
+            
+            
+            NeighborData *neighborData = [[NeighborData alloc] initWithDict:dict];
+            
+            NeighborDataFrame *neighborDataFrame = [[NeighborDataFrame alloc]init];
+            
+            neighborDataFrame.neighborData = neighborData;
+            
+            [self.neighborDataArray addObject:neighborDataFrame];
+            
+        }
+        [_waitImageView removeFromSuperview];
+        topicFlag = NO;
+        [self.tableView reloadData];
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"请求失败:%@", error.description);
+        return;
+    }];
+    
+}
+
+
+// 下拉刷新网络请求 全部 话题 活动
+- (void) downRefreshNet
+{
+    
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     NSString* communityId = [defaults stringForKey:@"communityId"];
     NSString* userId = [defaults stringForKey:@"userId"];
@@ -760,7 +883,7 @@ static BOOL upState = YES;
                                 @"community_id" : communityId,
                                 @"topic_id" : newTopicId,
                                 @"apitype" : @"comm",
-                                @"tag" : @"gettopic",
+                                @"tag" : Tag,
                                 @"salt" : @"1",
                                 @"hash" : hashString,
                                 @"keyset" : @"user_id:community_id:topic_id:",
@@ -771,27 +894,14 @@ static BOOL upState = YES;
         
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-//        NSLog(@"获取下拉所有帖子网络请求:%@", responseObject);
+        //        NSLog(@"获取下拉所有帖子网络请求:%@", responseObject);
         if([responseObject isKindOfClass:[NSArray class]])
         {
             for (NSInteger i = [responseObject count] - 1; i >=0 ; i--,sectionCount++)
             {
                 NSDictionary* responseDict = responseObject[i];
-                NSDictionary* dict;
-                dict = @{@"titleCategory" : @"话题",
-                         @"iconName" : responseDict[@"senderPortrait"],
-                         @"titleName" : responseDict[@"topicTitle"],
-                         @"accountName" : responseDict[@"displayName"],
-                         @"publishText" : responseDict[@"topicContent"],
-                         @"picturesArray" : responseDict[@"mediaFile"],
-                         @"topicTime" : responseDict[@"topicTime"],
-                         @"systemTime" : responseDict[@"systemTime"],
-                         @"senderId" : responseDict[@"senderId"],
-                         @"cacheKey" : responseDict[@"cacheKey"],
-                         @"topicCategory" : responseDict[@"objectType"],
-                         @"infoArray" : responseDict[@"objectData"]
-
-                         };
+                NSDictionary* dict = [self getResponseDictionary:responseObject[i]];
+                
                 if(i == [responseObject count] - 1)
                 {
                     newTopicId = responseDict[@"topic_id"];
@@ -807,7 +917,76 @@ static BOOL upState = YES;
         else if([responseObject isKindOfClass:[NSDictionary class]])
         {
             NSString* flag = [responseObject valueForKey:@"flag"];
-//            NSLog(@"下拉 flag = %@",flag);
+            //            NSLog(@"下拉 flag = %@",flag);
+        }
+        downFlag = NO;
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"请求失败:%@", error.description);
+        downFlag = NO;
+        return;
+    }];
+
+}
+
+// 下拉刷新网络请求 公告 建议
+- (void) downRefreshNoticeAndAdviceNet:(NSString*) type
+{
+    NSLog(@"down type = %@", type);
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSString* communityId = [defaults stringForKey:@"communityId"];
+    NSString* userId = [defaults stringForKey:@"userId"];
+    AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
+    manager.securityPolicy.allowInvalidCertificates = YES;
+    [manager.securityPolicy setValidatesDomainName:NO];
+    
+    if([self.neighborDataArray count] == 0)
+    {
+        newTopicId = @"-1";
+    }
+    
+    NSString* MD5String = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"user_id%@community_id%@topic_id%@",userId,communityId, newTopicId]];
+    NSString* hashString = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"%@1", MD5String]];
+    
+    NSDictionary* parameter = @{@"user_id" : userId,
+                                @"community_id" : communityId,
+                                @"topic_id" : newTopicId,
+                                @"apitype" : @"apiproperty",
+                                @"category_type" : type,
+                                @"tag" : Tag,
+                                @"salt" : @"1",
+                                @"hash" : hashString,
+                                @"keyset" : @"user_id:community_id:topic_id:",
+                                };
+    
+    [manager POST:POST_URL parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+        
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        //        NSLog(@"获取下拉所有帖子网络请求:%@", responseObject);
+        if([responseObject isKindOfClass:[NSArray class]])
+        {
+            for (NSInteger i = [responseObject count] - 1; i >=0 ; i--,sectionCount++)
+            {
+                NSDictionary* responseDict = responseObject[i];
+                NSDictionary* dict = [self getResponseDictionary:responseObject[i]];
+                
+                if(i == [responseObject count] - 1)
+                {
+                    newTopicId = responseDict[@"topic_id"];
+                }
+                NeighborData *neighborData = [[NeighborData alloc] initWithDict:dict];
+                
+                NeighborDataFrame *neighborDataFrame = [[NeighborDataFrame alloc]init];
+                
+                neighborDataFrame.neighborData = neighborData;
+                [self.neighborDataArray insertObject:neighborDataFrame atIndex: 0];
+            }
+        }
+        else if([responseObject isKindOfClass:[NSDictionary class]])
+        {
+            NSString* flag = [responseObject valueForKey:@"flag"];
+            //            NSLog(@"下拉 flag = %@",flag);
         }
         downFlag = NO;
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
@@ -818,8 +997,10 @@ static BOOL upState = YES;
     
 }
 
-// 发起上拉获取所有帖子网络请求
-- (void) upAllTopicNet
+
+
+// 上拉刷新网络请求 全部 话题 活动
+- (void) upRefreshNet
 {
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     NSString* communityId = [defaults stringForKey:@"communityId"];
@@ -827,9 +1008,6 @@ static BOOL upState = YES;
     AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
     manager.securityPolicy.allowInvalidCertificates = YES;
     [manager.securityPolicy setValidatesDomainName:NO];
-    
-    
-    
     
     NSString* MD5String = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"user_id%@community_id%@topic_id%@count6",userId,communityId, oldTopicId]];
     NSString* hashString = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"%@1", MD5String]];
@@ -839,7 +1017,7 @@ static BOOL upState = YES;
                                 @"topic_id" : oldTopicId,
                                 @"count" : @"6",
                                 @"apitype" : @"comm",
-                                @"tag" : @"gettopic",
+                                @"tag" : Tag,
                                 @"salt" : @"1",
                                 @"hash" : hashString,
                                 @"keyset" : @"user_id:community_id:topic_id:count:",
@@ -850,33 +1028,18 @@ static BOOL upState = YES;
         
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-//        NSLog(@"获取下拉所有帖子网络请求:%@", responseObject);
+        //        NSLog(@"获取下拉所有帖子网络请求:%@", responseObject);
         if([responseObject isKindOfClass:[NSArray class]])
         {
             for (int i = 0; i < [responseObject count]; i++,sectionCount++)
             {
                 NSDictionary* responseDict = responseObject[i];
-                NSDictionary* dict;
                 if(i == ([responseObject count] - 1))
                 {
                     oldTopicId = responseDict[@"topicId"];
                 }
                 
-                dict = @{
-                         @"iconName" : responseDict[@"senderPortrait"],
-                         @"titleName" : responseDict[@"topicTitle"],
-                         @"accountName" : responseDict[@"displayName"],
-                         @"publishText" : responseDict[@"topicContent"],
-                         @"picturesArray" : responseDict[@"mediaFile"],
-                         @"topicTime" : responseDict[@"topicTime"],
-                         @"systemTime" : responseDict[@"systemTime"],
-                         @"senderId" : responseDict[@"senderId"],
-                         @"cacheKey" : responseDict[@"cacheKey"],
-                         @"topicCategory" : responseDict[@"objectType"],
-                         @"infoArray" : responseDict[@"objectData"]
-
-
-                         };
+                NSDictionary* dict = [self getResponseDictionary:responseObject[i]];
                 
                 NeighborData *neighborData = [[NeighborData alloc] initWithDict:dict];
                 
@@ -887,12 +1050,83 @@ static BOOL upState = YES;
                 [self.neighborDataArray addObject:neighborDataFrame];
                 
             }
-
+            
         }
         else if([responseObject isKindOfClass:[NSDictionary class]])
         {
             NSString* flag = [responseObject valueForKey:@"flag"];
-//            NSLog(@"上拉 flag = %@",flag);
+            NSLog(@"上拉 flag = %@",flag);
+        }
+        upFlag = NO;
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"请求失败:%@", error.description);
+        upFlag = NO;
+        return;
+    }];
+
+}
+
+
+// 上拉刷新网络请求 公告 建议
+- (void) upRefreshNoticeAndAdviceNet:(NSString*) type
+{
+    NSLog(@"up type = %@ tag = %@", type,Tag);
+
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSString* communityId = [defaults stringForKey:@"communityId"];
+    NSString* userId = [defaults stringForKey:@"userId"];
+    AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
+    manager.securityPolicy.allowInvalidCertificates = YES;
+    [manager.securityPolicy setValidatesDomainName:NO];
+    
+    NSString* MD5String = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"user_id%@community_id%@topic_id%@count6",userId,communityId, oldTopicId]];
+    NSString* hashString = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"%@1", MD5String]];
+    
+    NSDictionary* parameter = @{@"user_id" : userId,
+                                @"community_id" : communityId,
+                                @"topic_id" : oldTopicId,
+                                @"count" : @"6",
+                                @"apitype" : @"apiproperty",
+                                @"category_type" : type,
+                                @"tag" : Tag,
+                                @"salt" : @"1",
+                                @"hash" : hashString,
+                                @"keyset" : @"user_id:community_id:topic_id:count:",
+                                };
+    
+    [manager POST:POST_URL parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+        
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        //        NSLog(@"获取下拉所有帖子网络请求:%@", responseObject);
+        if([responseObject isKindOfClass:[NSArray class]])
+        {
+            for (int i = 0; i < [responseObject count]; i++,sectionCount++)
+            {
+                NSDictionary* responseDict = responseObject[i];
+                if(i == ([responseObject count] - 1))
+                {
+                    oldTopicId = responseDict[@"topicId"];
+                }
+                
+                NSDictionary* dict = [self getResponseDictionary:responseObject[i]];
+                
+                NeighborData *neighborData = [[NeighborData alloc] initWithDict:dict];
+                
+                NeighborDataFrame *neighborDataFrame = [[NeighborDataFrame alloc]init];
+                
+                neighborDataFrame.neighborData = neighborData;
+                
+                [self.neighborDataArray addObject:neighborDataFrame];
+                
+            }
+            
+        }
+        else if([responseObject isKindOfClass:[NSDictionary class]])
+        {
+            NSString* flag = [responseObject valueForKey:@"flag"];
+            NSLog(@"上拉 flag = %@",flag);
         }
         upFlag = NO;
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
@@ -902,6 +1136,29 @@ static BOOL upState = YES;
     }];
     
 }
+
+
+- (NSDictionary*) getResponseDictionary: (NSDictionary *) responseDict
+{
+    NSDictionary* dict;
+    dict = @{
+        @"iconName" : responseDict[@"senderPortrait"],
+        @"titleName" : responseDict[@"topicTitle"],
+        @"accountName" : responseDict[@"displayName"],
+        @"publishText" : responseDict[@"topicContent"],
+        @"picturesArray" : responseDict[@"mediaFile"],
+        @"topicTime" : responseDict[@"topicTime"],
+        @"systemTime" : responseDict[@"systemTime"],
+        @"senderId" : responseDict[@"senderId"],
+        @"cacheKey" : responseDict[@"cacheKey"],
+        @"topicCategory" : responseDict[@"objectType"],
+        @"infoArray" : responseDict[@"objectData"]
+        };
+
+    
+    return dict;
+}
+
 
 
 @end
