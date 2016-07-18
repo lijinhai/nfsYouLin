@@ -10,6 +10,7 @@
 #import "NDetailTableViewController.h"
 #import "UIImageView+WebCache.h"
 #import "StringMD5.h"
+#import "MBProgressHUBTool.h"
 
 @implementation NeighborTableViewCell
 {
@@ -120,7 +121,6 @@
             
             // 创建报名详情
             self.applyView = [[ApplyDetailView alloc] init];
-            [self.applyView addTarget:self action:@selector(applyAction:) forControlEvents:UIControlEventTouchDown];
             
             // 删除按钮
             UIButton* deleteButton = [[UIButton alloc] init];
@@ -447,6 +447,24 @@
         self.applyView.applyNum.text = [NSString stringWithFormat:@"%ld",[[activityDict valueForKey:@"enrollTotal"] integerValue]];
         NSString *enrollFlag = [activityDict valueForKey:@"enrollFlag"];
         
+        // 创建报名详情
+        if([self.neighborDataFrame.neighborData.senderId integerValue] == [userId integerValue])
+        {
+            self.applyView.applyLabel.text = @"报名详情";
+        }
+        else
+        {
+            if([enrollFlag isEqualToString:@"false"])
+            {
+                self.applyView.applyLabel.text = @"我要报名";
+                
+            }
+            else if([enrollFlag isEqualToString:@"true"])
+            {
+                self.applyView.applyLabel.text = @"取消报名";
+            }
+        }
+
         // 创建活动过期图片
         NSInteger endTime = [[activityDict valueForKey:@"endTime"] integerValue];
         NSInteger systemTime = [self.neighborDataFrame.neighborData.systemTime integerValue];
@@ -461,24 +479,13 @@
         }
         else
         {
+            
             [self.pastImageView removeFromSuperview];
         }
         
-        // 创建报名详情
-        if([self.neighborDataFrame.neighborData.senderId integerValue] == [userId integerValue])
+        if([self.applyView.applyLabel.text isEqualToString:@"我要报名"])
         {
-            self.applyView.applyLabel.text = @"报名详情";
-        }
-        else
-        {
-            if([enrollFlag isEqualToString:@"false"])
-            {
-                self.applyView.applyLabel.text = @"我要报名";
-            }
-            else if([enrollFlag isEqualToString:@"true"])
-            {
-                self.applyView.applyLabel.text = @"取消报名";
-            }
+            [self.applyView addTarget:self action:@selector(wantApplyAction:) forControlEvents:UIControlEventTouchUpInside];
         }
         
         CGPoint point = self.neighborDataFrame.applyPoint;
@@ -597,12 +604,20 @@
 
 }
 
-// 点击报名详情
-- (void)applyAction:(id) sender
+// 点击我要报名
+- (void)wantApplyAction:(id) sender
 {
     ApplyDetailView* detailView = (ApplyDetailView*) sender;
+    if(detailView.applyLabel.enabled)
+    {
+        [_delegate applyDetail:self.sectionNum];
+    }
+    else
+    {
+        [MBProgressHUBTool textToast:self Tip:@"此活动已过期"];
+
+    }
     NSLog(@"detailView text = %@,num = %@",detailView.applyLabel.text, detailView.applyNum.text);
-    [_delegate applyDetail:self.sectionNum];
     
 }
 

@@ -41,10 +41,24 @@
     UIView* line = [[UIView alloc] initWithFrame:CGRectMake(CGRectGetMaxX(self.applyLabel.frame) + 5, 5, 1, CGRectGetHeight(self.frame) - 10)];
     line.backgroundColor = [UIColor whiteColor];
 
-    
-      self.applyNum.frame = CGRectMake(CGRectGetMaxX(line.frame), CGRectGetMinY(self.applyLabel.frame), CGRectGetWidth(self.frame) - CGRectGetMaxX(line.frame), CGRectGetHeight(self.applyLabel.frame));
+    CGSize numSize = [StringMD5 sizeWithString:self.applyNum.text font:[UIFont systemFontOfSize:15] maxSize:CGSizeMake(MAXFLOAT, MAXFLOAT)];
+
+    self.applyNum.frame = CGRectMake(CGRectGetMaxX(line.frame), CGRectGetMinY(self.applyLabel.frame), CGRectGetWidth(self.frame) - CGRectGetMaxX(line.frame), CGRectGetHeight(self.applyLabel.frame));
     
     self.backgroundColor = [UIColor lightGrayColor];
+    CGFloat width = CGRectGetWidth(self.applyNum.frame);
+    if(numSize.width > width)
+    {
+        CGRect frame = self.applyNum.frame;
+        frame.size.width = numSize.width;
+        self.applyNum.frame = frame;
+        
+        CGRect Frame = self.frame;
+        Frame.size.width = self.frame.size.width + (numSize.width - width);
+        self.frame = Frame;
+        
+    }
+    
     
     [self addSubview:self.applyLabel];
     [self addSubview:line];

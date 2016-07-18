@@ -72,6 +72,7 @@
     
     
     UIView* backgroundView;
+    DialogView* dialogView;
     
 }
 
@@ -184,7 +185,7 @@ static int sectionCount = 1;
     backgroundView = [[UIView alloc] initWithFrame:self.parentViewController.parentViewController.view.bounds];
     backgroundView.backgroundColor = [UIColor grayColor];
     backgroundView.alpha = 0.8;
-    
+    dialogView = nil;
     
     downFlag = YES;
     upFlag = YES;
@@ -691,6 +692,23 @@ static BOOL upState = YES;
 - (void) applyDetail:(NSInteger)sectionNum
 {
     NSLog(@"报名详情");
+    DialogView* applyView = [[DialogView alloc] initWithFrame:backgroundView.frame  View:backgroundView Flag:@"apply"];
+    backgroundView.alpha = 0.0f;
+    applyView.alpha = 0.0f;
+    [self.parentViewController.parentViewController.view  addSubview:backgroundView];
+    [self.parentViewController.parentViewController.view  addSubview:applyView];
+    [UIView animateWithDuration:0.3f animations:^{
+        backgroundView.alpha = 0.8f;
+        applyView.alpha = 1.0f;
+    }];
+    
+    dialogView = applyView;
+    UIButton* okBtn = applyView.applyYes;
+    [okBtn addTarget:self action:@selector(okApplyAction:) forControlEvents:UIControlEventTouchUpInside];
+    
+    UIButton* cancelBtn = applyView.applyNo;
+    [cancelBtn addTarget:self action:@selector(cancelApplyAction:) forControlEvents:UIControlEventTouchUpInside];
+    
 }
 
 // 查看全文回调事件
@@ -1160,5 +1178,28 @@ static BOOL upState = YES;
 }
 
 
+// 确定报名
+- (void) okApplyAction: (id)sender
+{
+    NSLog(@"确定报名");
+    [backgroundView removeFromSuperview];
+    if(dialogView)
+    {
+        [dialogView removeFromSuperview];
+        dialogView = nil;
+    }
+}
+
+// 取消报名
+- (void) cancelApplyAction: (id)sender
+{
+    NSLog(@"取消报名");
+    [backgroundView removeFromSuperview];
+    if(dialogView)
+    {
+        [dialogView removeFromSuperview];
+        dialogView = nil;
+    }
+}
 
 @end
