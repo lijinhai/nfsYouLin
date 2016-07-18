@@ -392,7 +392,7 @@
 {
     NeighborData* neighborData = self.neighborDataFrame.neighborData;
     NSURL* url = [NSURL URLWithString:neighborData.iconName];
-    [self.iconView sd_setImageWithURL:url placeholderImage:[UIImage imageNamed:@"default"] options:SDWebImageAllowInvalidSSLCertificates];
+    [self.iconView sd_setImageWithURL:url placeholderImage:[UIImage imageNamed:@"bg_error.png"] options:SDWebImageAllowInvalidSSLCertificates];
     self.titleLabel.text = [NSString stringWithFormat:@"%@",neighborData.titleName];
     
     self.timeInterval.text = [StringMD5 calculateTimeInternal:[neighborData.systemTime integerValue] / 1000 old:[neighborData.topicTime integerValue] / 1000];
@@ -418,7 +418,7 @@
         [self.picturesView addObject:pictureView];
         UIImageView* imageView = ((UIImageView *)[self.picturesView objectAtIndex:i]);
         NSURL* url = [NSURL URLWithString:[[neighborData.picturesArray objectAtIndex:i] valueForKey:@"resPath"]];
-        [imageView sd_setImageWithURL:url placeholderImage:[UIImage imageNamed:@"default"] options:SDWebImageAllowInvalidSSLCertificates];
+        [imageView sd_setImageWithURL:url placeholderImage:[UIImage imageNamed:@"bg_error.png"] options:SDWebImageAllowInvalidSSLCertificates];
     }
     
 }

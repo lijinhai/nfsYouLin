@@ -202,7 +202,7 @@
   
         NSURL* url = [NSURL URLWithString:_userData.userPortrait];
 
-        [self.headIV sd_setImageWithURL:url placeholderImage:[UIImage imageNamed:@"default"] options:SDWebImageAllowInvalidSSLCertificates];
+        [self.headIV sd_setImageWithURL:url placeholderImage:[UIImage imageNamed:@"bg_error.png"] options:SDWebImageAllowInvalidSSLCertificates];
         
         CGSize phoneSize = [StringMD5 sizeWithString:_userData.phoneNum font:[UIFont systemFontOfSize:17] maxSize:CGSizeMake(MAXFLOAT, MAXFLOAT)];
         

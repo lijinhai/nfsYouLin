@@ -226,7 +226,7 @@
 - (void) setZeroCellData
 {
     NSURL* url = [NSURL URLWithString:self.neighborData.iconName];
-    [self.iconView sd_setImageWithURL:url placeholderImage:[UIImage imageNamed:@"default"] options:SDWebImageAllowInvalidSSLCertificates];
+    [self.iconView sd_setImageWithURL:url placeholderImage:[UIImage imageNamed:@"bg_error.png"] options:SDWebImageAllowInvalidSSLCertificates];
     
     CGRect accountFrame;
     CGSize accountInfoLabelSize = [StringMD5 sizeWithString:[NSString stringWithFormat:@"%@",self.neighborData.accountName] font:[UIFont systemFontOfSize:15] maxSize:CGSizeMake(MAXFLOAT, MAXFLOAT)];
@@ -283,7 +283,7 @@
         
         NSURL* url = [NSURL URLWithString:[[self.neighborData.picturesArray objectAtIndex:i] valueForKey:@"resPath"]];
         
-        [pictureView sd_setImageWithURL:url placeholderImage:[UIImage imageNamed:@"default"] options:SDWebImageAllowInvalidSSLCertificates];
+        [pictureView sd_setImageWithURL:url placeholderImage:[UIImage imageNamed:@"bg_error.png"] options:SDWebImageAllowInvalidSSLCertificates];
         
         pictureView.frame = pictureFrame;
         [self.contentView addSubview:pictureView];

@@ -83,7 +83,7 @@
             
             NSURL* url = [NSURL URLWithString:[appendArray objectAtIndex:i]];
             
-            [imageView sd_setImageWithURL:url placeholderImage:[UIImage imageNamed:@"default"] options:SDWebImageAllowInvalidSSLCertificates];
+            [imageView sd_setImageWithURL:url placeholderImage:[UIImage imageNamed:@"bg_error.png"] options:SDWebImageAllowInvalidSSLCertificates];
             
             imageView.contentMode = UIViewContentModeScaleAspectFit;
             [imageScrollView addSubview:imageView];
