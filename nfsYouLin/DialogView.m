@@ -39,12 +39,17 @@
         {
             [self initApplyView:frame];
         }
+        else if([flag isEqualToString:@"cancelApply"])
+        {
+            [self initCancelApplyView:frame];
+        }
     }
     
     return self;
     
 }
 
+// 打招呼
 - (void) initSayHiView: (CGRect) frame
 {
     self.backgroundColor = [UIColor clearColor];
@@ -87,6 +92,7 @@
 
 }
 
+// 删除
 - (void) initDeleteView: (CGRect) frame
 {
     self.backgroundColor = [UIColor clearColor];
@@ -126,6 +132,10 @@
 
 }
 
+
+
+
+// 报名
 - (void) initApplyView: (CGRect) frame
 {
     self.backgroundColor = [UIColor clearColor];
@@ -225,6 +235,40 @@
 
     
 }
+
+// 取消报名
+- (void) initCancelApplyView: (CGRect) frame
+{
+    self.backgroundColor = [UIColor clearColor];
+    self.backView = [[UIView alloc] initWithFrame:CGRectMake(60, (frame.size.height - 80) / 2, frame.size.width - 120, 80)];
+    self.backView.backgroundColor = [UIColor lightGrayColor];
+    
+    self.textView = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.backView.frame), 40)];
+    self.textView.font = [UIFont systemFontOfSize:15];
+    self.textView.textAlignment = NSTextAlignmentCenter;
+    self.textView.text = @"请确认是否取消报名";
+    self.textView.editable = NO;
+    self.textView.bounces = NO;
+    self.textView.textColor = [UIColor blackColor];
+    
+    
+    [self.backView addSubview:self.textView];
+    
+    self.cancelApplyYes = [[UIButton alloc] initWithFrame:CGRectMake(0, 41, CGRectGetWidth(self.backView.frame) / 2 - 0.5, 39)];
+    [self.cancelApplyYes setTitle:@"确定" forState:UIControlStateNormal];
+    self.cancelApplyYes.backgroundColor = [UIColor whiteColor];
+    [self.cancelApplyYes setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [self.backView addSubview:self.cancelApplyYes];
+    
+    
+    self.okApplyNo = [[UIButton alloc] initWithFrame:CGRectMake(CGRectGetWidth(self.backView.frame) / 2 + 0.5 , 41, CGRectGetWidth(self.backView.frame) / 2 - 0.5, 39)];
+    [self.okApplyNo setTitle:@"取消" forState:UIControlStateNormal];
+    self.okApplyNo.backgroundColor = [UIColor whiteColor];
+    [self.okApplyNo setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [self.backView addSubview:self.okApplyNo];
+    [self addSubview:self.backView];
+}
+
 
 
 

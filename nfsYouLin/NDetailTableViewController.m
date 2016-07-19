@@ -21,6 +21,8 @@
     CGFloat _cellHeight;        // 第二个表格行高度
     NSMutableArray* _cellOtherHeight;   // 回复表格行高度
     UIView* backgroundView;
+    DialogView* dialogView;
+
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -60,6 +62,7 @@
     backgroundView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
     backgroundView.backgroundColor = [UIColor grayColor];
     backgroundView.alpha = 0.8;
+    dialogView = nil;
 
 }
 
@@ -346,9 +349,64 @@
     DialogView* deleteView = [[DialogView alloc] initWithFrame:backgroundView.frame  View:backgroundView Flag:@"delete"];
     [self.parentViewController.view addSubview:backgroundView];
     [self.parentViewController.view addSubview:deleteView];
-
-//    [self.parentViewController.parentViewController.parentViewController.view  addSubview:deleteView];
     
+}
+
+// 报名
+- (void) applyDetail:(NSInteger)sectionNum
+{
+    NSLog(@"报名详情");
+    DialogView* applyView = [[DialogView alloc] initWithFrame:backgroundView.frame  View:backgroundView Flag:@"apply"];
+    backgroundView.alpha = 0.0f;
+    applyView.alpha = 0.0f;
+    [self.parentViewController.view  addSubview:backgroundView];
+    [self.parentViewController.view addSubview:applyView];
+    [UIView animateWithDuration:0.3f animations:^{
+        backgroundView.alpha = 0.8f;
+        applyView.alpha = 1.0f;
+    }];
+    
+    dialogView = applyView;
+    UIButton* okBtn = applyView.applyYes;
+    [okBtn addTarget:self action:@selector(okApplyAction:) forControlEvents:UIControlEventTouchUpInside];
+    
+    UIButton* cancelBtn = applyView.applyNo;
+    [cancelBtn addTarget:self action:@selector(cancelApplyAction:) forControlEvents:UIControlEventTouchUpInside];
+    
+}
+
+// 取消报名
+- (void) cancelApply:(NSInteger) sectionNum
+{
+    NSLog(@"取消报名");
+    DialogView* cancelView = [[DialogView alloc] initWithFrame:backgroundView.frame  View:backgroundView Flag:@"cancelApply"];
+    [self.parentViewController.view  addSubview:backgroundView];
+    [self.parentViewController.view addSubview:cancelView];
+}
+
+
+// 确定报名
+- (void) okApplyAction: (id)sender
+{
+    NSLog(@"确定报名");
+    [backgroundView removeFromSuperview];
+    if(dialogView)
+    {
+        [dialogView removeFromSuperview];
+        dialogView = nil;
+    }
+}
+
+// 取消报名
+- (void) cancelApplyAction: (id)sender
+{
+    NSLog(@"取消报名");
+    [backgroundView removeFromSuperview];
+    if(dialogView)
+    {
+        [dialogView removeFromSuperview];
+        dialogView = nil;
+    }
 }
 
 

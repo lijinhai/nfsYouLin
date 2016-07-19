@@ -57,7 +57,7 @@
     NSString* newTopicId;
     NSString* oldTopicId;
     
-    //全部:1 话题:2 3:活动 4:公告 5:建议 6:闲品会
+    //全部:0 话题:1 2:活动 3:公告 5:建议 6:闲品会
     NSInteger category;
     NSString* Tag;
     
@@ -634,27 +634,27 @@ static BOOL upState = YES;
     if([text isEqualToString:@"全部"])
     {
         Tag = @"gettopic";
-        category = 1;
+        category = 0;
         [self getTopicNet];
 
     }
     else if([text isEqualToString:@"话题"])
     {
-        category = 2;
+        category = 1;
         Tag = @"singletopic";
         [self getTopicNet];
 
     }
     else if([text isEqualToString:@"活动"])
     {
-        category = 3;
+        category = 2;
         Tag = @"singleactivity";
         [self getTopicNet];
 
     }
     else if([text isEqualToString:@"公告"])
     {
-        category = 4;
+        category = 3;
         Tag = @"getnotice";
         [self getNoticeAndAdviceNet:@"3"];
 
@@ -688,7 +688,7 @@ static BOOL upState = YES;
     }
 }
 
-
+// 报名
 - (void) applyDetail:(NSInteger)sectionNum
 {
     NSLog(@"报名详情");
@@ -710,6 +710,16 @@ static BOOL upState = YES;
     [cancelBtn addTarget:self action:@selector(cancelApplyAction:) forControlEvents:UIControlEventTouchUpInside];
     
 }
+
+// 取消报名
+- (void) cancelApply:(NSInteger) sectionNum
+{
+    NSLog(@"取消报名");
+    DialogView* cancelView = [[DialogView alloc] initWithFrame:backgroundView.frame  View:backgroundView Flag:@"cancelApply"];
+    [self.parentViewController.parentViewController.view  addSubview:backgroundView];
+    [self.parentViewController.parentViewController.view  addSubview:cancelView];
+}
+
 
 // 查看全文回调事件
 - (void)readTotalInformation:(NSInteger)sectionNum
@@ -1088,7 +1098,6 @@ static BOOL upState = YES;
 // 上拉刷新网络请求 公告 建议
 - (void) upRefreshNoticeAndAdviceNet:(NSString*) type
 {
-    NSLog(@"up type = %@ tag = %@", type,Tag);
 
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     NSString* communityId = [defaults stringForKey:@"communityId"];
@@ -1111,7 +1120,6 @@ static BOOL upState = YES;
                                 @"hash" : hashString,
                                 @"keyset" : @"user_id:community_id:topic_id:count:",
                                 };
-    
     [manager POST:POST_URL parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
         
         

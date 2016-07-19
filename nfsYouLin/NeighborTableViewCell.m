@@ -479,14 +479,24 @@
         }
         else
         {
-            
+            self.applyView.applyLabel.enabled = YES;
+            self.applyView.applyNum.enabled = YES;
+
             [self.pastImageView removeFromSuperview];
         }
         
         if([self.applyView.applyLabel.text isEqualToString:@"我要报名"])
         {
+             [self.applyView removeTarget:self action:@selector(cancelApplyAction:) forControlEvents:UIControlEventTouchUpInside];
             [self.applyView addTarget:self action:@selector(wantApplyAction:) forControlEvents:UIControlEventTouchUpInside];
         }
+        
+        if([self.applyView.applyLabel.text isEqualToString:@"取消报名"])
+        {
+            [self.applyView removeTarget:self action:@selector(wantApplyAction:) forControlEvents:UIControlEventTouchUpInside];
+            [self.applyView addTarget:self action:@selector(cancelApplyAction:) forControlEvents:UIControlEventTouchUpInside];
+        }
+
         
         CGPoint point = self.neighborDataFrame.applyPoint;
         [self.applyView initApplyView:point];
@@ -617,9 +627,23 @@
         [MBProgressHUBTool textToast:self Tip:@"此活动已过期"];
 
     }
-    NSLog(@"detailView text = %@,num = %@",detailView.applyLabel.text, detailView.applyNum.text);
+}
+
+- (void)cancelApplyAction:(id) sender
+{
+    ApplyDetailView* detailView = (ApplyDetailView*) sender;
+    if(detailView.applyLabel.enabled)
+    {
+        [_delegate cancelApply:self.sectionNum];
+    }
+    else
+    {
+        [MBProgressHUBTool textToast:self Tip:@"此活动已过期"];
+        
+    }
     
 }
+
 
 // 点击删除
 - (void) deleteBtn

@@ -25,6 +25,10 @@
 @property(strong, nonatomic)UITextField* adultTF;
 @property(strong, nonatomic)UITextField* childTF;
 
+
+@property(strong, nonatomic)UIButton* cancelApplyYes;
+@property(strong, nonatomic)UIButton* okApplyNo;
+
 - (id) initWithFrame:(CGRect)frame View:(UIView*) view Flag:(NSString*) flag;
 
 

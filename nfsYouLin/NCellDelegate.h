@@ -30,6 +30,9 @@
 // 报名详情
 - (void)applyDetail:(NSInteger) sectionNum;
 
+// 取消报名
+- (void) cancelApply:(NSInteger) sectionNum;
+
 @end
 
 
