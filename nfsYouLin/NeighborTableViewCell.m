@@ -11,6 +11,8 @@
 #import "UIImageView+WebCache.h"
 #import "StringMD5.h"
 #import "MBProgressHUBTool.h"
+#import "AFHTTPSessionManager.h"
+
 
 @implementation NeighborTableViewCell
 {
@@ -18,10 +20,6 @@
     NSInteger _currentIndex;
     NSMutableArray* _buttons;
     
-    
-    
-    BOOL _praiseState; // 点赞状态
-
 }
 
 - (void)awakeFromNib {
@@ -241,6 +239,7 @@
             replyLabel.font = [UIFont systemFontOfSize:15];
             [replyLabel setAutoresizingMask:UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin];
             [replyImageView setAutoresizingMask:UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin];
+            self.replyLabel = replyLabel;
             [self.replyView addSubview:replyLabel];
             
             [self.replyView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin];
@@ -253,8 +252,6 @@
             
             
             // 添加点赞
-            _praiseState = NO;
-            _praiseCount = 0;
             self.praiseView = [[UIControl alloc] initWithFrame:CGRectMake(CGRectGetMaxX(lineView1.frame), 0, self.contentView.frame.size.width / 3, 40)];
             self.praiseView.backgroundColor = [UIColor whiteColor];
 
@@ -356,26 +353,48 @@
 - (void) touchCancelPraise
 {
     self.praiseView.backgroundColor = [UIColor whiteColor];
-    _praiseState = !_praiseState;
-    if(_praiseState)
+    NeighborData* neighborData = self.replyData;
+    
+    
+    if([neighborData.praiseType integerValue] == 0)
     {
-        _praiseCount = 1;
-        _praiseImageView.image = [UIImage imageNamed:@"dianzan_2.png"];
-        _praiseLabel.text = [NSString stringWithFormat:@"%ld",_praiseCount];
+        [self praiseNet:[neighborData.topicId integerValue] action:1];
+        self.praiseImageView.image = [UIImage imageNamed:@"dianzan_2.png"];
+        NSInteger num = [self.praiseLabel.text integerValue] + 1;
+        self.praiseLabel.text = [NSString stringWithFormat:@"%ld",num];
+        neighborData.praiseType = @"1";
+        neighborData.praiseCount = [NSString stringWithFormat:@"%ld",num];
     }
     else
     {
-        _praiseCount = 0;
-        _praiseLabel.text = @"赞";
-        _praiseImageView.image = [UIImage imageNamed:@"dianzan.png"];
-        
+        [self praiseNet:[neighborData.topicId integerValue] action:0];
+        self.praiseImageView.image = [UIImage imageNamed:@"dianzan.png"];
+        NSInteger num = [self.praiseLabel.text integerValue] - 1;
+       
+        if(num != 0)
+        {
+            self.praiseLabel.text = [NSString stringWithFormat:@"%ld",num];
+            neighborData.praiseType = @"0";
+            neighborData.praiseCount = [NSString stringWithFormat:@"%ld",num];
+        }
+        else
+        {
+            self.praiseLabel.text = @"赞";
+            neighborData.praiseType = @"0";
+            neighborData.praiseCount = @"0";
+        }
+
     }
+    
+    
 }
 
 
 //点击查看
 - (void) touchDownWatch
 {
+    
+    
     [_delegate readTotalInformation:self.sectionNum];
     self.watchView.backgroundColor = [UIColor lightGrayColor];
 
@@ -384,10 +403,9 @@
 - (void) touchCancelWatch
 {
     self.watchView.backgroundColor = [UIColor whiteColor];
-    _watchCount ++;
-    _watchLabel.text = [NSString stringWithFormat:@"%ld",_watchCount];
 }
 
+// 设置帖子数据
 - (void) settingData
 {
     NeighborData* neighborData = self.neighborDataFrame.neighborData;
@@ -420,9 +438,10 @@
         NSURL* url = [NSURL URLWithString:[[neighborData.picturesArray objectAtIndex:i] valueForKey:@"resPath"]];
         [imageView sd_setImageWithURL:url placeholderImage:[UIImage imageNamed:@"bg_error.png"] options:SDWebImageAllowInvalidSSLCertificates];
     }
-    
 }
 
+
+// 设置帖子数据和控件位置
 - (void) settingDataFrame
 {
     
@@ -561,6 +580,50 @@
     
 }
 
+// 设置评论数据
+- (void) setReplyCellData
+{
+    // 点赞状态
+    if([self.replyData.praiseType integerValue] == 1)
+    {
+        self.praiseImageView.image = [UIImage imageNamed:@"dianzan_2.png"];
+    }
+    else
+    {
+        self.praiseImageView.image = [UIImage imageNamed:@"dianzan.png"];
+        
+    }
+    
+    // 点赞个数
+    if ([self.replyData.praiseCount integerValue] != 0) {
+        self.praiseLabel.text = [NSString stringWithFormat:@"%ld",[self.replyData.praiseCount integerValue]];
+    }
+    else
+    {
+        self.praiseLabel.text = @"赞";
+    }
+    
+    // 浏览次数
+    if ([self.replyData.viewCount integerValue] != 0) {
+        self.watchLabel.text = [NSString stringWithFormat:@"%ld",[self.replyData.viewCount integerValue]];
+        
+    }
+    else
+    {
+        self.watchLabel.text = @"";
+    }
+    
+    // 回复个数
+    if ([self.replyData.replyCount integerValue] != 0) {
+        self.replyLabel.text = [NSString stringWithFormat:@"%ld",[self.replyData.replyCount integerValue]];
+    }
+    else
+    {
+        self.replyLabel.text = @"";
+    }
+
+}
+
 //防止图片重叠
 -(void)removeOldPictures
 {
@@ -581,6 +644,13 @@
     [self settingData];
     [self settingDataFrame];
 }
+
+- (void) setReplyData:(NeighborData *)replyData
+{
+    _replyData = replyData;
+    [self setReplyCellData];
+}
+
 
 -(NSMutableArray *)picturesView
 {
@@ -659,5 +729,47 @@
     NSLog(@"hiAction");
     [_delegate sayHi:self.sectionNum];
 }
+
+
+// 点赞网络请求
+// topicId 帖子id
+// type 点赞动作 1 点赞 0 取消点赞
+- (void) praiseNet: (NSInteger)topicId action:(NSInteger)type
+{
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSString* userId = [defaults stringForKey:@"userId"];
+    AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
+    manager.securityPolicy.allowInvalidCertificates = YES;
+    [manager.securityPolicy setValidatesDomainName:NO];
+    
+    
+    NSString* MD5String = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"user_id%@topic_id%ldtype%ld",userId,topicId,type]];
+    NSString* hashString = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"%@1", MD5String]];
+    
+    NSDictionary* parameter = @{@"user_id" : userId,
+                                @"topic_id" : [NSNumber numberWithInteger:topicId],
+                                @"type" : [NSNumber numberWithInteger:type],
+                                @"apitype" : @"comm",
+                                @"salt" : @"1",
+                                @"tag" : @"hitpraise",
+                                @"hash" : hashString,
+                                @"keyset" : @"user_id:topic_id:type:",
+                                };
+    
+    [manager POST:POST_URL parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+        
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSLog(@"点赞网络请求:%@", responseObject);
+       
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"请求失败:%@", error.description);
+        return;
+    }];
+
+}
+
+
 
 @end

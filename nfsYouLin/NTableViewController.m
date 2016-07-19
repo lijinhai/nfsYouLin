@@ -80,7 +80,8 @@ static int sectionCount = 1;
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    
+    [super viewWillAppear:animated];
+    [self.tableView reloadData];
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -280,9 +281,14 @@ static int sectionCount = 1;
             {
                 cell = [[NeighborTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellAnother];
             }
+            if([self.neighborDataArray count] != 0)
+            {
+                NeighborDataFrame* dataFrame = self.neighborDataArray[indexPath.section - 1];
+                cell.replyData = dataFrame.neighborData;
+            }
         }
 
-    }
+}
     
     
     cell.delegate = self;
@@ -722,10 +728,18 @@ static BOOL upState = YES;
 
 
 // 查看全文回调事件
-- (void)readTotalInformation:(NSInteger)sectionNum
+- (void)readTotalInformation:(NSInteger)sectionNum 
 {
     NeighborDataFrame* neighborDataFrame = self.neighborDataArray[sectionNum - 1];
     NeighborData* neighborData = neighborDataFrame.neighborData;
+    NSInteger topicId = [[neighborData valueForKey:@"topicId"] integerValue];
+    NSInteger num = [neighborData.viewCount integerValue] + 1;
+     neighborData.viewCount = [NSString stringWithFormat:@"%ld",num];
+    
+    [self viewTopicNet:topicId];
+   
+    
+    
     UIStoryboard* storyBoard = [UIStoryboard storyboardWithName:@"Neighbour" bundle:nil];
     _detailController= [storyBoard instantiateViewControllerWithIdentifier:@"details"];
     UIBarButtonItem* detailItem = [[UIBarButtonItem alloc] initWithTitle:@"详情" style:UIBarButtonItemStylePlain target:nil action:nil];
@@ -778,7 +792,6 @@ static BOOL upState = YES;
                                 @"hash" : hashString,
                                 @"keyset" : @"user_id:community_id:topic_id:",
                                 };
-    
     [manager POST:POST_URL parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
         
         
@@ -1178,10 +1191,20 @@ static BOOL upState = YES;
         @"senderId" : responseDict[@"senderId"],
         @"cacheKey" : responseDict[@"cacheKey"],
         @"topicCategory" : responseDict[@"objectType"],
-        @"infoArray" : responseDict[@"objectData"]
+        @"infoArray" : responseDict[@"objectData"],
+        @"praiseType" : responseDict[@"praiseType"],
+        @"viewCount" : responseDict[@"viewNum"],
+        @"praiseCount" : responseDict[@"likeNum"],
+        @"replyCount" : responseDict[@"commentNum"],
+        @"topicId" : responseDict[@"topicId"],
+
         };
 
-    
+    if([responseDict[@"topicTitle"] isEqualToString:@"刚刚好"])
+    {
+//        NSArray* array =
+        NSLog(@"walk topicId = %@",responseDict[@"topicId"]);
+    }
     return dict;
 }
 
@@ -1209,5 +1232,47 @@ static BOOL upState = YES;
         dialogView = nil;
     }
 }
+
+
+// 浏览帖子次数网络请求
+// topicId 帖子id
+- (void) viewTopicNet: (NSInteger)topicId
+{
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSString* userId = [defaults stringForKey:@"userId"];
+    NSString* communityId = [defaults stringForKey:@"communityId"];
+    
+    AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
+    manager.securityPolicy.allowInvalidCertificates = YES;
+    [manager.securityPolicy setValidatesDomainName:NO];
+    
+    
+    NSString* MD5String = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"user_id%@topic_id%ldcommunity_id%@",userId,topicId,communityId]];
+    NSString* hashString = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"%@1", MD5String]];
+    
+    NSDictionary* parameter = @{@"user_id" : userId,
+                                @"topic_id" : [NSNumber numberWithInteger:topicId],
+                                @"community_id" : communityId,
+                                @"apitype" : @"comm",
+                                @"salt" : @"1",
+                                @"tag" : @"intotopic",
+                                @"hash" : hashString,
+                                @"keyset" : @"user_id:topic_id:community_id:",
+                                };
+    
+    [manager POST:POST_URL parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+        
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSLog(@"浏览帖子次数网络请求:%@", responseObject);
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"请求失败:%@", error.description);
+        return;
+    }];
+    
+}
+
 
 @end

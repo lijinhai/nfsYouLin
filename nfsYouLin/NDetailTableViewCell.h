@@ -59,7 +59,6 @@
 @property(strong, nonatomic) UIControl* praiseView;
 @property(strong, nonatomic) UILabel* praiseLabel;
 @property(strong, nonatomic) UIImageView* praiseImageView;
-@property(nonatomic, assign) NSInteger praiseCount;
 
 // 其他表格行控件
 // 回复人头像

@@ -23,21 +23,21 @@
 // 回复
 @property(strong, nonatomic) UIControl* replyView;
 @property(strong, nonatomic) UILabel* replyLabel;
-@property(nonatomic, assign) NSInteger replyCount;
 
 // 点赞
 @property(strong, nonatomic) UIControl* praiseView;
 @property(strong, nonatomic) UILabel* praiseLabel;
 @property(strong, nonatomic) UIImageView* praiseImageView;
-@property(nonatomic, assign) NSInteger praiseCount;
 
 // 查看
 @property(strong, nonatomic) UIControl* watchView;
 @property(strong, nonatomic) UILabel* watchLabel;
-@property(nonatomic, assign) NSInteger watchCount;
 
-// 帖子
+// 帖子数据
 @property (nonatomic, strong)NeighborDataFrame *neighborDataFrame;
+
+// 评论数据
+@property (nonatomic, strong)NeighborData *replyData;
 
 // 头像
 @property (weak, nonatomic)UIImageView *iconView;

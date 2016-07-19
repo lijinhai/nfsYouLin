@@ -50,5 +50,21 @@
 // 欢迎帖子是否为·userID
 @property (strong, nonatomic) NSString* cacheKey;
 
+// 欢迎帖子ID
+@property (strong, nonatomic) NSString* topicId;
+
+// 回复个数
+@property (strong, nonatomic) NSString* replyCount;
+
+// 点赞个数
+@property (strong, nonatomic) NSString* praiseCount;
+
+// 点赞状态
+@property (strong, nonatomic) NSString* praiseType;
+
+// 浏览次数
+@property (strong, nonatomic) NSString* viewCount;
+
+
 - (id) initWithDict: (NSDictionary*) dict;
 @end
