@@ -727,13 +727,21 @@ static BOOL upState = YES;
     
 }
 
-// 取消报名
-- (void) cancelApply:(NSInteger) sectionNum
+// 取消报名回调
+- (void) cancelApply:(NSInteger) activityId
 {
     NSLog(@"取消报名");
     DialogView* cancelView = [[DialogView alloc] initWithFrame:backgroundView.frame  View:backgroundView Flag:@"cancelApply"];
     [self.parentViewController.parentViewController.view  addSubview:backgroundView];
     [self.parentViewController.parentViewController.view  addSubview:cancelView];
+    
+    dialogView = cancelView;
+    UIButton* okBtn = cancelView.cancelApplyYes;
+    okBtn.tag = activityId;
+    [okBtn addTarget:self action:@selector(cancelOkApplyAction:) forControlEvents:UIControlEventTouchUpInside];
+    
+    UIButton* cancelBtn = cancelView.cancelApplyNo;
+    [cancelBtn addTarget:self action:@selector(cancelNoApplyAction:) forControlEvents:UIControlEventTouchUpInside];
 }
 
 
@@ -1249,6 +1257,34 @@ static BOOL upState = YES;
     }
 }
 
+// 确定取消报名
+- (void) cancelOkApplyAction: (id) sender
+{
+    UIButton* button = (UIButton*)sender;
+    NSInteger activityId = button.tag;
+    [self cancelApplyNet:activityId];
+    [backgroundView removeFromSuperview];
+    if(dialogView)
+    {
+        [dialogView removeFromSuperview];
+        dialogView = nil;
+    }
+    
+}
+
+// 不取消报名
+- (void) cancelNoApplyAction: (id) sender
+{
+    
+    [backgroundView removeFromSuperview];
+    if(dialogView)
+    {
+        [dialogView removeFromSuperview];
+        dialogView = nil;
+    }
+    
+}
+
 
 // 浏览帖子次数网络请求
 // topicId 帖子id
@@ -1348,5 +1384,63 @@ static BOOL upState = YES;
     }];
 
 }
+
+// 取消报名网络请求
+// activityId 活动Id
+- (void) cancelApplyNet:(NSInteger) activityId
+{
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSString* userId = [defaults stringForKey:@"userId"];
+    
+    AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
+    manager.securityPolicy.allowInvalidCertificates = YES;
+    [manager.securityPolicy setValidatesDomainName:NO];
+    
+    
+    NSString* MD5String = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"activityId%lduserId%@",activityId,userId]];
+    NSString* hashString = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"%@1", MD5String]];
+    
+    NSDictionary* parameter = @{@"activityId" :
+                                    [NSNumber numberWithInteger:activityId],
+                                @"userId" : userId,
+                                @"apitype" : @"comm",
+                                @"salt" : @"1",
+                                @"tag" : @"delenroll",
+                                @"hash" : hashString,
+                                @"keyset" : @"activityId:userId:",
+                                };
+    
+    [manager POST:POST_URL parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+        
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSLog(@"取消报名网络请求:%@", responseObject);
+        if([[responseObject valueForKey:@"flag"] isEqualToString:@"ok"])
+        {
+            for(int i = 0; i < [self.neighborDataArray count] ;i++)
+            {
+                NeighborDataFrame* neighborDataFrame = self.neighborDataArray[i];
+                NeighborData* neighborData = neighborDataFrame.neighborData;
+                NSDictionary* dict = neighborData.infoArray[0];
+                NSMutableDictionary* dataDict = [NSMutableDictionary dictionaryWithDictionary:dict];
+                if ([[dict valueForKey:@"activityId"] integerValue] == activityId) {
+                    [dataDict setObject:@"false" forKey:@"enrollFlag"];
+                    [dataDict setObject:[responseObject valueForKey:@"enrollTotal"] forKey:@"enrollTotal"];
+                    NSArray* array = [NSArray arrayWithObject:dataDict];
+                    neighborDataFrame.neighborData.infoArray = [array mutableCopy];
+                    [self.neighborDataArray replaceObjectAtIndex:i withObject:neighborDataFrame];
+                }
+            }
+            [self.tableView reloadData];
+        }
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"请求失败:%@", error.description);
+        return;
+    }];
+    
+}
+
 
 @end

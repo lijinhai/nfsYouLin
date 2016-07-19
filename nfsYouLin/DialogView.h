@@ -27,7 +27,7 @@
 
 
 @property(strong, nonatomic)UIButton* cancelApplyYes;
-@property(strong, nonatomic)UIButton* okApplyNo;
+@property(strong, nonatomic)UIButton* cancelApplyNo;
 
 - (id) initWithFrame:(CGRect)frame View:(UIView*) view Flag:(NSString*) flag;
 

@@ -569,12 +569,16 @@
     }
 }
 
+
+// 点击取消报名
 - (void)cancelApplyAction:(id) sender
 {
     ApplyDetailView* detailView = (ApplyDetailView*) sender;
+    NSDictionary* activityDict = self.neighborData.infoArray[0];
+    NSInteger activiId = [[activityDict valueForKey:@"activityId"] integerValue];
     if(detailView.applyLabel.enabled)
     {
-        [_delegate cancelApply:0];
+        [_delegate cancelApply:activiId];
     }
     else
     {

@@ -261,11 +261,11 @@
     [self.backView addSubview:self.cancelApplyYes];
     
     
-    self.okApplyNo = [[UIButton alloc] initWithFrame:CGRectMake(CGRectGetWidth(self.backView.frame) / 2 + 0.5 , 41, CGRectGetWidth(self.backView.frame) / 2 - 0.5, 39)];
-    [self.okApplyNo setTitle:@"取消" forState:UIControlStateNormal];
-    self.okApplyNo.backgroundColor = [UIColor whiteColor];
-    [self.okApplyNo setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [self.backView addSubview:self.okApplyNo];
+    self.cancelApplyNo = [[UIButton alloc] initWithFrame:CGRectMake(CGRectGetWidth(self.backView.frame) / 2 + 0.5 , 41, CGRectGetWidth(self.backView.frame) / 2 - 0.5, 39)];
+    [self.cancelApplyNo setTitle:@"取消" forState:UIControlStateNormal];
+    self.cancelApplyNo.backgroundColor = [UIColor whiteColor];
+    [self.cancelApplyNo setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [self.backView addSubview:self.cancelApplyNo];
     [self addSubview:self.backView];
 }
 

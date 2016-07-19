@@ -32,7 +32,7 @@
 - (void)applyDetail:(NSInteger) activityId;
 
 // 取消报名
-- (void) cancelApply:(NSInteger) sectionNum;
+- (void) cancelApply:(NSInteger) activityId;
 
 @end
 
