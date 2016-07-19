@@ -704,7 +704,7 @@ static BOOL upState = YES;
 }
 
 // 报名
-- (void) applyDetail:(NSInteger)sectionNum
+- (void) applyDetail:(NSInteger)activityId
 {
     NSLog(@"报名详情");
     DialogView* applyView = [[DialogView alloc] initWithFrame:backgroundView.frame  View:backgroundView Flag:@"apply"];
@@ -719,6 +719,7 @@ static BOOL upState = YES;
     
     dialogView = applyView;
     UIButton* okBtn = applyView.applyYes;
+    okBtn.tag = activityId;
     [okBtn addTarget:self action:@selector(okApplyAction:) forControlEvents:UIControlEventTouchUpInside];
     
     UIButton* cancelBtn = applyView.applyNo;
@@ -1222,6 +1223,12 @@ static BOOL upState = YES;
 - (void) okApplyAction: (id)sender
 {
     NSLog(@"确定报名");
+    
+    UIButton* button = (UIButton*)sender;
+    NSInteger activityId = button.tag;
+    
+    [self applyNet:activityId Adult:[dialogView.adultTF.text integerValue] Child:[dialogView.childTF.text integerValue]];
+
     [backgroundView removeFromSuperview];
     if(dialogView)
     {
@@ -1283,5 +1290,63 @@ static BOOL upState = YES;
     
 }
 
+// 报名网络请求
+// activityId 活动Id adultNum 成人人数 childNum 小孩人数
+- (void) applyNet:(NSInteger) activityId Adult:(NSInteger)adultNum Child:(NSInteger)childNum
+{
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSString* userId = [defaults stringForKey:@"userId"];
+    
+    AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
+    manager.securityPolicy.allowInvalidCertificates = YES;
+    [manager.securityPolicy setValidatesDomainName:NO];
+    
+    
+    NSString* MD5String = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"activityId%lduserId%@enrollUserCount%ldenrollNeCount%ld",activityId,userId,adultNum,childNum]];
+    NSString* hashString = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"%@1", MD5String]];
+    
+    NSDictionary* parameter = @{@"activityId" :
+                                    [NSNumber numberWithInteger:activityId],
+                                @"userId" : userId,
+                                @"enrollUserCount" : [NSNumber numberWithInteger:adultNum],
+                                @"enrollNeCount" : [NSNumber numberWithInteger:childNum],
+                                @"apitype" : @"comm",
+                                @"salt" : @"1",
+                                @"tag" : @"enroll",
+                                @"hash" : hashString,
+                                @"keyset" : @"activityId:userId:enrollUserCount:enrollNeCount:",
+                                };
+    
+    [manager POST:POST_URL parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+        
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSLog(@"报名网络请求:%@", responseObject);
+        if([[responseObject valueForKey:@"flag"] isEqualToString:@"ok"])
+        {
+            for(int i = 0; i < [self.neighborDataArray count] ;i++)
+            {
+                NeighborDataFrame* neighborDataFrame = self.neighborDataArray[i];
+                NeighborData* neighborData = neighborDataFrame.neighborData;
+                NSDictionary* dict = neighborData.infoArray[0];
+                NSMutableDictionary* dataDict = [NSMutableDictionary dictionaryWithDictionary:dict];
+                if ([[dict valueForKey:@"activityId"] integerValue] == activityId) {
+                    [dataDict setObject:@"true" forKey:@"enrollFlag"];
+                    [dataDict setObject:[responseObject valueForKey:@"count"] forKey:@"enrollTotal"];
+                    NSArray* array = [NSArray arrayWithObject:dataDict];
+                    neighborDataFrame.neighborData.infoArray = [array mutableCopy];
+                    [self.neighborDataArray replaceObjectAtIndex:i withObject:neighborDataFrame];
+                }
+            }
+            [self.tableView reloadData];
+        }
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"请求失败:%@", error.description);
+        return;
+    }];
+
+}
 
 @end

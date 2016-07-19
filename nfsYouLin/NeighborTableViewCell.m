@@ -702,9 +702,13 @@
 - (void)wantApplyAction:(id) sender
 {
     ApplyDetailView* detailView = (ApplyDetailView*) sender;
+    
+    NSDictionary* activityDict = self.neighborDataFrame.neighborData.infoArray[0];
+    NSInteger activiId = [[activityDict valueForKey:@"activityId"] integerValue];
+    
     if(detailView.applyLabel.enabled)
     {
-        [_delegate applyDetail:self.sectionNum];
+        [_delegate applyDetail:activiId];
     }
     else
     {

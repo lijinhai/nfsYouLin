@@ -10,6 +10,9 @@
 #import "NDetailTableViewCell.h"
 #import "StringMD5.h"
 #import "DialogView.h"
+#import "AFHTTPSessionManager.h"
+
+
 @interface NDetailTableViewController ()
 
 @end
@@ -353,7 +356,7 @@
 }
 
 // 报名
-- (void) applyDetail:(NSInteger)sectionNum
+- (void) applyDetail:(NSInteger)activityId
 {
     NSLog(@"报名详情");
     DialogView* applyView = [[DialogView alloc] initWithFrame:backgroundView.frame  View:backgroundView Flag:@"apply"];
@@ -368,6 +371,7 @@
     
     dialogView = applyView;
     UIButton* okBtn = applyView.applyYes;
+    okBtn.tag = activityId;
     [okBtn addTarget:self action:@selector(okApplyAction:) forControlEvents:UIControlEventTouchUpInside];
     
     UIButton* cancelBtn = applyView.applyNo;
@@ -388,7 +392,11 @@
 // 确定报名
 - (void) okApplyAction: (id)sender
 {
-    NSLog(@"确定报名");
+    UIButton* button = (UIButton*)sender;
+    NSInteger activityId = button.tag;
+    
+    [self applyNet:activityId Adult:[dialogView.adultTF.text integerValue] Child:[dialogView.childTF.text integerValue]];
+
     [backgroundView removeFromSuperview];
     if(dialogView)
     {
@@ -407,6 +415,57 @@
         [dialogView removeFromSuperview];
         dialogView = nil;
     }
+}
+
+// 报名网络请求
+// activityId 活动Id adultNum 成人人数 childNum 小孩人数
+- (void) applyNet:(NSInteger) activityId Adult:(NSInteger)adultNum Child:(NSInteger)childNum
+{
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSString* userId = [defaults stringForKey:@"userId"];
+    
+    AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
+    manager.securityPolicy.allowInvalidCertificates = YES;
+    [manager.securityPolicy setValidatesDomainName:NO];
+    
+    
+    NSString* MD5String = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"activityId%lduserId%@enrollUserCount%ldenrollNeCount%ld",activityId,userId,adultNum,childNum]];
+    NSString* hashString = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"%@1", MD5String]];
+    
+    NSDictionary* parameter = @{@"activityId" :
+                                    [NSNumber numberWithInteger:activityId],
+                                @"userId" : userId,
+                                @"enrollUserCount" : [NSNumber numberWithInteger:adultNum],
+                                @"enrollNeCount" : [NSNumber numberWithInteger:childNum],
+                                @"apitype" : @"comm",
+                                @"salt" : @"1",
+                                @"tag" : @"enroll",
+                                @"hash" : hashString,
+                                @"keyset" : @"activityId:userId:enrollUserCount:enrollNeCount:",
+                                };
+    
+    [manager POST:POST_URL parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+        
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSLog(@"报名网络请求:%@", responseObject);
+        if([[responseObject valueForKey:@"flag"] isEqualToString:@"ok"])
+        {
+            NSDictionary* dict = self.neighborData.infoArray[0];
+            NSMutableDictionary* dataDict = [NSMutableDictionary dictionaryWithDictionary:dict];
+            [dataDict setObject:@"true" forKey:@"enrollFlag"];
+            [dataDict setObject:[responseObject valueForKey:@"count"] forKey:@"enrollTotal"];
+            NSArray* array = [NSArray arrayWithObject:dataDict];
+            self.neighborData.infoArray = [array mutableCopy];
+        }
+        [self.tableView reloadData];
+
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"请求失败:%@", error.description);
+        return;
+    }];
+    
 }
 
 

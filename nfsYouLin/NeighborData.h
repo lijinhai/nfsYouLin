@@ -39,7 +39,7 @@
 @property (strong, nonatomic) NSString* activityEnd;
 
 // 帖子信息(例:活动开始时间和结束时间等)
-@property(strong, nonatomic) NSArray* infoArray;
+@property(strong, nonatomic) NSMutableArray* infoArray;
 
 // 发表图片
 @property (strong, nonatomic) NSArray* picturesArray;

@@ -349,8 +349,6 @@
             // 活动过期
             self.applyView.applyLabel.enabled = NO;
             self.applyView.applyNum.enabled = NO;
-            self.applyView.applyLabel.enabled = NO;
-            self.applyView.applyNum.enabled = NO;
 
         }
         else
@@ -558,9 +556,11 @@
 - (void)wantApplyAction:(id) sender
 {
     ApplyDetailView* detailView = (ApplyDetailView*) sender;
+    NSDictionary* activityDict = self.neighborData.infoArray[0];
+    NSInteger activiId = [[activityDict valueForKey:@"activityId"] integerValue];
     if(detailView.applyLabel.enabled)
     {
-        [_delegate applyDetail:0];
+        [_delegate applyDetail:activiId];
     }
     else
     {

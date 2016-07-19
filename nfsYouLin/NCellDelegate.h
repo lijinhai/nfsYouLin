@@ -29,7 +29,7 @@
 - (void)deleteTopic:(NSInteger)sectionNum;
 
 // 报名详情
-- (void)applyDetail:(NSInteger) sectionNum;
+- (void)applyDetail:(NSInteger) activityId;
 
 // 取消报名
 - (void) cancelApply:(NSInteger) sectionNum;
