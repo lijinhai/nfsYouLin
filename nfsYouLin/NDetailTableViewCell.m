@@ -259,7 +259,13 @@
     textLabelFrame = CGRectMake(PADDING, CGRectGetMaxY(self.titleLabel.frame) + PADDING, textLabelSize.width, textLabelSize.height);
     self.contentLabel.frame = textLabelFrame;
     self.contentLabel.text = self.neighborData.publishText;
-    NSAttributedString *attrStr = [[NSAttributedString alloc] initWithData:[self.neighborData.publishText dataUsingEncoding:NSUnicodeStringEncoding] options:@{ NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType } documentAttributes:nil error:nil];
+    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+    [paragraphStyle setLineSpacing:5];
+    
+       NSMutableAttributedString *attrStr = [[NSMutableAttributedString alloc] initWithData:[self.neighborData.publishText dataUsingEncoding:NSUnicodeStringEncoding] options:@{ NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType } documentAttributes:nil error:nil];
+    [attrStr addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, [attrStr length])];
+    [attrStr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:15] range:NSMakeRange(0, [attrStr length])];
+
     self.contentLabel.attributedText = attrStr;
 
     height = CGRectGetMaxY(self.contentLabel.frame);
@@ -409,7 +415,7 @@
     }
     else
     {
-        self.replyLabel.text = @"";
+        self.replyLabel.text = @"回复";
     }
     
 

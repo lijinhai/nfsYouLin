@@ -67,7 +67,7 @@
     
     // 帖子内容位置大小
 //    UIFont *font = [UIFont systemFontOfSize:16];
-    UIFont *font = [UIFont fontWithName:@"AppleGothic" size:16];
+    UIFont *font = [UIFont systemFontOfSize:15];
     CGFloat textLabelX = PADDING;
     CGFloat accountInfoMaxY = CGRectGetMaxY(self.accountInfoFrame);
     CGFloat iconMaxY = CGRectGetMaxY(self.iconFrame);
@@ -77,20 +77,20 @@
     CGFloat textLabelW = textLabelSize.width;
     CGFloat textLabelH;
     self.textCount = textLabelSize.height / font.lineHeight;
-    if(self.textCount > 4)
+    if(self.textCount >= 4)
     {
-        textLabelH = 4 * font.lineHeight;
+        textLabelH = 6 * font.lineHeight;
     }
     else
     {
-         textLabelH = textLabelSize.height;
+         textLabelH = textLabelSize.height + 2 * font.lineHeight;
     }
     self.textFrame = CGRectMake(textLabelX, textLabelY, textLabelW, textLabelH);
     
     // 活动过期图片位置
-    CGFloat pastIVX = screenWidth - internalSize.width - 2 *PADDING- textLabelY;
+    CGFloat pastIVX = screenWidth - internalSize.width - 2 *PADDING - textLabelY;
     CGFloat pastIVY = PADDING;
-    CGFloat pastIVH = textLabelY;
+    CGFloat pastIVH = textLabelY - 10;
     CGFloat pastIVW = pastIVH;
     self.pastIVFrame = CGRectMake(pastIVX, pastIVY, pastIVH, pastIVW);
     
@@ -101,7 +101,7 @@
     CGFloat readButtonY;
     CGFloat readButtonW;
     CGFloat readButtonH;
-    if(self.textCount > 4)
+    if(self.textCount >= 4)
     {
         readButtonX = PADDING;
         readButtonY = CGRectGetMaxY(self.textFrame) + PADDING;
@@ -137,7 +137,7 @@
     }
     else
     {
-        self.cellHeight = CGRectGetMaxY(self.textFrame) + readButtonH +PADDING;
+        self.cellHeight = CGRectGetMaxY(self.textFrame) + readButtonH + PADDING;
     }
 
     self.cellHeight += 2 * PADDING;

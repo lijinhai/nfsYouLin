@@ -302,10 +302,15 @@ static int sectionCount = 1;
 // 表格高度
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if((indexPath.section != 0 && indexPath.row == 1) || indexPath.section == 0)
+    if(indexPath.section == 0)
+    {
+        return 51;
+    }
+    else if (indexPath.row == 1)
     {
         return 40;
     }
+    
     else
     {
         NeighborDataFrame *frame = self.neighborDataArray[indexPath.section - 1];
@@ -359,6 +364,10 @@ static int sectionCount = 1;
 // 处理单元格的选中
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if(indexPath.section == 0)
+    {
+        return;
+    }
     [self readTotalInformation:indexPath.section];
 }
 

@@ -2,11 +2,11 @@
   "images" : [
     {
       "idiom" : "iphone",
+      "filename" : "overline.png",
       "scale" : "1x"
     },
     {
       "idiom" : "iphone",
-      "filename" : "overline.png",
       "scale" : "2x"
     },
     {

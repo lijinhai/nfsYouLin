@@ -98,11 +98,10 @@
             UIImageView* pastImageView = [[UIImageView alloc] init];
             pastImageView.image = [UIImage imageNamed:@"overline.png"];
             self.pastImageView = pastImageView;
+//            self.pastImageView.backgroundColor = [UIColor redColor];
             
             // 创建帖子内容
             UILabel* contentLabel = [[UILabel alloc] init];
-            contentLabel.font = [UIFont fontWithName:@"AppleGothic" size:16];
-//            contentLabel.font = [UIFont systemFontOfSize:16];
             contentLabel.lineBreakMode = NSLineBreakByWordWrapping;     //去掉省略号
             contentLabel.numberOfLines = 4;
             [self.contentView addSubview:contentLabel];
@@ -136,7 +135,7 @@
         else if([reuseIdentifier isEqualToString:@"cellTitle"])
         {
             self.selectionStyle = UITableViewCellSelectionStyleNone;
-             self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0,0,CGRectGetWidth(self.contentView.frame),39)];
+             self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0,0,CGRectGetWidth(self.contentView.frame),50)];
             self.scrollView.backgroundColor = [UIColor whiteColor];
             _buttons = [NSMutableArray array];
             _currentIndex = 1;
@@ -417,8 +416,14 @@
     
      self.accountInfoLabel.text = [NSString stringWithFormat:@"%@", neighborData.accountName];
     
+    // 设置UILabel 行间距
+    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+    [paragraphStyle setLineSpacing:5];
+
     
-    NSAttributedString *attrStr = [[NSAttributedString alloc] initWithData:[neighborData.publishText dataUsingEncoding:NSUnicodeStringEncoding] options:@{ NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType } documentAttributes:nil error:nil];
+    NSMutableAttributedString *attrStr = [[NSMutableAttributedString alloc] initWithData:[neighborData.publishText dataUsingEncoding:NSUnicodeStringEncoding] options:@{ NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType } documentAttributes:nil error:nil];
+    [attrStr addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, [attrStr length])];
+    [attrStr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:15] range:NSMakeRange(0, [attrStr length])];
     
     self.contentLabel.text = neighborData.publishText;
     self.contentLabel.attributedText = attrStr;
@@ -435,7 +440,16 @@
         [self.contentView addSubview:pictureView];
         [self.picturesView addObject:pictureView];
         UIImageView* imageView = ((UIImageView *)[self.picturesView objectAtIndex:i]);
-        NSURL* url = [NSURL URLWithString:[[neighborData.picturesArray objectAtIndex:i] valueForKey:@"resPath"]];
+       
+        NSString* str =[[neighborData.picturesArray objectAtIndex:i] valueForKey:@"resPath"];
+        NSArray* strArray = [str componentsSeparatedByString:@"/"];
+        NSString* imageName = [NSString stringWithFormat:@"0%@",[strArray lastObject]];
+        
+        NSString* urlString = [str stringByReplacingOccurrencesOfString:[strArray lastObject] withString:imageName];
+        
+        NSURL* url = [NSURL URLWithString:urlString];
+        
+        
         [imageView sd_setImageWithURL:url placeholderImage:[UIImage imageNamed:@"bg_error.png"] options:SDWebImageAllowInvalidSSLCertificates];
     }
 }
@@ -546,7 +560,7 @@
     
     self.deleteButton.frame = self.neighborDataFrame.deleteFrame;
     
-    if(self.neighborDataFrame.textCount > 4)
+    if(self.neighborDataFrame.textCount >= 4)
     {
         self.readButton.frame = self.neighborDataFrame.readFrame;
         [self.contentView addSubview:self.readButton];
@@ -619,7 +633,7 @@
     }
     else
     {
-        self.replyLabel.text = @"";
+        self.replyLabel.text = @"回复";
     }
 
 }
