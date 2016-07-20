@@ -242,8 +242,6 @@
 		8F73C8D41D2B53E6009C83C2 /* AFURLResponseSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F73C8CD1D2B53E6009C83C2 /* AFURLResponseSerialization.m */; };
 		8F73C8D51D2B53E6009C83C2 /* AFURLSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F73C8CF1D2B53E6009C83C2 /* AFURLSessionManager.m */; };
 		8F73C95D1D2B8634009C83C2 /* MBProgressHUBTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F73C95C1D2B8634009C83C2 /* MBProgressHUBTool.m */; };
-		8F823D691D2A3A8600178B01 /* MOBFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F823D671D2A3A8600178B01 /* MOBFoundation.framework */; };
-		8F823D6A1D2A3A8600178B01 /* SMS_SDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F823D681D2A3A8600178B01 /* SMS_SDK.framework */; };
 		8F823D6C1D2A3B0000178B01 /* libicucore.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F823D6B1D2A3B0000178B01 /* libicucore.tbd */; };
 		8F823D6E1D2A3B1800178B01 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F823D6D1D2A3B1800178B01 /* MessageUI.framework */; };
 		8F823D701D2A3B2800178B01 /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F823D6F1D2A3B2800178B01 /* JavaScriptCore.framework */; };
@@ -252,6 +250,8 @@
 		8F9220151D387A5200A72F90 /* DialogView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F9220141D387A5200A72F90 /* DialogView.m */; };
 		8F9220181D38C6AC00A72F90 /* ApplyDetailView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F9220171D38C6AC00A72F90 /* ApplyDetailView.m */; };
 		8FB6F9A71D3F53E100E6C71A /* WaitView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FB6F9A61D3F53E100E6C71A /* WaitView.m */; };
+		8FB6F9AB1D3F67AD00E6C71A /* MOBFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FB6F9A91D3F67AD00E6C71A /* MOBFoundation.framework */; };
+		8FB6F9AC1D3F67AD00E6C71A /* SMS_SDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FB6F9AA1D3F67AD00E6C71A /* SMS_SDK.framework */; };
 		8FF22DA41CE1733800EAE9BA /* forgetViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FF22DA31CE1733800EAE9BA /* forgetViewController.m */; };
 		8FF7E9781D12A04D0026D07D /* ChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FF7E9771D12A04D0026D07D /* ChatViewController.m */; };
 		AF1DBD7F1CEAEA5100557E43 /* inputRegisterInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AF1DBD7E1CEAEA5100557E43 /* inputRegisterInfoViewController.m */; };
@@ -797,8 +797,6 @@
 		8F73C8CF1D2B53E6009C83C2 /* AFURLSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFURLSessionManager.m; sourceTree = "<group>"; };
 		8F73C95B1D2B8634009C83C2 /* MBProgressHUBTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUBTool.h; sourceTree = "<group>"; };
 		8F73C95C1D2B8634009C83C2 /* MBProgressHUBTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUBTool.m; sourceTree = "<group>"; };
-		8F823D671D2A3A8600178B01 /* MOBFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MOBFoundation.framework; path = SMS_SDK/MOBFoundation.framework; sourceTree = "<group>"; };
-		8F823D681D2A3A8600178B01 /* SMS_SDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SMS_SDK.framework; path = SMS_SDK/SMS_SDK.framework; sourceTree = "<group>"; };
 		8F823D6B1D2A3B0000178B01 /* libicucore.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libicucore.tbd; path = usr/lib/libicucore.tbd; sourceTree = SDKROOT; };
 		8F823D6D1D2A3B1800178B01 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		8F823D6F1D2A3B2800178B01 /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
@@ -810,6 +808,8 @@
 		8F9220171D38C6AC00A72F90 /* ApplyDetailView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApplyDetailView.m; sourceTree = "<group>"; };
 		8FB6F9A51D3F53E100E6C71A /* WaitView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WaitView.h; sourceTree = "<group>"; };
 		8FB6F9A61D3F53E100E6C71A /* WaitView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WaitView.m; sourceTree = "<group>"; };
+		8FB6F9A91D3F67AD00E6C71A /* MOBFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = MOBFoundation.framework; sourceTree = "<group>"; };
+		8FB6F9AA1D3F67AD00E6C71A /* SMS_SDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SMS_SDK.framework; sourceTree = "<group>"; };
 		8FF22DA21CE1733800EAE9BA /* forgetViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = forgetViewController.h; sourceTree = "<group>"; };
 		8FF22DA31CE1733800EAE9BA /* forgetViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = forgetViewController.m; sourceTree = "<group>"; };
 		8FF7E9761D12A0470026D07D /* ChatViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ChatViewController.h; sourceTree = "<group>"; };
@@ -963,15 +963,15 @@
 				8F823D701D2A3B2800178B01 /* JavaScriptCore.framework in Frameworks */,
 				8F823D6E1D2A3B1800178B01 /* MessageUI.framework in Frameworks */,
 				8F823D6C1D2A3B0000178B01 /* libicucore.tbd in Frameworks */,
-				8F823D6A1D2A3A8600178B01 /* SMS_SDK.framework in Frameworks */,
 				8F648DEB1D005D1500E3B155 /* ImageIO.framework in Frameworks */,
 				8F648B891D00536D00E3B155 /* libiconv.tbd in Frameworks */,
 				8F648B871D00535F00E3B155 /* libsqlite3.tbd in Frameworks */,
 				8F648B851D00535100E3B155 /* libstdc++.6.0.9.tbd in Frameworks */,
+				8FB6F9AC1D3F67AD00E6C71A /* SMS_SDK.framework in Frameworks */,
 				8F648B831D00533C00E3B155 /* libz.tbd in Frameworks */,
 				8F648B811D00533000E3B155 /* libc++.tbd in Frameworks */,
-				8F823D691D2A3A8600178B01 /* MOBFoundation.framework in Frameworks */,
 				8F648BB91D00539B00E3B155 /* libcurl.a in Frameworks */,
+				8FB6F9AB1D3F67AD00E6C71A /* MOBFoundation.framework in Frameworks */,
 				8F648BB81D00539B00E3B155 /* libcrypto.a in Frameworks */,
 				8F0BFBDA1D137DC200C9FF8B /* libHyphenateFullSDK.a in Frameworks */,
 				8F648B7D1D00531300E3B155 /* MobileCoreServices.framework in Frameworks */,
@@ -1897,8 +1897,6 @@
 				8F648B801D00533000E3B155 /* libc++.tbd */,
 				AF78501A1CFFCF0B009F6982 /* libsqlite3.dylib */,
 				8F823D6B1D2A3B0000178B01 /* libicucore.tbd */,
-				8F823D671D2A3A8600178B01 /* MOBFoundation.framework */,
-				8F823D681D2A3A8600178B01 /* SMS_SDK.framework */,
 				8F648B7C1D00531300E3B155 /* MobileCoreServices.framework */,
 				8F648B7A1D00530700E3B155 /* AVFoundation.framework */,
 				8F648B781D0052FB00E3B155 /* AudioToolbox.framework */,
@@ -1910,13 +1908,6 @@
 				8F823D731D2A3B4800178B01 /* AddressBookUI.framework */,
 			);
 			name = Framework;
-			sourceTree = "<group>";
-		};
-		8F823D661D2A3A8600178B01 /* SMS_SDK */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = SMS_SDK;
 			sourceTree = "<group>";
 		};
 		8FAFCD2D1CDAD99E008F4B48 /* youLinITabModule */ = {
@@ -1984,6 +1975,15 @@
 			name = youLinNeighborModule;
 			sourceTree = "<group>";
 		};
+		8FB6F9A81D3F67AD00E6C71A /* SMS_SDK */ = {
+			isa = PBXGroup;
+			children = (
+				8FB6F9A91D3F67AD00E6C71A /* MOBFoundation.framework */,
+				8FB6F9AA1D3F67AD00E6C71A /* SMS_SDK.framework */,
+			);
+			path = SMS_SDK;
+			sourceTree = "<group>";
+		};
 		AF5293C51D12925200503975 /* ChatView */ = {
 			isa = PBXGroup;
 			children = (
@@ -2043,10 +2043,10 @@
 		AFCE1F881CDAD1B20085F10F = {
 			isa = PBXGroup;
 			children = (
+				8FB6F9A81D3F67AD00E6C71A /* SMS_SDK */,
 				8F51E2591D338FBF0094A4E5 /* SDWebImage */,
 				8F73C8D61D2B540D009C83C2 /* Framework */,
 				8F73C8C21D2B53E6009C83C2 /* AFNetworking */,
-				8F823D661D2A3A8600178B01 /* SMS_SDK */,
 				AF5293C51D12925200503975 /* ChatView */,
 				8F648D591D00549E00E3B155 /* Resource */,
 				8F648D571D00548C00E3B155 /* EaseUIResource.bundle */,

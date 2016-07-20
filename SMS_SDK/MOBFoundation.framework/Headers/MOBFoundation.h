@@ -35,6 +35,5 @@
 #import <MOBFoundation/IMOBFPlugin.h>
 
 #import <MOBFoundation/MOBFNotificationCenter.h>
-#import <MOBFoundation/MOBFDataService.h>
 
 #endif
