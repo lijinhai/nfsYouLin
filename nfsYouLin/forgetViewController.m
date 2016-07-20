@@ -87,16 +87,13 @@
     [self setTextFieldEnabled:YES];
 }
 
+
+// 点击完成
 -(void)selectRightAction
 {
     
-    // 手机唯一标识
-    NSUUID *udid = [[UIDevice currentDevice] identifierForVendor];
-    NSLog(@"uuid = %@",udid);
-    
-    [self clearTextField];
-    [self.navigationController popViewControllerAnimated:YES];
-    
+//    [self clearTextField];
+    [self.view endEditing:YES];
     NSString* phoneNum = self.phoneNumTF.text;
     NSString* verifyCode = self.verifyCodeTF.text;
     NSString* password = self.passwordTF.text;
@@ -167,7 +164,7 @@
         if(flag == 200)
         {
             NSLog(@"验证码比对正确");
-            [self changPWDNetWork:phoneNum userId:userId];
+            [self changPWDNetWork:phoneNum PWD:password];
         }
         else
         {
@@ -184,10 +181,60 @@
 
 }
 
-
-- (void) changPWDNetWork: (NSString*) phoneNum userId:(NSInteger) user_Id
+// 修改密码网络请求
+- (void) changPWDNetWork: (NSString*) phoneNum PWD:(NSString *)password
 {
-    NSLog(@"userId = %ld",user_Id);
+    // 手机序列号
+    NSString* identifierNumber = [[UIDevice currentDevice].identifierForVendor UUIDString] ;
+    AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
+    manager.securityPolicy.allowInvalidCertificates = YES;
+    [manager.securityPolicy setValidatesDomainName:NO];
+    
+    NSString* passWord = [NSString stringWithFormat:@"%@%@",[StringMD5 stringAddMD5:password],phoneNum];
+    NSString* addMD5PassWord = [StringMD5 stringAddMD5:passWord];
+    
+    NSString* hashString =[StringMD5 stringAddMD5:[NSString stringWithFormat:@"phone%@imei%@password%@",phoneNum,identifierNumber,addMD5PassWord]];
+    NSString* hashMD5 = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"%@1",hashString]];
+    
+    NSDictionary* parameter = @{@"phone" : phoneNum,
+                                @"imei" : identifierNumber,
+                                @"password" : addMD5PassWord,
+                                @"apitype" : @"users",
+                                @"tag" : @"updatepwd",
+                                @"salt" : @"1",
+                                @"hash" : hashMD5,
+                                @"keyset" : @"phone:imei:password:",
+                                };
+    
+    [manager POST:POST_URL parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSLog(@"忘记密码请求成功:%@", responseObject);
+        if([[responseObject valueForKey:@"flag"] isEqualToString:@"ok"])
+        {
+            [self.navigationController popViewControllerAnimated:YES];
+
+            [MBProgressHUBTool textToast:self.view Tip:@"密码重置成功"];
+        }
+        else if([[responseObject valueForKey:@"flag"] isEqualToString:@"none_p"])
+        {
+            [MBProgressHUBTool textToast:self.view Tip:@"手机号不存在"];
+        }
+        else if([[responseObject valueForKey:@"flag"] isEqualToString:@"none_o"])
+        {
+            [MBProgressHUBTool textToast:self.view Tip:@"用户不存在"];
+        }
+        else if([[responseObject valueForKey:@"flag"] isEqualToString:@"no"])
+        {
+            [MBProgressHUBTool textToast:self.view Tip:@"服务器异常"];
+        }
+
+        return;
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"请求失败:%@", error.description);
+        return;
+    }];
+
 }
 
 - (void)TextFieldDidChange:(UITextField *)textField
@@ -280,12 +327,13 @@
             _timer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(getVerifyCode) userInfo:nil repeats:YES];
             
             //  获取短信验证码
+            NSLog(@"获取验证码。。。");
             [SMSSDK getVerificationCodeByMethod:SMSGetCodeMethodSMS phoneNumber:phoneNum zone:@"86" customIdentifier:nil result:^(NSError *error)
              {
                  if (!error)
                  {
                      NSLog(@"获取验证码成功");
-                     [self overTimer];
+//                     [self overTimer];
                      
                  }
                  else
@@ -345,7 +393,7 @@
     if(_secTime == 0)
     {
         [self overTimer];
-        [self clearTextField];
+//        [self clearTextField];
     }
 }
 

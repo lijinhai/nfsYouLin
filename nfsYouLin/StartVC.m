@@ -32,6 +32,7 @@
      _loginNC = [storyBoard instantiateViewControllerWithIdentifier:@"loginNCID"];
     
     
+    // 验证账户可用性 网络请求
     AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
     manager.securityPolicy.allowInvalidCertificates = YES;
     [manager.securityPolicy setValidatesDomainName:NO];
