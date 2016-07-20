@@ -76,11 +76,19 @@
     
 }
 
-static int sectionCount = 1;
+static NSInteger sectionCount = 1;
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+    if(self.neighborDataArray)
+    {
+        if([self.neighborDataArray count] != (sectionCount - 1))
+        {
+            sectionCount = sectionCount - 1;
+        }
+    }
     [self.tableView reloadData];
 }
 - (void)viewDidLoad {
@@ -764,6 +772,8 @@ static BOOL upState = YES;
     [self.parentViewController.navigationItem setBackBarButtonItem:detailItem];
     _detailController.sectionNum = sectionNum - 1;
     _detailController.neighborData = neighborData;
+    _detailController.neighborDF = neighborDataFrame;
+    _detailController.neighborDA = self.neighborDataArray;
     [self.navigationController pushViewController:_detailController animated:YES];
     
 }
@@ -779,11 +789,19 @@ static BOOL upState = YES;
 }
 
 // 删除帖子回调
-- (void)deleteTopic:(NSInteger)sectionNum
+- (void)deleteTopic:(NSInteger)topicId
 {
     DialogView* deleteView = [[DialogView alloc] initWithFrame:backgroundView.frame  View:backgroundView Flag:@"delete"];
     [self.parentViewController.parentViewController.view  addSubview:backgroundView];
     [self.parentViewController.parentViewController.view  addSubview:deleteView];
+
+    dialogView = deleteView;
+    UIButton* okBtn = deleteView.deleteYes;
+    okBtn.tag = topicId;
+    [okBtn addTarget:self action:@selector(deleteOkAction:) forControlEvents:UIControlEventTouchUpInside];
+    
+    UIButton* cancelBtn = deleteView.deleteNo;
+    [cancelBtn addTarget:self action:@selector(deleteNoAction:) forControlEvents:UIControlEventTouchUpInside];
 
 }
 
@@ -1285,6 +1303,35 @@ static BOOL upState = YES;
     
 }
 
+// 确定删除帖子
+- (void) deleteOkAction: (id) sender
+{
+    UIButton* button = (UIButton*)sender;
+    NSInteger topicId = button.tag;
+    [self deleteTopicNet:topicId];
+    [backgroundView removeFromSuperview];
+    if(dialogView)
+    {
+        [dialogView removeFromSuperview];
+        dialogView = nil;
+    }
+    
+}
+
+// 取消删除帖子
+- (void) deleteNoAction: (id) sender
+{
+    
+    [backgroundView removeFromSuperview];
+    if(dialogView)
+    {
+        [dialogView removeFromSuperview];
+        dialogView = nil;
+    }
+    
+}
+
+
 
 // 浏览帖子次数网络请求
 // topicId 帖子id
@@ -1383,6 +1430,62 @@ static BOOL upState = YES;
         return;
     }];
 
+}
+
+// 删除帖子网络请求
+// topicId 帖子Id
+- (void) deleteTopicNet:(NSInteger) topicId
+{
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSString* userId = [defaults stringForKey:@"userId"];
+    NSString* communityId = [defaults stringForKey:@"communityId"];
+
+    AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
+    manager.securityPolicy.allowInvalidCertificates = YES;
+    [manager.securityPolicy setValidatesDomainName:NO];
+    
+    
+    NSString* MD5String = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"user_id%@community_id%@topic_id%ld",userId,communityId,topicId]];
+    NSString* hashString = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"%@1", MD5String]];
+    
+    NSDictionary* parameter = @{@"user_id" : userId,
+                                @"community_id" : communityId,
+                                @"topic_id" : [NSNumber numberWithInteger:topicId],
+                                @"apitype" : @"comm",
+                                @"salt" : @"1",
+                                @"tag" : @"deltopic",
+                                @"hash" : hashString,
+                                @"keyset" : @"user_id:community_id:topic_id:",
+                                };
+    [manager POST:POST_URL parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+        
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSLog(@"删除帖子网络请求:%@", responseObject);
+        if([[responseObject valueForKey:@"flag"] isEqualToString:@"ok"])
+        {
+            for(int i = 0; i < [self.neighborDataArray count] ;i++)
+            {
+                NeighborDataFrame* neighborDataFrame = self.neighborDataArray[i];
+                NeighborData* neighborData = neighborDataFrame.neighborData;
+                
+                if([neighborData.topicId integerValue] == topicId)
+                {
+                    [self.neighborDataArray removeObject:neighborDataFrame];
+                    sectionCount = sectionCount - 1;
+                    break;
+                }
+            }
+            
+            [self.tableView reloadData];
+        }
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"请求失败:%@", error.description);
+        return;
+    }];
+    
 }
 
 // 取消报名网络请求

@@ -114,8 +114,8 @@
     [self.deleteYes setTitle:@"确定" forState:UIControlStateNormal];
     self.deleteYes.backgroundColor = [UIColor whiteColor];
     [self.deleteYes setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [self.deleteYes addTarget:self action:@selector(deleteYBtn:) forControlEvents:UIControlEventTouchUpInside];
-    [self.deleteYes addTarget:self action:@selector(deleteYColor:) forControlEvents:UIControlEventTouchDown];
+//    [self.deleteYes addTarget:self action:@selector(deleteYBtn:) forControlEvents:UIControlEventTouchUpInside];
+//    [self.deleteYes addTarget:self action:@selector(deleteYColor:) forControlEvents:UIControlEventTouchDown];
     [self.backView addSubview:self.deleteYes];
     
     
@@ -123,8 +123,8 @@
     [self.deleteNo setTitle:@"取消" forState:UIControlStateNormal];
     self.deleteNo.backgroundColor = [UIColor whiteColor];
     [self.deleteNo setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [self.deleteNo addTarget:self action:@selector(deleteNBtn:) forControlEvents:UIControlEventTouchUpInside];
-    [self.deleteNo addTarget:self action:@selector(deleteNColor:) forControlEvents:UIControlEventTouchDown];
+//    [self.deleteNo addTarget:self action:@selector(deleteNBtn:) forControlEvents:UIControlEventTouchUpInside];
+//    [self.deleteNo addTarget:self action:@selector(deleteNColor:) forControlEvents:UIControlEventTouchDown];
     
     [self.backView addSubview:self.deleteNo];
     [self addSubview:self.backView];

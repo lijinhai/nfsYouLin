@@ -741,7 +741,8 @@
 - (void) deleteBtn
 {
     NSLog(@"删除!");
-    [_delegate deleteTopic:self.sectionNum];
+    NSInteger topicId = [self.neighborDataFrame.neighborData.topicId integerValue];
+    [_delegate deleteTopic:topicId];
 
     
 }

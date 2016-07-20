@@ -26,7 +26,7 @@
 
 
 // 删除按钮事件
-- (void)deleteTopic:(NSInteger)sectionNum;
+- (void)deleteTopic:(NSInteger)topicId;
 
 // 报名详情
 - (void)applyDetail:(NSInteger) activityId;

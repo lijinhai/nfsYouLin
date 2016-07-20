@@ -80,7 +80,7 @@
             deleteButton.backgroundColor = [UIColor clearColor];
             deleteButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
             self.deleteButton = deleteButton;
-            [self.deleteButton addTarget:self action:@selector(deleteBtn) forControlEvents:UIControlEventTouchDown];
+            [self.deleteButton addTarget:self action:@selector(deleteBtn:) forControlEvents:UIControlEventTouchDown];
 
         }
         else if([reuseIdentifier isEqualToString:@"Two"])
@@ -546,10 +546,12 @@
     [_delegate showImageViewWithImageViews:imageArray byClickWhich:recognizer.view.tag];
 }
 
-- (void)deleteBtn
+// 点击删除
+- (void)deleteBtn:(id) sender;
 {
-    [_delegate deleteTopic:1];
     NSLog(@"delete detail!");
+    NSInteger topicId = [self.neighborData.topicId integerValue];
+    [_delegate deleteTopic:topicId];
 }
 
 // 点击我要报名
