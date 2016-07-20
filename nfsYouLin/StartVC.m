@@ -58,22 +58,16 @@
         NSString* flag = [responseObject valueForKey:@"flag"];
         if([flag isEqualToString:@"ok"])
         {
-            NSLog(@"flag == ok");
-            
             [self presentViewController:_firstTBC animated:YES completion:nil];
         }
         else if([flag isEqualToString:@"no"])
         {
-            NSLog(@"flag == no");
             NSString* shareInfo = [StringMD5 replaceUnicode:[responseObject valueForKey:@"share_info"]];
             NSLog(@"shareInfo = %@",shareInfo);
             [self presentViewController:_loginNC animated:YES completion:nil];
         }
         else
         {
-            NSLog(@"flag == argv_error");
-//            [self presentViewController:_firstTBC animated:YES completion:nil];
-            
             [self presentViewController:_loginNC animated:YES completion:nil];
 
         }

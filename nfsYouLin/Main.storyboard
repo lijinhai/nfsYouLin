@@ -9,7 +9,7 @@
         <!--登录注册-->
         <scene sceneID="LNY-0L-0Bg">
             <objects>
-                <viewController title="登录注册" id="XEv-u7-nL0" customClass="homeViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="homeVC" title="登录注册" useStoryboardIdentifierAsRestorationIdentifier="YES" id="XEv-u7-nL0" customClass="homeViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="IQT-AB-DLe">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

@@ -12,7 +12,7 @@
 #import "AFHTTPSessionManager.h"
 #import "StringMD5.h"
 #import <SMS_SDK/SMSSDK.h>
-
+#import "WaitView.h"
 
 @interface forgetViewController ()
 
@@ -26,13 +26,12 @@
     UILabel* titleLabel;
     
     NSInteger userId;
-
+    UIView* backgroundView;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    NSLog(@"viewDidLoad");
     self.automaticallyAdjustsScrollViewInsets = NO;
     UIBarButtonItem *barrightBtn=[[UIBarButtonItem alloc]initWithTitle:@"完成" style:UIBarButtonItemStylePlain target:self action:@selector(selectRightAction)];
     self.navigationItem.rightBarButtonItem = barrightBtn;
@@ -61,6 +60,10 @@
     titleLabel.backgroundColor = [UIColor lightGrayColor];
     titleLabel.text = @"秒后重新获取";
     
+    backgroundView = [[UIView alloc] initWithFrame:self.parentViewController.view.frame];
+    backgroundView.backgroundColor = [UIColor clearColor];
+    WaitView* waitView = [[WaitView alloc] initWithFrame:self.parentViewController.view.frame Title:@"正在重置..."];
+    [backgroundView addSubview:waitView];
     _secTime = 60;
     userId = 0;
     
@@ -140,6 +143,7 @@
 
     
     // 发起验证码比对网络请求
+    [self.parentViewController.view addSubview:backgroundView];
     AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
     manager.securityPolicy.allowInvalidCertificates = YES;
     [manager.securityPolicy setValidatesDomainName:NO];
@@ -170,10 +174,12 @@
         {
             NSLog(@"flag = %d",flag);
             self.verifyCodeTF.text = @"";
+            [backgroundView removeFromSuperview];
             [MBProgressHUBTool textToast:self.view Tip:@"验证码错误,请正确填写"];
         }
         return;
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        [backgroundView removeFromSuperview];
         NSLog(@"请求失败:%@", error.description);
         return;
     }];
@@ -228,7 +234,7 @@
         {
             [MBProgressHUBTool textToast:self.view Tip:@"服务器异常"];
         }
-
+        [backgroundView removeFromSuperview];
         return;
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         NSLog(@"请求失败:%@", error.description);

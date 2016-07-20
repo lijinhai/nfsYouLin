@@ -74,9 +74,11 @@
     UIView* backgroundView;
     DialogView* dialogView;
     
+    NSInteger sectionCount;
+    
 }
 
-static NSInteger sectionCount = 1;
+
 
 - (void)viewWillAppear:(BOOL)animated
 {
@@ -201,6 +203,7 @@ static NSInteger sectionCount = 1;
     topicFlag = YES;
     Tag = @"gettopic";
     category = 1;
+    sectionCount = 1;
     [self initWaitImageAnimate];
     [self.view addSubview:_waitImageView];
     
@@ -243,7 +246,10 @@ static NSInteger sectionCount = 1;
 // 表格包含分区数
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableVie
 {
-    
+    if(sectionCount == 0)
+    {
+        return 1;
+    }
     return sectionCount;
 }
 

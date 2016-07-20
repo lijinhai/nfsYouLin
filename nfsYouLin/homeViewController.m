@@ -31,9 +31,20 @@
     UINavigationController *newNavigationController;
     UIActivityIndicatorView* _indicator;
 }
+
+- (void) viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSString* phoneNum = [defaults stringForKey:@"phoneNum"];
+    if (phoneNum.length == 11) {
+        self.phoneTextField.text = phoneNum;
+    }
+
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
-   
     /*设置textField clear button 图片*/
     UIView *rightVeiw = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 30, 20)];
     UIImageView* xImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"btn_x.png"]];
@@ -125,7 +136,6 @@
 
 
 - (IBAction)forgetAction:(UIButton *)sender {
-
     UIBarButtonItem* neighborItem = [[UIBarButtonItem alloc] initWithTitle:@"忘记密码" style:UIBarButtonItemStylePlain target:nil action:nil];
     [self.navigationItem setBackBarButtonItem:neighborItem];
     [self.navigationController pushViewController:_forgetController animated:YES];
@@ -336,7 +346,6 @@
         NSLog(@"flag = %@",flag);
         if([flag isEqualToString:@"ok"])
         {
-            NSLog(@"更改个人信息网络请求 成功");
             NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
             [defaults setInteger:userId forKey:@"userId"];
             [defaults setValue:phoneNum forKey:@"phoneNum"];

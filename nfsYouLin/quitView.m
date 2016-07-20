@@ -10,12 +10,8 @@
 #import "UIViewController+LewPopupViewController.h"
 #import "LewPopupViewAnimationSlide.h"
 
-
 @implementation quitView{
-
     UILabel *tipInfo;
-    UIButton *quitLoginBtn;
-    UIButton *cancelBtn;
 }
 
 /*
@@ -36,47 +32,46 @@
     tipInfo.numberOfLines=0;
     tipInfo.textAlignment=NSTextAlignmentCenter;
     /*退出按钮*/
-    quitLoginBtn=[[UIButton alloc] initWithFrame:CGRectMake(10, 80, self.frame.size.width-20, 40)];
-   [quitLoginBtn setTitle:@"退出登录" forState:UIControlStateNormal];
+    self.logoutBtn=[[UIButton alloc] initWithFrame:CGRectMake(10, 80, self.frame.size.width-20, 40)];
+   [self.logoutBtn setTitle:@"退出登录" forState:UIControlStateNormal];
 
-    quitLoginBtn.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+    self.logoutBtn.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
     
-    quitLoginBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
+    self.logoutBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
     
-    [quitLoginBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    quitLoginBtn.titleLabel.font = [UIFont boldSystemFontOfSize:16.0f];
-    quitLoginBtn.tintColor=[UIColor whiteColor];
-    quitLoginBtn.layer.cornerRadius=5.0f;
-    quitLoginBtn.backgroundColor=[UIColor redColor];
-    [quitLoginBtn addTarget:self action:@selector(toggleQuitButton) forControlEvents: UIControlEventTouchUpInside];
+    [self.logoutBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    self.logoutBtn.titleLabel.font = [UIFont boldSystemFontOfSize:16.0f];
+    self.logoutBtn.tintColor=[UIColor whiteColor];
+    self.logoutBtn.layer.cornerRadius=5.0f;
+    self.logoutBtn.backgroundColor=[UIColor redColor];
+//    [self.logoutBtn addTarget:self action:@selector(toggleQuitButton) forControlEvents: UIControlEventTouchUpInside];
     /*取消按钮*/
-    cancelBtn=[[UIButton alloc] initWithFrame:CGRectMake(10, 140, self.frame.size.width-20, 40)];
-    [cancelBtn setTitle:@"取消" forState:UIControlStateNormal];
+    self.cancelBtn=[[UIButton alloc] initWithFrame:CGRectMake(10, 140, self.frame.size.width-20, 40)];
+    [self.cancelBtn setTitle:@"取消" forState:UIControlStateNormal];
     
-    cancelBtn.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+    self.cancelBtn.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
     
-    cancelBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
+    self.cancelBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
     
-    [cancelBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    cancelBtn.titleLabel.font = [UIFont boldSystemFontOfSize:16.0f];
-    cancelBtn.tintColor=[UIColor whiteColor];
-    cancelBtn.layer.cornerRadius=5.0f;
-    cancelBtn.backgroundColor=[UIColor darkGrayColor];
-    [cancelBtn addTarget:self action:@selector(toggleCancelButton) forControlEvents: UIControlEventTouchUpInside];
+    [self.cancelBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    self.cancelBtn.titleLabel.font = [UIFont boldSystemFontOfSize:16.0f];
+    self.cancelBtn.tintColor=[UIColor whiteColor];
+    self.cancelBtn.layer.cornerRadius=5.0f;
+    self.cancelBtn.backgroundColor=[UIColor darkGrayColor];
+    [self.cancelBtn addTarget:self action:@selector(toggleCancelButton) forControlEvents: UIControlEventTouchUpInside];
 
     /*定义view*/
     _bGView= [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 205)];
     _bGView.backgroundColor=[UIColor whiteColor];
     [_bGView addSubview:tipInfo];
-    [_bGView addSubview:quitLoginBtn];
-    [_bGView addSubview:cancelBtn];
+    [_bGView addSubview:self.logoutBtn];
+    [_bGView addSubview:self.cancelBtn];
     
     [self addSubview:_bGView];
     return self;
 }
 
 -(void)toggleQuitButton{
-
 
     NSLog(@"退出登录");
     [self dismissMyTable];
@@ -97,7 +92,6 @@
     
     [_parentVC lew_dismissPopupViewWithanimation:[LewPopupViewAnimationSlide new]];
 }
-
 
 @end
 

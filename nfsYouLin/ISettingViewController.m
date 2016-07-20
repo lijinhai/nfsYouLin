@@ -12,6 +12,13 @@
 #import "LxxPlaySound.h"
 #import "BlackListViewController.h"
 #import "MBProgressHUD.h"
+#import "AFHTTPSessionManager.h"
+#import "MBProgressHUBTool.h"
+#import "StringMD5.h"
+#import "HeaderFile.h"
+#import "LoginNC.h"
+#import "WaitView.h"
+
 @interface ISettingViewController ()<UITableViewDataSource,UITableViewDelegate>
 
 @end
@@ -28,6 +35,8 @@
     NSString *noticeflag;
     UILabel *cacheCountLable;
     BlackListViewController *BlackListController;
+    LoginNC* loginNC;
+    UIView* backgroundView;
     
 }
 
@@ -44,14 +53,12 @@
     [switchShockButton addTarget:self action:@selector(switchShockAction) forControlEvents:UIControlEventValueChanged];
     shockflag=@"off";
     noticeflag=@"off";
-    NSLog(@"viewWillAppear");
     /*计算缓存大小并初始化cacheCountLable*/
     cacheCountLable=[[UILabel alloc] initWithFrame:CGRectMake(_tableView.frame.size.width-70,24,50, 20) ];
     cacheCountLable.text=@"0 B";
 
 }
 - (void)viewDidLoad {
-    NSLog(@"viewDidLoad");
     [super viewDidLoad];
     _viewColor = [UIColor colorWithRed:243/255.0 green:243/255.0 blue:240/255.0 alpha:1];
     
@@ -66,10 +73,18 @@
         [self.tableView setLayoutMargins:UIEdgeInsetsZero];
     }
     
+    WaitView* waitView = [[WaitView alloc] initWithFrame:self.parentViewController.view.frame Title:@"正在注销..."];
+    backgroundView = [[UIView alloc] initWithFrame:self.parentViewController.view.frame];
+    backgroundView.backgroundColor = [UIColor clearColor];
+    [backgroundView addSubview:waitView];
+    
+    
     UIStoryboard* storyBoard = [UIStoryboard storyboardWithName:@"Me" bundle:nil];
    
     BlackListController=[storyBoard instantiateViewControllerWithIdentifier:@"blacklistcontroller"];
 
+    UIStoryboard* MainSB = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    loginNC = [MainSB instantiateViewControllerWithIdentifier:@"loginNCID"];
     /*自定义导航返回箭头*/
     UIImage *backButtonImage = [[UIImage imageNamed:@"mm_title_back.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 25, 0,0)];
     
@@ -310,6 +325,10 @@
         {
             NSLog(@"退出操作");
             quitView *view = [quitView defaultPopupView];
+            UIButton* logoutBtn = view.logoutBtn;
+            [logoutBtn addTarget:self action:@selector(logoutAction:) forControlEvents:UIControlEventTouchUpInside];
+            
+            
             view.parentVC = self;
             [self lew_presentPopupView:view animation:[LewPopupViewAnimationSlide new] dismissed:^{
                 //[self.otherTableView reloadData];
@@ -347,4 +366,63 @@
 {
     return 70.0f;
 }
+
+
+// 退出登录
+- (void) logoutAction: (id)sender
+{
+    [self.parentViewController.view addSubview:backgroundView];
+    [self lew_dismissPopupViewWithanimation:[LewPopupViewAnimationSlide new]];
+    [self logoutNet];
+}
+
+// 用户注销网络请求
+- (void) logoutNet
+{
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSString* userId = [defaults stringForKey:@"userId"];
+    NSString* phoneNum = [defaults stringForKey:@"phoneNum"];
+    
+    AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
+    manager.securityPolicy.allowInvalidCertificates = YES;
+    [manager.securityPolicy setValidatesDomainName:NO];
+    
+    
+    NSString* MD5String = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"user_phone%@user_id%@",phoneNum,userId]];
+    NSString* hashString = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"%@1", MD5String]];
+    
+    NSDictionary* parameter = @{@"user_phone" : phoneNum,
+                                @"user_id" : userId,
+                                @"apitype" : @"users",
+                                @"salt" : @"1",
+                                @"tag" : @"logoff",
+                                @"hash" : hashString,
+                                @"keyset" : @"user_phone:user_id:",
+                                };
+    
+    [manager POST:POST_URL parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+        
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSLog(@"注销网络请求:%@", responseObject);
+        if([[responseObject valueForKey:@"flag"] isEqualToString:@"ok"])
+        {
+            NSLog(@"成功");
+            [self presentViewController:loginNC animated:YES completion:nil];
+        }
+        else
+        {
+            NSLog(@"注销失败");
+        }
+        [backgroundView removeFromSuperview];
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"请求失败:%@", error.description);
+        return;
+    }];
+    
+}
+
+
+
 @end
