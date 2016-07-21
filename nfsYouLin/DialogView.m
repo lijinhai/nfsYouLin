@@ -75,8 +75,8 @@
     [self.send setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     
     
-    [self.send addTarget:self action:@selector(sendBtn:) forControlEvents:UIControlEventTouchUpInside];
-    [self.send addTarget:self action:@selector(sendColor:) forControlEvents:UIControlEventTouchDown];
+//    [self.send addTarget:self action:@selector(sendBtn:) forControlEvents:UIControlEventTouchUpInside];
+//    [self.send addTarget:self action:@selector(sendColor:) forControlEvents:UIControlEventTouchDown];
     [self.backView addSubview:self.send];
     
     
@@ -84,8 +84,8 @@
     [self.cancel setTitle:@"取消" forState:UIControlStateNormal];
     self.cancel.backgroundColor = [UIColor whiteColor];
     [self.cancel setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [self.cancel addTarget:self action:@selector(cancelBtn:) forControlEvents:UIControlEventTouchUpInside];
-    [self.cancel addTarget:self action:@selector(cancelColor:) forControlEvents:UIControlEventTouchDown];
+//    [self.cancel addTarget:self action:@selector(cancelBtn:) forControlEvents:UIControlEventTouchUpInside];
+//    [self.cancel addTarget:self action:@selector(cancelColor:) forControlEvents:UIControlEventTouchDown];
     
     [self.backView addSubview:self.cancel];
     [self addSubview:self.backView];

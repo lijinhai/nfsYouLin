@@ -22,7 +22,7 @@
 - (void)reloadShowByTitle: (NSString* )text;
 
 // 打招呼
-- (void)sayHi:(NSInteger)sectionNum;
+- (void)sayHi:(NSInteger)topicId;
 
 
 // 删除按钮事件
