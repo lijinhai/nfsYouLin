@@ -577,7 +577,10 @@
             {
                 [self.contentView addSubview:self.hiBtn];
             }
-
+            else
+            {
+                [self.hiBtn removeFromSuperview];
+            }
         }
     }
     else
@@ -747,10 +750,12 @@
     
 }
 
+// 打招呼
 - (void)hiAction:(id)sender
 {
     NSLog(@"hiAction");
-    [_delegate sayHi:self.sectionNum];
+    NSInteger topicId = [self.neighborDataFrame.neighborData.topicId integerValue];
+    [_delegate sayHi:topicId];
 }
 
 

@@ -785,13 +785,21 @@ static BOOL upState = YES;
 }
 
 // 打招呼回调
-- (void)sayHi:(NSInteger)sectionNum
+- (void)sayHi:(NSInteger)topicId
 {
     NSLog(@"打招呼");
     DialogView* hiView = [[DialogView alloc] initWithFrame:backgroundView.frame  View:backgroundView Flag:@"sayHi"];
     hiView.textView.text = @"欢迎小宝宝来到本小区";
     [self.parentViewController.parentViewController.view  addSubview:backgroundView];
     [self.parentViewController.parentViewController.view  addSubview:hiView];
+    
+    dialogView = hiView;
+    UIButton* okBtn = hiView.send;
+    okBtn.tag = topicId;
+    [okBtn addTarget:self action:@selector(hiOkAction:) forControlEvents:UIControlEventTouchUpInside];
+    
+    UIButton* cancelBtn = hiView.cancel;
+    [cancelBtn addTarget:self action:@selector(hiNoAction:) forControlEvents:UIControlEventTouchUpInside];
 }
 
 // 删除帖子回调
@@ -834,6 +842,7 @@ static BOOL upState = YES;
                                 @"hash" : hashString,
                                 @"keyset" : @"user_id:community_id:topic_id:",
                                 };
+    NSLog(@"parameter = %@",parameter);
     [manager POST:POST_URL parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
         
         
@@ -1337,6 +1346,35 @@ static BOOL upState = YES;
     
 }
 
+// 发送打招呼
+- (void) hiOkAction: (id) sender
+{
+    
+    if(dialogView)
+    {
+        UIButton* button = (UIButton*)sender;
+        NSInteger topicId = button.tag;
+        NSLog(@"text = %@",dialogView.textView.text);
+        [self sayHiNet:topicId Content:dialogView.textView.text];
+        [backgroundView removeFromSuperview];
+        [dialogView removeFromSuperview];
+        dialogView = nil;
+    }
+    
+}
+
+// 取消发送打招呼
+- (void) hiNoAction: (id) sender
+{
+    
+    [backgroundView removeFromSuperview];
+    if(dialogView)
+    {
+        [dialogView removeFromSuperview];
+        dialogView = nil;
+    }
+    
+}
 
 
 // 浏览帖子次数网络请求
@@ -1544,6 +1582,72 @@ static BOOL upState = YES;
             [self.tableView reloadData];
         }
         
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"请求失败:%@", error.description);
+        return;
+    }];
+    
+}
+
+
+// 打招呼网络请求
+// topicId 帖子Id content 打招呼内容
+- (void) sayHiNet:(NSInteger) topicId Content:(NSString*)content
+{
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSString* userId = [defaults stringForKey:@"userId"];
+    
+    AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
+    manager.securityPolicy.allowInvalidCertificates = YES;
+    [manager.securityPolicy setValidatesDomainName:NO];
+    
+    
+    NSString* MD5String = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"user_id%@topic_id%ldcontent%@",userId,topicId,content]];
+    NSString* hashString = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"%@1", MD5String]];
+    
+    NSDictionary* parameter = @{@"user_id" : userId,
+                                @"topic_id" : [NSNumber numberWithInteger:topicId],
+                                @"content" : content,
+                                @"apitype" : @"comm",
+                                @"salt" : @"1",
+                                @"tag" : @"sayhello",
+                                @"hash" : hashString,
+                                @"keyset" : @"user_id:topic_id:content:",
+                                };
+    [manager POST:POST_URL parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+        
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSLog(@"打招呼网络请求:%@", responseObject);
+        if([[responseObject valueForKey:@"flag"] isEqualToString:@"ok"])
+        {
+            for(int i = 0; i < [self.neighborDataArray count] ;i++)
+            {
+                NeighborDataFrame* neighborDataFrame = self.neighborDataArray[i];
+                NeighborData* neighborData = neighborDataFrame.neighborData;
+                NSDictionary* dict = neighborData.infoArray[0];
+                NSMutableDictionary* dataDict = [NSMutableDictionary dictionaryWithDictionary:dict];
+                if([neighborData.topicId integerValue] == topicId)
+                {
+                    [dataDict setObject:@"1" forKey:@"sayHelloStatus"];
+                    NSArray* array = [NSArray arrayWithObject:dataDict];
+                    neighborDataFrame.neighborData.infoArray = [array mutableCopy];
+                    [self.neighborDataArray replaceObjectAtIndex:i withObject:neighborDataFrame];
+                    break;
+                }
+
+            }
+
+        }
+        if([[responseObject valueForKey:@"flag"] isEqualToString:@"black"])
+        {
+        }
+        if([[responseObject valueForKey:@"flag"] isEqualToString:@"no"])
+        {
+        }
+        [self.tableView reloadData];
+
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         NSLog(@"请求失败:%@", error.description);
         return;
