@@ -97,7 +97,7 @@
 
 - (void) createSearchBar
 {
-    _searchBar = [[SearchBarView alloc] initWithFrame:CGRectMake(0, self.navigationController.navigationBar.frame.size.height / 4, self.view.bounds.size.width - 120, self.navigationController.navigationBar.frame.size.height / 2)];
+    _searchBar = [[SearchBarView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width - 120, self.navigationController.navigationBar.frame.size.height * 0.7)];
     
     _searchBar.placeholder = @"请输入关键字";
     _searchBar.backgroundColor = [UIColor whiteColor];

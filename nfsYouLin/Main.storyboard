@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="ddw-Kf-aaB">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="YOW-vq-vdk">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -9,7 +9,7 @@
         <!--登录注册-->
         <scene sceneID="LNY-0L-0Bg">
             <objects>
-                <viewController title="登录注册" id="XEv-u7-nL0" customClass="homeViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="homeVC" title="登录注册" useStoryboardIdentifierAsRestorationIdentifier="YES" id="XEv-u7-nL0" customClass="homeViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="IQT-AB-DLe">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -510,7 +510,7 @@
         <!--导航1-->
         <scene sceneID="T5L-mK-qUi">
             <objects>
-                <navigationController title="导航1" automaticallyAdjustsScrollViewInsets="NO" id="ddw-Kf-aaB" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="loginNCID" title="导航1" automaticallyAdjustsScrollViewInsets="NO" id="ddw-Kf-aaB" customClass="LoginNC" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationItem key="navigationItem" id="kC2-dd-jFu"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" backIndicatorImage="cal_left_arrow" id="Pn4-9X-vci">
@@ -529,7 +529,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hGl-vi-Mve" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-3031" y="-1181"/>
+            <point key="canvasLocation" x="-3537" y="-931"/>
         </scene>
         <!--优邻首页-->
         <scene sceneID="env-FW-G8l">
@@ -658,7 +658,7 @@
         <!--Neighbour-->
         <scene sceneID="et3-tt-QRr">
             <objects>
-                <viewControllerPlaceholder storyboardName="Neighbour" id="vdb-UN-QNV" sceneMemberID="viewController">
+                <viewControllerPlaceholder storyboardIdentifier="neighborVC" storyboardName="Neighbour" id="vdb-UN-QNV" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Item" id="1Yb-vS-FOh"/>
                 </viewControllerPlaceholder>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="TzZ-s1-2AN" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -739,6 +739,27 @@
             </objects>
             <point key="canvasLocation" x="2023" y="-917"/>
         </scene>
+        <!--StartVC-->
+        <scene sceneID="wUQ-t5-j3p">
+            <objects>
+                <viewController id="YOW-vq-vdk" customClass="StartVC" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="mAI-dT-bfJ">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="loading" id="ON6-Sj-nee">
+                                <rect key="frame" x="0.0" y="-24" width="414" height="760"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina55"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Kf4-on-9dH" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-3556" y="-1728"/>
+        </scene>
     </scenes>
     <resources>
         <image name="bg_1" width="988" height="677"/>
@@ -747,6 +768,7 @@
         <image name="btn_yanzhengma_n" width="115" height="53"/>
         <image name="cal_left_arrow" width="12" height="12"/>
         <image name="fenggexianchang" width="1080" height="1"/>
+        <image name="loading" width="1080" height="1920"/>
         <image name="login" width="1080" height="668"/>
         <image name="pic_verifity_youlin" width="1080" height="520"/>
         <image name="read_server" width="18" height="18"/>

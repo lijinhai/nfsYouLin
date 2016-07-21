@@ -183,7 +183,7 @@
 //       测试代码
 //    UIBarButtonItem* neighborItem = [[UIBarButtonItem alloc] initWithTitle:@"详细信息" style:UIBarButtonItemStylePlain target:nil action:nil];
 //    [self.navigationItem setBackBarButtonItem:neighborItem];
-//    inputRegisterInfoController.phoneNum = @"11111";
+//    inputRegisterInfoController.phoneNum = @"15114599422";
 //    [self.navigationController pushViewController:inputRegisterInfoController animated:YES];
 //    return;
     

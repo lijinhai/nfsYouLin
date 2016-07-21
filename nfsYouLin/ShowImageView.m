@@ -8,6 +8,9 @@
 
 #define imageTag 2000
 #import "ShowImageView.h"
+#import "UIImageView+WebCache.h"
+
+
 @implementation ShowImageView
 
 
@@ -75,8 +78,13 @@
             imageScrollView.minimumZoomScale = 1;
             
             UIImageView *imageView = [[UIImageView alloc] initWithFrame:self.bounds];
-            UIImage *image = [UIImage imageNamed:[appendArray objectAtIndex:i]];
-            imageView.image = image;
+//            UIImage *image = [UIImage imageNamed:[appendArray objectAtIndex:i]];
+//            imageView.image = image;
+            
+            NSURL* url = [NSURL URLWithString:[appendArray objectAtIndex:i]];
+            
+            [imageView sd_setImageWithURL:url placeholderImage:[UIImage imageNamed:@"bg_error.png"] options:SDWebImageAllowInvalidSSLCertificates];
+            
             imageView.contentMode = UIViewContentModeScaleAspectFit;
             [imageScrollView addSubview:imageView];
             [_scrollView addSubview:imageScrollView];

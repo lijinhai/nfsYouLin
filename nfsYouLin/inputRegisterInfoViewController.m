@@ -17,6 +17,8 @@
 #import "SqlDictionary.h"
 #import "FMDB.h"
 #import "Constants.h"
+#import "SqliteOperation.h"
+
 
 @interface inputRegisterInfoViewController ()
 
@@ -141,10 +143,9 @@
     NSString* password = self.passwordTextField.text;
     NSString* comfirmPWD = self.comfirmPWDTextField.text;
     NSString* gender = [NSString stringWithFormat:@"%ld",self.genderSelected];
-    // 测试代码
+//     测试代码
 //    [self.view endEditing:NO];
-//    UIBarButtonItem* neighborItem = [[UIBarButtonItem alloc] initWithTitle:@"请选择城市" style:UIBarButtonItemStylePlain target:nil action:nil];
-//    [self.navigationItem setBackBarButtonItem:neighborItem];
+//  
 //    [self.navigationController pushViewController:cityController animated:YES];
 //    return;
     if(self.genderSelected == -1)
@@ -182,8 +183,10 @@
     personInfoDic[@"user_name"] = nickName;
     personInfoDic[@"user_gender"] = [NSNumber numberWithInteger:self.genderSelected];
     
-    
-  
+//    personInfoDic[@"user_id"] = [NSNumber numberWithLong:88];
+//    personInfoDic[@"user_portrait"] = @"/sss/eee/333/dfdf.png";
+//    [self insertSqlite:personInfoDic];
+//  
 //    return;
     // 发起用户注册网络请求
     AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
@@ -215,7 +218,7 @@
             NSLog(@"注册成功");
             personInfoDic[@"user_id"] = [responseObject valueForKey:@"user_id"];
             personInfoDic[@"user_portrait"] = [responseObject valueForKey:@"user_avatr"];
-            if([self insertSqlite:personInfoDic])
+            if([SqliteOperation insertUsersSqlite:personInfoDic View:self.view])
             {
                 NSLog(@"页面跳转");
                 [self.navigationController pushViewController:cityController animated:YES];
@@ -311,62 +314,6 @@
     return YES;
 }
 
-- (BOOL) insertSqlite: (NSMutableDictionary *) dict
-{
-    NSLog(@"insertSqlite = %@",dict);
-    if(!dict)
-        return NO;
-    AppDelegate* app = [[UIApplication sharedApplication] delegate];
-    NSString* filePath = app.dbPath;
-    
-    NSFileManager* fileManager = [NSFileManager defaultManager];
-    if([fileManager fileExistsAtPath:filePath])
-    {
-        FMDatabase* db = [FMDatabase databaseWithPath:filePath];
-        if ([db open])
-        {
-            [db executeUpdate:INSERT_USERS_TABLE,
-                personInfoDic[@"user_public_status"] ,
-                personInfoDic[@"user_vocation"] ,
-                personInfoDic[@"user_level"] ,
-                personInfoDic[@"user_id"],
-                personInfoDic[@"user_name"] ,
-                personInfoDic[@"user_portrait"],
-                personInfoDic[@"user_gender"] ,
-                personInfoDic[@"user_phone_number"] ,
-                personInfoDic[@"user_family_id"],
-                personInfoDic[@"user_family_address"] ,
-                personInfoDic[@"user_birthday"],
-                personInfoDic[@"user_email"] ,
-                personInfoDic[@"user_type"] ,
-                personInfoDic[@"user_time"],
-                personInfoDic[@"user_json"] ,
-                personInfoDic[@"login_account"] ,
-                personInfoDic[@"table_version"] ];
-        }
-        else
-        {
-            NSLog(@"数据库打开失败");
-            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"错误信息" message:@"数据库打开失败" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
-            [alert show];
-            [db close];
-            return NO;
-        }
-        [db close];
-
-    }
-    else
-    {
-        NSLog(@"数据库不存在");
-        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"错误信息" message:@"数据写入错误" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
-        [alert show];
-        return NO;
-
-    }
-    
-    return YES;
-
-}
 
 
 @end

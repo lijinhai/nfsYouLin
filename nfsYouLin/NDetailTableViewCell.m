@@ -8,10 +8,12 @@
 
 #import "NDetailTableViewCell.h"
 #import "StringMD5.h"
+#import "UIImageView+WebCache.h"
+#import "MBProgressHUBTool.h"
+#import "AFHTTPSessionManager.h"
 
 @implementation NDetailTableViewCell
 {
-    BOOL _praiseState; // 点赞状态
 
 }
 
@@ -70,6 +72,15 @@
             [self.contentView addSubview:contentLabel];
             self.contentLabel = contentLabel;
 
+            // 创建删除
+            UIButton* deleteButton = [[UIButton alloc] init];
+            [deleteButton setTitle:@"删除" forState:UIControlStateNormal];
+            
+            [deleteButton setTitleColor:[UIColor colorWithRed:0 / 255.0 green:128 / 255.0 blue:0 / 255.0 alpha:1] forState:UIControlStateNormal];
+            deleteButton.backgroundColor = [UIColor clearColor];
+            deleteButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+            self.deleteButton = deleteButton;
+            [self.deleteButton addTarget:self action:@selector(deleteBtn:) forControlEvents:UIControlEventTouchDown];
 
         }
         else if([reuseIdentifier isEqualToString:@"Two"])
@@ -90,6 +101,7 @@
             replyLabel.font = [UIFont systemFontOfSize:15];
             [replyLabel setAutoresizingMask:UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin];
             [replyImageView setAutoresizingMask:UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin];
+            self.replyLabel = replyLabel;
             [self.replyView addSubview:replyLabel];
             
             [self.replyView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin];
@@ -100,10 +112,6 @@
             
             
             // 添加点赞
-            _praiseState = NO;
-            _praiseCount = 0;
-
-            
             self.praiseView = [[UIControl alloc] initWithFrame:CGRectMake(CGRectGetMaxX(lineView1.frame), 0, self.contentView.frame.size.width / 2, 40)];
             self.praiseView.backgroundColor = [UIColor whiteColor	];
             
@@ -214,31 +222,36 @@
 
 - (void) setZeroCellData
 {
-    self.iconView.image = [UIImage imageNamed:self.neighborData.iconName];
+    NSURL* url = [NSURL URLWithString:self.neighborData.iconName];
+    [self.iconView sd_setImageWithURL:url placeholderImage:[UIImage imageNamed:@"bg_error.png"] options:SDWebImageAllowInvalidSSLCertificates];
     
     CGRect accountFrame;
-    CGSize accountInfoLabelSize = [StringMD5 sizeWithString:[NSString stringWithFormat:@"%@@%@",self.neighborData.accountName, self.neighborData.addressInfo] font:[UIFont systemFontOfSize:15] maxSize:CGSizeMake(MAXFLOAT, MAXFLOAT)];
+    CGSize accountInfoLabelSize = [StringMD5 sizeWithString:[NSString stringWithFormat:@"%@",self.neighborData.accountName] font:[UIFont systemFontOfSize:15] maxSize:CGSizeMake(MAXFLOAT, MAXFLOAT)];
     CGFloat accountInfoLabelW = accountInfoLabelSize.width;
     CGFloat accountInfoLabelH = accountInfoLabelSize.height;
     accountFrame = CGRectMake(CGRectGetMaxX(self.iconView.frame) +  PADDING / 2, PADDING / 2, accountInfoLabelW, accountInfoLabelH);
     self.accountInfoLabel.frame = accountFrame;
-    self.accountInfoLabel.text = [NSString stringWithFormat:@"%@@%@",self.neighborData.accountName, self.neighborData.addressInfo];
+    self.accountInfoLabel.text = [NSString stringWithFormat:@"%@",self.neighborData.accountName];
     
+    NSDate* topicTime = [NSDate dateWithTimeIntervalSince1970:[self.neighborData.topicTime integerValue] / 1000];
+    NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"MM月dd日 HH:mm"];
     
-    CGSize timeLabelSize = [StringMD5 sizeWithString:[NSString stringWithFormat:@"%@",self.neighborData.dateTime] font:[UIFont systemFontOfSize:12] maxSize:CGSizeMake(MAXFLOAT, MAXFLOAT)];
+    CGSize timeLabelSize = [StringMD5 sizeWithString:[NSString stringWithFormat:@"%@",[formatter stringFromDate:topicTime]] font:[UIFont systemFontOfSize:12] maxSize:CGSizeMake(MAXFLOAT, MAXFLOAT)];
     CGFloat timeLabelW = timeLabelSize.width;
     CGFloat timeLabelH = timeLabelSize.height;
     self.timeLabel.frame = CGRectMake( CGRectGetMinX(self.accountInfoLabel.frame), CGRectGetMaxY(self.accountInfoLabel.frame), timeLabelW, timeLabelH);
-    self.timeLabel.text = self.neighborData.dateTime;
+    self.timeLabel.text = [formatter stringFromDate:topicTime];
 
 }
 
 - (void) setFirstCellData
 {
+    CGFloat height;
     CGRect titleFrame;
-    CGSize titleSize = [StringMD5 sizeWithString:[NSString stringWithFormat:@"标题:#%@#%@",self.neighborData.titleCategory,self.neighborData.titleName] font:[UIFont boldSystemFontOfSize:18] maxSize:CGSizeMake(MAXFLOAT, MAXFLOAT)];
+    CGSize titleSize = [StringMD5 sizeWithString:[NSString stringWithFormat:@"标题:%@",self.neighborData.titleName] font:[UIFont boldSystemFontOfSize:18] maxSize:CGSizeMake(MAXFLOAT, MAXFLOAT)];
     titleFrame = CGRectMake(PADDING, PADDING, titleSize.width, titleSize.height);
-    self.titleLabel.text = [NSString stringWithFormat:@"标题:#%@#%@",self.neighborData.titleCategory,self.neighborData.titleName];
+    self.titleLabel.text = [NSString stringWithFormat:@"标题:%@",self.neighborData.titleName];
     self.titleLabel.frame = titleFrame;
     
     CGRect textLabelFrame;
@@ -246,6 +259,16 @@
     textLabelFrame = CGRectMake(PADDING, CGRectGetMaxY(self.titleLabel.frame) + PADDING, textLabelSize.width, textLabelSize.height);
     self.contentLabel.frame = textLabelFrame;
     self.contentLabel.text = self.neighborData.publishText;
+    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+    [paragraphStyle setLineSpacing:5];
+    
+       NSMutableAttributedString *attrStr = [[NSMutableAttributedString alloc] initWithData:[self.neighborData.publishText dataUsingEncoding:NSUnicodeStringEncoding] options:@{ NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType } documentAttributes:nil error:nil];
+    [attrStr addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, [attrStr length])];
+    [attrStr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:15] range:NSMakeRange(0, [attrStr length])];
+
+    self.contentLabel.attributedText = attrStr;
+
+    height = CGRectGetMaxY(self.contentLabel.frame);
     
     //创建配图
     CGFloat picturesViewW = (screenWidth - PADDING ) / 3 - (PADDING / 2);
@@ -260,17 +283,140 @@
         CGFloat picturesViewX = PADDING + (i % 3)*(picturesViewW + PADDING / 2);
         CGFloat picturesViewY = CGRectGetMaxY(self.contentLabel.frame) + PADDING + (PADDING / 2 + picturesViewH) * (i / 3);
         CGRect pictureFrame = CGRectMake(picturesViewX, picturesViewY, picturesViewW, picturesViewH);
-        pictureView.image = [UIImage imageNamed:[self.neighborData.picturesArray objectAtIndex:i]];
+        
+        NSURL* url = [NSURL URLWithString:[[self.neighborData.picturesArray objectAtIndex:i] valueForKey:@"resPath"]];
+        
+        [pictureView sd_setImageWithURL:url placeholderImage:[UIImage imageNamed:@"bg_error.png"] options:SDWebImageAllowInvalidSSLCertificates];
+        
         pictureView.frame = pictureFrame;
         [self.contentView addSubview:pictureView];
         [self.picturesView addObject:pictureView];
+        height = CGRectGetMaxY(pictureView.frame);
     }
+    
+    height += 2 * PADDING;
+    // 创建删除
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSString* userId = [defaults stringForKey:@"userId"];
+    CGSize deleteSize = [StringMD5 sizeWithString:@"删除" font:[UIFont systemFontOfSize:20] maxSize:CGSizeMake(MAXFLOAT, MAXFLOAT)];
+    CGFloat deleteX = screenWidth - deleteSize.width - PADDING;
+    CGFloat deleteY = height;
+    if([self.neighborData.senderId integerValue] == [userId integerValue])
+    {
+        self.deleteButton.frame = CGRectMake(deleteX, deleteY, deleteSize.width, deleteSize.height);
+        [self.contentView addSubview:self.deleteButton];
+        height = CGRectGetMaxY(self.deleteButton.frame) + PADDING;
+        
+    }
+    else
+    {
+        
+    }
+    
+    // 创建报名详情
+    self.applyView = [[ApplyDetailView alloc] init];
+    if([self.neighborData.topicCategory integerValue] == 1)
+    {
+        CGPoint point = CGPointMake(PADDING, height);
+        
+        NSDictionary* activityDict = self.neighborData.infoArray[0];
+        NSInteger endTime = [[activityDict valueForKey:@"endTime"] integerValue];
+        NSInteger systemTime = [self.neighborData.systemTime integerValue];
+        
+        self.applyView.applyNum.text = [NSString stringWithFormat:@"%ld",[[activityDict valueForKey:@"enrollTotal"] integerValue]];
+        NSString *enrollFlag = [activityDict valueForKey:@"enrollFlag"];
+
+        // 创建报名详情
+        if([self.neighborData.senderId integerValue] == [userId integerValue])
+        {
+            self.applyView.applyLabel.text = @"报名详情";
+        }
+        else
+        {
+            if([enrollFlag isEqualToString:@"false"])
+            {
+                self.applyView.applyLabel.text = @"我要报名";
+                
+            }
+            else if([enrollFlag isEqualToString:@"true"])
+            {
+                self.applyView.applyLabel.text = @"取消报名";
+            }
+        }
+        
+        if(systemTime > endTime)
+        {
+            // 活动过期
+            self.applyView.applyLabel.enabled = NO;
+            self.applyView.applyNum.enabled = NO;
+
+        }
+        else
+        {
+            self.applyView.applyLabel.enabled = YES;
+            self.applyView.applyNum.enabled = YES;
+
+        }
+       
+        if([self.applyView.applyLabel.text isEqualToString:@"我要报名"])
+        {
+            [self.applyView addTarget:self action:@selector(wantApplyAction:) forControlEvents:UIControlEventTouchUpInside];
+        }
+        
+        if([self.applyView.applyLabel.text isEqualToString:@"取消报名"])
+        {
+            [self.applyView addTarget:self action:@selector(cancelApplyAction:) forControlEvents:UIControlEventTouchUpInside];
+        }
+        
+
+        
+       
+
+        
+        [self.applyView initApplyView:point];
+        [self.contentView addSubview:self.applyView];
+    }
+    else
+    {
+        [self.applyView removeFromSuperview];
+    }
+
+    height += PADDING;
 
 }
 
 - (void) setSecondCellData
 {
+    // 点赞状态
+    if([self.neighborData.praiseType integerValue] == 1)
+    {
+        self.praiseImageView.image = [UIImage imageNamed:@"dianzan_2.png"];
+    }
+    else
+    {
+        self.praiseImageView.image = [UIImage imageNamed:@"dianzan.png"];
+        
+    }
     
+    // 点赞个数
+    if ([self.neighborData.praiseCount integerValue] != 0) {
+        self.praiseLabel.text = [NSString stringWithFormat:@"%ld",[self.neighborData.praiseCount integerValue]];
+    }
+    else
+    {
+        self.praiseLabel.text = @"赞";
+    }
+    
+    // 回复个数
+    if ([self.neighborData.replyCount integerValue] != 0) {
+        self.replyLabel.text = [NSString stringWithFormat:@"%ld",[self.neighborData.replyCount integerValue]];
+    }
+    else
+    {
+        self.replyLabel.text = @"回复";
+    }
+    
+
 }
 
 - (void) setOtherCellData
@@ -278,12 +424,12 @@
     self.personView.image = [UIImage imageNamed:self.neighborData.iconName ];
     
     CGRect personLableFrame;
-    CGSize personLableLabelSize = [StringMD5 sizeWithString:[NSString stringWithFormat:@"%@@%@",self.neighborData.accountName, self.neighborData.addressInfo] font:[UIFont systemFontOfSize:15] maxSize:CGSizeMake(MAXFLOAT, MAXFLOAT)];
+    CGSize personLableLabelSize = [StringMD5 sizeWithString:[NSString stringWithFormat:@"%@",self.neighborData.accountName] font:[UIFont systemFontOfSize:15] maxSize:CGSizeMake(MAXFLOAT, MAXFLOAT)];
     CGFloat personLabelW = personLableLabelSize.width;
     CGFloat personLabelH = personLableLabelSize.height;
     personLableFrame = CGRectMake(CGRectGetMaxX(self.personView.frame) +  PADDING, PADDING, personLabelW, personLabelH);
     self.personLable.frame = personLableFrame;
-    self.personLable.text = [NSString stringWithFormat:@"%@@%@",self.neighborData.accountName, self.neighborData.addressInfo];
+    self.personLable.text = [NSString stringWithFormat:@"%@",self.neighborData.accountName];
     
     
     CGRect replyTimeFrame;
@@ -333,20 +479,39 @@
 - (void) touchCancelPraise1
 {
     self.praiseView.backgroundColor = [UIColor whiteColor];
-    _praiseState = !_praiseState;
-    if(_praiseState)
+    NeighborData* neighborData = self.neighborData;
+    
+    
+    if([neighborData.praiseType integerValue] == 0)
     {
-        _praiseCount = 1;
-        _praiseImageView.image = [UIImage imageNamed:@"dianzan_2.png"];
-        _praiseLabel.text = [NSString stringWithFormat:@"%ld",_praiseCount];
+        [self praiseNet:[neighborData.topicId integerValue] action:1];
+        self.praiseImageView.image = [UIImage imageNamed:@"dianzan_2.png"];
+        NSInteger num = [self.praiseLabel.text integerValue] + 1;
+        self.praiseLabel.text = [NSString stringWithFormat:@"%ld",num];
+        neighborData.praiseType = @"1";
+        neighborData.praiseCount = [NSString stringWithFormat:@"%ld",num];
     }
     else
     {
-        _praiseCount = 0;
-        _praiseLabel.text = @"赞";
-        _praiseImageView.image = [UIImage imageNamed:@"dianzan.png"];
+        [self praiseNet:[neighborData.topicId integerValue] action:0];
+        self.praiseImageView.image = [UIImage imageNamed:@"dianzan.png"];
+        NSInteger num = [self.praiseLabel.text integerValue] - 1;
+        
+        if(num != 0)
+        {
+            self.praiseLabel.text = [NSString stringWithFormat:@"%ld",num];
+            neighborData.praiseType = @"0";
+            neighborData.praiseCount = [NSString stringWithFormat:@"%ld",num];
+        }
+        else
+        {
+            self.praiseLabel.text = @"赞";
+            neighborData.praiseType = @"0";
+            neighborData.praiseCount = @"0";
+        }
         
     }
+
 }
 
 
@@ -370,7 +535,98 @@
 
 - (void)tapImageView: (UITapGestureRecognizer*) recognizer
 {
-    [_delegate showImageViewWithImageViews:self.neighborData.picturesArray byClickWhich:recognizer.view.tag];
+    
+    
+    NSMutableArray* imageArray = [[NSMutableArray alloc] init];
+    
+    for (int i = 0; i < [self.neighborData.picturesArray count]; i++) {
+        [imageArray addObject:[[self.neighborData.picturesArray objectAtIndex:i] valueForKey:@"resPath"]];
+    }
+    
+    [_delegate showImageViewWithImageViews:imageArray byClickWhich:recognizer.view.tag];
+}
+
+// 点击删除
+- (void)deleteBtn:(id) sender;
+{
+    NSLog(@"delete detail!");
+    NSInteger topicId = [self.neighborData.topicId integerValue];
+    [_delegate deleteTopic:topicId];
+}
+
+// 点击我要报名
+- (void)wantApplyAction:(id) sender
+{
+    ApplyDetailView* detailView = (ApplyDetailView*) sender;
+    NSDictionary* activityDict = self.neighborData.infoArray[0];
+    NSInteger activiId = [[activityDict valueForKey:@"activityId"] integerValue];
+    if(detailView.applyLabel.enabled)
+    {
+        [_delegate applyDetail:activiId];
+    }
+    else
+    {
+        [MBProgressHUBTool textToast:self Tip:@"此活动已过期"];
+        
+    }
+}
+
+
+// 点击取消报名
+- (void)cancelApplyAction:(id) sender
+{
+    ApplyDetailView* detailView = (ApplyDetailView*) sender;
+    NSDictionary* activityDict = self.neighborData.infoArray[0];
+    NSInteger activiId = [[activityDict valueForKey:@"activityId"] integerValue];
+    if(detailView.applyLabel.enabled)
+    {
+        [_delegate cancelApply:activiId];
+    }
+    else
+    {
+        [MBProgressHUBTool textToast:self Tip:@"此活动已过期"];
+        
+    }
+    
+}
+
+// 点赞网络请求
+// topicId 帖子id
+// type 点赞动作 1 点赞 0 取消点赞
+- (void) praiseNet: (NSInteger)topicId action:(NSInteger)type
+{
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSString* userId = [defaults stringForKey:@"userId"];
+    AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
+    manager.securityPolicy.allowInvalidCertificates = YES;
+    [manager.securityPolicy setValidatesDomainName:NO];
+    
+    
+    NSString* MD5String = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"user_id%@topic_id%ldtype%ld",userId,topicId,type]];
+    NSString* hashString = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"%@1", MD5String]];
+    
+    NSDictionary* parameter = @{@"user_id" : userId,
+                                @"topic_id" : [NSNumber numberWithInteger:topicId],
+                                @"type" : [NSNumber numberWithInteger:type],
+                                @"apitype" : @"comm",
+                                @"salt" : @"1",
+                                @"tag" : @"hitpraise",
+                                @"hash" : hashString,
+                                @"keyset" : @"user_id:topic_id:type:",
+                                };
+    
+    [manager POST:POST_URL parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+        
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSLog(@"点赞网络请求:%@", responseObject);
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"请求失败:%@", error.description);
+        return;
+    }];
+    
 }
 
 

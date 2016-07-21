@@ -26,12 +26,10 @@
 - (void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    NSLog(@"viewWillAppear");
 }
 
 - (void)viewDidLoad {
-    NSLog(@"viewDidLoad");
-    [super viewDidLoad];    
+    [super viewDidLoad];
     _viewColor = [UIColor colorWithRed:243/255.0 green:243/255.0 blue:240/255.0 alpha:1];
     
     self.view.backgroundColor = _viewColor;

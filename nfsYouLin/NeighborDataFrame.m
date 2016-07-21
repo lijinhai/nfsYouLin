@@ -25,9 +25,26 @@
     CGFloat iconViewH = 60;
     self.iconFrame = CGRectMake(iconViewX, iconViewY, iconViewW, iconViewH);
     
+    
+    
+    // 时间间隔位置大小
+    
+    NSString* internalString = [StringMD5 calculateTimeInternal:[self.neighborData.systemTime integerValue] / 1000 old:[self.neighborData.topicTime integerValue] / 1000];
+    CGSize internalSize = [StringMD5 sizeWithString:[NSString stringWithFormat:@"%@",internalString] font:[UIFont systemFontOfSize:10] maxSize:CGSizeMake(MAXFLOAT,MAXFLOAT)];
+    CGFloat internalX = screenWidth - internalSize.width - PADDING;
+    CGFloat internalY = PADDING;
+    self.intervalFrame = CGRectMake(internalX, internalY, internalSize.width , internalSize.height);
+    
+    // 打招呼按钮位置
+    
+     CGSize hiSize = [StringMD5 sizeWithString:@"打招呼" font:[UIFont systemFontOfSize:8] maxSize:CGSizeMake(MAXFLOAT,MAXFLOAT)];
+    CGFloat hiX = screenWidth - hiSize.width - 2 * PADDING;
+    CGFloat hiY = CGRectGetMaxY(self.intervalFrame) + PADDING / 2;
+    self.hiFrame = CGRectMake(hiX, hiY, hiSize.width + PADDING, hiSize.height+ PADDING / 2);
+    
     // 帖子标题位置大小
     CGFloat titleLabelX = CGRectGetMaxX(self.iconFrame) + PADDING;
-    CGSize titleLabelSize = [StringMD5 sizeWithString:[NSString stringWithFormat:@"#%@#%@",self.neighborData.titleCategory,self.neighborData.titleName] font:[UIFont boldSystemFontOfSize:18] maxSize:CGSizeMake(MAXFLOAT,MAXFLOAT)];
+    CGSize titleLabelSize = [StringMD5 sizeWithString:[NSString stringWithFormat:@"%@",self.neighborData.titleName] font:[UIFont boldSystemFontOfSize:18] maxSize:CGSizeMake(screenWidth - hiSize.width - iconViewW - 4 * PADDING - PADDING / 2,MAXFLOAT)];
     CGFloat titleLabelY = iconViewY + PADDING / 2;
     CGFloat titleLabelW = titleLabelSize.width;
     CGFloat titleLabelH = titleLabelSize.height;
@@ -36,30 +53,47 @@
     // 用户信息位置大小
     CGFloat accountInfoLabelX = CGRectGetMaxX(self.iconFrame) + PADDING;
     CGFloat accountInfoLabelY = CGRectGetMaxY(self.titleFrame);
-    CGSize accountInfoLabelSize = [StringMD5 sizeWithString:[NSString stringWithFormat:@"%@@%@",self.neighborData.accountName, self.neighborData.addressInfo] font:[UIFont systemFontOfSize:15] maxSize:CGSizeMake(MAXFLOAT, MAXFLOAT)];
+//    CGSize accountInfoLabelSize = [StringMD5 sizeWithString:[NSString stringWithFormat:@"%@@%@",self.neighborData.accountName, self.neighborData.addressInfo] font:[UIFont systemFontOfSize:15] maxSize:CGSizeMake(MAXFLOAT, MAXFLOAT)];
+    
+    CGSize accountInfoLabelSize = [StringMD5 sizeWithString:[NSString stringWithFormat:@"%@",self.neighborData.accountName] font:[UIFont systemFontOfSize:15] maxSize:CGSizeMake(MAXFLOAT, MAXFLOAT)];
+    
     CGFloat accountInfoLabelW = accountInfoLabelSize.width;
     CGFloat accountInfoLabelH = accountInfoLabelSize.height;
     self.accountInfoFrame = CGRectMake(accountInfoLabelX, accountInfoLabelY, accountInfoLabelW, accountInfoLabelH);
     
+    
+    
+    
+    
     // 帖子内容位置大小
 //    UIFont *font = [UIFont systemFontOfSize:16];
-    UIFont *font = [UIFont fontWithName:@"AppleGothic" size:16];
+    UIFont *font = [UIFont systemFontOfSize:15];
     CGFloat textLabelX = PADDING;
-    CGFloat textLabelY = CGRectGetMaxY(self.iconFrame) + PADDING;
+    CGFloat accountInfoMaxY = CGRectGetMaxY(self.accountInfoFrame);
+    CGFloat iconMaxY = CGRectGetMaxY(self.iconFrame);
+    CGFloat textLabelY = (accountInfoMaxY > iconMaxY ? accountInfoMaxY : iconMaxY) + PADDING;
     CGSize textLabelSize = [StringMD5 sizeWithString:self.neighborData.publishText font:font maxSize:CGSizeMake(screenWidth - 2 * PADDING, MAXFLOAT)];
    
     CGFloat textLabelW = textLabelSize.width;
     CGFloat textLabelH;
     self.textCount = textLabelSize.height / font.lineHeight;
-    if(self.textCount > 4)
+    if(self.textCount >= 4)
     {
-        textLabelH = 4 * font.lineHeight;
+        textLabelH = 6 * font.lineHeight;
     }
     else
     {
-         textLabelH = textLabelSize.height;
+         textLabelH = textLabelSize.height + 2 * font.lineHeight;
     }
     self.textFrame = CGRectMake(textLabelX, textLabelY, textLabelW, textLabelH);
+    
+    // 活动过期图片位置
+    CGFloat pastIVX = screenWidth - internalSize.width - 2 *PADDING - textLabelY;
+    CGFloat pastIVY = PADDING;
+    CGFloat pastIVH = textLabelY - 10;
+    CGFloat pastIVW = pastIVH;
+    self.pastIVFrame = CGRectMake(pastIVX, pastIVY, pastIVH, pastIVW);
+    
     
 
     // 查看全文位置大小
@@ -67,7 +101,7 @@
     CGFloat readButtonY;
     CGFloat readButtonW;
     CGFloat readButtonH;
-    if(self.textCount > 4)
+    if(self.textCount >= 4)
     {
         readButtonX = PADDING;
         readButtonY = CGRectGetMaxY(self.textFrame) + PADDING;
@@ -103,7 +137,44 @@
     }
     else
     {
-        self.cellHeight = CGRectGetMaxY(self.textFrame) + readButtonH +PADDING;
+        self.cellHeight = CGRectGetMaxY(self.textFrame) + readButtonH + PADDING;
+    }
+
+    self.cellHeight += 2 * PADDING;
+    
+    
+    // 报名详情
+     if([self.neighborData.topicCategory integerValue] == 1)
+     {
+         CGFloat applyH = 30;
+         CGFloat applyY = self.cellHeight;
+         self.applyPoint = CGPointMake(PADDING, applyY);
+         self.cellHeight += (2 * PADDING + applyH);
+     }
+    
+    
+    // 删除位置
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSString* userId = [defaults stringForKey:@"userId"];
+    if([self.neighborData.senderId integerValue] == [userId integerValue])
+    {
+        CGFloat deleteX;
+        CGFloat deleteY;
+        CGFloat deleteW;
+        CGFloat deleteH;
+        CGSize deleteSize = [StringMD5 sizeWithString:@"删除" font:[UIFont systemFontOfSize:20] maxSize:CGSizeMake(MAXFLOAT, MAXFLOAT)];
+        deleteW = deleteSize.width;
+        deleteH = deleteSize.height;
+        
+        deleteX = screenWidth - deleteW - PADDING;
+        deleteY = self.cellHeight;
+        
+        self.deleteFrame = CGRectMake(deleteX, deleteY, deleteW, deleteH);
+        self.cellHeight = CGRectGetMaxY(self.deleteFrame) + 2 * PADDING;
+    }
+    else
+    {
+        self.deleteFrame = CGRectMake(0, 0, 0, 0);
     }
 
     

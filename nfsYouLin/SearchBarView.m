@@ -56,12 +56,12 @@
     CGSize leftButtonSize =  [StringMD5 sizeWithString:@"搜全部" font:[UIFont systemFontOfSize:14] maxSize:CGSizeMake(MAXFLOAT,MAXFLOAT)];
     
     
-    UIView* leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, leftButtonSize.width + 20, self.bounds.size.height)];
+    UIView* leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, leftButtonSize.width + 30, self.bounds.size.height)];
     
     
     
     self.leftButton = [[UIButton alloc] initWithFrame:CGRectMake(5, 0, leftButtonSize.width, self.bounds.size.height)];
-        self.leftButton.backgroundColor = [UIColor clearColor];
+    self.leftButton.backgroundColor = [UIColor clearColor];
 //    [self.leftButton setTitle:@"搜全部" forState:UIControlStateNormal];
     self.leftButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
     [self.leftButton setFont:[UIFont systemFontOfSize:14]];

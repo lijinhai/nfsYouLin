@@ -12,4 +12,7 @@
 
 
 - (NSMutableDictionary *) getInitUserDictionary;
+
+
+- (NSMutableDictionary *)getInitFamilyInfoDic;
 @end

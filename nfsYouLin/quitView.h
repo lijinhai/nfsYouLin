@@ -12,5 +12,9 @@
 @property (nonatomic, weak)UIViewController *parentVC;
 @property (nonatomic, strong)UIView *bGView;
 @property(nonatomic,retain) NSString *passValue;
+@property (nonatomic, strong)UIButton *logoutBtn;
+@property (nonatomic, strong)UIButton *cancelBtn;
+
 + (instancetype)defaultPopupView;
+
 @end

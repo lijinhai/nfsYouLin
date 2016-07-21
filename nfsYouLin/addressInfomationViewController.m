@@ -13,6 +13,8 @@
 #import "PopupAddressSettingView.h"
 #import "MBProgressHUD.h"
 #import "addressVerificationViewController.h"
+
+
 @interface addressInfomationViewController ()<UITableViewDelegate,UITableViewDataSource>
 
 @end
@@ -500,7 +502,7 @@ thread.name=[NSString stringWithFormat:@"myThread%ld",rowNumber];
     NSArray* paths = NSSearchPathForDirectoriesInDomains( NSDocumentDirectory ,  NSUserDomainMask ,  YES );
     NSString* documentPath = [ paths objectAtIndex: 0 ];
     
-    NSString* dbPath = [ documentPath stringByAppendingPathComponent: @"neighbors.db" ];
+    NSString* dbPath = [ documentPath stringByAppendingPathComponent: @"youLin-IOS.db" ];
     NSLog(@"%@",dbPath);
     FMDatabase* database = [ FMDatabase databaseWithPath: dbPath ];
     if ( ![ database open ] )

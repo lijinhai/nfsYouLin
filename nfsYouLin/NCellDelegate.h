@@ -17,8 +17,23 @@
 - (void)showImageViewWithImageViews:(NSArray *)imageViews byClickWhich:(NSInteger)clickTag;
 // 查看全文
 - (void)readTotalInformation:(NSInteger)sectionNum;
+
 // 帖子类别切换
 - (void)reloadShowByTitle: (NSString* )text;
+
+// 打招呼
+- (void)sayHi:(NSInteger)sectionNum;
+
+
+// 删除按钮事件
+- (void)deleteTopic:(NSInteger)topicId;
+
+// 报名详情
+- (void)applyDetail:(NSInteger) activityId;
+
+// 取消报名
+- (void) cancelApply:(NSInteger) activityId;
+
 @end
 
 

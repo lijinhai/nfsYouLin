@@ -11,14 +11,7 @@
 #import "NeighborDataFrame.h"
 #import "NeighborData.h"
 #import "NCellDelegate.h"
-
-//@protocol cellDelegate <NSObject>
-//
-//- (void)showCircularImageViewWithImage:(UIImage*) image;
-//- (void)showImageViewWithImageViews:(NSArray *)imageViews byClickWhich:(NSInteger)clickTag;
-//- (void)readTotalInformation:(NSInteger)sectionNum;
-//
-//@end
+#import "ApplyDetailView.h"
 
 @interface NeighborTableViewCell : UITableViewCell<UIScrollViewDelegate>
 
@@ -30,28 +23,57 @@
 // 回复
 @property(strong, nonatomic) UIControl* replyView;
 @property(strong, nonatomic) UILabel* replyLabel;
-@property(nonatomic, assign) NSInteger replyCount;
 
 // 点赞
 @property(strong, nonatomic) UIControl* praiseView;
 @property(strong, nonatomic) UILabel* praiseLabel;
 @property(strong, nonatomic) UIImageView* praiseImageView;
-@property(nonatomic, assign) NSInteger praiseCount;
 
 // 查看
 @property(strong, nonatomic) UIControl* watchView;
 @property(strong, nonatomic) UILabel* watchLabel;
-@property(nonatomic, assign) NSInteger watchCount;
 
-// 帖子
+// 帖子数据
 @property (nonatomic, strong)NeighborDataFrame *neighborDataFrame;
 
-@property (weak, nonatomic)UIImageView *iconView;        // 头像
-@property (weak, nonatomic)UILabel *titleLabel;          // 帖子标题
-@property (weak, nonatomic)UILabel *accountInfoLabel;    // 用户信息标题
-@property (weak, nonatomic)UILabel *contentLabel;        // 帖子内容
-@property (strong, nonatomic)UIButton* readButton;       // 查看全文按钮
-@property (strong,nonatomic)NSMutableArray *picturesView;   // 发表的图片
+// 评论数据
+@property (nonatomic, strong)NeighborData *replyData;
+
+// 头像
+@property (weak, nonatomic)UIImageView *iconView;
+
+// 帖子标题
+@property (weak, nonatomic)UILabel *titleLabel;
+
+// 用户信息标题
+@property (weak, nonatomic)UILabel *accountInfoLabel;
+
+// 时间间隔
+@property (weak, nonatomic)UILabel *timeInterval;
+
+// 打招呼按钮
+@property (strong, nonatomic)UIButton *hiBtn;
+
+// 报名详情
+@property (strong, nonatomic)ApplyDetailView* applyView;
+
+
+// 帖子内容
+@property (weak, nonatomic)UILabel *contentLabel;
+
+
+// 查看全文按钮
+@property (strong, nonatomic)UIButton* readButton;
+
+
+// 删除按钮
+@property (strong, nonatomic)UIButton* deleteButton;
+
+// 发表的图片
+@property (strong,nonatomic)NSMutableArray *picturesView;
+
+// 活动过期图片
+@property (strong, nonatomic)UIImageView *pastImageView;
 
 @property (nonatomic,assign) id<cellDelegate> delegate;
 

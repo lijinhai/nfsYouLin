@@ -243,7 +243,7 @@
     
     NSArray* paths = NSSearchPathForDirectoriesInDomains( NSDocumentDirectory ,  NSUserDomainMask ,  YES );
     NSString* documentPath = [ paths objectAtIndex: 0 ];
-    NSString* dbPath = [ documentPath stringByAppendingPathComponent: @"neighbors.db" ];
+    NSString* dbPath = [ documentPath stringByAppendingPathComponent: @"youLin-IOS.db" ];
     FMDatabase* database = [ FMDatabase databaseWithPath: dbPath ];
     if ( ![ database open ] )
     {
@@ -271,7 +271,7 @@
     NSMutableArray *array=[[NSMutableArray alloc]initWithCapacity:1];
     NSArray* paths = NSSearchPathForDirectoriesInDomains( NSDocumentDirectory ,  NSUserDomainMask ,  YES );
     NSString* documentPath = [ paths objectAtIndex: 0 ];
-    NSString* dbPath = [ documentPath stringByAppendingPathComponent: @"neighbors.db" ];
+    NSString* dbPath = [ documentPath stringByAppendingPathComponent: @"youLin-IOS.db" ];
     FMDatabase* database = [ FMDatabase databaseWithPath: dbPath ];
     if ( ![ database open ] )
     {
@@ -315,7 +315,7 @@
     
     NSArray* paths = NSSearchPathForDirectoriesInDomains( NSDocumentDirectory ,  NSUserDomainMask ,  YES );
     NSString* documentPath = [ paths objectAtIndex: 0 ];
-    NSString* dbPath = [ documentPath stringByAppendingPathComponent: @"neighbors.db" ];
+    NSString* dbPath = [ documentPath stringByAppendingPathComponent: @"youLin-IOS.db" ];
     FMDatabase* database = [ FMDatabase databaseWithPath: dbPath ];
     if ( ![ database open ] )
     {
@@ -338,7 +338,7 @@
     
     NSArray* paths = NSSearchPathForDirectoriesInDomains( NSDocumentDirectory ,  NSUserDomainMask ,  YES );
     NSString* documentPath = [ paths objectAtIndex: 0 ];
-    NSString* dbPath = [ documentPath stringByAppendingPathComponent: @"neighbors.db" ];
+    NSString* dbPath = [ documentPath stringByAppendingPathComponent: @"youLin-IOS.db" ];
     FMDatabase* database = [ FMDatabase databaseWithPath: dbPath ];
     if ( ![ database open ] )
     {

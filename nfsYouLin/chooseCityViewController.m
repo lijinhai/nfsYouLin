@@ -17,7 +17,7 @@
 @implementation chooseCityViewController{
 
     myCommunityViewController *myCommunityController;
-    
+    UINavigationController *loginNC;
     
     UIImageView* _backIV;
     UILabel* _backLabel;
@@ -28,6 +28,9 @@
     _cityName.userInteractionEnabled=YES;
     UITapGestureRecognizer *labelTapGestureRecognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(cityNameTouchUpInside:)];
     [_cityName addGestureRecognizer:labelTapGestureRecognizer];
+    
+    UIStoryboard* storyBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    loginNC = [storyBoard instantiateViewControllerWithIdentifier:@"viewID"];
     // Do any additional setup after loading the view.
 }
 
@@ -93,6 +96,7 @@
 - (void) loginAction
 {
     NSLog(@"login Action");
+    [self presentViewController:loginNC animated:YES completion:nil];
     _backLabel.alpha = 1.0;
     _backIV.alpha = 1.0;
 

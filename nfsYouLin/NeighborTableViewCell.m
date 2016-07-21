@@ -8,6 +8,11 @@
 
 #import "NeighborTableViewCell.h"
 #import "NDetailTableViewController.h"
+#import "UIImageView+WebCache.h"
+#import "StringMD5.h"
+#import "MBProgressHUBTool.h"
+#import "AFHTTPSessionManager.h"
+
 
 @implementation NeighborTableViewCell
 {
@@ -15,17 +20,6 @@
     NSInteger _currentIndex;
     NSMutableArray* _buttons;
     
-    
-    
-    BOOL _praiseState; // 点赞状态
-
-//    // 评论cell
-//    UIImageView* _praiseImageView;
-//    UILabel* _praiseLabel;
-//    NSInteger _praiseCount; // 点赞数量
-//    
-//    UILabel* _watchLabel;
-//    NSInteger _watchCount; // 访问次数
 }
 
 - (void)awakeFromNib {
@@ -59,13 +53,34 @@
             self.iconView.userInteractionEnabled = YES;
             [self.iconView addGestureRecognizer:tapGesture];
 
-            
+            // 创建时间间隔
+            UILabel* timeInterval = [[UILabel alloc] init];
+            timeInterval.textAlignment = NSTextAlignmentLeft;
+            timeInterval.font = [UIFont systemFontOfSize:10];
+            timeInterval.enabled = NO;
+            [self.contentView addSubview:timeInterval];
+            self.timeInterval = timeInterval;
+
+            // 创建打招呼按钮
+            UIButton* hiBtn = [[UIButton alloc] init];
+            [hiBtn.layer setBorderWidth:1.0];
+            hiBtn.layer.borderColor=[UIColor grayColor].CGColor;
+            [hiBtn setTitle:@"打招呼" forState:UIControlStateNormal];
+            hiBtn.titleLabel.font = [UIFont systemFontOfSize:8];
+            hiBtn.contentHorizontalAlignment = UIControlContentVerticalAlignmentCenter | UIControlContentHorizontalAlignmentCenter;
+
+            [hiBtn setTitleColor:[UIColor colorWithRed:255/255.0 green:186/255.0 blue:2/255.0 alpha:1] forState:UIControlStateNormal];
+//            [self.contentView addSubview:hiBtn];
+            [hiBtn addTarget:self action:@selector(hiAction:) forControlEvents:UIControlEventTouchDown];
+            self.hiBtn = hiBtn;
+
             
             // 创建帖子标题 #帖子类别# + 帖子名称
             
             UILabel* titleLabel = [[UILabel alloc] init];
             titleLabel.textAlignment = NSTextAlignmentLeft;
             titleLabel.font = [UIFont boldSystemFontOfSize:18];
+            titleLabel.numberOfLines = 0;
             [self.contentView addSubview:titleLabel];
             self.titleLabel = titleLabel;
 
@@ -79,10 +94,14 @@
             [self.contentView addSubview:accountInfoLabel];
             self.accountInfoLabel = accountInfoLabel;
             
+            // 创建活动过期图片
+            UIImageView* pastImageView = [[UIImageView alloc] init];
+            pastImageView.image = [UIImage imageNamed:@"overline.png"];
+            self.pastImageView = pastImageView;
+//            self.pastImageView.backgroundColor = [UIColor redColor];
+            
             // 创建帖子内容
             UILabel* contentLabel = [[UILabel alloc] init];
-            contentLabel.font = [UIFont fontWithName:@"AppleGothic" size:16];
-//            contentLabel.font = [UIFont systemFontOfSize:16];
             contentLabel.lineBreakMode = NSLineBreakByWordWrapping;     //去掉省略号
             contentLabel.numberOfLines = 4;
             [self.contentView addSubview:contentLabel];
@@ -96,12 +115,27 @@
             readButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
             self.readButton = readButton;
             [self.readButton addTarget:self action:@selector(readBtn) forControlEvents:UIControlEventTouchDown];
+            
+            // 创建报名详情
+            self.applyView = [[ApplyDetailView alloc] init];
+            
+            // 删除按钮
+            UIButton* deleteButton = [[UIButton alloc] init];
+            [deleteButton setTitle:@"删除" forState:UIControlStateNormal];
+            
+            [deleteButton setTitleColor:[UIColor colorWithRed:0 / 255.0 green:128 / 255.0 blue:0 / 255.0 alpha:1] forState:UIControlStateNormal];
+            deleteButton.backgroundColor = [UIColor clearColor];
+            deleteButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+            self.deleteButton = deleteButton;
+            [self.deleteButton addTarget:self action:@selector(deleteBtn) forControlEvents:UIControlEventTouchDown];
+            
+            
 
         }
         else if([reuseIdentifier isEqualToString:@"cellTitle"])
         {
             self.selectionStyle = UITableViewCellSelectionStyleNone;
-             self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0,0,CGRectGetWidth(self.contentView.frame),39)];
+             self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0,0,CGRectGetWidth(self.contentView.frame),50)];
             self.scrollView.backgroundColor = [UIColor whiteColor];
             _buttons = [NSMutableArray array];
             _currentIndex = 1;
@@ -204,6 +238,7 @@
             replyLabel.font = [UIFont systemFontOfSize:15];
             [replyLabel setAutoresizingMask:UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin];
             [replyImageView setAutoresizingMask:UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin];
+            self.replyLabel = replyLabel;
             [self.replyView addSubview:replyLabel];
             
             [self.replyView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin];
@@ -216,8 +251,6 @@
             
             
             // 添加点赞
-            _praiseState = NO;
-            _praiseCount = 0;
             self.praiseView = [[UIControl alloc] initWithFrame:CGRectMake(CGRectGetMaxX(lineView1.frame), 0, self.contentView.frame.size.width / 3, 40)];
             self.praiseView.backgroundColor = [UIColor whiteColor];
 
@@ -319,26 +352,48 @@
 - (void) touchCancelPraise
 {
     self.praiseView.backgroundColor = [UIColor whiteColor];
-    _praiseState = !_praiseState;
-    if(_praiseState)
+    NeighborData* neighborData = self.replyData;
+    
+    
+    if([neighborData.praiseType integerValue] == 0)
     {
-        _praiseCount = 1;
-        _praiseImageView.image = [UIImage imageNamed:@"dianzan_2.png"];
-        _praiseLabel.text = [NSString stringWithFormat:@"%ld",_praiseCount];
+        [self praiseNet:[neighborData.topicId integerValue] action:1];
+        self.praiseImageView.image = [UIImage imageNamed:@"dianzan_2.png"];
+        NSInteger num = [self.praiseLabel.text integerValue] + 1;
+        self.praiseLabel.text = [NSString stringWithFormat:@"%ld",num];
+        neighborData.praiseType = @"1";
+        neighborData.praiseCount = [NSString stringWithFormat:@"%ld",num];
     }
     else
     {
-        _praiseCount = 0;
-        _praiseLabel.text = @"赞";
-        _praiseImageView.image = [UIImage imageNamed:@"dianzan.png"];
-        
+        [self praiseNet:[neighborData.topicId integerValue] action:0];
+        self.praiseImageView.image = [UIImage imageNamed:@"dianzan.png"];
+        NSInteger num = [self.praiseLabel.text integerValue] - 1;
+       
+        if(num != 0)
+        {
+            self.praiseLabel.text = [NSString stringWithFormat:@"%ld",num];
+            neighborData.praiseType = @"0";
+            neighborData.praiseCount = [NSString stringWithFormat:@"%ld",num];
+        }
+        else
+        {
+            self.praiseLabel.text = @"赞";
+            neighborData.praiseType = @"0";
+            neighborData.praiseCount = @"0";
+        }
+
     }
+    
+    
 }
 
 
 //点击查看
 - (void) touchDownWatch
 {
+    
+    
     [_delegate readTotalInformation:self.sectionNum];
     self.watchView.backgroundColor = [UIColor lightGrayColor];
 
@@ -347,19 +402,31 @@
 - (void) touchCancelWatch
 {
     self.watchView.backgroundColor = [UIColor whiteColor];
-    _watchCount ++;
-    _watchLabel.text = [NSString stringWithFormat:@"%ld",_watchCount];
 }
 
+// 设置帖子数据
 - (void) settingData
 {
-    NSLog(@"setData");
     NeighborData* neighborData = self.neighborDataFrame.neighborData;
-    self.iconView.image = [UIImage imageNamed:neighborData.iconName];
-    self.titleLabel.text = [NSString stringWithFormat:@"#%@#%@",neighborData.titleCategory,neighborData.titleName];
-    self.accountInfoLabel.text = [NSString stringWithFormat:@"%@@%@",neighborData.accountName, neighborData.addressInfo];
-    self.contentLabel.text = neighborData.publishText;
+    NSURL* url = [NSURL URLWithString:neighborData.iconName];
+    [self.iconView sd_setImageWithURL:url placeholderImage:[UIImage imageNamed:@"bg_error.png"] options:SDWebImageAllowInvalidSSLCertificates];
+    self.titleLabel.text = [NSString stringWithFormat:@"%@",neighborData.titleName];
     
+    self.timeInterval.text = [StringMD5 calculateTimeInternal:[neighborData.systemTime integerValue] / 1000 old:[neighborData.topicTime integerValue] / 1000];
+    
+     self.accountInfoLabel.text = [NSString stringWithFormat:@"%@", neighborData.accountName];
+    
+    // 设置UILabel 行间距
+    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+    [paragraphStyle setLineSpacing:5];
+
+    
+    NSMutableAttributedString *attrStr = [[NSMutableAttributedString alloc] initWithData:[neighborData.publishText dataUsingEncoding:NSUnicodeStringEncoding] options:@{ NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType } documentAttributes:nil error:nil];
+    [attrStr addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, [attrStr length])];
+    [attrStr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:15] range:NSMakeRange(0, [attrStr length])];
+    
+    self.contentLabel.text = neighborData.publishText;
+    self.contentLabel.attributedText = attrStr;
     
     //创建配图
     for (int i = 0; i < [neighborData.picturesArray count]; i++)
@@ -372,28 +439,152 @@
         
         [self.contentView addSubview:pictureView];
         [self.picturesView addObject:pictureView];
-        ((UIImageView *)[self.picturesView objectAtIndex:i]).image = [UIImage imageNamed:[neighborData.picturesArray objectAtIndex:i]];
+        UIImageView* imageView = ((UIImageView *)[self.picturesView objectAtIndex:i]);
+       
+        NSString* str =[[neighborData.picturesArray objectAtIndex:i] valueForKey:@"resPath"];
+        NSArray* strArray = [str componentsSeparatedByString:@"/"];
+        NSString* imageName = [NSString stringWithFormat:@"0%@",[strArray lastObject]];
+        
+        NSString* urlString = [str stringByReplacingOccurrencesOfString:[strArray lastObject] withString:imageName];
+        
+        NSURL* url = [NSURL URLWithString:urlString];
+        
+        
+        [imageView sd_setImageWithURL:url placeholderImage:[UIImage imageNamed:@"bg_error.png"] options:SDWebImageAllowInvalidSSLCertificates];
     }
-
-    
 }
 
+
+// 设置帖子数据和控件位置
 - (void) settingDataFrame
 {
-    NSLog(@"setDataFrame");
+    
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSString* userId = [defaults stringForKey:@"userId"];
+    NSDictionary* activityDict = self.neighborDataFrame.neighborData.infoArray[0];
+
     self.iconView.frame = self.neighborDataFrame.iconFrame;
     self.titleLabel.frame = self.neighborDataFrame.titleFrame;
     self.accountInfoLabel.frame = self.neighborDataFrame.accountInfoFrame;
-    self.contentLabel.frame = self.neighborDataFrame.textFrame;
+    self.hiBtn.frame = self.neighborDataFrame.hiFrame;
     
+    self.timeInterval.frame = self.neighborDataFrame.intervalFrame;
+
+    self.contentLabel.frame = self.neighborDataFrame.textFrame;
+
     self.readButton.frame = self.neighborDataFrame.readFrame;
     
-    if(self.neighborDataFrame.textCount > 4)
+    
+    if([self.neighborDataFrame.neighborData.topicCategory integerValue] == 1)
     {
-        NSLog(@"共 %ld 行", self.neighborDataFrame.textCount);
+        self.applyView.applyNum.text = [NSString stringWithFormat:@"%ld",[[activityDict valueForKey:@"enrollTotal"] integerValue]];
+        NSString *enrollFlag = [activityDict valueForKey:@"enrollFlag"];
+        
+        // 创建报名详情
+        if([self.neighborDataFrame.neighborData.senderId integerValue] == [userId integerValue])
+        {
+            self.applyView.applyLabel.text = @"报名详情";
+        }
+        else
+        {
+            if([enrollFlag isEqualToString:@"false"])
+            {
+                self.applyView.applyLabel.text = @"我要报名";
+                
+            }
+            else if([enrollFlag isEqualToString:@"true"])
+            {
+                self.applyView.applyLabel.text = @"取消报名";
+            }
+        }
+
+        // 创建活动过期图片
+        NSInteger endTime = [[activityDict valueForKey:@"endTime"] integerValue];
+        NSInteger systemTime = [self.neighborDataFrame.neighborData.systemTime integerValue];
+        if(systemTime > endTime)
+        {
+            // 活动过期
+            self.pastImageView.frame = self.neighborDataFrame.pastIVFrame;
+            [self.contentView addSubview:self.pastImageView];
+            
+            self.applyView.applyLabel.enabled = NO;
+            self.applyView.applyNum.enabled = NO;
+        }
+        else
+        {
+            self.applyView.applyLabel.enabled = YES;
+            self.applyView.applyNum.enabled = YES;
+
+            [self.pastImageView removeFromSuperview];
+        }
+        
+        if([self.applyView.applyLabel.text isEqualToString:@"我要报名"])
+        {
+             [self.applyView removeTarget:self action:@selector(cancelApplyAction:) forControlEvents:UIControlEventTouchUpInside];
+            [self.applyView addTarget:self action:@selector(wantApplyAction:) forControlEvents:UIControlEventTouchUpInside];
+        }
+        
+        if([self.applyView.applyLabel.text isEqualToString:@"取消报名"])
+        {
+            [self.applyView removeTarget:self action:@selector(wantApplyAction:) forControlEvents:UIControlEventTouchUpInside];
+            [self.applyView addTarget:self action:@selector(cancelApplyAction:) forControlEvents:UIControlEventTouchUpInside];
+        }
+
+        
+        CGPoint point = self.neighborDataFrame.applyPoint;
+        [self.applyView initApplyView:point];
+        [self.contentView addSubview:self.applyView];
+        
+    }
+    else
+    {
+        [self.applyView removeFromSuperview];
+        [self.pastImageView removeFromSuperview];
+
+    }
+   
+    
+
+    
+    if([self.neighborDataFrame.neighborData.senderId integerValue] == [userId integerValue])
+    {
+        // 添加删除按钮
+        [self.contentView addSubview:self.deleteButton];
+    }
+    else
+    {
+        [self.deleteButton removeFromSuperview];
+
+    }
+
+    
+    self.deleteButton.frame = self.neighborDataFrame.deleteFrame;
+    
+    if(self.neighborDataFrame.textCount >= 4)
+    {
         self.readButton.frame = self.neighborDataFrame.readFrame;
         [self.contentView addSubview:self.readButton];
     }
+    
+
+    // 根据senderId 添加打招呼按钮
+    
+    if([self.neighborDataFrame.neighborData.senderId integerValue] == 1)
+    {
+        if([self.neighborDataFrame.neighborData.cacheKey integerValue] != [userId integerValue])
+        {
+            if([[activityDict valueForKey:@"sayHelloStatus"] integerValue] == 0)
+            {
+                [self.contentView addSubview:self.hiBtn];
+            }
+
+        }
+    }
+    else
+    {
+        [self.hiBtn removeFromSuperview];
+    }
+
     
     for (int i = 0; i < [self.neighborDataFrame.picturesFrame count]; i++)
     {
@@ -401,6 +592,50 @@
     }
 
     
+}
+
+// 设置评论数据
+- (void) setReplyCellData
+{
+    // 点赞状态
+    if([self.replyData.praiseType integerValue] == 1)
+    {
+        self.praiseImageView.image = [UIImage imageNamed:@"dianzan_2.png"];
+    }
+    else
+    {
+        self.praiseImageView.image = [UIImage imageNamed:@"dianzan.png"];
+        
+    }
+    
+    // 点赞个数
+    if ([self.replyData.praiseCount integerValue] != 0) {
+        self.praiseLabel.text = [NSString stringWithFormat:@"%ld",[self.replyData.praiseCount integerValue]];
+    }
+    else
+    {
+        self.praiseLabel.text = @"赞";
+    }
+    
+    // 浏览次数
+    if ([self.replyData.viewCount integerValue] != 0) {
+        self.watchLabel.text = [NSString stringWithFormat:@"%ld",[self.replyData.viewCount integerValue]];
+        
+    }
+    else
+    {
+        self.watchLabel.text = @"";
+    }
+    
+    // 回复个数
+    if ([self.replyData.replyCount integerValue] != 0) {
+        self.replyLabel.text = [NSString stringWithFormat:@"%ld",[self.replyData.replyCount integerValue]];
+    }
+    else
+    {
+        self.replyLabel.text = @"回复";
+    }
+
 }
 
 //防止图片重叠
@@ -424,6 +659,13 @@
     [self settingDataFrame];
 }
 
+- (void) setReplyData:(NeighborData *)replyData
+{
+    _replyData = replyData;
+    [self setReplyCellData];
+}
+
+
 -(NSMutableArray *)picturesView
 {
     if (!_picturesView)
@@ -441,7 +683,12 @@
 
 - (void)tapImageView: (UITapGestureRecognizer*) recognizer
 {
-      [_delegate showImageViewWithImageViews:_neighborDataFrame.neighborData.picturesArray byClickWhich:recognizer.view.tag];
+    NSMutableArray* imageArray = [[NSMutableArray alloc] init];
+    
+    for (int i = 0; i < [_neighborDataFrame.neighborData.picturesArray count]; i++) {
+        [imageArray addObject:[[_neighborDataFrame.neighborData.picturesArray objectAtIndex:i] valueForKey:@"resPath"]];
+    }
+    [_delegate showImageViewWithImageViews:imageArray byClickWhich:recognizer.view.tag];
 }
 
 // 点击全文按钮
@@ -450,5 +697,102 @@
     [_delegate readTotalInformation:self.sectionNum];
 
 }
+
+// 点击我要报名
+- (void)wantApplyAction:(id) sender
+{
+    ApplyDetailView* detailView = (ApplyDetailView*) sender;
+    
+    NSDictionary* activityDict = self.neighborDataFrame.neighborData.infoArray[0];
+    NSInteger activiId = [[activityDict valueForKey:@"activityId"] integerValue];
+    
+    if(detailView.applyLabel.enabled)
+    {
+        [_delegate applyDetail:activiId];
+    }
+    else
+    {
+        [MBProgressHUBTool textToast:self Tip:@"此活动已过期"];
+
+    }
+}
+
+// 取消报名
+- (void)cancelApplyAction:(id) sender
+{
+    NSLog(@"cancelApplyAction");
+    ApplyDetailView* detailView = (ApplyDetailView*) sender;
+    NSDictionary* activityDict = self.neighborDataFrame.neighborData.infoArray[0];
+    NSInteger activiId = [[activityDict valueForKey:@"activityId"] integerValue];
+    if(detailView.applyLabel.enabled)
+    {
+        [_delegate cancelApply:activiId];
+    }
+    else
+    {
+        [MBProgressHUBTool textToast:self Tip:@"此活动已过期"];
+        
+    }
+    
+}
+
+
+// 点击删除
+- (void) deleteBtn
+{
+    NSLog(@"删除!");
+    NSInteger topicId = [self.neighborDataFrame.neighborData.topicId integerValue];
+    [_delegate deleteTopic:topicId];
+
+    
+}
+
+- (void)hiAction:(id)sender
+{
+    NSLog(@"hiAction");
+    [_delegate sayHi:self.sectionNum];
+}
+
+
+// 点赞网络请求
+// topicId 帖子id
+// type 点赞动作 1 点赞 0 取消点赞
+- (void) praiseNet: (NSInteger)topicId action:(NSInteger)type
+{
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSString* userId = [defaults stringForKey:@"userId"];
+    AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
+    manager.securityPolicy.allowInvalidCertificates = YES;
+    [manager.securityPolicy setValidatesDomainName:NO];
+    
+    
+    NSString* MD5String = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"user_id%@topic_id%ldtype%ld",userId,topicId,type]];
+    NSString* hashString = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"%@1", MD5String]];
+    
+    NSDictionary* parameter = @{@"user_id" : userId,
+                                @"topic_id" : [NSNumber numberWithInteger:topicId],
+                                @"type" : [NSNumber numberWithInteger:type],
+                                @"apitype" : @"comm",
+                                @"salt" : @"1",
+                                @"tag" : @"hitpraise",
+                                @"hash" : hashString,
+                                @"keyset" : @"user_id:topic_id:type:",
+                                };
+    
+    [manager POST:POST_URL parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+        
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSLog(@"点赞网络请求:%@", responseObject);
+       
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"请求失败:%@", error.description);
+        return;
+    }];
+
+}
+
+
 
 @end

@@ -15,6 +15,7 @@
 @property (nonatomic,strong)NSMutableArray *neighborDataArray;
 @property (strong, nonatomic) IBOutlet UITabBarItem *neighborTabBarItem;
 
+@property (nonatomic,strong)NSString *xxxx;
 
 
 

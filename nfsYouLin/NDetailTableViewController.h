@@ -9,12 +9,15 @@
 #import <UIKit/UIKit.h>
 #import "NCellDelegate.h"
 #import "NeighborData.h"
+#import "NeighborDataFrame.h"
 #import "ShowImageView.h"
 
 @interface NDetailTableViewController : UITableViewController <EMChatToolbarDelegate, cellDelegate>
 
 @property (nonatomic, strong) NeighborData* neighborData;
 @property (assign, nonatomic) NSInteger sectionNum;
+@property (nonatomic, strong) NeighborDataFrame* neighborDF;
+@property (nonatomic, strong) NSMutableArray* neighborDA;
 
 
 /*!

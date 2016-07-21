@@ -119,15 +119,18 @@
     else if([reuseIdentifier isEqualToString:@"cellZero"])
     {
         /*处理头像*/
-        self.imageView.image = [UIImage imageNamed:@"account.png"];
-        self.imageView.userInteractionEnabled = YES;
+        
+        self.headIV = [[UIImageView alloc] initWithFrame:CGRectMake(10, 10, 80, 80)];
+        
+        self.headIV.layer.masksToBounds = YES;
+        self.headIV.layer.cornerRadius = 40;
+        self.headIV.userInteractionEnabled = YES;
         UITapGestureRecognizer* tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(headTapAction:)];
-        [self.imageView addGestureRecognizer:tapGesture];
-
+        [self.headIV addGestureRecognizer:tapGesture];
+        [self.contentView addSubview:self.headIV];
         
         
-        UIView* view = [[UIView alloc] initWithFrame:CGRectMake(100, self.contentView.frame.size.height, 400, self.contentView.frame.size.height)];
-        [self.imageView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin];
+        UIView* view = [[UIView alloc] initWithFrame:CGRectMake(100, 25, 400, 50)];
         
         self.nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 15, 10)];
         self.nameLabel.text = @"姓名";
@@ -203,7 +206,34 @@
 
 - (void) headTapAction: (UITapGestureRecognizer*) recognizer
 {
-    [_delegate showCircularImageViewWithImage:self.imageView.image];
+    [_delegate showCircularImageViewWithImage:self.headIV.image];
 }
+
+- (void) setUserData:(Users *)userData
+{
+    
+    _userData = userData;
+    if(_userData)
+    {
+  
+        NSURL* url = [NSURL URLWithString:_userData.userPortrait];
+
+        [self.headIV sd_setImageWithURL:url placeholderImage:[UIImage imageNamed:@"bg_error.png"] options:SDWebImageAllowInvalidSSLCertificates];
+        
+        CGSize phoneSize = [StringMD5 sizeWithString:_userData.phoneNum font:[UIFont systemFontOfSize:17] maxSize:CGSizeMake(MAXFLOAT, MAXFLOAT)];
+        
+        CGSize nameSize = [StringMD5 sizeWithString:_userData.userName font:[UIFont systemFontOfSize:17] maxSize:CGSizeMake(MAXFLOAT, MAXFLOAT)];
+        self.nameLabel.frame = CGRectMake(0, 0, nameSize.width, nameSize.height);
+         self.phoneLabel.frame = CGRectMake(0, nameSize.height, phoneSize.width, phoneSize.height);
+        self.phoneLabel.text = _userData.phoneNum;
+        self.nameLabel.text = _userData.userName;
+        
+        
+        
+
+        
+    }
+}
+
 
 @end
