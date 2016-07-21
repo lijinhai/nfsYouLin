@@ -258,6 +258,8 @@
 		AF4B305A1D332A3800CBF257 /* LewPopupViewAnimationFade.m in Sources */ = {isa = PBXBuildFile; fileRef = AF4B30591D332A3800CBF257 /* LewPopupViewAnimationFade.m */; };
 		AF4B305D1D332A6700CBF257 /* LewPopupViewAnimationSlide.m in Sources */ = {isa = PBXBuildFile; fileRef = AF4B305C1D332A6700CBF257 /* LewPopupViewAnimationSlide.m */; };
 		AF4B30601D332B9100CBF257 /* LxxPlaySound.m in Sources */ = {isa = PBXBuildFile; fileRef = AF4B305F1D332B9100CBF257 /* LxxPlaySound.m */; };
+		AF4B306C1D33780600CBF257 /* SignIntegralViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AF4B306B1D33780600CBF257 /* SignIntegralViewController.m */; };
+		AF4B30761D34C2D700CBF257 /* PopupCalendarView.m in Sources */ = {isa = PBXBuildFile; fileRef = AF4B30751D34C2D700CBF257 /* PopupCalendarView.m */; };
 		AF4B4F1A1D07AAF60039BE42 /* PopupAddressSettingView.m in Sources */ = {isa = PBXBuildFile; fileRef = AF4B4F191D07AAF60039BE42 /* PopupAddressSettingView.m */; };
 		AF4B4F1D1D07ACF90039BE42 /* LewPopupViewAnimationRight.m in Sources */ = {isa = PBXBuildFile; fileRef = AF4B4F1C1D07ACF90039BE42 /* LewPopupViewAnimationRight.m */; };
 		AF5293D31D1297DC00503975 /* FirstTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = AF5293D21D1297DC00503975 /* FirstTabBarController.m */; };
@@ -274,6 +276,8 @@
 		AF7850161CFFC5C8009F6982 /* FMDatabaseQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = AF78500F1CFFC5C8009F6982 /* FMDatabaseQueue.m */; };
 		AF7850171CFFC5C8009F6982 /* FMResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = AF7850121CFFC5C8009F6982 /* FMResultSet.m */; };
 		AF78501B1CFFCF0B009F6982 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = AF78501A1CFFCF0B009F6982 /* libsqlite3.dylib */; };
+		AF7FF17F1D3CBDD90068F8D9 /* FDCalendar.m in Sources */ = {isa = PBXBuildFile; fileRef = AF7FF17C1D3CBDD90068F8D9 /* FDCalendar.m */; };
+		AF7FF1801D3CBDD90068F8D9 /* FDCalendarItem.m in Sources */ = {isa = PBXBuildFile; fileRef = AF7FF17E1D3CBDD90068F8D9 /* FDCalendarItem.m */; };
 		AFCE1F961CDAD1B20085F10F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = AFCE1F951CDAD1B20085F10F /* main.m */; };
 		AFCE1F991CDAD1B20085F10F /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = AFCE1F981CDAD1B20085F10F /* AppDelegate.m */; };
 		AFCE1F9C1CDAD1B20085F10F /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AFCE1F9B1CDAD1B20085F10F /* ViewController.m */; };
@@ -797,6 +801,10 @@
 		AF4B305C1D332A6700CBF257 /* LewPopupViewAnimationSlide.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LewPopupViewAnimationSlide.m; sourceTree = "<group>"; };
 		AF4B305E1D332B9100CBF257 /* LxxPlaySound.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LxxPlaySound.h; sourceTree = "<group>"; };
 		AF4B305F1D332B9100CBF257 /* LxxPlaySound.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LxxPlaySound.m; sourceTree = "<group>"; };
+		AF4B306A1D33780600CBF257 /* SignIntegralViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignIntegralViewController.h; sourceTree = "<group>"; };
+		AF4B306B1D33780600CBF257 /* SignIntegralViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SignIntegralViewController.m; sourceTree = "<group>"; };
+		AF4B30741D34C2D700CBF257 /* PopupCalendarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PopupCalendarView.h; sourceTree = "<group>"; };
+		AF4B30751D34C2D700CBF257 /* PopupCalendarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PopupCalendarView.m; sourceTree = "<group>"; };
 		AF4B4F181D07AAF60039BE42 /* PopupAddressSettingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PopupAddressSettingView.h; sourceTree = "<group>"; };
 		AF4B4F191D07AAF60039BE42 /* PopupAddressSettingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PopupAddressSettingView.m; sourceTree = "<group>"; };
 		AF4B4F1B1D07ACF90039BE42 /* LewPopupViewAnimationRight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LewPopupViewAnimationRight.h; sourceTree = "<group>"; };
@@ -830,6 +838,10 @@
 		AF7850121CFFC5C8009F6982 /* FMResultSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMResultSet.m; sourceTree = "<group>"; };
 		AF78501A1CFFCF0B009F6982 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = /usr/lib/libsqlite3.dylib; sourceTree = "<absolute>"; };
 		AF78501C1D00153D009F6982 /* Constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
+		AF7FF17B1D3CBDD90068F8D9 /* FDCalendar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDCalendar.h; sourceTree = "<group>"; };
+		AF7FF17C1D3CBDD90068F8D9 /* FDCalendar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDCalendar.m; sourceTree = "<group>"; };
+		AF7FF17D1D3CBDD90068F8D9 /* FDCalendarItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDCalendarItem.h; sourceTree = "<group>"; };
+		AF7FF17E1D3CBDD90068F8D9 /* FDCalendarItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDCalendarItem.m; sourceTree = "<group>"; };
 		AFCE1F911CDAD1B20085F10F /* nfsYouLin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = nfsYouLin.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AFCE1F951CDAD1B20085F10F /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		AFCE1F971CDAD1B20085F10F /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -1831,6 +1843,8 @@
 				AF4B305F1D332B9100CBF257 /* LxxPlaySound.m */,
 				AF4B30201D2F903600CBF257 /* UIViewLinkmanTouch.h */,
 				AF4B30211D2F903600CBF257 /* UIViewLinkmanTouch.m */,
+				AF4B306A1D33780600CBF257 /* SignIntegralViewController.h */,
+				AF4B306B1D33780600CBF257 /* SignIntegralViewController.m */,
 			);
 			name = youLinITabModule;
 			sourceTree = "<group>";
@@ -1863,6 +1877,19 @@
 				8F6491311D0653CB00E3B155 /* NDetailTableViewCell.m */,
 			);
 			name = youLinNeighborModule;
+			sourceTree = "<group>";
+		};
+		AF4B306D1D34C0C100CBF257 /* SignedCalendar */ = {
+			isa = PBXGroup;
+			children = (
+				AF7FF17B1D3CBDD90068F8D9 /* FDCalendar.h */,
+				AF7FF17C1D3CBDD90068F8D9 /* FDCalendar.m */,
+				AF7FF17D1D3CBDD90068F8D9 /* FDCalendarItem.h */,
+				AF7FF17E1D3CBDD90068F8D9 /* FDCalendarItem.m */,
+				AF4B30741D34C2D700CBF257 /* PopupCalendarView.h */,
+				AF4B30751D34C2D700CBF257 /* PopupCalendarView.m */,
+			);
+			name = SignedCalendar;
 			sourceTree = "<group>";
 		};
 		AF5293C51D12925200503975 /* ChatView */ = {
@@ -1998,6 +2025,7 @@
 		AFE5690D1CF443C300C0F745 /* popupViewController */ = {
 			isa = PBXGroup;
 			children = (
+				AF4B306D1D34C0C100CBF257 /* SignedCalendar */,
 				AFE5691B1CF445BA00C0F745 /* PopupFloorView.h */,
 				AFE5691C1CF445C100C0F745 /* PopupFloorView.m */,
 				AF4B30171D2F8F5200CBF257 /* UpdatePhotoView.h */,
@@ -2122,6 +2150,7 @@
 				TargetAttributes = {
 					AFCE1F901CDAD1B20085F10F = {
 						CreatedOnToolsVersion = 7.3;
+						DevelopmentTeam = VD77NNWC3W;
 					};
 					AFCE1FA91CDAD1B20085F10F = {
 						CreatedOnToolsVersion = 7.3;
@@ -2297,6 +2326,7 @@
 				8F648D311D00547A00E3B155 /* UIViewController+DismissKeyboard.m in Sources */,
 				8F5304491CDB7A8B0078FD64 /* homeViewController.m in Sources */,
 				AF4B30281D2F909B00CBF257 /* NickNameViewController.m in Sources */,
+				AF7FF1801D3CBDD90068F8D9 /* FDCalendarItem.m in Sources */,
 				8F73C8D21D2B53E6009C83C2 /* AFSecurityPolicy.m in Sources */,
 				AFCE1F991CDAD1B20085F10F /* AppDelegate.m in Sources */,
 				8F648D511D00547A00E3B155 /* EaseTextView.m in Sources */,
@@ -2325,6 +2355,7 @@
 				8F648D241D00547A00E3B155 /* PSTCollectionViewUpdateItem.m in Sources */,
 				8F0F1B511D19247900404C46 /* SearchBarView.m in Sources */,
 				8F648D361D00547A00E3B155 /* EaseEmoji.m in Sources */,
+				AF4B306C1D33780600CBF257 /* SignIntegralViewController.m in Sources */,
 				8F648D481D00547A00E3B155 /* EaseBubbleView+Image.m in Sources */,
 				8F648D161D00547A00E3B155 /* UIImage+EMGIF.m in Sources */,
 				8F648CF31D00547A00E3B155 /* MJRefreshFooter.m in Sources */,
@@ -2339,6 +2370,7 @@
 				8F648D101D00547A00E3B155 /* EMSDWebImageDownloaderOperation.m in Sources */,
 				8F648D1A1D00547A00E3B155 /* UIImageView+EMWebCache.m in Sources */,
 				8F648D201D00547A00E3B155 /* PSTCollectionViewData.m in Sources */,
+				AF4B30761D34C2D700CBF257 /* PopupCalendarView.m in Sources */,
 				8F648D341D00547A00E3B155 /* EaseConvertToCommonEmoticonsHelper.m in Sources */,
 				8F648D2D1D00547A00E3B155 /* EaseUserModel.m in Sources */,
 				8F648D4E1D00547A00E3B155 /* EaseChatToolbar.m in Sources */,
@@ -2362,6 +2394,7 @@
 				8F648D0E1D00547A00E3B155 /* EMSDWebImageDecoder.m in Sources */,
 				8F648D001D00547A00E3B155 /* UIScrollView+MJExtension.m in Sources */,
 				8F648D541D00547A00E3B155 /* EaseChatBarMoreView.m in Sources */,
+				AF7FF17F1D3CBDD90068F8D9 /* FDCalendar.m in Sources */,
 				8F648D331D00547A00E3B155 /* EaseChineseToPinyin.m in Sources */,
 				AF7850151CFFC5C8009F6982 /* FMDatabasePool.m in Sources */,
 				AFE5693E1CFE649200C0F745 /* multiTableViewCell.m in Sources */,
@@ -2594,6 +2627,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2614,6 +2649,7 @@
 				OTHER_LIBTOOLFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = nfs.nfsYouLin;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -2621,6 +2657,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2641,6 +2679,7 @@
 				OTHER_LIBTOOLFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = nfs.nfsYouLin;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};

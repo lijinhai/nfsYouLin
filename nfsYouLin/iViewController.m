@@ -12,6 +12,8 @@
 #import "ISettingViewController.h"
 #import "AboutYouLinViewController.h"
 #import "PersonalInformationViewController.h"
+#import "SignIntegralViewController.h"
+
 @interface iViewController ()
 
 @end
@@ -26,8 +28,10 @@
     ISettingViewController *ISettingController;
     AboutYouLinViewController *AboutYouLinController;
     PersonalInformationViewController *PersonalInformationController;
-    
+    multiTableViewCell *multiTableCell;
+    SignIntegralViewController *SignIntegralController;
     UIBarButtonItem* backItemTitle;
+    UIButton *signButton;
     
 }
 
@@ -43,7 +47,8 @@
     
     [self.iTabBarItem setTitleTextAttributes:@{NSFontAttributeName : [UIFont fontWithName:@"HelveticaNeue-Bold" size:10.0f],NSForegroundColorAttributeName : fontColor
                                                } forState:UIControlStateSelected];
-    
+    //multiTableCell=[[multiTableViewCell alloc] init];
+    //[multiTableCell.signButton addTarget:self action:@selector(signGetIntegralAction) forControlEvents:UIControlEventTouchDown];
     
     _viewColor = [UIColor colorWithRed:243/255.0 green:243/255.0 blue:240/255.0 alpha:1];
     
@@ -68,6 +73,7 @@
     ISettingController=[iStoryBoard instantiateViewControllerWithIdentifier:@"isettingcontroller"];
     AboutYouLinController=[iStoryBoard instantiateViewControllerWithIdentifier:@"aboutyoulincontroller"];
     PersonalInformationController=[iStoryBoard instantiateViewControllerWithIdentifier:@"personalinformationcontroller"];
+    SignIntegralController=[iStoryBoard instantiateViewControllerWithIdentifier:@"signintegralcontroller"];
     
 }
 - (void)didReceiveMemoryWarning {
@@ -102,6 +108,11 @@
     NSInteger rowNo = indexPath.row;
     NSInteger section = indexPath.section;
     multiTableViewCell* cell = nil;
+    signButton = [[UIButton alloc] initWithFrame:CGRectMake(320, 30, 40, 40)];
+    signButton.layer.cornerRadius = signButton.frame.size.width / 2;
+    signButton.layer.masksToBounds = YES;
+    [signButton setBackgroundImage:[UIImage imageNamed:@"btn_qiandao.png"] forState:UIControlStateNormal];
+    [signButton addTarget:self action:@selector(signGetIntegralAction) forControlEvents:UIControlEventTouchDown];
     if(section == 0)
     {
         NSString* cellZero = @"cellZero";
@@ -113,6 +124,7 @@
             {
                 cell = [[multiTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellZero];
             }
+            [cell.contentView addSubview:signButton];
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             cell.delegate = self;
             
@@ -147,6 +159,15 @@
     
     
     return cell;
+}
+-(void)signGetIntegralAction{
+
+    
+    backItemTitle = [[UIBarButtonItem alloc] initWithTitle:@"积分签到" style:UIBarButtonItemStylePlain target:nil action:nil];
+    [self.parentViewController.navigationItem setBackBarButtonItem:backItemTitle];
+    [self.parentViewController.navigationController pushViewController:SignIntegralController animated:YES];
+    /*获取签到日期*/
+    SignIntegralController.nowWeekSignedArray=@[@"7.18",@"7.19"];
 }
 
 

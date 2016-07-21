@@ -24,7 +24,7 @@
     self = [super initWithFrame:frame];
     
     //self.alpha=0.0f;
-    self.backgroundColor=[UIColor colorWithWhite:0.f alpha:0.5];
+    self.backgroundColor=[UIColor colorWithWhite:0.f alpha:0.1];
     /*定义view*/
     _bGView1= [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 119)];
     _bGView1.backgroundColor=[UIColor whiteColor];
