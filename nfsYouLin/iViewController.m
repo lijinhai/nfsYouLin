@@ -34,6 +34,7 @@
     SignIntegralViewController *SignIntegralController;
     UIBarButtonItem* backItemTitle;
     UIButton *signButton;
+    Users* user;
     
 }
 

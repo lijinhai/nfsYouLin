@@ -8,6 +8,8 @@
 
 #import "multiTableViewCell.h"
 #import "SignIntegralViewController.h"
+#import "StringMD5.h"
+#import "UIImageView+WebCache.h"
 
 @implementation multiTableViewCell{
     SignIntegralViewController *SignIntegralController;
