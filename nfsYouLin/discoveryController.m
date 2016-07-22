@@ -7,7 +7,7 @@
 //
 
 #import "discoveryController.h"
-#import "friendsViewController.h"
+#import "FriendsVC.h"
 
 
 @interface discoveryController ()
@@ -19,7 +19,7 @@
     NSArray* _discoveryServiceName;
     NSArray* _discoveryServiceImages;
     UIColor* _viewColor;
-    friendsViewController* _friendsController;
+    FriendsVC* _friendsController;
     UITabBarController* _parentController;
 }
 

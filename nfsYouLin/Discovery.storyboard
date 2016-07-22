@@ -42,10 +42,10 @@
             </objects>
             <point key="canvasLocation" x="514" y="-131"/>
         </scene>
-        <!--Friends View Controller-->
+        <!--FriendsVC-->
         <scene sceneID="PIW-UG-EQi">
             <objects>
-                <viewController storyboardIdentifier="friends" useStoryboardIdentifierAsRestorationIdentifier="YES" id="SaP-aW-3Cp" customClass="friendsViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="friends" useStoryboardIdentifierAsRestorationIdentifier="YES" id="SaP-aW-3Cp" customClass="FriendsVC" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="ivD-SO-aLe"/>
                         <viewControllerLayoutGuide type="bottom" id="P1Y-lm-c1u"/>
@@ -53,14 +53,6 @@
                     <view key="view" contentMode="scaleToFill" id="RFj-UY-g9r">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="HAHHAHAHAHA" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bCg-VB-vBY">
-                                <rect key="frame" x="90" y="248" width="129" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" id="3pC-tX-04b"/>

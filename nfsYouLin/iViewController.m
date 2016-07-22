@@ -316,13 +316,14 @@
     if([db open])
     {
         NSLog(@"iVC: db open success!");
-        FMResultSet *result = [db executeQuery:@"SELECT user_name, user_portrait, user_phone_number FROM table_users WHERE id = 1"];
+        NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+        NSString* phoneNum = [defaults stringForKey:@"phoneNum"];
+        user.phoneNum = phoneNum;
+        FMResultSet *result = [db executeQuery:@"SELECT user_name, user_portrait FROM table_users WHERE user_phone_number = ?",phoneNum];
         while ([result next]) {
             NSString *name = [result stringForColumn:@"user_name"];
-            NSString *phoneNum = [result stringForColumn:@"user_phone_number"];
             NSString *portrait = [result stringForColumn:@"user_portrait"];
             user.userName = name;
-            user.phoneNum = phoneNum;
             user.userPortrait = portrait;
             NSLog(@"name = %@",user.userName);
             NSLog(@"phoneNum = %@",user.phoneNum);
