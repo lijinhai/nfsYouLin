@@ -16,7 +16,12 @@
 @interface FDCalendarItem : UIView
 
 @property (strong, nonatomic) NSDate *date;
-@property (nonatomic, strong) NSArray *signedArray;
+
+@property (strong, nonatomic) NSString *oneDateString;
+@property (strong, nonatomic) NSString *twoDateString;
+@property (strong, nonatomic) NSString *threeDateString;
+
+@property (nonatomic, strong) NSMutableArray *signedArray;
 @property (weak, nonatomic) id<FDCalendarItemDelegate> delegate;
 - (NSDate *)previousMonthDate;
 - (NSDate *)lastMonthDate;

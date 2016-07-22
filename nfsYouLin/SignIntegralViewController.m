@@ -47,33 +47,33 @@
     
     }
     /*设置周label日期*/
-    NSMutableArray *weekDateArray=[self getWeekTime];
-    self.MONLabel.text=[weekDateArray objectAtIndex:0];
+    _weekDateArray=[self getWeekTime];
+    self.MONLabel.text=[_weekDateArray objectAtIndex:0];
     self.MONLabel.tag=0;
     
-    self.TUELabel.text=[weekDateArray objectAtIndex:1];
+    self.TUELabel.text=[_weekDateArray objectAtIndex:1];
     self.TUELabel.tag=1;
     
-    self.WEDLabel.text=[weekDateArray objectAtIndex:2];
+    self.WEDLabel.text=[_weekDateArray objectAtIndex:2];
     self.WEDLabel.tag=2;
     
-    self.THULabel.text=[weekDateArray objectAtIndex:3];
+    self.THULabel.text=[_weekDateArray objectAtIndex:3];
     self.THULabel.tag=3;
     
-    self.FRILabel.text=[weekDateArray objectAtIndex:4];
+    self.FRILabel.text=[_weekDateArray objectAtIndex:4];
     self.FRILabel.tag=4;
     
-    self.SATLabel.text=[weekDateArray objectAtIndex:5];
+    self.SATLabel.text=[_weekDateArray objectAtIndex:5];
     self.SATLabel.tag=5;
     
-    self.SUNLabel.text=[weekDateArray objectAtIndex:6];
+    self.SUNLabel.text=[_weekDateArray objectAtIndex:6];
     self.SUNLabel.tag=6;
    /*设置周签到标示*/
     if([self.nowWeekSignedArray count]!=0)
     {
-        for(int i=0;i<[weekDateArray count];i++){
+        for(int i=0;i<[_weekDateArray count];i++){
         
-           if([self checkWeekSignedDay:[weekDateArray objectAtIndex:i]])
+           if([self checkWeekSignedDay:[_weekDateArray objectAtIndex:i]])
            {
                UIView *layerView=[[UIView alloc] initWithFrame:CGRectMake(17.5+59*i, 286,24, 24)];
                UIImageView *picView=[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"pic_dian2"]];
@@ -90,6 +90,7 @@
         
         
         }
+        [self.nowWeekSignedArray removeAllObjects];
     
     }
     
@@ -107,7 +108,7 @@
         NSCalendar *calendar = [NSCalendar currentCalendar];
         NSDateComponents *comp = [calendar components:NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay | NSCalendarUnitWeekday | NSCalendarUnitDay fromDate:[NSDate date]];
         NSInteger weekDay = [comp weekday];
-        NSLog(@"weekDay is %ld",weekDay);
+        //NSLog(@"weekDay is %ld",weekDay);
         UIView *layerView=[[UIView alloc] init];
         if(weekDay!=1)
         {
@@ -128,8 +129,9 @@
     {
         
         NSInteger points=3;//今天签到所得分数
-        PopupCalendarView *view = [PopupCalendarView defaultPopupView:points tFrame:CGRectMake(0, 0, 365, 375)];
+        PopupCalendarView *view = [PopupCalendarView defaultPopupView:points tFrame:CGRectMake(0, 0, 365, 375) signArray:self.monthSignedArray];
         view.parentVC = self;
+        //NSLog(@"self.monthSignedArray is %ld",[self.monthSignedArray count]);
         [self lew_presentPopupView:view animation:[LewPopupViewAnimationRight new] dismissed:^{
             NSLog(@"动画结束");
         }];
@@ -203,8 +205,6 @@
     {
       if([day isEqualToString:[self.nowWeekSignedArray objectAtIndex:i]])
           {
-          
-          
               return YES;
               break;
           }else{

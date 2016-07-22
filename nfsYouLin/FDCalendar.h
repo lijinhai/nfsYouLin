@@ -10,6 +10,11 @@
 
 @interface FDCalendar : UIView
 
-- (instancetype)initWithCurrentDate:(NSDate *)date;
+@property (nonatomic, strong) NSMutableArray *nowMonthSignedArray;
+@property (nonatomic, strong) NSMutableArray *previousMonthSignedArray;
+@property (nonatomic, strong) NSMutableArray *lastMonthSignedArray;
+@property (nonatomic, strong) NSMutableDictionary *dic;
+
+- (instancetype)initWithCurrentDate:(NSDate *)date signArray:(NSMutableArray *)datearray;
 
 @end

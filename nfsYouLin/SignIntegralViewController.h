@@ -26,5 +26,8 @@
 @property (weak, nonatomic) IBOutlet UILabel *SATLabel;
 
 @property (weak, nonatomic) IBOutlet UILabel *SUNLabel;
-@property (nonatomic, strong) NSArray *nowWeekSignedArray;
+
+@property (nonatomic, strong) NSMutableArray *nowWeekSignedArray;
+@property (nonatomic, strong) NSMutableArray *monthSignedArray;
+@property (nonatomic, strong) NSMutableArray *weekDateArray;
 @end

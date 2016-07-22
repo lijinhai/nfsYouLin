@@ -254,6 +254,7 @@
 		8FF22DA41CE1733800EAE9BA /* forgetViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FF22DA31CE1733800EAE9BA /* forgetViewController.m */; };
 		8FF7E9781D12A04D0026D07D /* ChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FF7E9771D12A04D0026D07D /* ChatViewController.m */; };
 		AF0E0FF01D4068B2009FB44D /* DialogView.m in Sources */ = {isa = PBXBuildFile; fileRef = AF0E0FEF1D4068B2009FB44D /* DialogView.m */; };
+		AF0E0FF21D40716C009FB44D /* SMS_SDK in Resources */ = {isa = PBXBuildFile; fileRef = AF0E0FF11D40716C009FB44D /* SMS_SDK */; };
 		AF1DBD7F1CEAEA5100557E43 /* inputRegisterInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AF1DBD7E1CEAEA5100557E43 /* inputRegisterInfoViewController.m */; };
 		AF1DBD941CED4D8500557E43 /* chooseCityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AF1DBD931CED4D8500557E43 /* chooseCityViewController.m */; };
 		AF1DBD971CED80D400557E43 /* myCommunityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AF1DBD961CED80D400557E43 /* myCommunityViewController.m */; };
@@ -818,6 +819,7 @@
 		8FF7E9771D12A04D0026D07D /* ChatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatViewController.m; sourceTree = "<group>"; };
 		AF0E0FEE1D4068B2009FB44D /* DialogView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DialogView.h; sourceTree = "<group>"; };
 		AF0E0FEF1D4068B2009FB44D /* DialogView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DialogView.m; sourceTree = "<group>"; };
+		AF0E0FF11D40716C009FB44D /* SMS_SDK */ = {isa = PBXFileReference; lastKnownFileType = folder; path = SMS_SDK; sourceTree = "<group>"; };
 		AF1DBD7D1CEAEA5100557E43 /* inputRegisterInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = inputRegisterInfoViewController.h; sourceTree = "<group>"; };
 		AF1DBD7E1CEAEA5100557E43 /* inputRegisterInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = inputRegisterInfoViewController.m; sourceTree = "<group>"; };
 		AF1DBD921CED4D8500557E43 /* chooseCityViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = chooseCityViewController.h; sourceTree = "<group>"; };
@@ -2061,6 +2063,7 @@
 		AFCE1F881CDAD1B20085F10F = {
 			isa = PBXGroup;
 			children = (
+				AF0E0FF11D40716C009FB44D /* SMS_SDK */,
 				8F51E2591D338FBF0094A4E5 /* SDWebImage */,
 				8F73C8D61D2B540D009C83C2 /* Framework */,
 				8F73C8C21D2B53E6009C83C2 /* AFNetworking */,
@@ -2394,6 +2397,7 @@
 				8F648DB81D00549E00E3B155 /* chatBar_keyboardSelected@2x.png in Resources */,
 				8F648DE11D00549E00E3B155 /* chat_sender_audio_playing_001@2x.png in Resources */,
 				8F648DCC1D00549E00E3B155 /* VoiceSearchFeedback001@2x.png in Resources */,
+				AF0E0FF21D40716C009FB44D /* SMS_SDK in Resources */,
 				8F648D291D00547A00E3B155 /* MWPhotoBrowser.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

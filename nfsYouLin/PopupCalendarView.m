@@ -23,7 +23,7 @@
     // Drawing code
 }
 */
-- (id)initWithFrame:(CGRect)frame  todayIntegralValue:(NSInteger) todayPoint
+- (id)initWithFrame:(CGRect)frame  todayIntegralValue:(NSInteger) todayPoint threeMonthSign:(NSMutableArray *)threeMonthSignedArray
 {
     self = [super initWithFrame:frame];
     self.backgroundColor=[UIColor whiteColor];
@@ -43,40 +43,138 @@
     showTodayPointsInfo.font=[UIFont systemFontOfSize:16];
     showTodayPointsInfo.textAlignment=NSTextAlignmentCenter;
     [self addSubview:showTodayPointsInfo];
-    
+    NSLog(@"threeMonthSignedArray is  %ld",[threeMonthSignedArray count]);
 
     /*加载日历*/
-    FDCalendar *calendar = [[FDCalendar alloc] initWithCurrentDate:[NSDate date]];
+    //NSMutableArray *arrayStr=[[NSMutableArray alloc] init];
+    FDCalendar *calendar = [[FDCalendar alloc] initWithCurrentDate:[NSDate date] signArray:threeMonthSignedArray];
     CGRect frame1 = CGRectMake(0, 40, 365, 360);
     frame.origin.y = 0;
     calendar.frame = frame1;
+//    calendar.nowMonthSignedArray=[[NSMutableArray alloc] init];
+//    calendar.previousMonthSignedArray=[[NSMutableArray alloc] init];
+//    calendar.lastMonthSignedArray=[[NSMutableArray alloc] init];
+//    for(int i=0;i<[threeMonthSignedArray count];i++)
+//    {
+//        NSArray *array = [[threeMonthSignedArray objectAtIndex:i] componentsSeparatedByString:@"."];
+//        NSString *yearAndMonthStr=[NSString stringWithFormat:@"%@%@%@",array[0],@".",array[1]];
+//        [arrayStr addObject:yearAndMonthStr];
+//    }
+//    
+//    NSMutableDictionary *dic = [[NSMutableDictionary alloc]initWithCapacity:0];
+//    for(NSString *str in arrayStr)
+//    {
+//        [dic setValue:str forKey:str];
+//    }
+//    NSArray *keys = [dic allKeys];
+//    long int length = [keys count];
+//    for(int i=0;i<[threeMonthSignedArray count];i++)
+//    {
+//        NSArray *array = [[threeMonthSignedArray objectAtIndex:i] componentsSeparatedByString:@"."];
+//        NSString *submonthStr=[NSString stringWithFormat:@"%@%@%@",array[0],@".",array[1]];
+//        NSString *subdateStr=[NSString stringWithFormat:@"%@%@%@",array[1],@".",array[2]];
+//        if([keys count]==1)
+//        {
+//            [calendar.nowMonthSignedArray addObject:subdateStr];
+//             calendar.previousMonthSignedArray=nil;
+//             calendar.lastMonthSignedArray=nil;
+//            
+//        
+//        }else if([keys count]==2){
+//            id key1 = [keys objectAtIndex:0];
+//            id obj1 = [dic objectForKey:key1];
+//            id key2 = [keys objectAtIndex:1];
+//            id obj2 = [dic objectForKey:key2];
+//            if(([obj1 intValue]-[obj2 intValue])<=1){
+//            
+//                for (int j = 0; j < length;j++){
+//                    
+//                    id key = [keys objectAtIndex:j];
+//                    id obj = [dic objectForKey:key];
+//                    if([submonthStr isEqualToString:obj]&&j==0)
+//                    {
+//                        [calendar.nowMonthSignedArray addObject:subdateStr];
+//                        
+//                    }else{
+//                        
+//                        [calendar.previousMonthSignedArray addObject:subdateStr];
+//                        
+//                    }
+//                }
+//                calendar.lastMonthSignedArray=nil;
+//
+//            }else{
+//            
+//                for (int j = 0; j < length;j++){
+//                    
+//                    id key = [keys objectAtIndex:j];
+//                    id obj = [dic objectForKey:key];
+//                    if([submonthStr isEqualToString:obj]&&j==0)
+//                    {
+//                        [calendar.nowMonthSignedArray addObject:subdateStr];
+//                        
+//                    }else{
+//                        
+//                        [calendar.lastMonthSignedArray addObject:subdateStr];
+//                    }
+//                    
+//                }
+//                calendar.previousMonthSignedArray=nil;
+//
+//            }
+//            
+//        }else if([keys count]==3)
+//        {
+//            for (int j = 0; j < length;j++){
+//                
+//                id key = [keys objectAtIndex:j];
+//                id obj = [dic objectForKey:key];
+//                if([submonthStr isEqualToString:obj]&&j==0)
+//                {
+//                    NSLog(@"7 subdateStr is %@",subdateStr);
+//                  [calendar.nowMonthSignedArray addObject:subdateStr];
+//                
+//                }else if([submonthStr isEqualToString:obj]&&j==1){
+//                
+//                   NSLog(@"6 subdateStr is %@",subdateStr);
+//                  [calendar.previousMonthSignedArray addObject:subdateStr];
+//                    
+//                }else if([submonthStr isEqualToString:obj]&&j==2)
+//                {
+//                   NSLog(@"5 subdateStr is %@",subdateStr);
+//                  [calendar.lastMonthSignedArray addObject:subdateStr];
+//                }
+//                
+//            }
+//
+//        
+//        }
+//      
+//        
+//            }
+
+    /*
+    calendar.nowMonthSignedArray=@[@""];
+    calendar.previousMonthSignedArray=@[@""];
+    calendar.lastMonthSignedArray=@[@""];
+     */
+    //[calendar initWithCurrentDate:[NSDate date]];
     [self addSubview:calendar];
     return self;
 }
 
-+ (instancetype)defaultPopupView:(NSInteger) todayPoint tFrame:(CGRect)frame{
-    return [[PopupCalendarView alloc]initWithFrame:frame todayIntegralValue:todayPoint];
++ (instancetype)defaultPopupView:(NSInteger) todayPoint tFrame:(CGRect)frame signArray:(NSMutableArray *)datearray{
+    return [[PopupCalendarView alloc]initWithFrame:frame todayIntegralValue:todayPoint threeMonthSign:datearray];
 }
 
 -(void)dismissMyView{
     [_parentVC lew_dismissPopupViewWithanimation:[LewPopupViewAnimationRight new]];
 }
 
-- (void)textToast:(NSString *)tips {
-    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.window  animated:YES];
-    
-    // Set the annular determinate mode to show task progress.navigationController.view
-    hud.mode = MBProgressHUDModeText;
-    hud.bezelView.backgroundColor=[UIColor blackColor];
-    hud.bezelView.alpha = 1;
-    hud.minSize=CGSizeMake(50, 50);
-    hud.label.text = NSLocalizedString(tips, @"HUD message title");
-    
-    hud.label.textColor = [UIColor whiteColor];
-    hud.label.font= [UIFont systemFontOfSize:15];
-    hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
-    
-    [hud hideAnimated:YES afterDelay:0.8f];
-}
+-(void)loadSignedCalendar{
 
+
+
+
+}
 @end

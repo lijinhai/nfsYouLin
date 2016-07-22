@@ -104,6 +104,17 @@ typedef NS_ENUM(NSUInteger, FDCalendarMonth) {
 
 // 获取date的上上个月
 - (NSDate *)lastMonth{
+    
+//    NSString *datestring = [NSString stringWithFormat:@"1999-09-03"];
+//    //想要设置自己想要的格式，可以用nsdateformatter这个类，这里是初始化
+//    NSDateFormatter * dm = [[NSDateFormatter alloc]init];
+//    //指定输出的格式   这里格式必须是和上面定义字符串的格式相同，否则输出空
+//    [dm setDateFormat:@"yyyy-MM-dd"];
+//    //把字符串的时间转换成Date对象，用dateFromString方法
+//    NSDate * newdate = [dm dateFromString:datestring];
+//    //输出
+//    NSLog(@"newdate is %@",newdate);
+    
     NSDateComponents *components = [[NSDateComponents alloc] init];
     components.month = -2;
     NSDate *lastMonth = [[NSCalendar currentCalendar] dateByAddingComponents:components toDate:[NSDate date] options:NSCalendarMatchStrictly];
@@ -112,6 +123,17 @@ typedef NS_ENUM(NSUInteger, FDCalendarMonth) {
 
 // 获取date的上个月
 - (NSDate *)previousMonth {
+
+    //    NSString *datestring = [NSString stringWithFormat:@"1999-09-03"];
+    //    //想要设置自己想要的格式，可以用nsdateformatter这个类，这里是初始化
+    //    NSDateFormatter * dm = [[NSDateFormatter alloc]init];
+    //    //指定输出的格式   这里格式必须是和上面定义字符串的格式相同，否则输出空
+    //    [dm setDateFormat:@"yyyy-MM-dd"];
+    //    //把字符串的时间转换成Date对象，用dateFromString方法
+    //    NSDate * newdate = [dm dateFromString:datestring];
+    //    //输出
+    //    NSLog(@"newdate is %@",newdate);
+
     NSDateComponents *components = [[NSDateComponents alloc] init];
     components.month = -1;
     NSDate *previousMonth = [[NSCalendar currentCalendar] dateByAddingComponents:components toDate:[NSDate date] options:NSCalendarMatchStrictly];
@@ -234,11 +256,8 @@ typedef NS_ENUM(NSUInteger, FDCalendarMonth) {
     } else {    // 属于这个月
         NSInteger day = indexPath.row - firstWeekday + 1;
         cell.dayLabel.text= [NSString stringWithFormat:@"%ld", day];
-        //NSLog(@"day is %ld",[self month:self.date]);
-        //NSLog(@"previousMonthDate is %ld",[self month:self.previousMonthDate]);
-        //NSLog(@"lastMonthDate is %ld",[self month:self.lastMonthDate]);
+
         if (day == [[NSCalendar currentCalendar] component:NSCalendarUnitDay fromDate:self.date]&&[self month:self.date]==[self month:[NSDate date]]) {
-            //NSLog(@"****self.date is %@ ********",self.date);
             cell.backgroundColor = RGB(255, 140, 0);
             cell.layer.cornerRadius = cell.frame.size.height / 2;
             cell.layer.borderWidth = 1.0;

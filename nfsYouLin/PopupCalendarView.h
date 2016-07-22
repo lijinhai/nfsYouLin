@@ -11,5 +11,6 @@
 @interface PopupCalendarView : UIView
 @property (nonatomic, strong) UIView *innerView;
 @property (nonatomic, weak)UIViewController *parentVC;
-+ (instancetype)defaultPopupView:(NSInteger) todayPoint tFrame:(CGRect)frame;
+
++ (instancetype)defaultPopupView:(NSInteger) todayPoint tFrame:(CGRect)frame signArray:(NSMutableArray *)datearray;
 @end
