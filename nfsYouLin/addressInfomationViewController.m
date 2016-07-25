@@ -492,6 +492,8 @@ thread.name=[NSString stringWithFormat:@"myThread%ld",rowNumber];
 }
 - (IBAction)writeAddressAction:(id)sender {
     
+    UIBarButtonItem* neighborItem = [[UIBarButtonItem alloc] initWithTitle:@"填写家庭住址" style:UIBarButtonItemStylePlain target:nil action:nil];
+    [self.navigationItem setBackBarButtonItem:neighborItem];
     [self.navigationController pushViewController:jumpFamilyAddressController animated:YES];
 }
 - (NSMutableArray*) getAddressList

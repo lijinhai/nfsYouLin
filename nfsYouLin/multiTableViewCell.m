@@ -7,11 +7,15 @@
 //
 
 #import "multiTableViewCell.h"
+#import "SignIntegralViewController.h"
 #import "StringMD5.h"
 #import "UIImageView+WebCache.h"
 
-@implementation multiTableViewCell
+@implementation multiTableViewCell{
+    SignIntegralViewController *SignIntegralController;
+    UIBarButtonItem* backItemTitle;
 
+}
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code
@@ -30,6 +34,8 @@
     self.integralCount = 0;
     self.favoriteCount = 0;
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
+    UIStoryboard* iStoryBoard = [UIStoryboard storyboardWithName:@"Me" bundle:nil];
+    SignIntegralController=[iStoryBoard instantiateViewControllerWithIdentifier:@"signintegralcontroller"];
     if([reuseIdentifier isEqualToString:@"cellOne"])
     {
         self.integralView = [[UIControl alloc] initWithFrame:CGRectMake(0, 0, self.contentView.frame.size.width / 3 - 1 , 80)];
@@ -128,28 +134,40 @@
         
         UIView* view = [[UIView alloc] initWithFrame:CGRectMake(100, 25, 400, 50)];
         
-        UILabel* nameLabel = [[UILabel alloc] init];
-        UILabel* phoneLabel = [[UILabel alloc] init];
-
-        self.signButton = [[UIButton alloc] initWithFrame:CGRectMake(220, 5, 40, 40)];
+        self.nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 15, 10)];
+        self.nameLabel.text = @"姓名";
+        self.phoneLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 15, 120, 15)];
+        self.phoneLabel.text = @"15114599422";
+        self.phoneLabel.enabled = NO;
+        [self.nameLabel setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
+        [view setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin];
+        
+        self.signButton = [[UIButton alloc] initWithFrame:CGRectMake(200, -10, 40, 40)];
         self.signButton.layer.cornerRadius = self.signButton.frame.size.width / 2;
         self.signButton.layer.masksToBounds = YES;
         [self.signButton setBackgroundImage:[UIImage imageNamed:@"btn_qiandao.png"] forState:UIControlStateNormal];
-        [view addSubview:nameLabel];
-        [view addSubview:phoneLabel];
-        [view addSubview:self.signButton];
-        self.nameLabel = nameLabel;
-        self.phoneLabel = phoneLabel;
+        [self.signButton addTarget:self action:@selector(signGetIntegralAction) forControlEvents:UIControlEventTouchDown];
         
+        [view addSubview:self.nameLabel];
+        [view addSubview:self.phoneLabel];
+        //[view addSubview:self.signButton];
         [self.contentView addSubview:view];
     }
     return self;
 }
 
+-(void)signGetIntegralAction{
+    //
+        NSLog(@"签到了么~~~~~~~~");
+        backItemTitle = [[UIBarButtonItem alloc] initWithTitle:@"积分签到" style:UIBarButtonItemStylePlain target:nil action:nil];
+        //[ setBackBarButtonItem:backItemTitle];
+        //[self.navigationController pushViewController:SignIntegralController animated:YES];
+}
 
 - (void) touchDownIntegral
 {
     self.integralView.backgroundColor = [UIColor lightGrayColor];
+    //NSLog(@"签到了！！！！");
 }
 
 - (void)touchCancelIntegral
@@ -168,7 +186,7 @@
 
 - (void)touchCancelPublish
 {
-    //    self.view1.backgroundColor = _viewColor;
+    //self.view1.backgroundColor = _viewColor;
     self.publishCount += 3;
     self.publishLable.text = [NSString stringWithFormat:@"%ld",self.publishCount];
     self.publishView.backgroundColor = [UIColor whiteColor];

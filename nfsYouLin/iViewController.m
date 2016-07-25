@@ -14,6 +14,9 @@
 #import "AppDelegate.h"
 #import "AboutYouLinViewController.h"
 #import "PersonalInformationViewController.h"
+#import "SignIntegralViewController.h"
+#import "AFHTTPSessionManager.h"
+
 @interface iViewController ()
 
 @end
@@ -28,8 +31,10 @@
     ISettingViewController *ISettingController;
     AboutYouLinViewController *AboutYouLinController;
     PersonalInformationViewController *PersonalInformationController;
-    
+    multiTableViewCell *multiTableCell;
+    SignIntegralViewController *SignIntegralController;
     UIBarButtonItem* backItemTitle;
+    UIButton *signButton;
     Users* user;
     
 }
@@ -46,7 +51,8 @@
     
     [self.iTabBarItem setTitleTextAttributes:@{NSFontAttributeName : [UIFont fontWithName:@"HelveticaNeue-Bold" size:10.0f],NSForegroundColorAttributeName : fontColor
                                                } forState:UIControlStateSelected];
-    
+    //multiTableCell=[[multiTableViewCell alloc] init];
+    //[multiTableCell.signButton addTarget:self action:@selector(signGetIntegralAction) forControlEvents:UIControlEventTouchDown];
     
     _viewColor = [UIColor colorWithRed:243/255.0 green:243/255.0 blue:240/255.0 alpha:1];
     
@@ -71,6 +77,7 @@
     ISettingController=[iStoryBoard instantiateViewControllerWithIdentifier:@"isettingcontroller"];
     AboutYouLinController=[iStoryBoard instantiateViewControllerWithIdentifier:@"aboutyoulincontroller"];
     PersonalInformationController=[iStoryBoard instantiateViewControllerWithIdentifier:@"personalinformationcontroller"];
+    SignIntegralController=[iStoryBoard instantiateViewControllerWithIdentifier:@"signintegralcontroller"];
     
 }
 - (void)didReceiveMemoryWarning {
@@ -105,6 +112,11 @@
     NSInteger rowNo = indexPath.row;
     NSInteger section = indexPath.section;
     multiTableViewCell* cell = nil;
+    signButton = [[UIButton alloc] initWithFrame:CGRectMake(320, 30, 40, 40)];
+    signButton.layer.cornerRadius = signButton.frame.size.width / 2;
+    signButton.layer.masksToBounds = YES;
+    [signButton setBackgroundImage:[UIImage imageNamed:@"btn_qiandao.png"] forState:UIControlStateNormal];
+    [signButton addTarget:self action:@selector(signGetIntegralAction) forControlEvents:UIControlEventTouchDown];
     if(section == 0)
     {
         NSString* cellZero = @"cellZero";
@@ -116,6 +128,7 @@
             {
                 cell = [[multiTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellZero];
             }
+            [cell.contentView addSubview:signButton];
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             cell.delegate = self;
             cell.userData = user;
@@ -152,7 +165,116 @@
     
     return cell;
 }
+-(void)signGetIntegralAction{
 
+    
+    AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
+    manager.securityPolicy.allowInvalidCertificates = YES;
+    [manager.securityPolicy setValidatesDomainName:NO];
+    [manager GET:@"https://123.57.9.62/youlin/api1.0/?tag=getsigndate&apitype=users&access=9527&user_id=47" parameters:nil progress:^(NSProgress * _Nonnull downloadProgress) {
+        // 这里可以获取到目前的数据请求的进度
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        // 请求成功，解析数据
+        NSLog(@"%@", [[responseObject objectAtIndex:0][@"credit"] stringValue]);
+        SignIntegralController.nowWeekSignedArray=[[NSMutableArray alloc] init];
+        SignIntegralController.monthSignedArray=[[NSMutableArray alloc] init];
+
+        for(int i=1;i<[responseObject count];i++)
+        {
+            NSString *year=[[responseObject objectAtIndex:i][@"year"] stringValue];
+            NSString *month=[[responseObject objectAtIndex:i][@"month"] stringValue];
+            NSString *day=[[responseObject objectAtIndex:i][@"day"] stringValue];
+            NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
+            [formatter setDateStyle:NSDateFormatterMediumStyle];
+            [formatter setTimeStyle:NSDateFormatterShortStyle];
+            if([month intValue]<10){
+                
+              [formatter setDateFormat:@"M.dd"];
+            }else{
+                
+              [formatter setDateFormat:@"MM.dd"];
+            }
+            
+            NSDate *date = [NSDate dateWithTimeIntervalSince1970:[[[responseObject objectAtIndex:i][@"timestamp"] stringValue]intValue]];
+            
+            NSString *dateString=[formatter stringFromDate:date];
+            /*获取本周签到日期*/
+            if([month intValue]==[self month:[NSDate date]]&&[year intValue]==[self year:[NSDate date]])
+            {
+             for(int i=0;i<[[self getWeekTime] count];i++){
+              if([dateString isEqualToString:[[self getWeekTime] objectAtIndex:i]]){
+                  
+                  [SignIntegralController.nowWeekSignedArray addObject:dateString];
+                  
+                }
+            }
+            }
+            /*获取最近三个月的签到日期*/
+            NSString *composeDateString=[NSString stringWithFormat:@"%@%@%@%@%@",year,@".",month,@".",day];
+            [SignIntegralController.monthSignedArray addObject:composeDateString];
+        }
+        backItemTitle = [[UIBarButtonItem alloc] initWithTitle:@"积分签到" style:UIBarButtonItemStylePlain target:nil action:nil];
+        [self.parentViewController.navigationItem setBackBarButtonItem:backItemTitle];
+        [self.parentViewController.navigationController pushViewController:SignIntegralController animated:YES];
+
+
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        // 请求失败
+        NSLog(@"%@", [error localizedDescription]);
+    }];
+}
+
+- (NSInteger)month:(NSDate *)date{
+    NSDateComponents *components = [[NSCalendar currentCalendar] components:(NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay) fromDate:date];
+    return [components month];
+}
+- (NSInteger)year:(NSDate *)date{
+    NSDateComponents *components = [[NSCalendar currentCalendar] components:(NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay) fromDate:date];
+    return [components year];
+}
+
+// 获取当前周的周一到周日的日期
+- (NSMutableArray *)getWeekTime
+{
+    NSDate *nowDate = [NSDate date];
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    NSDateComponents *comp = [calendar components:NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay | NSCalendarUnitWeekday | NSCalendarUnitDay fromDate:nowDate];
+    NSInteger weekDay = [comp weekday];
+    NSInteger day = [comp day];
+    long firstDiff,lastDiff;
+    if (weekDay == 1)
+    {
+        firstDiff = -6;
+        lastDiff = 0;
+    }
+    else
+    {
+        firstDiff = [calendar firstWeekday] - weekDay + 1;
+        lastDiff = 8 - weekDay;
+    }
+    
+    NSDateComponents *firstDayComp = [calendar components:NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay  fromDate:nowDate];
+    [firstDayComp setDay:day + firstDiff];
+    NSDate *firstDayOfWeek = [calendar dateFromComponents:firstDayComp];
+    NSMutableArray *weekDateArray=[[NSMutableArray alloc] init];
+    for(int i=0;i<7;i++){
+        NSDate *nextDay = [firstDayOfWeek dateByAddingTimeInterval:24*60*60*i];
+        NSInteger nowmonth=[self month:nextDay];
+        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+        if(nowmonth<10)
+        {
+            
+            [formatter setDateFormat:@"M.dd"];
+        }else{
+            
+            [formatter setDateFormat:@"MM.dd"];
+        }
+        NSString *firstDay = [formatter stringFromDate:nextDay];
+        [weekDateArray addObject:firstDay];
+    }
+    
+    return weekDateArray;
+}
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
