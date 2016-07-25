@@ -69,6 +69,7 @@
 
 - (NSMutableArray *)sortArrayWithArray:(NSArray*) array
 {
+    NSMutableArray* arr = [NSMutableArray arrayWithArray:array];
     NSMutableArray* arr1 = [[NSMutableArray alloc] init];
     NSArray* arr2;
     NSMutableArray* arr3 = [[NSMutableArray alloc] init];
@@ -82,8 +83,12 @@
     arr2 = [arr1 sortedArrayUsingSelector:@selector(compare:)];
     for (int i = 0; i < [arr2 count]; i++)
     {
+        
         NSUInteger index = [arr1 indexOfObject:arr2[i]];
-        [arr3 addObject:array[index]];
+        [arr3 addObject:arr[index]];
+        [arr1 removeObjectAtIndex:index];
+        [arr removeObjectAtIndex:index];
+
     }
     
     return arr3;

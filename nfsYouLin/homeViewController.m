@@ -239,6 +239,13 @@
                 [personInfoDic removeAllObjects];
                 personInfoDic = [sqlDict getInitFamilyInfoDic];
                 NSDictionary* familyDict = responseObject[i];
+                if([personDic[@"user_family_id"] integerValue] ==
+                   [familyDict[@"family_id"] integerValue])
+                {
+                    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+                    [defaults setInteger:[[familyDict valueForKey:@"block_id"] integerValue] forKey:@"block_id"];
+                    [defaults synchronize];
+                }
                 personInfoDic[@"family_apt_id"] = familyDict[@"apt_num_id"];
                 personInfoDic[@"family_block_id"] = familyDict[@"block_id"];
                 personInfoDic[@"family_block"] = familyDict[@"block_name"];

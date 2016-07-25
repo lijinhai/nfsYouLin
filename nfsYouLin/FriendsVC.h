@@ -13,5 +13,6 @@
 @property(strong, nonatomic) UITableView* tableView;
 
 
+@property(strong, nonatomic) NSMutableArray* friendsArray;
 
 @end

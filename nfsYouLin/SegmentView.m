@@ -22,7 +22,7 @@
         self.backgroundColor = [UIColor lightGrayColor];
         color = [UIColor colorWithRed:255/255.0 green:186/255.0 blue:2/255.0 alpha:1];
         self.neighborsBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.frame) / 2, CGRectGetHeight(self.frame) - 4 ) ];
-        [self.neighborsBtn setTitle:@"附近邻居:30" forState:UIControlStateNormal];
+        [self.neighborsBtn setTitle:@"附近邻居:0" forState:UIControlStateNormal];
         self.neighborsBtn.backgroundColor = [UIColor whiteColor];
         [self.neighborsBtn setTitleColor:[UIColor blackColor]forState:UIControlStateNormal];
         
