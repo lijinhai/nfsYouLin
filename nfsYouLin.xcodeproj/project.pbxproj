@@ -2002,19 +2002,6 @@
 			name = youLinNeighborModule;
 			sourceTree = "<group>";
 		};
-		AF4B306D1D34C0C100CBF257 /* SignedCalendar */ = {
-			isa = PBXGroup;
-			children = (
-				AF7FF17B1D3CBDD90068F8D9 /* FDCalendar.h */,
-				AF7FF17C1D3CBDD90068F8D9 /* FDCalendar.m */,
-				AF7FF17D1D3CBDD90068F8D9 /* FDCalendarItem.h */,
-				AF7FF17E1D3CBDD90068F8D9 /* FDCalendarItem.m */,
-				AF4B30741D34C2D700CBF257 /* PopupCalendarView.h */,
-				AF4B30751D34C2D700CBF257 /* PopupCalendarView.m */,
-			);
-			name = SignedCalendar;
-			sourceTree = "<group>";
-		};
 		8FB6FA451D41B47C00E6C71A /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -2046,6 +2033,19 @@
 				8FB6FA551D41B97700E6C71A /* FriendViewCell.m */,
 			);
 			name = View;
+			sourceTree = "<group>";
+		};
+		AF4B306D1D34C0C100CBF257 /* SignedCalendar */ = {
+			isa = PBXGroup;
+			children = (
+				AF7FF17B1D3CBDD90068F8D9 /* FDCalendar.h */,
+				AF7FF17C1D3CBDD90068F8D9 /* FDCalendar.m */,
+				AF7FF17D1D3CBDD90068F8D9 /* FDCalendarItem.h */,
+				AF7FF17E1D3CBDD90068F8D9 /* FDCalendarItem.m */,
+				AF4B30741D34C2D700CBF257 /* PopupCalendarView.h */,
+				AF4B30751D34C2D700CBF257 /* PopupCalendarView.m */,
+			);
+			name = SignedCalendar;
 			sourceTree = "<group>";
 		};
 		AF5293C51D12925200503975 /* ChatView */ = {
@@ -2320,7 +2320,7 @@
 				TargetAttributes = {
 					AFCE1F901CDAD1B20085F10F = {
 						CreatedOnToolsVersion = 7.3;
-						DevelopmentTeam = VD77NNWC3W;
+						DevelopmentTeam = 2E4D9VDYX9;
 					};
 					AFCE1FA91CDAD1B20085F10F = {
 						CreatedOnToolsVersion = 7.3;

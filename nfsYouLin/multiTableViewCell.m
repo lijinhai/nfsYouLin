@@ -122,10 +122,10 @@
     {
         /*处理头像*/
         
-        self.headIV = [[UIImageView alloc] initWithFrame:CGRectMake(10, 10, 80, 80)];
+        self.headIV = [[UIImageView alloc] initWithFrame:CGRectMake(10, 20, 60, 60)];
         
         self.headIV.layer.masksToBounds = YES;
-        self.headIV.layer.cornerRadius = 40;
+        self.headIV.layer.cornerRadius = 30;
         self.headIV.userInteractionEnabled = YES;
         UITapGestureRecognizer* tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(headTapAction:)];
         [self.headIV addGestureRecognizer:tapGesture];
@@ -142,7 +142,7 @@
         [self.nameLabel setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
         [view setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin];
         
-        self.signButton = [[UIButton alloc] initWithFrame:CGRectMake(200, -10, 40, 40)];
+        self.signButton = [[UIButton alloc] initWithFrame:CGRectMake(200, -10, 50, 50)];
         self.signButton.layer.cornerRadius = self.signButton.frame.size.width / 2;
         self.signButton.layer.masksToBounds = YES;
         [self.signButton setBackgroundImage:[UIImage imageNamed:@"btn_qiandao.png"] forState:UIControlStateNormal];
