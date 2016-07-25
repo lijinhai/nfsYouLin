@@ -105,16 +105,6 @@ typedef NS_ENUM(NSUInteger, FDCalendarMonth) {
 // 获取date的上上个月
 - (NSDate *)lastMonth{
     
-//    NSString *datestring = [NSString stringWithFormat:@"1999-09-03"];
-//    //想要设置自己想要的格式，可以用nsdateformatter这个类，这里是初始化
-//    NSDateFormatter * dm = [[NSDateFormatter alloc]init];
-//    //指定输出的格式   这里格式必须是和上面定义字符串的格式相同，否则输出空
-//    [dm setDateFormat:@"yyyy-MM-dd"];
-//    //把字符串的时间转换成Date对象，用dateFromString方法
-//    NSDate * newdate = [dm dateFromString:datestring];
-//    //输出
-//    NSLog(@"newdate is %@",newdate);
-    
     NSDateComponents *components = [[NSDateComponents alloc] init];
     components.month = -2;
     NSDate *lastMonth = [[NSCalendar currentCalendar] dateByAddingComponents:components toDate:[NSDate date] options:NSCalendarMatchStrictly];
@@ -123,16 +113,6 @@ typedef NS_ENUM(NSUInteger, FDCalendarMonth) {
 
 // 获取date的上个月
 - (NSDate *)previousMonth {
-
-    //    NSString *datestring = [NSString stringWithFormat:@"1999-09-03"];
-    //    //想要设置自己想要的格式，可以用nsdateformatter这个类，这里是初始化
-    //    NSDateFormatter * dm = [[NSDateFormatter alloc]init];
-    //    //指定输出的格式   这里格式必须是和上面定义字符串的格式相同，否则输出空
-    //    [dm setDateFormat:@"yyyy-MM-dd"];
-    //    //把字符串的时间转换成Date对象，用dateFromString方法
-    //    NSDate * newdate = [dm dateFromString:datestring];
-    //    //输出
-    //    NSLog(@"newdate is %@",newdate);
 
     NSDateComponents *components = [[NSDateComponents alloc] init];
     components.month = -1;

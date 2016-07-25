@@ -7,15 +7,14 @@
 //
 
 #import "multiTableViewCell.h"
+#import "UIViewLinkmanTouch.h"
 #import "SignIntegralViewController.h"
 #import "StringMD5.h"
 #import "UIImageView+WebCache.h"
 
-@implementation multiTableViewCell{
-    SignIntegralViewController *SignIntegralController;
-    UIBarButtonItem* backItemTitle;
 
-}
+@implementation multiTableViewCell
+
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code
@@ -34,10 +33,12 @@
     self.integralCount = 0;
     self.favoriteCount = 0;
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
-    UIStoryboard* iStoryBoard = [UIStoryboard storyboardWithName:@"Me" bundle:nil];
-    SignIntegralController=[iStoryBoard instantiateViewControllerWithIdentifier:@"signintegralcontroller"];
+   
+    
     if([reuseIdentifier isEqualToString:@"cellOne"])
     {
+        
+
         self.integralView = [[UIControl alloc] initWithFrame:CGRectMake(0, 0, self.contentView.frame.size.width / 3 - 1 , 80)];
         self.integralView.backgroundColor = [UIColor whiteColor];
         UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(self.integralView.bounds.size.width + 1 , 20.0f, 1.0f, 40)];
@@ -57,8 +58,8 @@
         [lineView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin];
         [self.integralView addSubview:lable1];
         [self.integralView addSubview:self.integralLabel];
-        [self.integralView addTarget:self action:@selector(touchDownIntegral) forControlEvents:UIControlEventTouchDown];
-        [self.integralView addTarget:self action:@selector(touchCancelIntegral) forControlEvents:UIControlEventTouchUpInside ];
+        //[self.integralView addTarget:self action:@selector(touchDownIntegral) forControlEvents:UIControlEventTouchDown];
+        //[self.integralView addTarget:self action:@selector(touchCancelIntegral) forControlEvents:UIControlEventTouchUpInside ];
         [self.contentView addSubview:self.integralView];
         [self.contentView addSubview:lineView];
         
@@ -85,10 +86,10 @@
         [self.publishView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin];
         [lineView2 setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin];
         [self.publishView addSubview:lable2];
-        ////        [self.view2 addSubview:lineView2];
+            //[self.view2 addSubview:lineView2];
         [self.publishView addSubview:self.publishLable];
-        [self.publishView addTarget:self action:@selector(touchDownPublish) forControlEvents:UIControlEventTouchDown];
-        [self.publishView addTarget:self action:@selector(touchCancelPublish) forControlEvents:UIControlEventTouchUpInside ];
+        //[self.publishView addTarget:self action:@selector(touchDownPublish) forControlEvents:UIControlEventTouchDown];
+        //[self.publishView addTarget:self action:@selector(touchCancelPublish) forControlEvents:UIControlEventTouchUpInside ];
         [self.contentView addSubview:self.publishView];
         [self.contentView addSubview:lineView2];
         
@@ -112,11 +113,7 @@
         
         [self.favoriteView addSubview:lable3];
         [self.favoriteView addSubview:self.favoriteLabel];
-        [self.favoriteView addTarget:self action:@selector(touchDownFavorite) forControlEvents:UIControlEventTouchDown];
-        [self.favoriteView addTarget:self action:@selector(touchCancelFavorite) forControlEvents:UIControlEventTouchUpInside ];
         [self.contentView addSubview:self.favoriteView];
-
-
     }
     else if([reuseIdentifier isEqualToString:@"cellZero"])
     {
@@ -142,68 +139,26 @@
         [self.nameLabel setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
         [view setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin];
         
-        self.signButton = [[UIButton alloc] initWithFrame:CGRectMake(200, -10, 40, 40)];
-        self.signButton.layer.cornerRadius = self.signButton.frame.size.width / 2;
-        self.signButton.layer.masksToBounds = YES;
-        [self.signButton setBackgroundImage:[UIImage imageNamed:@"btn_qiandao.png"] forState:UIControlStateNormal];
-        [self.signButton addTarget:self action:@selector(signGetIntegralAction) forControlEvents:UIControlEventTouchDown];
-        
         [view addSubview:self.nameLabel];
         [view addSubview:self.phoneLabel];
-        //[view addSubview:self.signButton];
+    
         [self.contentView addSubview:view];
     }
+    
+    
     return self;
 }
-
--(void)signGetIntegralAction{
-    //
-        NSLog(@"签到了么~~~~~~~~");
-        backItemTitle = [[UIBarButtonItem alloc] initWithTitle:@"积分签到" style:UIBarButtonItemStylePlain target:nil action:nil];
-        //[ setBackBarButtonItem:backItemTitle];
-        //[self.navigationController pushViewController:SignIntegralController animated:YES];
-}
-
-- (void) touchDownIntegral
-{
-    self.integralView.backgroundColor = [UIColor lightGrayColor];
-    //NSLog(@"签到了！！！！");
-}
-
-- (void)touchCancelIntegral
-{
-//    self.view1.backgroundColor = _viewColor;
-    self.integralCount += 3;
-    self.integralLabel.text = [NSString stringWithFormat:@"%ld",self.integralCount];
-    self.integralView.backgroundColor = [UIColor whiteColor];
-}
-
-
-- (void) touchDownPublish
-{
-    self.publishView.backgroundColor = [UIColor lightGrayColor];
-}
-
-- (void)touchCancelPublish
-{
-    //self.view1.backgroundColor = _viewColor;
-    self.publishCount += 3;
-    self.publishLable.text = [NSString stringWithFormat:@"%ld",self.publishCount];
-    self.publishView.backgroundColor = [UIColor whiteColor];
-}
-
-- (void) touchDownFavorite
-{
-    self.favoriteView.backgroundColor = [UIColor lightGrayColor];
-}
-
-- (void)touchCancelFavorite
-{
-    //    self.view1.backgroundColor = _viewColor;
-    self.favoriteCount += 3;
-    self.favoriteLabel.text = [NSString stringWithFormat:@"%ld",self.favoriteCount];
-    self.favoriteView.backgroundColor = [UIColor whiteColor];
-}
+/*获取父view的UIViewController*/
+//- (UIViewController *)viewController
+//{
+//    for (UIView* next = [self superview]; next; next = next.superview) {
+//        UIResponder *nextResponder = [next nextResponder];
+//        if ([nextResponder isKindOfClass:[UIViewController class]]) {
+//            return (UIViewController *)nextResponder;
+//        }
+//    }
+//    return nil;
+//}
 
 
 - (void) headTapAction: (UITapGestureRecognizer*) recognizer

@@ -38,6 +38,7 @@
          dict[@"user_json"] ,
          dict[@"login_account"] ,
          dict[@"table_version"] ];
+        //NSLog(@"USER_Family_id is %@",dict[@"user_family_id"]);
     }
     else
     {

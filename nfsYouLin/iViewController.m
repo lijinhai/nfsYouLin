@@ -15,7 +15,13 @@
 #import "AboutYouLinViewController.h"
 #import "PersonalInformationViewController.h"
 #import "SignIntegralViewController.h"
+#import "IntegralMallViewController.h"
 #import "AFHTTPSessionManager.h"
+#import "StringMD5.h"
+#import "MBProgressHUBTool.h"
+#import "HeaderFile.h"
+#import "SqliteOperation.h"
+#import "SqlDictionary.h"
 
 @interface iViewController ()
 
@@ -33,6 +39,7 @@
     PersonalInformationViewController *PersonalInformationController;
     multiTableViewCell *multiTableCell;
     SignIntegralViewController *SignIntegralController;
+    IntegralMallViewController *IntegralMallController;
     UIBarButtonItem* backItemTitle;
     UIButton *signButton;
     Users* user;
@@ -78,7 +85,20 @@
     AboutYouLinController=[iStoryBoard instantiateViewControllerWithIdentifier:@"aboutyoulincontroller"];
     PersonalInformationController=[iStoryBoard instantiateViewControllerWithIdentifier:@"personalinformationcontroller"];
     SignIntegralController=[iStoryBoard instantiateViewControllerWithIdentifier:@"signintegralcontroller"];
+    IntegralMallController=[iStoryBoard instantiateViewControllerWithIdentifier:@"integralmallcontroller"];
     
+}
+-(void)viewWillAppear:(BOOL)animated{
+
+    //NSLog(@"viewWillAppear  begin");
+    UIControl *integralView=(UIControl *)[self.view viewWithTag:2016];
+    integralView.backgroundColor=[UIColor whiteColor];
+    UIControl *favoriteView=(UIControl *)[self.view viewWithTag:2017];
+    favoriteView.backgroundColor=[UIColor whiteColor];
+    UIControl *publishView=(UIControl *)[self.view viewWithTag:2018];
+    publishView.backgroundColor=[UIColor whiteColor];
+    
+
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -124,6 +144,7 @@
         if(rowNo == 0)
         {
             cell = (multiTableViewCell*)[tableView dequeueReusableCellWithIdentifier:cellZero];
+
             if(cell == nil)
             {
                 cell = [[multiTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellZero];
@@ -140,6 +161,22 @@
             if(cell == nil)
             {
                 cell = [[multiTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellOne];
+                /*积分*/
+                UIControl *pointsView=cell.integralView;
+                //cell.integralView.backgroundColor=[UIColor whiteColor];
+                pointsView.tag=2016;
+                [pointsView addTarget:self action:@selector(touchDownIntegral:) forControlEvents:UIControlEventTouchDown];
+                /*收藏*/
+                UIControl *favoriteControlView=cell.favoriteView;
+                //cell.integralView.backgroundColor=[UIColor whiteColor];
+                favoriteControlView.tag=2017;
+                [favoriteControlView addTarget:self action:@selector(touchDownFavorite:) forControlEvents:UIControlEventTouchDown];
+                /*我发的*/
+                UIControl *publishControlView=cell.publishView;
+                //cell.integralView.backgroundColor=[UIColor whiteColor];
+                publishControlView.tag=2018;
+                [publishControlView addTarget:self action:@selector(touchDownPublish:) forControlEvents:UIControlEventTouchDown];
+                
             }
         }
     }
@@ -165,6 +202,87 @@
     
     return cell;
 }
+- (void) touchDownIntegral:(id) sender{
+    
+    UIControl *integralView=(UIControl *)[self.view viewWithTag:[sender tag]];
+    integralView.backgroundColor=[UIColor colorWithRed:227/255.0 green:227/255.0 blue:227/255.0 alpha:1.0];
+    AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
+    manager.securityPolicy.allowInvalidCertificates = YES;
+    manager.responseSerializer.stringEncoding=NSUTF8StringEncoding;
+    [manager.securityPolicy setValidatesDomainName:NO];
+    NSString* communityId = [NSString stringWithFormat:@"%ld", [self getNowCommunityId]];
+    NSString* hashString =[StringMD5 stringAddMD5:[NSString stringWithFormat:@"community_id%@",communityId]];
+    NSString* hashMD5 = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"%@2016",hashString]];
+    NSDictionary* parameter = @{@"community_id" : communityId,
+                                @"deviceType":@"ios",
+                                @"apitype" : @"exchange",
+                                @"tag" : @"getgiftlist",
+                                @"salt" : @"2016",
+                                @"hash" : hashMD5,
+                                @"keyset" : @"community_id:",
+                                };
+    
+    [manager POST:POST_URL parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
+        NSMutableArray * goodsMutableAry=[responseObject objectForKey:@"info"];
+        IntegralMallController.goodsArray=goodsMutableAry;
+        backItemTitle = [[UIBarButtonItem alloc] initWithTitle:@"积分" style:UIBarButtonItemStylePlain target:nil action:nil];
+        [self.parentViewController.navigationItem setBackBarButtonItem:backItemTitle];
+        [self.parentViewController.navigationController pushViewController:IntegralMallController animated:YES];
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"请求失败:%@", error.description);
+        
+        return;
+    }];
+
+    
+}
+
+-(NSInteger) getNowCommunityId{
+
+    NSArray* paths = NSSearchPathForDirectoriesInDomains( NSDocumentDirectory ,  NSUserDomainMask ,  YES );
+    NSString* documentPath = [ paths objectAtIndex: 0 ];
+    NSString* dbPath = [ documentPath stringByAppendingPathComponent: @"youLin-IOS.db" ];
+    FMDatabase* database = [ FMDatabase databaseWithPath: dbPath ];
+    if ( ![ database open ] )
+    {
+        NSLog(@"打开数据库失败");
+    }
+    // 查找表
+    NSInteger comid=0;
+    NSString *query = @"select table_all_family.family_community_id from table_users,table_all_family where table_users.user_family_id=table_all_family.family_id";
+    FMResultSet* resultSet = [ database executeQuery:query];
+    // 逐行读取数据
+    while ( [ resultSet next ] )
+    {
+        // 对应字段来取数据
+        comid=[ resultSet intForColumn: @"family_community_id" ];
+    }
+    [ database close ];
+    return comid;
+}
+
+- (void) touchDownFavorite:(id) sender{
+    
+    UIControl *favoriteView=(UIControl *)[self.view viewWithTag:[sender tag]];
+    favoriteView.backgroundColor=[UIColor colorWithRed:227/255.0 green:227/255.0 blue:227/255.0 alpha:1.0];
+    backItemTitle = [[UIBarButtonItem alloc] initWithTitle:@"我的收藏" style:UIBarButtonItemStylePlain target:nil action:nil];
+    [self.parentViewController.navigationItem setBackBarButtonItem:backItemTitle];
+    //[self.parentViewController.navigationController pushViewController:IntegralMallController animated:YES];
+}
+
+- (void) touchDownPublish:(id) sender{
+    
+    UIControl *publishView=(UIControl *)[self.view viewWithTag:[sender tag]];
+    publishView.backgroundColor=[UIColor colorWithRed:227/255.0 green:227/255.0 blue:227/255.0 alpha:1.0];
+    backItemTitle = [[UIBarButtonItem alloc] initWithTitle:@"我发的" style:UIBarButtonItemStylePlain target:nil action:nil];
+    [self.parentViewController.navigationItem setBackBarButtonItem:backItemTitle];
+    //[self.parentViewController.navigationController pushViewController:IntegralMallController animated:YES];
+}
+
 -(void)signGetIntegralAction{
 
     
@@ -399,6 +517,7 @@
         default:
             break;
     }
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 #pragma mark - 圆形头像点击事件回调
