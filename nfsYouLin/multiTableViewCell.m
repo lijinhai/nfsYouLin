@@ -120,10 +120,9 @@
     }
     else if([reuseIdentifier isEqualToString:@"cellZero"])
     {
-        /*处理头像*/
+        // 处理头像
         
         self.headIV = [[UIImageView alloc] initWithFrame:CGRectMake(10, 20, 60, 60)];
-        
         self.headIV.layer.masksToBounds = YES;
         self.headIV.layer.cornerRadius = 30;
         self.headIV.userInteractionEnabled = YES;
@@ -132,8 +131,7 @@
         [self.contentView addSubview:self.headIV];
         
         
-        UIView* view = [[UIView alloc] initWithFrame:CGRectMake(100, 25, 400, 50)];
-        
+        UIView* view = [[UIView alloc] initWithFrame:CGRectMake(70, 25, 400, 50)];
         self.nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 15, 10)];
         self.nameLabel.text = @"姓名";
         self.phoneLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 15, 120, 15)];
