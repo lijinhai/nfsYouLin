@@ -46,7 +46,7 @@
     self.passwordTF.delegate = self;
     [self.passwordTF addTarget:self action:@selector(TextFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
     
-    self.againPWDTF.returnKeyType = UIReturnKeyDone;
+    self.againPWDTF.returnKeyType = UIReturnKeyGo;
     self.againPWDTF.delegate = self;
     [self.againPWDTF addTarget:self action:@selector(TextFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
     
@@ -72,7 +72,6 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    NSLog(@"viewWillAppear");
     // 显示导航条
     self.navigationController.navigationBarHidden = NO;
     [self setTextFieldEnabled:NO];
@@ -94,8 +93,12 @@
 // 点击完成
 -(void)selectRightAction
 {
-    
-//    [self clearTextField];
+    [self finishSetNewPWD];
+}
+
+// 完成忘记密码
+- (void) finishSetNewPWD
+{
     [self.view endEditing:YES];
     NSString* phoneNum = self.phoneNumTF.text;
     NSString* verifyCode = self.verifyCodeTF.text;
@@ -140,7 +143,7 @@
         [MBProgressHUBTool textToast:self.view Tip:@"密码不一致,请重新填写"];
         return;
     }
-
+    
     
     // 发起验证码比对网络请求
     [self.parentViewController.view addSubview:backgroundView];
@@ -184,8 +187,8 @@
         return;
     }];
 
-
 }
+
 
 // 修改密码网络请求
 - (void) changPWDNetWork: (NSString*) phoneNum PWD:(NSString *)password
@@ -430,6 +433,7 @@
     else if(textField == self.againPWDTF)
     {
         [self.againPWDTF resignFirstResponder];
+        [self finishSetNewPWD];
     }
     
     return YES;

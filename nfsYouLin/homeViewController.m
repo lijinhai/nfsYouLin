@@ -55,8 +55,10 @@
     self.phoneTextField.keyboardType = UIKeyboardTypeNumberPad;
     [self.phoneTextField addTarget:self action:@selector(phoneTextFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
     self.phoneTextField.delegate = self;
+    
     self.passwordTextField.rightView = rightVeiw;
     self.passwordTextField.rightViewMode = UITextFieldViewModeWhileEditing;
+    self.passwordTextField.delegate = self;
     /*xImageView 添加点击事件*/
     xImageView.userInteractionEnabled = YES;
     UITapGestureRecognizer *xImageViewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(xImageViewClick:)];
@@ -123,15 +125,18 @@
 }
 
 // UITextFieldDelegate 限制输入框只能输入数字
--(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
-    NSCharacterSet *cs;
-    cs = [[NSCharacterSet characterSetWithCharactersInString:@"0123456789\n"]invertedSet];
+-(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    if(textField == self.phoneTextField)
+    {
+        NSCharacterSet *cs;
+        cs = [[NSCharacterSet characterSetWithCharactersInString:@"0123456789\n"]invertedSet];
+        NSString *filtered = [[string componentsSeparatedByCharactersInSet:cs]componentsJoinedByString:@""];
+        BOOL canChange = [string isEqualToString:filtered];
+        return canChange;
+    }
     
-    NSString *filtered = [[string componentsSeparatedByCharactersInSet:cs]componentsJoinedByString:@""];
-    
-    BOOL canChange = [string isEqualToString:filtered];
-    
-    return canChange;
+    return YES;
 }
 
 
@@ -150,6 +155,13 @@
 - (IBAction)loginAction:(id)sender {
     
     [self.view endEditing:YES];
+    [self login];
+
+}
+
+// 登录
+- (void) login
+{
     NSString* phoneNum = self.phoneTextField.text;
     NSString* password = self.passwordTextField.text;
     if(phoneNum.length == 0)
@@ -202,7 +214,7 @@
             personInfoDic[@"user_id"] = [NSNumber numberWithLong:userId];
             
             personInfoDic[@"user_name"] = personDic[@"user_nick"];
-
+            
             personInfoDic[@"user_portrait"] = personDic[@"user_portrait"];
             personInfoDic[@"user_gender"] = personDic[@"user_gender"];
             personInfoDic[@"user_phone_number"] = personDic[@"user_phone_number"];
@@ -214,7 +226,7 @@
             personInfoDic[@"user_time"] = personDic[@"user_time"];
             personInfoDic[@"user_json"] = personDic[@"user_json"];
             personInfoDic[@"user_json"] = personDic[@"user_json"];
-
+            
             if(![SqliteOperation insertUsersSqlite:personInfoDic View:self.view])
             {
                 NSLog(@"插入失败！");
@@ -227,6 +239,13 @@
                 [personInfoDic removeAllObjects];
                 personInfoDic = [sqlDict getInitFamilyInfoDic];
                 NSDictionary* familyDict = responseObject[i];
+                if([personDic[@"user_family_id"] integerValue] ==
+                   [familyDict[@"family_id"] integerValue])
+                {
+                    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+                    [defaults setInteger:[[familyDict valueForKey:@"block_id"] integerValue] forKey:@"block_id"];
+                    [defaults synchronize];
+                }
                 personInfoDic[@"family_apt_id"] = familyDict[@"apt_num_id"];
                 personInfoDic[@"family_block_id"] = familyDict[@"block_id"];
                 personInfoDic[@"family_block"] = familyDict[@"block_name"];
@@ -243,7 +262,7 @@
                 personInfoDic[@"family_id"] = familyDict[@"family_id"];
                 personInfoDic[@"family_member_count"] = familyDict[@"family_member_count"];
                 personInfoDic[@"family_name"] = familyDict[@"family_name"];
-//                personInfoDic[@"family_name"] = familyDict[@"fr_id"];
+                //                personInfoDic[@"family_name"] = familyDict[@"fr_id"];
                 personInfoDic[@"is_family_member"] = familyDict[@"is_family_member"];
                 personInfoDic[@"ne_status"] = familyDict[@"ne_status"];
                 personInfoDic[@"primary_flag"] = familyDict[@"primary_flag"];
@@ -258,24 +277,24 @@
             
             
             // 测试查询
-//            AppDelegate* app = [[UIApplication sharedApplication] delegate];
-//            FMDatabase* db = app.db;
-//            if([db open])
-//            {
-//                FMResultSet *rs = [db executeQuery:@"SELECT * FROM table_all_family"];
-//                NSLog(@"查询");
-//                while ([rs next]) {
-//                    
-//                    NSString *user_avatar = [rs stringForColumn:@"user_avatar"];
-//                    
-//                    NSLog(@"user_avatar = %@",user_avatar);
-//                }
-//            }
-
+            //            AppDelegate* app = [[UIApplication sharedApplication] delegate];
+            //            FMDatabase* db = app.db;
+            //            if([db open])
+            //            {
+            //                FMResultSet *rs = [db executeQuery:@"SELECT * FROM table_all_family"];
+            //                NSLog(@"查询");
+            //                while ([rs next]) {
+            //
+            //                    NSString *user_avatar = [rs stringForColumn:@"user_avatar"];
+            //
+            //                    NSLog(@"user_avatar = %@",user_avatar);
+            //                }
+            //            }
+            
             [self changePersonInfoNet:userId];
             
             
-
+            
         }
         else if([responseObject isKindOfClass:[NSDictionary class]])
         {
@@ -299,10 +318,9 @@
         [_indicator stopAnimating];
         return;
     }];
-
-//    [self presentViewController:newNavigationController animated:YES completion:nil];
-
+    
 }
+
 
 - (IBAction)finishEdit:(id)sender {
     [sender resignFirstResponder];
@@ -366,6 +384,13 @@
 
 }
 
-
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    if(textField == self.passwordTextField)
+    {
+        [self login];
+    }
+    return YES;
+}
 
 @end

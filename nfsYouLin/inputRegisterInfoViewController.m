@@ -89,7 +89,7 @@
     self.comfirmPWDTextField.leftView = paddingView2;
     self.comfirmPWDTextField.leftViewMode = UITextFieldViewModeAlways;
     self.comfirmPWDTextField.secureTextEntry = YES;
-    self.comfirmPWDTextField.returnKeyType = UIReturnKeyDone;
+    self.comfirmPWDTextField.returnKeyType = UIReturnKeyGo;
     self.comfirmPWDTextField.delegate = self;
     [self.comfirmPWDTextField addTarget:self action:@selector(TextFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
     
@@ -137,17 +137,27 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
--(void)finishAction{
 
+
+// 完成
+- (void)finishAction
+{
+    [self.view endEditing:YES];
+    [self finishResigter];
+    
+}
+
+// 完成注册
+- (void) finishResigter
+{
     NSString* nickName = self.nickNameTextField.text;
     NSString* password = self.passwordTextField.text;
     NSString* comfirmPWD = self.comfirmPWDTextField.text;
     NSString* gender = [NSString stringWithFormat:@"%ld",self.genderSelected];
-//     测试代码
-//    [self.view endEditing:NO];
-//  
-//    [self.navigationController pushViewController:cityController animated:YES];
-//    return;
+    //     测试代码
+    //
+    //    [self.navigationController pushViewController:cityController animated:YES];
+    //    return;
     if(self.genderSelected == -1)
     {
         [MBProgressHUBTool textToast:self.view Tip:@"请选择性别"];
@@ -178,16 +188,16 @@
         return;
     }
     
-  
+    
     personInfoDic[@"user_phone_number"] = self.phoneNum;
     personInfoDic[@"user_name"] = nickName;
     personInfoDic[@"user_gender"] = [NSNumber numberWithInteger:self.genderSelected];
     
-//    personInfoDic[@"user_id"] = [NSNumber numberWithLong:88];
-//    personInfoDic[@"user_portrait"] = @"/sss/eee/333/dfdf.png";
-//    [self insertSqlite:personInfoDic];
-//  
-//    return;
+    //    personInfoDic[@"user_id"] = [NSNumber numberWithLong:88];
+    //    personInfoDic[@"user_portrait"] = @"/sss/eee/333/dfdf.png";
+    //    [self insertSqlite:personInfoDic];
+    //
+    //    return;
     // 发起用户注册网络请求
     AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
     manager.securityPolicy.allowInvalidCertificates = YES;
@@ -224,14 +234,13 @@
                 [self.navigationController pushViewController:cityController animated:YES];
             }
             
-          
+            
         }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         NSLog(@"请求失败:%@", error.description);
         return;
     }];
 
-    
 }
 
 -(void)selectRadioClick:(UITapGestureRecognizer*)sender{
@@ -310,6 +319,7 @@
     else if(textField == self.comfirmPWDTextField)
     {
         [self.comfirmPWDTextField resignFirstResponder];
+        [self finishResigter];
     }
     return YES;
 }
