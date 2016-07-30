@@ -53,23 +53,23 @@
 - (void) initSayHiView: (CGRect) frame
 {
     self.backgroundColor = [UIColor clearColor];
-    self.backView = [[UIView alloc] initWithFrame:CGRectMake((frame.size.width - 12 * 15) / 2, (frame.size.height - 80) / 2, 12 * 15, 80)];
+    self.backView = [[UIView alloc] initWithFrame:CGRectMake((frame.size.width - 16 * 15) / 2, (frame.size.height - 80) / 2, 16 * 15, 100)];
     self.backView.backgroundColor = [UIColor lightGrayColor];
     
-    self.textView = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, 12 * 15, 40)];
-    self.textView.backgroundColor = [UIColor whiteColor];
-    self.textView.font = [UIFont systemFontOfSize:12];
-    self.textView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
-    self.textView.bounces = NO;
-    self.textView.scrollEnabled = NO;
-    self.textView.delegate = self;
-    self.textView.returnKeyType = UIReturnKeySend;
-    _previousHeight = ceilf([self.textView sizeThatFits:self.textView.frame.size].height);
+    self.sayHiTV = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, 16 * 15, 50)];
+    self.sayHiTV.backgroundColor = [UIColor whiteColor];
+    self.sayHiTV.font = [UIFont systemFontOfSize:16];
+    self.sayHiTV.autoresizingMask = UIViewAutoresizingFlexibleHeight;
+    self.sayHiTV.bounces = NO;
+    self.sayHiTV.scrollEnabled = NO;
+    self.sayHiTV.delegate = self;
+//    self.sayHiTV.returnKeyType = UIReturnKeySend;
+    _previousHeight = ceilf([self.sayHiTV sizeThatFits:self.sayHiTV.frame.size].height);
     maxHeight = 20 * _previousHeight;
     minHeight = _previousHeight;
-    [self.backView addSubview:self.textView];
+    [self.backView addSubview:self.sayHiTV];
     
-    self.send = [[UIButton alloc] initWithFrame:CGRectMake(0, 41, self.backView.frame.size.width / 2 - 0.5, 39)];
+    self.send = [[UIButton alloc] initWithFrame:CGRectMake(0, 51, self.backView.frame.size.width / 2 - 0.5, 49)];
     [self.send setTitle:@"发送" forState:UIControlStateNormal];
     self.send.backgroundColor = [UIColor whiteColor];
     [self.send setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
@@ -80,7 +80,7 @@
     [self.backView addSubview:self.send];
     
     
-    self.cancel = [[UIButton alloc] initWithFrame:CGRectMake(self.backView.frame.size.width / 2 + 0.5 , 41, self.backView.frame.size.width / 2 - 0.5, 39)];
+    self.cancel = [[UIButton alloc] initWithFrame:CGRectMake(self.backView.frame.size.width / 2 + 0.5 , 51, self.backView.frame.size.width / 2 - 0.5, 49)];
     [self.cancel setTitle:@"取消" forState:UIControlStateNormal];
     self.cancel.backgroundColor = [UIColor whiteColor];
     [self.cancel setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
@@ -99,16 +99,16 @@
     self.backView = [[UIView alloc] initWithFrame:CGRectMake(60, (frame.size.height - 80) / 2, frame.size.width - 120, 80)];
     self.backView.backgroundColor = [UIColor lightGrayColor];
     
-    self.textView = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.backView.frame), 40)];
-    self.textView.backgroundColor = [UIColor colorWithRed:255/255.0 green:186/255.0 blue:2/255.0 alpha:1];
-    self.textView.font = [UIFont systemFontOfSize:15];
-    self.textView.text = @"  确定要删除该内容吗？";
-    self.textView.editable = NO;
-    self.textView.bounces = NO;
-    self.textView.textColor = [UIColor whiteColor];
+    self.deleteTV = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.backView.frame), 40)];
+    self.deleteTV.backgroundColor = [UIColor colorWithRed:255/255.0 green:186/255.0 blue:2/255.0 alpha:1];
+    self.deleteTV.font = [UIFont systemFontOfSize:15];
+    self.deleteTV.text = @"  确定要删除该内容吗？";
+    self.deleteTV.editable = NO;
+    self.deleteTV.bounces = NO;
+    self.deleteTV.textColor = [UIColor whiteColor];
     
     
-    [self.backView addSubview:self.textView];
+    [self.backView addSubview:self.deleteTV];
     
     self.deleteYes = [[UIButton alloc] initWithFrame:CGRectMake(0, 41, CGRectGetWidth(self.backView.frame) / 2 - 0.5, 39)];
     [self.deleteYes setTitle:@"确定" forState:UIControlStateNormal];
@@ -243,16 +243,16 @@
     self.backView = [[UIView alloc] initWithFrame:CGRectMake(60, (frame.size.height - 80) / 2, frame.size.width - 120, 80)];
     self.backView.backgroundColor = [UIColor lightGrayColor];
     
-    self.textView = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.backView.frame), 40)];
-    self.textView.font = [UIFont systemFontOfSize:15];
-    self.textView.textAlignment = NSTextAlignmentCenter;
-    self.textView.text = @"请确认是否取消报名";
-    self.textView.editable = NO;
-    self.textView.bounces = NO;
-    self.textView.textColor = [UIColor blackColor];
+    self.cancelApplyTV = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.backView.frame), 40)];
+    self.cancelApplyTV.font = [UIFont systemFontOfSize:15];
+    self.cancelApplyTV.textAlignment = NSTextAlignmentCenter;
+    self.cancelApplyTV.text = @"请确认是否取消报名";
+    self.cancelApplyTV.editable = NO;
+    self.cancelApplyTV.bounces = NO;
+    self.cancelApplyTV.textColor = [UIColor blackColor];
     
     
-    [self.backView addSubview:self.textView];
+    [self.backView addSubview:self.cancelApplyTV];
     
     self.cancelApplyYes = [[UIButton alloc] initWithFrame:CGRectMake(0, 41, CGRectGetWidth(self.backView.frame) / 2 - 0.5, 39)];
     [self.cancelApplyYes setTitle:@"确定" forState:UIControlStateNormal];
@@ -327,7 +327,7 @@
     }
     else
     {
-        textViewFrame.size = CGSizeMake(textViewW, _previousHeight + 9);
+        textViewFrame.size = CGSizeMake(textViewW, _previousHeight + 14);
         textView.frame= textViewFrame;
     }
     _previousHeight = toHeight;
@@ -360,7 +360,7 @@
     [UIView animateWithDuration:0.3 animations:^{
         CGRect frame = self.backView.frame;
         CGPoint point = frame.origin;
-        point.y = 150;
+        point.y = 80;
         frame.origin = point;
         self.backView.frame = frame;
         

@@ -789,7 +789,7 @@ static BOOL upState = YES;
 {
     NSLog(@"打招呼");
     DialogView* hiView = [[DialogView alloc] initWithFrame:backgroundView.frame  View:backgroundView Flag:@"sayHi"];
-    hiView.textView.text = @"欢迎小宝宝来到本小区";
+    hiView.sayHiTV.text = @"欢迎小宝宝来到本小区";
     [self.parentViewController.parentViewController.view  addSubview:backgroundView];
     [self.parentViewController.parentViewController.view  addSubview:hiView];
     
@@ -1354,8 +1354,7 @@ static BOOL upState = YES;
     {
         UIButton* button = (UIButton*)sender;
         NSInteger topicId = button.tag;
-        NSLog(@"text = %@",dialogView.textView.text);
-        [self sayHiNet:topicId Content:dialogView.textView.text];
+        [self sayHiNet:topicId Content:dialogView.sayHiTV.text];
         [backgroundView removeFromSuperview];
         [dialogView removeFromSuperview];
         dialogView = nil;
@@ -1375,6 +1374,8 @@ static BOOL upState = YES;
     }
     
 }
+
+
 
 
 // 浏览帖子次数网络请求

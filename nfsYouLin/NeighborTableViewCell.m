@@ -66,7 +66,7 @@
             [hiBtn.layer setBorderWidth:1.0];
             hiBtn.layer.borderColor=[UIColor grayColor].CGColor;
             [hiBtn setTitle:@"打招呼" forState:UIControlStateNormal];
-            hiBtn.titleLabel.font = [UIFont systemFontOfSize:8];
+            hiBtn.titleLabel.font = [UIFont systemFontOfSize:12];
             hiBtn.contentHorizontalAlignment = UIControlContentVerticalAlignmentCenter | UIControlContentHorizontalAlignmentCenter;
 
             [hiBtn setTitleColor:[UIColor colorWithRed:255/255.0 green:186/255.0 blue:2/255.0 alpha:1] forState:UIControlStateNormal];

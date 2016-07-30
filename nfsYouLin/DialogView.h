@@ -14,8 +14,9 @@
 
 @property(strong, nonatomic)UIButton* send;
 @property(strong, nonatomic)UIButton* cancel;
-@property(strong, nonatomic)UITextView* textView;
+@property(strong, nonatomic)UITextView* sayHiTV;
 
+@property(strong, nonatomic)UITextView* deleteTV;
 @property(strong, nonatomic)UIButton* deleteYes;
 @property(strong, nonatomic)UIButton* deleteNo;
 
@@ -26,6 +27,7 @@
 @property(strong, nonatomic)UITextField* childTF;
 
 
+@property(strong, nonatomic)UITextView* cancelApplyTV;
 @property(strong, nonatomic)UIButton* cancelApplyYes;
 @property(strong, nonatomic)UIButton* cancelApplyNo;
 

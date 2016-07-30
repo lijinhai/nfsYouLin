@@ -37,7 +37,7 @@
     
     // 打招呼按钮位置
     
-     CGSize hiSize = [StringMD5 sizeWithString:@"打招呼" font:[UIFont systemFontOfSize:8] maxSize:CGSizeMake(MAXFLOAT,MAXFLOAT)];
+     CGSize hiSize = [StringMD5 sizeWithString:@"打招呼" font:[UIFont systemFontOfSize:15] maxSize:CGSizeMake(MAXFLOAT,MAXFLOAT)];
     CGFloat hiX = screenWidth - hiSize.width - 2 * PADDING;
     CGFloat hiY = CGRectGetMaxY(self.intervalFrame) + PADDING / 2;
     self.hiFrame = CGRectMake(hiX, hiY, hiSize.width + PADDING, hiSize.height+ PADDING / 2);
