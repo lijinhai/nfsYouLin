@@ -164,6 +164,34 @@
             </objects>
             <point key="canvasLocation" x="598" y="-579"/>
         </scene>
+        <!--积分规则-->
+        <scene sceneID="bWe-1r-CGU">
+            <objects>
+                <viewController storyboardIdentifier="integralrulescontroller" title="积分规则" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Tjb-hV-f8i" customClass="IntegralRulesViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="lBN-bo-aPf"/>
+                        <viewControllerLayoutGuide type="bottom" id="To9-Wr-mmX"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="EBI-w8-tRz">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <webView contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pzs-83-byg">
+                                <rect key="frame" x="0.0" y="-1" width="415" height="737"/>
+                                <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="deviceRGB"/>
+                            </webView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina55"/>
+                    <connections>
+                        <outlet property="integralRulesWebView" destination="pzs-83-byg" id="Jf2-qM-0ni"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="E5M-ba-zof" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1038" y="-1372"/>
+        </scene>
         <!--积分商城-->
         <scene sceneID="2kC-kH-4z7">
             <objects>
@@ -216,15 +244,9 @@
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="171" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5e9-W3-nOv">
-                                        <rect key="frame" x="37" y="97" width="86" height="62"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5e9-W3-nOv">
+                                        <rect key="frame" x="37" y="97" width="338" height="62"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="55"/>
-                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="分" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UXa-4i-GK3">
-                                        <rect key="frame" x="141" y="129" width="17" height="21"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
                                     </label>
@@ -262,9 +284,9 @@
                         <outlet property="backView" destination="See-A3-OQg" id="NV4-Uj-72Q"/>
                         <outlet property="goodsCollectView" destination="mzB-i9-Ni6" id="D35-cZ-N0p"/>
                         <outlet property="integralRuleLabel" destination="riC-3n-uRV" id="xZO-9N-DV1"/>
+                        <outlet property="integralValueLabel" destination="5e9-W3-nOv" id="Bri-mg-cLB"/>
                         <outlet property="meImageView" destination="h0V-ba-xLL" id="mnO-Pt-YpG"/>
                         <outlet property="meLabel" destination="EKb-jS-SMI" id="asI-gO-Veq"/>
-                        <outletCollection property="integralValueLabel" destination="5e9-W3-nOv" id="sVH-EP-fMe"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="VaE-Z7-Ta6" userLabel="First Responder" sceneMemberID="firstResponder"/>

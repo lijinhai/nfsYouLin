@@ -11,7 +11,10 @@
 #import "SignIntegralViewController.h"
 #import "StringMD5.h"
 #import "UIImageView+WebCache.h"
-
+#import "AFHTTPSessionManager.h"
+#import "HeaderFile.h"
+#import "AppDelegate.h"
+#import "SqliteOperation.h"
 
 @implementation multiTableViewCell
 
@@ -33,12 +36,12 @@
     self.integralCount = 0;
     self.favoriteCount = 0;
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
-   
+    
     
     if([reuseIdentifier isEqualToString:@"cellOne"])
     {
-        
-
+        /*获取用户积分*/
+        [self getUserIntegral:[SqliteOperation getUserId]];
         self.integralView = [[UIControl alloc] initWithFrame:CGRectMake(0, 0, self.contentView.frame.size.width / 3 - 1 , 80)];
         self.integralView.backgroundColor = [UIColor whiteColor];
         UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(self.integralView.bounds.size.width + 1 , 20.0f, 1.0f, 40)];
@@ -48,8 +51,9 @@
         lable1.enabled = NO;
         lable1.textAlignment = NSTextAlignmentCenter;
         self.integralLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 50, self.integralView.bounds.size.width, 30)];
+        self.integralLabel.tag=222;
         self.integralLabel.textAlignment = NSTextAlignmentCenter;
-        self.integralLabel.text = [NSString stringWithFormat:@"%ld",self.integralCount];
+
         // 设置文字控件的宽度按照上一级视图（topView）的比例进行缩放
         [lable1 setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
         [self.integralLabel setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
@@ -75,6 +79,7 @@
         [lineView2 setBackgroundColor:[UIColor blackColor]];
         
         self.publishLable = [[UILabel alloc] initWithFrame:CGRectMake(0, 50, self.publishView.bounds.size.width, 30)];
+       
         self.publishLable.textAlignment = NSTextAlignmentCenter;
         self.publishLable.text = [NSString stringWithFormat:@"%ld",self.publishCount];
         
@@ -146,6 +151,40 @@
     
     return self;
 }
+
+-(void)getUserIntegral:(long) userid{
+    
+    AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
+    manager.securityPolicy.allowInvalidCertificates = YES;
+    manager.responseSerializer.stringEncoding=NSUTF8StringEncoding;
+    [manager.securityPolicy setValidatesDomainName:NO];
+    NSString* myId = [NSString stringWithFormat:@"%ld",userid];
+    NSString* hashString =[StringMD5 stringAddMD5:[NSString stringWithFormat:@"user_id%@",myId]];
+    NSString* hashMD5 = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"%@1024",hashString]];
+    NSDictionary* parameter = @{@"user_id" : myId,
+                                @"deviceType":@"ios",
+                                @"apitype" : @"users",
+                                @"tag" : @"usercredit",
+                                @"salt" : @"1024",
+                                @"hash" : hashMD5,
+                                @"keyset" : @"user_id:",
+                                };
+    
+    [manager POST:POST_URL parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
+        self.integralCount=[[responseObject objectForKey:@"credit"] intValue];
+        self.integralLabel.text = [NSString stringWithFormat:@"%ld",self.integralCount];
+        self.integralLabel.tag=1024;
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"请求失败:%@", error.description);
+        
+        return;
+    }];
+}
+
 /*获取父view的UIViewController*/
 //- (UIViewController *)viewController
 //{
@@ -168,6 +207,7 @@
 {
     
     _userData = userData;
+   
     if(_userData)
     {
   
@@ -182,9 +222,6 @@
          self.phoneLabel.frame = CGRectMake(0, nameSize.height, phoneSize.width, phoneSize.height);
         self.phoneLabel.text = _userData.phoneNum;
         self.nameLabel.text = _userData.userName;
-        
-        
-        
 
         
     }

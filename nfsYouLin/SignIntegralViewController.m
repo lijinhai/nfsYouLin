@@ -9,6 +9,10 @@
 #import "SignIntegralViewController.h"
 #import "LewPopupViewController.h"
 #import "PopupCalendarView.h"
+#import "AFHTTPSessionManager.h"
+#import "StringMD5.h"
+#import "HeaderFile.h"
+#import "SqliteOperation.h"
 
 @interface SignIntegralViewController ()
 
@@ -35,17 +39,6 @@
     [[UIBarButtonItem appearance] setBackButtonBackgroundImage:backButtonImage forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
     [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
     self.navigationItem.title=@"";
-    /*签到点击事件*/
-    signedImage = [UIImage imageNamed:@"btn_qiandao_c"];//已签到
-    [_pleaseSignImage setUserInteractionEnabled:YES];
-     _pleaseSignImage.tag = 1;
-    [_pleaseSignImage addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(clickSignImage:)]];
-    if(signFlag!=NULL)
-    {
-    
-        _pleaseSignImage.image=signedImage;
-    
-    }
     /*设置周label日期*/
     _weekDateArray=[self getWeekTime];
     self.MONLabel.text=[_weekDateArray objectAtIndex:0];
@@ -90,10 +83,27 @@
         
         
         }
-        [self.nowWeekSignedArray removeAllObjects];
-    
+        
     }
+    /*签到点击事件*/
     
+    [_pleaseSignImage setUserInteractionEnabled:YES];
+    _pleaseSignImage.tag = 1;
+    [_pleaseSignImage addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(clickSignImage:)]];
+    NSLog(@"%@",[NSString stringWithFormat:@"%ld",[self day:[NSDate date]]]);
+    if([self checkWeekSignedDay: [self setMonthAndDayStr]])
+    {
+        signedImage = [UIImage imageNamed:@"btn_qiandao_c"];//已签到
+        _pleaseSignImage.image=signedImage;
+        signFlag=@"signed";
+    }else{
+        
+        signedImage = [UIImage imageNamed:@"btn_qiandao_a"];//请签到
+        _pleaseSignImage.image=signedImage;
+        signFlag=NULL;
+    }
+
+    [self.nowWeekSignedArray removeAllObjects];
 }
 
 - (void)clickSignImage:(UITapGestureRecognizer *)sender{
@@ -102,9 +112,9 @@
     UIImage *signedWhite =  [UIImage imageNamed:@"pic_dian2"];
     UIImageView *signedWhiteView=[[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 24, 24)];
     signedWhiteView.image=signedWhite;
-    NSLog(@"%ld", sender.view.tag);
     if(signFlag==NULL)
     {
+        [self userTodaySign];
         NSCalendar *calendar = [NSCalendar currentCalendar];
         NSDateComponents *comp = [calendar components:NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay | NSCalendarUnitWeekday | NSCalendarUnitDay fromDate:[NSDate date]];
         NSInteger weekDay = [comp weekday];
@@ -122,8 +132,9 @@
         picView.frame=CGRectMake(0, 0,24, 24);
         [layerView addSubview:picView];
         [self.view addSubview:layerView];
+        signedImage = [UIImage imageNamed:@"btn_qiandao_c"];
         _pleaseSignImage.image = signedImage;
-        signFlag=@"signed";
+        
     }
     else
     {
@@ -136,6 +147,58 @@
             NSLog(@"动画结束");
         }];
     }
+
+}
+/*MM.dd/M.dd字符串*/
+-(NSString*)setMonthAndDayStr{
+
+    NSDate *nowdate=[NSDate date];
+    NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateStyle:NSDateFormatterMediumStyle];
+    [formatter setTimeStyle:NSDateFormatterShortStyle];
+    if([self month:nowdate] <10){
+        
+        [formatter setDateFormat:@"M.dd"];
+    }else{
+        
+        [formatter setDateFormat:@"MM.dd"];
+    }
+     NSString *dateString=[formatter stringFromDate:nowdate];
+
+
+    return dateString;
+
+}
+
+/*用户签到*/
+-(void)userTodaySign{
+
+    /*用户签到*/
+    AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
+    manager.securityPolicy.allowInvalidCertificates = YES;
+    manager.responseSerializer.stringEncoding=NSUTF8StringEncoding;
+    [manager.securityPolicy setValidatesDomainName:NO];
+    NSString* userId = [NSString stringWithFormat:@"%ld", [SqliteOperation getUserId]];
+    NSString* hashString =[StringMD5 stringAddMD5:[NSString stringWithFormat:@"user_id%@",userId]];
+    NSString* hashMD5 = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"%@729",hashString]];
+    NSDictionary* parameter = @{@"user_id" : userId,
+                                @"deviceType":@"ios",
+                                @"apitype" : @"users",
+                                @"tag" : @"usersign",
+                                @"salt" : @"729",
+                                @"hash" : hashMD5,
+                                @"keyset" : @"user_id:",
+                                };
+    
+    [manager POST:POST_URL parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSLog(@"responseObject is %@",responseObject);
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        // 请求失败
+        NSLog(@"%@", [error localizedDescription]);
+    }];
 
 }
 

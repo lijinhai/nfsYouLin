@@ -314,6 +314,9 @@
 		AFCE1FAF1CDAD1B20085F10F /* nfsYouLinTests.m in Sources */ = {isa = PBXBuildFile; fileRef = AFCE1FAE1CDAD1B20085F10F /* nfsYouLinTests.m */; };
 		AFCE1FBA1CDAD1B20085F10F /* nfsYouLinUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = AFCE1FB91CDAD1B20085F10F /* nfsYouLinUITests.m */; };
 		AFCE1FCB1CDAD2020085F10F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AFCE1FC71CDAD2020085F10F /* Main.storyboard */; };
+		AFD75EA81D470971006B5A4B /* PopupGoodsExchageView.m in Sources */ = {isa = PBXBuildFile; fileRef = AFD75EA71D470971006B5A4B /* PopupGoodsExchageView.m */; };
+		AFD75EAB1D49E9FF006B5A4B /* IntegralRulesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AFD75EAA1D49E9FF006B5A4B /* IntegralRulesViewController.m */; };
+		AFD75EAE1D4AF3BF006B5A4B /* PopupExchangeTipView.m in Sources */ = {isa = PBXBuildFile; fileRef = AFD75EAD1D4AF3BF006B5A4B /* PopupExchangeTipView.m */; };
 		AFE5690C1CF2CB8000C0F745 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AFE5690B1CF2CB8000C0F745 /* Assets.xcassets */; };
 		AFE569111CF4440E00C0F745 /* LewPopupBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = AFE569101CF4440E00C0F745 /* LewPopupBackgroundView.m */; };
 		AFE569141CF4442500C0F745 /* LewPopupViewAnimationDrop.m in Sources */ = {isa = PBXBuildFile; fileRef = AFE569131CF4442500C0F745 /* LewPopupViewAnimationDrop.m */; };
@@ -944,6 +947,12 @@
 		AFCE1FB91CDAD1B20085F10F /* nfsYouLinUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = nfsYouLinUITests.m; sourceTree = "<group>"; };
 		AFCE1FBB1CDAD1B20085F10F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AFCE1FC71CDAD2020085F10F /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
+		AFD75EA61D470971006B5A4B /* PopupGoodsExchageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PopupGoodsExchageView.h; sourceTree = "<group>"; };
+		AFD75EA71D470971006B5A4B /* PopupGoodsExchageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PopupGoodsExchageView.m; sourceTree = "<group>"; };
+		AFD75EA91D49E9FF006B5A4B /* IntegralRulesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IntegralRulesViewController.h; sourceTree = "<group>"; };
+		AFD75EAA1D49E9FF006B5A4B /* IntegralRulesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IntegralRulesViewController.m; sourceTree = "<group>"; };
+		AFD75EAC1D4AF3BF006B5A4B /* PopupExchangeTipView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PopupExchangeTipView.h; sourceTree = "<group>"; };
+		AFD75EAD1D4AF3BF006B5A4B /* PopupExchangeTipView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PopupExchangeTipView.m; sourceTree = "<group>"; };
 		AFE5690B1CF2CB8000C0F745 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		AFE5690E1CF443FE00C0F745 /* LewPopupViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LewPopupViewController.h; sourceTree = "<group>"; };
 		AFE5690F1CF4440500C0F745 /* LewPopupBackgroundView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LewPopupBackgroundView.h; sourceTree = "<group>"; };
@@ -1974,6 +1983,8 @@
 				AF4B306B1D33780600CBF257 /* SignIntegralViewController.m */,
 				AF81B32B1D42073900C48856 /* IntegralMallViewController.h */,
 				AF81B32C1D42073900C48856 /* IntegralMallViewController.m */,
+				AFD75EA91D49E9FF006B5A4B /* IntegralRulesViewController.h */,
+				AFD75EAA1D49E9FF006B5A4B /* IntegralRulesViewController.m */,
 			);
 			name = youLinITabModule;
 			sourceTree = "<group>";
@@ -2224,6 +2235,10 @@
 				AFE569211CFD5A3000C0F745 /* doorplate.plist */,
 				AF4B4F1B1D07ACF90039BE42 /* LewPopupViewAnimationRight.h */,
 				AF4B4F1C1D07ACF90039BE42 /* LewPopupViewAnimationRight.m */,
+				AFD75EA61D470971006B5A4B /* PopupGoodsExchageView.h */,
+				AFD75EA71D470971006B5A4B /* PopupGoodsExchageView.m */,
+				AFD75EAC1D4AF3BF006B5A4B /* PopupExchangeTipView.h */,
+				AFD75EAD1D4AF3BF006B5A4B /* PopupExchangeTipView.m */,
 			);
 			name = popupViewController;
 			sourceTree = "<group>";
@@ -2517,6 +2532,7 @@
 				8F64912C1D05435100E3B155 /* NDetailTableViewController.m in Sources */,
 				8F648D461D00547A00E3B155 /* EaseBubbleView+File.m in Sources */,
 				8F648CF41D00547A00E3B155 /* MJRefreshHeader.m in Sources */,
+				AFD75EAE1D4AF3BF006B5A4B /* PopupExchangeTipView.m in Sources */,
 				AF4B305A1D332A3800CBF257 /* LewPopupViewAnimationFade.m in Sources */,
 				8F648D0A1D00547A00E3B155 /* MWZoomingScrollView.m in Sources */,
 				8F648CE81D00547900E3B155 /* EMCDDeviceManagerBase.m in Sources */,
@@ -2599,7 +2615,6 @@
 				8F648CFA1D00547A00E3B155 /* MJRefreshBackStateFooter.m in Sources */,
 				8F51E27D1D338FBF0094A4E5 /* SDImageCache.m in Sources */,
 				8F73C95D1D2B8634009C83C2 /* MBProgressHUBTool.m in Sources */,
-				8F60C96F1CE0277600720B01 /* friendsViewController.m in Sources */,
 				AF81B32D1D42073900C48856 /* IntegralMallViewController.m in Sources */,
 				AF4B304E1D33282800CBF257 /* FeedbackViewController.m in Sources */,
 				AF4B30571D3329AB00CBF257 /* PopupFeedBackTypeView.m in Sources */,
@@ -2665,6 +2680,7 @@
 				8F648D531D00547A00E3B155 /* EaseFacialView.m in Sources */,
 				8F648D141D00547A00E3B155 /* NSData+EMImageContentType.m in Sources */,
 				8F5303851CDB45B50078FD64 /* discoveryController.m in Sources */,
+				AFD75EAB1D49E9FF006B5A4B /* IntegralRulesViewController.m in Sources */,
 				8F648D011D00547A00E3B155 /* UIScrollView+MJRefresh.m in Sources */,
 				8F51E2A11D34D3CD0094A4E5 /* SqliteOperation.m in Sources */,
 				8F648D1D1D00547A00E3B155 /* PSTCollectionView.m in Sources */,
@@ -2684,6 +2700,7 @@
 				8F648D0F1D00547A00E3B155 /* EMSDWebImageDownloader.m in Sources */,
 				8F648D071D00547A00E3B155 /* MWPhotoBrowser.m in Sources */,
 				8F648D1E1D00547A00E3B155 /* PSTCollectionViewCell.m in Sources */,
+				AFD75EA81D470971006B5A4B /* PopupGoodsExchageView.m in Sources */,
 				AF5410471CE571380037673F /* aboutTermsViewController.m in Sources */,
 				8F51E2811D338FBF0094A4E5 /* SDWebImageDownloaderOperation.m in Sources */,
 				8F648D301D00547A00E3B155 /* NSString+Valid.m in Sources */,
