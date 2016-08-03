@@ -492,7 +492,9 @@ static ChatDemoHelper *helper = nil;
         
         _callController = [[CallViewController alloc] initWithSession:_callSession isCaller:NO status:NSLocalizedString(@"call.waiting", "Waiting to answer...")];
         _callController.modalPresentationStyle = UIModalPresentationOverFullScreen;
-        [_friendVC presentViewController:_callController animated:NO completion:nil];
+//        [_friendVC presentViewController:_callController animated:NO completion:nil];
+        [_mainVC presentViewController:_callController animated:NO completion:nil];
+
     }
 }
 

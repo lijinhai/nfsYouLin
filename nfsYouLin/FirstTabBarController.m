@@ -64,7 +64,7 @@
 
     [ChatDemoHelper shareHelper];
     [ChatDemoHelper shareHelper].friendVC = app.friendVC;
-    
+    [ChatDemoHelper shareHelper].mainVC = self;
     UINavigationController* navigationController = self.navigationController;
     _listTableView = [[ListTableView alloc] initWithFrame:CGRectMake(self.view.frame.size.width - 150, CGRectGetMaxY(self.navigationController.navigationBar.frame), 150, 200)];
     
