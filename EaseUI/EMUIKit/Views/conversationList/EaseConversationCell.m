@@ -14,6 +14,7 @@
 
 #import "EMConversation.h"
 #import "UIImageView+EMWebCache.h"
+#import "PersonModel.h"
 
 CGFloat const EaseConversationCellPadding = 10;
 
@@ -59,6 +60,7 @@ CGFloat const EaseConversationCellPadding = 10;
 
 - (void)_setupSubview
 {
+    self.backgroundColor = [UIColor whiteColor];
     _avatarView = [[EaseImageView alloc] init];
     _avatarView.translatesAutoresizingMaskIntoConstraints = NO;
     [self.contentView addSubview:_avatarView];
@@ -157,14 +159,22 @@ CGFloat const EaseConversationCellPadding = 10;
 
 - (void)setModel:(id<IConversationModel>)model
 {
+    NSString *userId;
     _model = model;
-    
+
     if ([_model.title length] > 0) {
         self.titleLabel.text = _model.title;
+        userId = _model.title;
     }
     else{
         self.titleLabel.text = _model.conversation.conversationId;
+        userId = _model.conversation.conversationId;
     }
+   
+
+    self.titleLabel.text = [[PersonModel sharedPersonModel].nickDict valueForKey:userId];
+    _model.avatarURLPath = [[PersonModel sharedPersonModel].userDict valueForKey:userId];
+    
     
     if (self.showAvatar) {
         if ([_model.avatarURLPath length] > 0){
@@ -183,6 +193,15 @@ CGFloat const EaseConversationCellPadding = 10;
         _avatarView.showBadge = YES;
         _avatarView.badge = _model.conversation.unreadMessagesCount;
     }
+    
+    UITapGestureRecognizer* tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(headTapAction:)];
+    [self.avatarView addGestureRecognizer:tapGesture];
+}
+
+- (void) headTapAction: (UITapGestureRecognizer*) recognizer
+{
+    
+    [_imageDelegate showCircularImageViewWithImage:self.avatarView.imageView.image];
 }
 
 - (void)setTitleLabelFont:(UIFont *)titleLabelFont

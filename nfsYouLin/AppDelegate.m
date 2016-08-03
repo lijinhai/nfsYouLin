@@ -13,6 +13,7 @@
 #import "AFNetworkReachabilityManager.h"
 #import "HeaderFile.h"
 #import "MBProgressHUBTool.h"
+#import "ChatDemoHelper.h"
 
 
 #define appKey @"d3f836c7d14c"
@@ -33,30 +34,21 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
     
+    [[EaseSDKHelper shareHelper] hyphenateApplication:application didFinishLaunchingWithOptions:launchOptions appkey:@"nfs-hlj#youlinapp" apnsCertName:nil otherConfig:@{kSDKConfigEnableConsoleLogger:[NSNumber numberWithBool:YES]}];
+    
+//    [ChatDemoHelper shareHelper];
+    
     //监听服务器网络变化
     [self listenNetwork];
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:kReachabilityChangedNotification object:nil];
-//    Reachability* reach = [Reachability reachabilityWithHostName:@"http://123.57.9.62"];
-//    Reachability* reach = [Reachability reachabilityWithHostName:@"www.baidu.com"];
-//    Reachability* reach = [Reachability reachabilityWithHostName:@"123.57.9.12"];
-//    [reach startNotifier];
-    
-    
-    // 环信初始化
-    EMOptions *options = [EMOptions optionsWithAppkey:@"walk#test"];
-    [[EMClient sharedClient] initializeSDKWithOptions:options];
-    EMError *error = [[EMClient sharedClient] loginWithUsername:@"test2" password:@"123456"];
-    if (!error)
-    {
-        NSLog(@"环信登陆成功");
-    }
-    
+
     // 短信验证初始化
     [SMSSDK registerApp:appKey withSecret:appSecret];
     
     NSLog(@"创建数据库");
     self.dbPath = [self dataFilePath];
     [self createTable];
+    
+   
     
     return YES;
 }
@@ -68,10 +60,13 @@
 - (void)applicationDidEnterBackground:(UIApplication *)application {
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+
+
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
+
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
@@ -80,6 +75,15 @@
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+}
+
+- (void) application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
+{
+    if(_friendVC)
+    {
+        [_friendVC didReceiveLocalNotification:notification];
+
+    }
 }
 
 //应用程序的沙盒路径

@@ -16,6 +16,10 @@
 @property(strong, nonatomic) UIButton* chatBtn;
 @property(strong, nonatomic) UIView* cLineView;
 
+@property(strong, nonatomic) UIImageView* circle;
+
 - (id) init;
+
+- (void) setIsMessage:(BOOL)isMessage;
 
 @end

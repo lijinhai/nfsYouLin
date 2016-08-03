@@ -156,17 +156,39 @@
 
 #pragma mark - EaseMessageViewControllerDataSource
 
+
+//// 自定义Cell
+//- (UITableViewCell*)messageViewController:(UITableView *)tableView cellForMessageModel:(id<IMessageModel>)messageModel
+//{
+//    //如果消息是文本消息显示用户自定义cell
+//    if (messageModel.bodyType == EMMessageBodyTypeText)
+//    {
+//        NSString *CellIdentifier = [EaseBaseMessageCell cellIdentifierWithModel:messageModel];
+//        EaseBaseMessageCell *cell = (EaseBaseMessageCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+//        if (cell == nil)
+//        {
+//            cell = [[EaseBaseMessageCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier model:messageModel];
+//            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+//        }
+//        cell.model = messageModel;
+//        return cell;
+//    }
+//    return nil;
+//}
 - (id<IMessageModel>)messageViewController:(EaseMessageViewController *)viewController
                            modelForMessage:(EMMessage *)message
 {
     id<IMessageModel> model = nil;
     model = [[EaseMessageModel alloc] initWithMessage:message];
-    model.avatarImage = [UIImage imageNamed:@"EaseUIResource.bundle/user"];
+//    model.avatarImage = [UIImage imageNamed:@"EaseUIResource.bundle/user"];
+    model.avatarURLPath = [self.modelDict valueForKey:model.nickname];
+    
 //    UserProfileEntity *profileEntity = [[UserProfileManager sharedInstance] getUserProfileByUsername:model.nickname];
 //    if (profileEntity) {
 //        model.avatarURLPath = profileEntity.imageUrl;
 //        model.nickname = profileEntity.nickname;
 //    }
+    model.nickname = @"";
     model.failImageName = @"imageDownloadFail";
     return model;
 }

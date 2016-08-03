@@ -34,6 +34,10 @@
         self.chatBtn.backgroundColor = [UIColor whiteColor];
         [self.chatBtn setTitleColor:[UIColor blackColor]forState:UIControlStateNormal];
         
+        self.circle = [[UIImageView alloc] initWithFrame:CGRectMake(CGRectGetWidth(self.chatBtn.frame) / 2 + 45, 22, 6, 6)];
+        self.circle.layer.masksToBounds = YES;
+        self.circle.layer.cornerRadius = 3;
+        self.circle.image = [UIImage imageNamed:@"hongdian"];
         
         self.cLineView = [[UIView alloc] initWithFrame:CGRectMake(CGRectGetMaxX(self.nLineView.frame), CGRectGetMaxY(self.chatBtn.frame), CGRectGetWidth(self.neighborsBtn.frame), 3)];
         self.cLineView.backgroundColor = [UIColor whiteColor];
@@ -47,6 +51,20 @@
     
     return self;
 }
+
+- (void) setIsMessage:(BOOL)isMessage
+{
+    if(isMessage)
+    {
+        [self.chatBtn addSubview:self.circle];
+
+    }
+    else
+    {
+        [self.circle removeFromSuperview];
+    }
+}
+
 
 
 @end

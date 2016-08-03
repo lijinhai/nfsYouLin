@@ -578,11 +578,6 @@
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </tabBar>
-                    <connections>
-                        <segue destination="vdb-UN-QNV" kind="relationship" relationship="viewControllers" id="T9B-KM-0gh"/>
-                        <segue destination="dQw-Sd-6lD" kind="relationship" relationship="viewControllers" id="1Th-nT-08J"/>
-                        <segue destination="UQL-P4-n3V" kind="relationship" relationship="viewControllers" id="NbY-6G-Nto"/>
-                    </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cmS-5t-RiR" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -634,36 +629,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Al0-A6-ylx" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-3188" y="399"/>
-        </scene>
-        <!--Discovery-->
-        <scene sceneID="VJE-ZI-CKl">
-            <objects>
-                <viewControllerPlaceholder storyboardName="Discovery" id="dQw-Sd-6lD" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Item" id="QSL-nI-Fvb"/>
-                </viewControllerPlaceholder>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Zjh-sb-44O" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-1890" y="591"/>
-        </scene>
-        <!--Me-->
-        <scene sceneID="FjX-9N-zea">
-            <objects>
-                <viewControllerPlaceholder storyboardName="Me" id="UQL-P4-n3V" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Item" id="13X-ah-Zqm"/>
-                </viewControllerPlaceholder>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="R0m-OZ-49R" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-1910.5" y="701"/>
-        </scene>
-        <!--Neighbour-->
-        <scene sceneID="et3-tt-QRr">
-            <objects>
-                <viewControllerPlaceholder storyboardIdentifier="neighborVC" storyboardName="Neighbour" id="vdb-UN-QNV" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Item" id="1Yb-vS-FOh"/>
-                </viewControllerPlaceholder>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="TzZ-s1-2AN" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-1888" y="410"/>
         </scene>
         <!--扫描二维码-->
         <scene sceneID="e01-aT-jqV">

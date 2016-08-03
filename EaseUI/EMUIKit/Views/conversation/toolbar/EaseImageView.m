@@ -71,15 +71,19 @@
 {
     if (_imageView == nil) {
         self.clipsToBounds = NO;
+        
+
         self.backgroundColor = [UIColor clearColor];
         
         _imageView = [[UIImageView alloc] init];
         _imageView.translatesAutoresizingMaskIntoConstraints = NO;
         _imageView.layer.cornerRadius = _imageCornerRadius;
         _imageView.clipsToBounds = YES;
-        _imageView.backgroundColor = [UIColor grayColor];
+        _imageView.backgroundColor = [UIColor blueColor];
+        _imageView.frame = CGRectMake(10, 10, 60, 60);
+        _imageView.layer.cornerRadius = 30;
         [self addSubview:_imageView];
-        
+
         _badgeView = [[UILabel alloc] init];
         _badgeView.translatesAutoresizingMaskIntoConstraints = NO;
         _badgeView.textAlignment = NSTextAlignmentCenter;
@@ -175,6 +179,7 @@
     if (_imageCornerRadius != imageCornerRadius) {
         _imageCornerRadius = imageCornerRadius;
         self.imageView.layer.cornerRadius = _imageCornerRadius;
+
     }
 }
 

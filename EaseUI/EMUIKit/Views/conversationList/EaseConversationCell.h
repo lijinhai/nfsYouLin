@@ -17,9 +17,13 @@
 #import "IModelCell.h"
 #import "EaseImageView.h"
 
+#import "NCellDelegate.h"
+
 static CGFloat EaseConversationCellMinHeight = 60;
 
 @interface EaseConversationCell : UITableViewCell<IModelCell>
+
+@property (nonatomic,assign) id<cellDelegate> imageDelegate;
 
 @property (strong, nonatomic) EaseImageView *avatarView;
 
