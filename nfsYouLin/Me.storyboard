@@ -192,6 +192,25 @@
             </objects>
             <point key="canvasLocation" x="1038" y="-1372"/>
         </scene>
+        <!--我的礼品-->
+        <scene sceneID="dbr-Ke-y61">
+            <objects>
+                <viewController storyboardIdentifier="mygiftscontroller" title="我的礼品" useStoryboardIdentifierAsRestorationIdentifier="YES" id="TJo-ff-MpT" customClass="MyGiftsViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="wiR-gy-fXi"/>
+                        <viewControllerLayoutGuide type="bottom" id="Ccb-bm-qyk"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Yhw-95-d7n">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina55"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="C7e-EO-gR9" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1507" y="-1372"/>
+        </scene>
         <!--积分商城-->
         <scene sceneID="2kC-kH-4z7">
             <objects>

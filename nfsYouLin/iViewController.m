@@ -302,7 +302,9 @@
 
         SignIntegralController.nowWeekSignedArray=[[NSMutableArray alloc] init];
         SignIntegralController.monthSignedArray=[[NSMutableArray alloc] init];
+        NSLog(@"responseObject is %@",responseObject);
         NSMutableArray *responseObjectAry=[responseObject objectForKey:@"info"];
+        SignIntegralController.todayPoints=[[responseObjectAry objectAtIndex:0][@"credit"] intValue];
         for(int i=1;i<[responseObjectAry count];i++)
         {
             

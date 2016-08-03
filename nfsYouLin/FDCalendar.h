@@ -14,6 +14,7 @@
 @property (nonatomic, strong) NSMutableArray *previousMonthSignedArray;
 @property (nonatomic, strong) NSMutableArray *lastMonthSignedArray;
 @property (nonatomic, strong) NSMutableDictionary *dic;
+@property (nonatomic, strong) NSMutableArray *dateMutablearray;
 
 - (instancetype)initWithCurrentDate:(NSDate *)date signArray:(NSMutableArray *)datearray;
 

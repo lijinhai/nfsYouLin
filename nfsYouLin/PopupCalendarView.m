@@ -43,7 +43,7 @@
     showTodayPointsInfo.font=[UIFont systemFontOfSize:16];
     showTodayPointsInfo.textAlignment=NSTextAlignmentCenter;
     [self addSubview:showTodayPointsInfo];
-    NSLog(@"threeMonthSignedArray is  %ld",[threeMonthSignedArray count]);
+    //NSLog(@"threeMonthSignedArray is  %ld",[threeMonthSignedArray count]);
 
     /*加载日历*/
     //NSMutableArray *arrayStr=[[NSMutableArray alloc] init];

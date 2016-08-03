@@ -18,8 +18,15 @@
 #import "HeaderFile.h"
 #import "Users.h"
 #import "MBProgressHUBTool.h"
+#import "MJRefresh.h"
+#import "MyGiftsViewController.h"
 
 @interface IntegralMallViewController ()
+{
+    
+    MJRefreshFooter *_footer;
+}
+
 
 @end
 
@@ -28,9 +35,11 @@
     UIColor *_viewColor;
     PopupGoodsExchageView *view;
     IntegralRulesViewController *IntegralRulesController;
+    MyGiftsViewController *MyGiftsController;
     Users* user;
     NSTimer *timer;
-    
+    MJRefreshAutoNormalFooter *footer;
+   
 }
 
 - (void)viewDidLoad {
@@ -40,7 +49,13 @@
     _integralRuleLabel.userInteractionEnabled=YES;
     UITapGestureRecognizer *labelTapGestureRecognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(integralRuleTouchUpInside:)];
     [_integralRuleLabel addGestureRecognizer:labelTapGestureRecognizer];
-    // Do any additional setup after loading the view.
+    
+    footer  = [MJRefreshAutoNormalFooter   footerWithRefreshingTarget:self refreshingAction:@selector(loadMoreData)];
+    self.goodsCollectView.mj_footer = footer;
+    //footer.refreshingTitleHidden=YES;
+
+    footer.stateLabel.hidden=YES;
+    //[footer setImages:refreshingImages forState:MJRefreshStateRefreshing];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -53,16 +68,33 @@
     /*积分label设置*/
     _integralValueLabel.attributedText=[self setIntegralLabel:self.pointStr];
     _integralValueLabel.textAlignment=NSTextAlignmentLeft;
-    NSLog(@"integralStr is %@",_integralValueLabel.text);
     /*CollectView初始化*/
     self.goodsCollectView.backgroundColor=_viewColor;
     self.goodsCollectView.delegate=self;
     self.goodsCollectView.dataSource=self;
+    self.goodsCollectView.translatesAutoresizingMaskIntoConstraints=NO;
+    self.goodsCollectView.alwaysBounceVertical=YES;
+    [self.goodsCollectView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"GoodsCell"];
+    /*me label设置*/
+    _meLabel.userInteractionEnabled=YES;
+    UITapGestureRecognizer *labelTapGestureRecognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(meLabelTouchUpInside:)];
+    
+    [_meLabel addGestureRecognizer:labelTapGestureRecognizer];
 
-    [self.goodsCollectView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"CalendarCell"];
     /*页面跳转*/
     UIStoryboard* iStoryBoard = [UIStoryboard storyboardWithName:@"Me" bundle:nil];
     IntegralRulesController=[iStoryBoard instantiateViewControllerWithIdentifier:@"integralrulescontroller"];
+    MyGiftsController=[iStoryBoard instantiateViewControllerWithIdentifier:@"mygiftscontroller"];
+}
+
+-(void) meLabelTouchUpInside:(UITapGestureRecognizer *)recognizer{
+   
+    /*跳转至我的礼品*/
+    UIBarButtonItem* neighborItem = [[UIBarButtonItem alloc] initWithTitle:@"我的礼品" style:UIBarButtonItemStylePlain target:nil action:nil];
+    [self.navigationItem setBackBarButtonItem:neighborItem];
+    [self.navigationController pushViewController:MyGiftsController animated:YES];
+    
+    
 }
 - (void)returnText:(ReturnTextBlock)block {
     
@@ -95,6 +127,19 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+
+-(void)loadMoreData{
+    
+    //footer.stateLabel.hidden=NO;
+    //[footer.stateLabel setText:@"加载更多"];
+    [self.goodsCollectView.mj_footer beginRefreshing];
+    NSLog(@"下拉加载数据刷新");
+    [self.goodsCollectView.mj_footer endRefreshing];
+    //footer.stateLabel.hidden=YES;
+    //[footer endRefreshingWithNoMoreData];
+}
+
 #pragma mark - UICollectionDatasource
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
@@ -129,7 +174,7 @@
     
     NSInteger rowNo = indexPath.row;
     NSInteger section = indexPath.section;
-    static NSString *CellIdentifier = @"CalendarCell";
+    static NSString *CellIdentifier = @"GoodsCell";
     UICollectionViewCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:CellIdentifier forIndexPath:indexPath];
     cell.backgroundColor = [UIColor whiteColor];
     
@@ -211,17 +256,9 @@
     [manager.securityPolicy setValidatesDomainName:NO];
     
     NSString* userId = [NSString stringWithFormat:@"%ld", [SqliteOperation getUserId]];
-    NSLog(@"userId is %@",userId);
-    
     NSString* communityId = [NSString stringWithFormat:@"%ld", [SqliteOperation getNowCommunityId]];
-    NSLog(@"communityId is %@",communityId);
-
     NSString* countStr=view.countTextField.text;
-    NSLog(@"countStr is %@",countStr);
-    
     NSString* glIdStr=[NSString stringWithFormat:@"%ld",[sender tag]];
-    NSLog(@"glIdStr is %@",glIdStr);
-    
     NSString* hashString =[StringMD5 stringAddMD5:[NSString stringWithFormat:@"user_id%@community_id%@count%@gl_id%@",userId,communityId,countStr,glIdStr]];
     NSString* hashMD5 = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"%@3",hashString]];
     NSDictionary* parameter = @{@"user_id" : userId,

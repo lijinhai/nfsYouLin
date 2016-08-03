@@ -22,6 +22,7 @@
 
     NSString *signFlag;
     UIImage *signedImage;
+   
 
 }
 
@@ -139,7 +140,7 @@
     else
     {
         
-        NSInteger points=3;//今天签到所得分数
+        NSInteger points=_todayPoints;//今天签到所得分数
         PopupCalendarView *view = [PopupCalendarView defaultPopupView:points tFrame:CGRectMake(0, 0, 365, 375) signArray:self.monthSignedArray];
         view.parentVC = self;
         //NSLog(@"self.monthSignedArray is %ld",[self.monthSignedArray count]);
@@ -193,10 +194,12 @@
     [manager POST:POST_URL parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        NSLog(@"responseObject is %@",responseObject);
+        
+        NSLog(@"responseObject is %@",[responseObject objectForKey:@"credit"]);
+        signFlag=@"signed";
         
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        // 请求失败
+        
         NSLog(@"%@", [error localizedDescription]);
     }];
 

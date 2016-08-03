@@ -20,6 +20,10 @@
 @property (nonatomic, strong) NSString *pointStr;
 @property (weak, nonatomic) IBOutlet UICollectionView *goodsCollectView;
 
+
+
+
+
 typedef void (^ReturnTextBlock)(NSString *showText);
 @property (nonatomic, copy) ReturnTextBlock returnTextBlock;
 - (void)returnText:(ReturnTextBlock)block;
