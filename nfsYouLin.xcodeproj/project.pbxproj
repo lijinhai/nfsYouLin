@@ -422,6 +422,7 @@
 		AF78501B1CFFCF0B009F6982 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = AF78501A1CFFCF0B009F6982 /* libsqlite3.dylib */; };
 		AF7FF17F1D3CBDD90068F8D9 /* FDCalendar.m in Sources */ = {isa = PBXBuildFile; fileRef = AF7FF17C1D3CBDD90068F8D9 /* FDCalendar.m */; };
 		AF7FF1801D3CBDD90068F8D9 /* FDCalendarItem.m in Sources */ = {isa = PBXBuildFile; fileRef = AF7FF17E1D3CBDD90068F8D9 /* FDCalendarItem.m */; };
+		AF81B32D1D42073900C48856 /* IntegralMallViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AF81B32C1D42073900C48856 /* IntegralMallViewController.m */; };
 		AFCE1F961CDAD1B20085F10F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = AFCE1F951CDAD1B20085F10F /* main.m */; };
 		AFCE1F991CDAD1B20085F10F /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = AFCE1F981CDAD1B20085F10F /* AppDelegate.m */; };
 		AFCE1F9C1CDAD1B20085F10F /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AFCE1F9B1CDAD1B20085F10F /* ViewController.m */; };
@@ -429,6 +430,10 @@
 		AFCE1FAF1CDAD1B20085F10F /* nfsYouLinTests.m in Sources */ = {isa = PBXBuildFile; fileRef = AFCE1FAE1CDAD1B20085F10F /* nfsYouLinTests.m */; };
 		AFCE1FBA1CDAD1B20085F10F /* nfsYouLinUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = AFCE1FB91CDAD1B20085F10F /* nfsYouLinUITests.m */; };
 		AFCE1FCB1CDAD2020085F10F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AFCE1FC71CDAD2020085F10F /* Main.storyboard */; };
+		AFD75EA81D470971006B5A4B /* PopupGoodsExchageView.m in Sources */ = {isa = PBXBuildFile; fileRef = AFD75EA71D470971006B5A4B /* PopupGoodsExchageView.m */; };
+		AFD75EAB1D49E9FF006B5A4B /* IntegralRulesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AFD75EAA1D49E9FF006B5A4B /* IntegralRulesViewController.m */; };
+		AFD75EAE1D4AF3BF006B5A4B /* PopupExchangeTipView.m in Sources */ = {isa = PBXBuildFile; fileRef = AFD75EAD1D4AF3BF006B5A4B /* PopupExchangeTipView.m */; };
+		AFD75EB71D4E084E006B5A4B /* MyGiftsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AFD75EB61D4E084E006B5A4B /* MyGiftsViewController.m */; };
 		AFE5690C1CF2CB8000C0F745 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AFE5690B1CF2CB8000C0F745 /* Assets.xcassets */; };
 		AFE569111CF4440E00C0F745 /* LewPopupBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = AFE569101CF4440E00C0F745 /* LewPopupBackgroundView.m */; };
 		AFE569141CF4442500C0F745 /* LewPopupViewAnimationDrop.m in Sources */ = {isa = PBXBuildFile; fileRef = AFE569131CF4442500C0F745 /* LewPopupViewAnimationDrop.m */; };
@@ -450,6 +455,11 @@
 		AFE569491CFE652A00C0F745 /* frog.png in Resources */ = {isa = PBXBuildFile; fileRef = AFE569421CFE652A00C0F745 /* frog.png */; };
 		AFE5694A1CFE652A00C0F745 /* mouse.png in Resources */ = {isa = PBXBuildFile; fileRef = AFE569431CFE652A00C0F745 /* mouse.png */; };
 		AFE5694B1CFE652A00C0F745 /* rabbit.png in Resources */ = {isa = PBXBuildFile; fileRef = AFE569441CFE652A00C0F745 /* rabbit.png */; };
+		AFE5694D1CFE65D900C0F745 /* Neighbour.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AFE5694C1CFE65D900C0F745 /* Neighbour.storyboard */; };
+		AFEB36551D4ED3450081A5E6 /* ExchangingGiftsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AFEB36541D4ED3450081A5E6 /* ExchangingGiftsViewController.m */; };
+		AFEB36581D4ED43C0081A5E6 /* ExchangedGiftsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AFEB36571D4ED43C0081A5E6 /* ExchangedGiftsViewController.m */; };
+		AFEB365E1D503F050081A5E6 /* GoodsCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = AFEB365D1D503F050081A5E6 /* GoodsCollectionViewCell.m */; };
+		AFEB36651D506F6F0081A5E6 /* goodsInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = AFEB36641D506F6F0081A5E6 /* goodsInfo.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1161,6 +1171,8 @@
 		AF7FF17C1D3CBDD90068F8D9 /* FDCalendar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDCalendar.m; sourceTree = "<group>"; };
 		AF7FF17D1D3CBDD90068F8D9 /* FDCalendarItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDCalendarItem.h; sourceTree = "<group>"; };
 		AF7FF17E1D3CBDD90068F8D9 /* FDCalendarItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDCalendarItem.m; sourceTree = "<group>"; };
+		AF81B32B1D42073900C48856 /* IntegralMallViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IntegralMallViewController.h; sourceTree = "<group>"; };
+		AF81B32C1D42073900C48856 /* IntegralMallViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IntegralMallViewController.m; sourceTree = "<group>"; };
 		AFCE1F911CDAD1B20085F10F /* nfsYouLin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = nfsYouLin.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AFCE1F951CDAD1B20085F10F /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		AFCE1F971CDAD1B20085F10F /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -1176,6 +1188,14 @@
 		AFCE1FB91CDAD1B20085F10F /* nfsYouLinUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = nfsYouLinUITests.m; sourceTree = "<group>"; };
 		AFCE1FBB1CDAD1B20085F10F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AFCE1FC71CDAD2020085F10F /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
+		AFD75EA61D470971006B5A4B /* PopupGoodsExchageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PopupGoodsExchageView.h; sourceTree = "<group>"; };
+		AFD75EA71D470971006B5A4B /* PopupGoodsExchageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PopupGoodsExchageView.m; sourceTree = "<group>"; };
+		AFD75EA91D49E9FF006B5A4B /* IntegralRulesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IntegralRulesViewController.h; sourceTree = "<group>"; };
+		AFD75EAA1D49E9FF006B5A4B /* IntegralRulesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IntegralRulesViewController.m; sourceTree = "<group>"; };
+		AFD75EAC1D4AF3BF006B5A4B /* PopupExchangeTipView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PopupExchangeTipView.h; sourceTree = "<group>"; };
+		AFD75EAD1D4AF3BF006B5A4B /* PopupExchangeTipView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PopupExchangeTipView.m; sourceTree = "<group>"; };
+		AFD75EB51D4E084E006B5A4B /* MyGiftsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyGiftsViewController.h; sourceTree = "<group>"; };
+		AFD75EB61D4E084E006B5A4B /* MyGiftsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyGiftsViewController.m; sourceTree = "<group>"; };
 		AFE5690B1CF2CB8000C0F745 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		AFE5690E1CF443FE00C0F745 /* LewPopupViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LewPopupViewController.h; sourceTree = "<group>"; };
 		AFE5690F1CF4440500C0F745 /* LewPopupBackgroundView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LewPopupBackgroundView.h; sourceTree = "<group>"; };
@@ -1211,6 +1231,15 @@
 		AFE569431CFE652A00C0F745 /* mouse.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mouse.png; sourceTree = "<group>"; };
 		AFE569441CFE652A00C0F745 /* rabbit.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = rabbit.png; sourceTree = "<group>"; };
 		AFE569451CFE652A00C0F745 /* HeaderFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HeaderFile.h; sourceTree = "<group>"; };
+		AFE5694C1CFE65D900C0F745 /* Neighbour.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Neighbour.storyboard; sourceTree = "<group>"; };
+		AFEB36531D4ED3450081A5E6 /* ExchangingGiftsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExchangingGiftsViewController.h; sourceTree = "<group>"; };
+		AFEB36541D4ED3450081A5E6 /* ExchangingGiftsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExchangingGiftsViewController.m; sourceTree = "<group>"; };
+		AFEB36561D4ED43C0081A5E6 /* ExchangedGiftsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExchangedGiftsViewController.h; sourceTree = "<group>"; };
+		AFEB36571D4ED43C0081A5E6 /* ExchangedGiftsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExchangedGiftsViewController.m; sourceTree = "<group>"; };
+		AFEB365C1D503F050081A5E6 /* GoodsCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GoodsCollectionViewCell.h; sourceTree = "<group>"; };
+		AFEB365D1D503F050081A5E6 /* GoodsCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GoodsCollectionViewCell.m; sourceTree = "<group>"; };
+		AFEB36631D506F6F0081A5E6 /* goodsInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = goodsInfo.h; sourceTree = "<group>"; };
+		AFEB36641D506F6F0081A5E6 /* goodsInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = goodsInfo.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2427,6 +2456,11 @@
 				AF4B30211D2F903600CBF257 /* UIViewLinkmanTouch.m */,
 				AF4B306A1D33780600CBF257 /* SignIntegralViewController.h */,
 				AF4B306B1D33780600CBF257 /* SignIntegralViewController.m */,
+				AF81B32B1D42073900C48856 /* IntegralMallViewController.h */,
+				AF81B32C1D42073900C48856 /* IntegralMallViewController.m */,
+				AFD75EA91D49E9FF006B5A4B /* IntegralRulesViewController.h */,
+				AFD75EAA1D49E9FF006B5A4B /* IntegralRulesViewController.m */,
+				AFEB365F1D506E900081A5E6 /* goodsExchange */,
 			);
 			name = youLinITabModule;
 			sourceTree = "<group>";
@@ -2709,6 +2743,10 @@
 				AFE569211CFD5A3000C0F745 /* doorplate.plist */,
 				AF4B4F1B1D07ACF90039BE42 /* LewPopupViewAnimationRight.h */,
 				AF4B4F1C1D07ACF90039BE42 /* LewPopupViewAnimationRight.m */,
+				AFD75EA61D470971006B5A4B /* PopupGoodsExchageView.h */,
+				AFD75EA71D470971006B5A4B /* PopupGoodsExchageView.m */,
+				AFD75EAC1D4AF3BF006B5A4B /* PopupExchangeTipView.h */,
+				AFD75EAD1D4AF3BF006B5A4B /* PopupExchangeTipView.m */,
 			);
 			name = popupViewController;
 			sourceTree = "<group>";
@@ -2741,6 +2779,47 @@
 				8FB6F9A61D3F53E100E6C71A /* WaitView.m */,
 			);
 			name = View;
+			sourceTree = "<group>";
+		};
+		AFEB365F1D506E900081A5E6 /* goodsExchange */ = {
+			isa = PBXGroup;
+			children = (
+				AFEB36621D506F0E0081A5E6 /* Model */,
+				AFEB36611D506EFB0081A5E6 /* Controller */,
+				AFEB36601D506EDA0081A5E6 /* View */,
+			);
+			name = goodsExchange;
+			sourceTree = "<group>";
+		};
+		AFEB36601D506EDA0081A5E6 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				AFEB365C1D503F050081A5E6 /* GoodsCollectionViewCell.h */,
+				AFEB365D1D503F050081A5E6 /* GoodsCollectionViewCell.m */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
+		AFEB36611D506EFB0081A5E6 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				AFD75EB51D4E084E006B5A4B /* MyGiftsViewController.h */,
+				AFD75EB61D4E084E006B5A4B /* MyGiftsViewController.m */,
+				AFEB36531D4ED3450081A5E6 /* ExchangingGiftsViewController.h */,
+				AFEB36541D4ED3450081A5E6 /* ExchangingGiftsViewController.m */,
+				AFEB36561D4ED43C0081A5E6 /* ExchangedGiftsViewController.h */,
+				AFEB36571D4ED43C0081A5E6 /* ExchangedGiftsViewController.m */,
+			);
+			name = Controller;
+			sourceTree = "<group>";
+		};
+		AFEB36621D506F0E0081A5E6 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				AFEB36631D506F6F0081A5E6 /* goodsInfo.h */,
+				AFEB36641D506F6F0081A5E6 /* goodsInfo.m */,
+			);
+			name = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -3096,6 +3175,7 @@
 				AFE569251CFD793400C0F745 /* addressInfomationViewController.m in Sources */,
 				8F648D0B1D00547A00E3B155 /* DACircularProgressView.m in Sources */,
 				8F648D411D00547A00E3B155 /* EaseUserCell.m in Sources */,
+				AFEB36581D4ED43C0081A5E6 /* ExchangedGiftsViewController.m in Sources */,
 				8F51E1EB1D3324750094A4E5 /* Users.m in Sources */,
 				8F51E2871D338FBF0094A4E5 /* UIImage+WebP.m in Sources */,
 				AF4B30191D2F8F5200CBF257 /* UpdatePhotoView.m in Sources */,
@@ -3113,6 +3193,8 @@
 				8F64912C1D05435100E3B155 /* NeighborDetailTVC.m in Sources */,
 				8F648D461D00547A00E3B155 /* EaseBubbleView+File.m in Sources */,
 				8F648CF41D00547A00E3B155 /* MJRefreshHeader.m in Sources */,
+				AFEB36651D506F6F0081A5E6 /* goodsInfo.m in Sources */,
+				AFD75EAE1D4AF3BF006B5A4B /* PopupExchangeTipView.m in Sources */,
 				AF4B305A1D332A3800CBF257 /* LewPopupViewAnimationFade.m in Sources */,
 				8F648D0A1D00547A00E3B155 /* MWZoomingScrollView.m in Sources */,
 				8F648CE81D00547900E3B155 /* EMCDDeviceManagerBase.m in Sources */,
@@ -3179,6 +3261,7 @@
 				8F648D251D00547A00E3B155 /* PSTGridLayoutInfo.m in Sources */,
 				AFE569111CF4440E00C0F745 /* LewPopupBackgroundView.m in Sources */,
 				8F51E2841D338FBF0094A4E5 /* UIButton+WebCache.m in Sources */,
+				AFD75EB71D4E084E006B5A4B /* MyGiftsViewController.m in Sources */,
 				8F648D0E1D00547A00E3B155 /* EMSDWebImageDecoder.m in Sources */,
 				8F648D001D00547A00E3B155 /* UIScrollView+MJExtension.m in Sources */,
 				8F648D541D00547A00E3B155 /* EaseChatBarMoreView.m in Sources */,
@@ -3197,6 +3280,7 @@
 				8F648CFA1D00547A00E3B155 /* MJRefreshBackStateFooter.m in Sources */,
 				8F51E27D1D338FBF0094A4E5 /* SDImageCache.m in Sources */,
 				8F73C95D1D2B8634009C83C2 /* MBProgressHUBTool.m in Sources */,
+				AF81B32D1D42073900C48856 /* IntegralMallViewController.m in Sources */,
 				AF4B304E1D33282800CBF257 /* FeedbackViewController.m in Sources */,
 				AF4B30571D3329AB00CBF257 /* PopupFeedBackTypeView.m in Sources */,
 				8F648CE11D00547900E3B155 /* EaseUI.m in Sources */,
@@ -3253,6 +3337,7 @@
 				AF54103B1CE1BE850037673F /* MBProgressHUD.m in Sources */,
 				AF7850161CFFC5C8009F6982 /* FMDatabaseQueue.m in Sources */,
 				AFE569321CFE62F500C0F745 /* NeighborTableViewCell.m in Sources */,
+				AFEB36551D4ED3450081A5E6 /* ExchangingGiftsViewController.m in Sources */,
 				8F648D111D00547A00E3B155 /* EMSDWebImageManager.m in Sources */,
 				8FB6FA4A1D41B4EF00E6C71A /* FriendsVC.m in Sources */,
 				8F648CE21D00547900E3B155 /* EMAudioPlayerUtil.m in Sources */,
@@ -3260,13 +3345,15 @@
 				AF4B30371D2F935700CBF257 /* addressVerificationViewController.m in Sources */,
 				8F648D531D00547A00E3B155 /* EaseFacialView.m in Sources */,
 				8F648D141D00547A00E3B155 /* NSData+EMImageContentType.m in Sources */,
-				8F5303851CDB45B50078FD64 /* DiscoveryTVC.m in Sources */,
+				8F5303851CDB45B50078FD64 /* discoveryController.m in Sources */,
+				AFD75EAB1D49E9FF006B5A4B /* IntegralRulesViewController.m in Sources */,
 				8F648D011D00547A00E3B155 /* UIScrollView+MJRefresh.m in Sources */,
 				8F51E2A11D34D3CD0094A4E5 /* SqliteOperation.m in Sources */,
 				8F648D1D1D00547A00E3B155 /* PSTCollectionView.m in Sources */,
 				AF4B301C1D2F8FE200CBF257 /* LewPopupViewAnimationDownSlide.m in Sources */,
 				8F648D171D00547A00E3B155 /* UIImage+EMMultiFormat.m in Sources */,
 				8F648CEB1D00547900E3B155 /* EMVoiceConverter.mm in Sources */,
+				AFEB365E1D503F050081A5E6 /* GoodsCollectionViewCell.m in Sources */,
 				8FB6FA4D1D41B56A00E6C71A /* SegmentView.m in Sources */,
 				8F648D431D00547A00E3B155 /* EaseCustomMessageCell.m in Sources */,
 				8F648CF71D00547A00E3B155 /* MJRefreshAutoStateFooter.m in Sources */,
@@ -3281,6 +3368,7 @@
 				8F648D0F1D00547A00E3B155 /* EMSDWebImageDownloader.m in Sources */,
 				8F648D071D00547A00E3B155 /* MWPhotoBrowser.m in Sources */,
 				8F648D1E1D00547A00E3B155 /* PSTCollectionViewCell.m in Sources */,
+				AFD75EA81D470971006B5A4B /* PopupGoodsExchageView.m in Sources */,
 				AF5410471CE571380037673F /* aboutTermsViewController.m in Sources */,
 				8F51E2811D338FBF0094A4E5 /* SDWebImageDownloaderOperation.m in Sources */,
 				8F648D301D00547A00E3B155 /* NSString+Valid.m in Sources */,

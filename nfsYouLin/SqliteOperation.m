@@ -38,6 +38,7 @@
          dict[@"user_json"] ,
          dict[@"login_account"] ,
          dict[@"table_version"] ];
+        //NSLog(@"USER_Family_id is %@",dict[@"user_family_id"]);
     }
     else
     {
@@ -105,6 +106,51 @@
     return YES;
 }
 
++ (NSInteger) getNowCommunityId{
+    
+    AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+    FMDatabase *db = delegate.db;
+    
+    if ( ![ db open ] )
+    {
+        NSLog(@"打开数据库失败");
+    }
+    // 查找表
+    NSInteger comid=0;
+    NSString *query = @"select table_all_family.family_community_id from table_users,table_all_family where table_users.user_family_id=table_all_family.family_id";
+    FMResultSet* resultSet = [ db executeQuery:query];
+    // 逐行读取数据
+    while ( [ resultSet next ] )
+    {
+        // 对应字段来取数据
+        comid=[ resultSet intForColumn: @"family_community_id" ];
+    }
+    [ db close ];
+    return comid;
+}
 
-
++ (long)getUserId
+{
+    
+    AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+    FMDatabase *db = delegate.db;
+    long loginUserId=0;
+    if([db open])
+    {
+        FMResultSet *result = [db executeQuery:@"SELECT user_id FROM table_users"];
+        while ([result next]) {
+            
+            loginUserId = [result longForColumn:@"user_id"];
+        }
+        [db close];
+        
+        return loginUserId;
+    }
+    else
+    {
+        NSLog(@"iVC: db open error!");
+        return 0;
+    }
+    
+}
 @end

@@ -7,15 +7,17 @@
 //
 
 #import "multiTableViewCell.h"
+#import "UIViewLinkmanTouch.h"
 #import "SignIntegralViewController.h"
 #import "StringMD5.h"
 #import "UIImageView+WebCache.h"
+#import "AFHTTPSessionManager.h"
+#import "HeaderFile.h"
+#import "AppDelegate.h"
+#import "SqliteOperation.h"
 
-@implementation multiTableViewCell{
-    SignIntegralViewController *SignIntegralController;
-    UIBarButtonItem* backItemTitle;
+@implementation multiTableViewCell
 
-}
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code
@@ -34,10 +36,12 @@
     self.integralCount = 0;
     self.favoriteCount = 0;
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
-    UIStoryboard* iStoryBoard = [UIStoryboard storyboardWithName:@"Me" bundle:nil];
-    SignIntegralController=[iStoryBoard instantiateViewControllerWithIdentifier:@"signintegralcontroller"];
+    
+    
     if([reuseIdentifier isEqualToString:@"cellOne"])
     {
+        /*获取用户积分*/
+        [self getUserIntegral:[SqliteOperation getUserId]];
         self.integralView = [[UIControl alloc] initWithFrame:CGRectMake(0, 0, self.contentView.frame.size.width / 3 - 1 , 80)];
         self.integralView.backgroundColor = [UIColor whiteColor];
         UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(self.integralView.bounds.size.width + 1 , 20.0f, 1.0f, 40)];
@@ -47,8 +51,9 @@
         lable1.enabled = NO;
         lable1.textAlignment = NSTextAlignmentCenter;
         self.integralLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 50, self.integralView.bounds.size.width, 30)];
+        self.integralLabel.tag=222;
         self.integralLabel.textAlignment = NSTextAlignmentCenter;
-        self.integralLabel.text = [NSString stringWithFormat:@"%ld",self.integralCount];
+
         // 设置文字控件的宽度按照上一级视图（topView）的比例进行缩放
         [lable1 setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
         [self.integralLabel setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
@@ -57,8 +62,8 @@
         [lineView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin];
         [self.integralView addSubview:lable1];
         [self.integralView addSubview:self.integralLabel];
-        [self.integralView addTarget:self action:@selector(touchDownIntegral) forControlEvents:UIControlEventTouchDown];
-        [self.integralView addTarget:self action:@selector(touchCancelIntegral) forControlEvents:UIControlEventTouchUpInside ];
+        //[self.integralView addTarget:self action:@selector(touchDownIntegral) forControlEvents:UIControlEventTouchDown];
+        //[self.integralView addTarget:self action:@selector(touchCancelIntegral) forControlEvents:UIControlEventTouchUpInside ];
         [self.contentView addSubview:self.integralView];
         [self.contentView addSubview:lineView];
         
@@ -74,6 +79,7 @@
         [lineView2 setBackgroundColor:[UIColor blackColor]];
         
         self.publishLable = [[UILabel alloc] initWithFrame:CGRectMake(0, 50, self.publishView.bounds.size.width, 30)];
+       
         self.publishLable.textAlignment = NSTextAlignmentCenter;
         self.publishLable.text = [NSString stringWithFormat:@"%ld",self.publishCount];
         
@@ -85,10 +91,10 @@
         [self.publishView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin];
         [lineView2 setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin];
         [self.publishView addSubview:lable2];
-        ////        [self.view2 addSubview:lineView2];
+            //[self.view2 addSubview:lineView2];
         [self.publishView addSubview:self.publishLable];
-        [self.publishView addTarget:self action:@selector(touchDownPublish) forControlEvents:UIControlEventTouchDown];
-        [self.publishView addTarget:self action:@selector(touchCancelPublish) forControlEvents:UIControlEventTouchUpInside ];
+        //[self.publishView addTarget:self action:@selector(touchDownPublish) forControlEvents:UIControlEventTouchDown];
+        //[self.publishView addTarget:self action:@selector(touchCancelPublish) forControlEvents:UIControlEventTouchUpInside ];
         [self.contentView addSubview:self.publishView];
         [self.contentView addSubview:lineView2];
         
@@ -112,11 +118,7 @@
         
         [self.favoriteView addSubview:lable3];
         [self.favoriteView addSubview:self.favoriteLabel];
-        [self.favoriteView addTarget:self action:@selector(touchDownFavorite) forControlEvents:UIControlEventTouchDown];
-        [self.favoriteView addTarget:self action:@selector(touchCancelFavorite) forControlEvents:UIControlEventTouchUpInside ];
         [self.contentView addSubview:self.favoriteView];
-
-
     }
     else if([reuseIdentifier isEqualToString:@"cellZero"])
     {
@@ -140,68 +142,60 @@
         [self.nameLabel setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
         [view setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin];
         
-        self.signButton = [[UIButton alloc] initWithFrame:CGRectMake(200, -10, 50, 50)];
-        self.signButton.layer.cornerRadius = self.signButton.frame.size.width / 2;
-        self.signButton.layer.masksToBounds = YES;
-        [self.signButton setBackgroundImage:[UIImage imageNamed:@"btn_qiandao.png"] forState:UIControlStateNormal];
-        [self.signButton addTarget:self action:@selector(signGetIntegralAction) forControlEvents:UIControlEventTouchDown];
-        
         [view addSubview:self.nameLabel];
         [view addSubview:self.phoneLabel];
-        //[view addSubview:self.signButton];
+    
         [self.contentView addSubview:view];
     }
+    
+    
     return self;
 }
 
--(void)signGetIntegralAction{
-    //
-        NSLog(@"签到了么~~~~~~~~");
-        backItemTitle = [[UIBarButtonItem alloc] initWithTitle:@"积分签到" style:UIBarButtonItemStylePlain target:nil action:nil];
-        //[ setBackBarButtonItem:backItemTitle];
-        //[self.navigationController pushViewController:SignIntegralController animated:YES];
+-(void)getUserIntegral:(long) userid{
+    
+    AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
+    manager.securityPolicy.allowInvalidCertificates = YES;
+    manager.responseSerializer.stringEncoding=NSUTF8StringEncoding;
+    [manager.securityPolicy setValidatesDomainName:NO];
+    NSString* myId = [NSString stringWithFormat:@"%ld",userid];
+    NSString* hashString =[StringMD5 stringAddMD5:[NSString stringWithFormat:@"user_id%@",myId]];
+    NSString* hashMD5 = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"%@1024",hashString]];
+    NSDictionary* parameter = @{@"user_id" : myId,
+                                @"deviceType":@"ios",
+                                @"apitype" : @"users",
+                                @"tag" : @"usercredit",
+                                @"salt" : @"1024",
+                                @"hash" : hashMD5,
+                                @"keyset" : @"user_id:",
+                                };
+    
+    [manager POST:POST_URL parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
+        self.integralCount=[[responseObject objectForKey:@"credit"] intValue];
+        self.integralLabel.text = [NSString stringWithFormat:@"%ld",self.integralCount];
+        self.integralLabel.tag=1024;
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"请求失败:%@", error.description);
+        
+        return;
+    }];
 }
 
-- (void) touchDownIntegral
-{
-    self.integralView.backgroundColor = [UIColor lightGrayColor];
-    //NSLog(@"签到了！！！！");
-}
-
-- (void)touchCancelIntegral
-{
-//    self.view1.backgroundColor = _viewColor;
-    self.integralCount += 3;
-    self.integralLabel.text = [NSString stringWithFormat:@"%ld",self.integralCount];
-    self.integralView.backgroundColor = [UIColor whiteColor];
-}
-
-
-- (void) touchDownPublish
-{
-    self.publishView.backgroundColor = [UIColor lightGrayColor];
-}
-
-- (void)touchCancelPublish
-{
-    //self.view1.backgroundColor = _viewColor;
-    self.publishCount += 3;
-    self.publishLable.text = [NSString stringWithFormat:@"%ld",self.publishCount];
-    self.publishView.backgroundColor = [UIColor whiteColor];
-}
-
-- (void) touchDownFavorite
-{
-    self.favoriteView.backgroundColor = [UIColor lightGrayColor];
-}
-
-- (void)touchCancelFavorite
-{
-    //    self.view1.backgroundColor = _viewColor;
-    self.favoriteCount += 3;
-    self.favoriteLabel.text = [NSString stringWithFormat:@"%ld",self.favoriteCount];
-    self.favoriteView.backgroundColor = [UIColor whiteColor];
-}
+/*获取父view的UIViewController*/
+//- (UIViewController *)viewController
+//{
+//    for (UIView* next = [self superview]; next; next = next.superview) {
+//        UIResponder *nextResponder = [next nextResponder];
+//        if ([nextResponder isKindOfClass:[UIViewController class]]) {
+//            return (UIViewController *)nextResponder;
+//        }
+//    }
+//    return nil;
+//}
 
 
 - (void) headTapAction: (UITapGestureRecognizer*) recognizer
@@ -213,6 +207,7 @@
 {
     
     _userData = userData;
+   
     if(_userData)
     {
   
@@ -227,9 +222,6 @@
          self.phoneLabel.frame = CGRectMake(0, nameSize.height, phoneSize.width, phoneSize.height);
         self.phoneLabel.text = _userData.phoneNum;
         self.nameLabel.text = _userData.userName;
-        
-        
-        
 
         
     }

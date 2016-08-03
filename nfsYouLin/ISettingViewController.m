@@ -328,8 +328,6 @@
             quitView *view = [quitView defaultPopupView];
             UIButton* logoutBtn = view.logoutBtn;
             [logoutBtn addTarget:self action:@selector(logoutAction:) forControlEvents:UIControlEventTouchUpInside];
-            
-            
             view.parentVC = self;
             [self lew_presentPopupView:view animation:[LewPopupViewAnimationSlide new] dismissed:^{
                 //[self.otherTableView reloadData];

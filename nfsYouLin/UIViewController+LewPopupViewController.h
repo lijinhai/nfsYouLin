@@ -17,6 +17,9 @@
 
 @interface UIViewController (LewPopupViewController)
 @property (nonatomic, retain, readonly) UIView *lewPopupView;
+@property (nonatomic, retain, readonly) UIView *lewPopupView1;
+@property (nonatomic, retain, readonly) UIView *lewPopupView2;
+@property (nonatomic, retain, readonly) UIView *lewPopupView3;
 @property (nonatomic, retain, readonly) UIView *lewOverlayView;
 @property (nonatomic, retain, readonly) id<LewPopupAnimation> lewPopupAnimation;
 
@@ -26,9 +29,11 @@
 
 - (void)lew_presentPopupView:(UIView *)popupView animation:(id<LewPopupAnimation>)animation backgroundClickable:(BOOL)clickable;
 - (void)lew_presentPopupView:(UIView *)popupView animation:(id<LewPopupAnimation>)animation backgroundClickable:(BOOL)clickable dismissed:(void(^)(void))dismissed;
-
+- (void)lew_presentPopupViews:(NSMutableArray *)arrayView animation:(id<LewPopupAnimation>)animation dismissed:(void (^)(void))dismissed;
 - (void)lew_dismissPopupView;
+- (void)lew_dismissPopupViews;
 - (void)lew_dismissPopupViewWithanimation:(id<LewPopupAnimation>)animation;
+- (void)lew_dismissPopupViewsWithanimation:(id<LewPopupAnimation>)animation;
 @end
 
 #pragma mark - 

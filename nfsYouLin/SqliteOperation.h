@@ -17,4 +17,9 @@
 // 家庭信息表插入
 + (BOOL) insertFamilyInfoSqlite: (NSMutableDictionary *) dict View:(UIView*) view;
 
+// 查询用户所在社区的ID
++ (NSInteger) getNowCommunityId;
+
+// 获取用户ID
++ (long)getUserId;
 @end

@@ -41,8 +41,8 @@ static NSDateFormatter *dateFormattor;
         [self getMonthArray:datearray];
         [self getSignMonthArray:datearray];
         [self setupWeekHeader];
-        [self setupCalendarItems:[_dic count]];
-        [self setupScrollView:[_dic count]];
+        [self setupCalendarItems:[_dateMutablearray count]];
+        [self setupScrollView:[_dateMutablearray count]];
         [self setFrame:CGRectMake(0, 0, DeviceWidth, CGRectGetMaxY(self.scrollView.frame))];
         [self setCurrentDate:self.date];
     }
@@ -60,11 +60,34 @@ static NSDateFormatter *dateFormattor;
         NSString *yearAndMonthStr=[NSString stringWithFormat:@"%@%@%@",array[0],@".",array[1]];
         [arrayStr addObject:yearAndMonthStr];
     }
-    _dic = [[NSMutableDictionary alloc]initWithCapacity:0];
-    for(NSString *str in arrayStr)
-    {
-        [_dic setValue:str forKey:str];
+    
+    _dateMutablearray = [@[] mutableCopy];
+    for (int i = 0; i < arrayStr.count; i ++) {
+        
+        NSString *string = arrayStr[i];
+        
+        NSMutableArray *tempArray = [@[] mutableCopy];
+        
+        [tempArray addObject:string];
+        
+        for (int j = i+1; j < arrayStr.count; j ++) {
+            
+            NSString *jstring = arrayStr[j];
+            
+            if([string isEqualToString:jstring]){
+                
+                [tempArray addObject:jstring];
+                
+                [arrayStr removeObjectAtIndex:j];
+                j -= 1;
+                
+            }
+            
+        }
+        
+        [_dateMutablearray addObject:tempArray[0]];
     }
+    
 }
 
 -(void) getSignMonthArray:(NSMutableArray *)datearray{
@@ -72,56 +95,48 @@ static NSDateFormatter *dateFormattor;
     _nowMonthSignedArray=[[NSMutableArray alloc] init];
     _previousMonthSignedArray=[[NSMutableArray alloc] init];
     _lastMonthSignedArray=[[NSMutableArray alloc] init];
-            NSArray *keys = [_dic allKeys];
-            long int length = [keys count];
-            for(int i=0;i<[datearray count];i++)
-            {
-                NSArray *array = [[datearray objectAtIndex:i] componentsSeparatedByString:@"."];
-                NSString *submonthStr=[NSString stringWithFormat:@"%@%@%@",array[0],@".",array[1]];
-                NSString *subdateStr=[NSString stringWithFormat:@"%@%@%@",array[1],@".",array[2]];
-                if([keys count]==1)
+
+    for(int i=0;i<[datearray count];i++)
+    {
+        NSArray *array = [[datearray objectAtIndex:i] componentsSeparatedByString:@"."];
+        NSString *submonthStr=[NSString stringWithFormat:@"%@%@%@",array[0],@".",array[1]];
+
+        if([_dateMutablearray count]==1)
+        {
+            [_nowMonthSignedArray addObject:array[2]];
+    
+        }else if([_dateMutablearray count]==2){
+            
+                if([submonthStr isEqualToString:_dateMutablearray[0]])
                 {
+                    
                     [_nowMonthSignedArray addObject:array[2]];
     
-                }else if([keys count]==2){
+                }else{
+    
                     
+                    [_previousMonthSignedArray addObject:array[2]];
     
-                        for (int j = 0; j < length;j++){
-    
-                            id key = [keys objectAtIndex:j];
-                            id obj = [_dic objectForKey:key];
-                            if([submonthStr isEqualToString:obj]&&j==0)
-                            {
-                                [_nowMonthSignedArray addObject:array[2]];
-    
-                            }else{
-    
-                                [_previousMonthSignedArray addObject:array[2]];
-    
-                            }
-                            
-                    }
-    
-                }else if([keys count]==3)
+                }
+            
+        }else if([_dateMutablearray count]==3)
                 {
-                    for (int j = 0; j < length;j++){
-    
-                        id key = [keys objectAtIndex:j];
-                        id obj = [_dic objectForKey:key];
-                        if([submonthStr isEqualToString:obj]&&j==0)
+                        
+                        if([submonthStr isEqualToString:_dateMutablearray[0]])
                         {
+                            //NSLog(@"_nowMonthSignedArray is %@",array[2]);
                            [_nowMonthSignedArray addObject:array[2]];
     
-                        }else if([submonthStr isEqualToString:obj]&&j==1){
+                        }else if([submonthStr isEqualToString:_dateMutablearray[1]]){
     
+                            //NSLog(@"_previousMonthSignedArray is %@",array[2]);
                             [_previousMonthSignedArray addObject:array[2]];
     
-                        }else if([submonthStr isEqualToString:obj]&&j==2)
+                        }else if([submonthStr isEqualToString:_dateMutablearray[2]])
                         {
+                            //NSLog(@"_lastMonthSignedArray is %@",array[2]);
                             [_lastMonthSignedArray addObject:array[2]];
                         }
-                        
-                    }
                     
                 }
     
@@ -243,13 +258,13 @@ static NSDateFormatter *dateFormattor;
     
    
 }
--(NSMutableArray *) getStringByDate:(NSMutableDictionary *)dic{
+-(NSMutableArray *) getStringByDate:(NSMutableArray *)datearray{
     
     NSMutableArray *monthStr=[[NSMutableArray alloc] init];
-    for (id key in dic){
+    for (int i=0;i<[datearray count];i++){
         
-        id obj = [dic objectForKey:key];
-        NSString *datestring = [NSString stringWithFormat:@"%@",obj];
+        
+        NSString *datestring = [NSString stringWithFormat:@"%@",[datearray objectAtIndex:i]];
         NSDateFormatter * dm = [[NSDateFormatter alloc]init];
         [dm setDateFormat:@"yyyy.MM"];
         NSDate * newdate = [dm dateFromString:datestring];
@@ -261,20 +276,19 @@ static NSDateFormatter *dateFormattor;
 // 设置当前日期，初始化
 - (void)setCurrentDate:(NSDate *)date {
     
-    NSMutableArray *monthAry=[self getStringByDate:_dic];
-    if([_dic count]==3)
+    NSMutableArray *monthAry=[self getStringByDate:_dateMutablearray];
+    if([_dateMutablearray count]==3)
     {
      self.rightCalendarItem.date = date;//当前月份
-        self.centerCalendarItem.date =[monthAry objectAtIndex:1];
-       
+     self.centerCalendarItem.date =[monthAry objectAtIndex:1];
      self.leftCalendarItem.date =[monthAry objectAtIndex:2];
         
-    }else if([_dic count]==2)
+    }else if([_dateMutablearray count]==2)
     {
         self.rightCalendarItem.date = date;//当前月份
         self.centerCalendarItem.date = [monthAry objectAtIndex:1];//前一个月
     
-    }else if([_dic count]==1){
+    }else if([_dateMutablearray count]==1){
     
       self.rightCalendarItem.date = date;//当前月份
 

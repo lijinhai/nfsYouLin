@@ -12,6 +12,9 @@
 
 
 #define kLEWPopupView @"kLEWPopupView"
+#define kLEWPopupView1 @"kLEWPopupView1"
+#define kLEWPopupView2 @"kLEWPopupView2"
+#define kLEWPopupView3 @"kLEWPopupView3"
 #define kLEWOverlayView @"kLEWOverlayView"
 #define kLEWPopupViewDismissedBlock @"kLEWPopupViewDismissedBlock"
 #define KLEWPopupAnimation @"KLEWPopupAnimation"
@@ -44,6 +47,13 @@
     [self _presentPopupView:popupView animation:animation backgroundClickable:YES dismissed:dismissed];
 }
 
+
+- (void)lew_presentPopupViews:(NSMutableArray *)arrayView animation:(id<LewPopupAnimation>)animation dismissed:(void (^)(void))dismissed{
+    [self _presentPopupViews:arrayView animation:animation backgroundClickable:YES dismissed:dismissed];
+}
+
+
+
 - (void)lew_presentPopupView:(UIView *)popupView animation:(id<LewPopupAnimation>)animation backgroundClickable:(BOOL)clickable{
     [self _presentPopupView:popupView animation:animation backgroundClickable:clickable dismissed:nil];
 }
@@ -56,8 +66,17 @@
     [self _dismissPopupViewWithAnimation:animation];
 }
 
+- (void)lew_dismissPopupViewsWithanimation:(id<LewPopupAnimation>)animation{
+    [self _dismissPopupViewsWithAnimation:animation];
+}
+
 - (void)lew_dismissPopupView{
+    
     [self _dismissPopupViewWithAnimation:self.lewPopupAnimation];
+}
+- (void)lew_dismissPopupViews{
+    
+     [self _dismissPopupViewsWithAnimation:self.lewPopupAnimation];
 }
 #pragma mark - inline property
 - (UIView *)lewPopupView {
@@ -68,6 +87,29 @@
     objc_setAssociatedObject(self, kLEWPopupView, lewPopupView, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
+- (UIView *)lewPopupView1 {
+    return objc_getAssociatedObject(self, kLEWPopupView1);
+}
+
+- (void)setLewPopupView1:(UIViewController *)lewPopupView1 {
+    objc_setAssociatedObject(self, kLEWPopupView1, lewPopupView1, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (UIView *)lewPopupView2 {
+    return objc_getAssociatedObject(self, kLEWPopupView2);
+}
+
+- (void)setLewPopupView2:(UIViewController *)lewPopupView2 {
+    objc_setAssociatedObject(self, kLEWPopupView2, lewPopupView2, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (UIView *)lewPopupView3 {
+    return objc_getAssociatedObject(self, kLEWPopupView3);
+}
+
+- (void)setLewPopupView3:(UIViewController *)lewPopupView3 {
+    objc_setAssociatedObject(self, kLEWPopupView3, lewPopupView3, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
 - (UIView *)lewOverlayView{
     return objc_getAssociatedObject(self, kLEWOverlayView);
 }
@@ -94,14 +136,16 @@
 #pragma mark - view handle
 
 - (void)_presentPopupView:(UIView*)popupView animation:(id<LewPopupAnimation>)animation backgroundClickable:(BOOL)clickable dismissed:(void(^)(void))dismissed{
-
+   
     
     // check if source view controller is not in destination
     if ([self.lewOverlayView.subviews containsObject:popupView]) return;
     
     // fix issue #2
     if (self.lewOverlayView && self.lewOverlayView.subviews.count > 1) {
+
         [self _dismissPopupViewWithAnimation:nil];
+        
     }
     
     self.lewPopupView = nil;
@@ -121,7 +165,7 @@
     popupView.layer.shadowOpacity = 0.5;
     popupView.layer.shouldRasterize = YES;
     popupView.layer.rasterizationScale = [[UIScreen mainScreen] scale];
-    
+
     // Add overlay
     if (self.lewOverlayView == nil) {
         UIView *overlayView = [[UIView alloc] initWithFrame:sourceView.bounds];
@@ -133,29 +177,155 @@
         UIView *backgroundView = [[LewPopupBackgroundView alloc] initWithFrame:sourceView.bounds];
         backgroundView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         backgroundView.backgroundColor = [UIColor clearColor];
+       
         [overlayView addSubview:backgroundView];
-        
         // Make the Background Clickable
         if (clickable) {
+
             UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(lew_dismissPopupView)];
             [backgroundView addGestureRecognizer:tap];
         }
+        
         self.lewOverlayView = overlayView;
     }
     
     [self.lewOverlayView addSubview:popupView];
+    
     [sourceView addSubview:self.lewOverlayView];
 
     self.lewOverlayView.alpha = 1.0f;
     popupView.center = self.lewOverlayView.center;
+    
     if (animation) {
         [animation showView:popupView overlayView:self.lewOverlayView];
+        
     }
     
     [self setLewDismissCallback:dismissed];
 
 }
 
+- (void)_presentPopupViews:(NSMutableArray*)arrayView animation:(id<LewPopupAnimation>)animation backgroundClickable:(BOOL)clickable dismissed:(void(^)(void))dismissed{
+    
+    UIView *picView=[arrayView objectAtIndex:0];
+    UIView *countView=[arrayView objectAtIndex:1];
+    UIView *pointView=[arrayView objectAtIndex:2];
+    if ([self.lewOverlayView.subviews containsObject:picView]) return;
+    if ([self.lewOverlayView.subviews containsObject:countView]) return;
+    if ([self.lewOverlayView.subviews containsObject:pointView]) return;
+    if (self.lewOverlayView && self.lewOverlayView.subviews.count > 1) {
+            [self _dismissPopupViewsWithAnimation:nil];
+        }
+
+    self.lewPopupView1 = nil;
+    self.lewPopupView1 = [arrayView objectAtIndex:0];
+    self.lewPopupView2 = nil;
+    self.lewPopupView2 = [arrayView objectAtIndex:1];
+    self.lewPopupView3 = nil;
+    self.lewPopupView3 = [arrayView objectAtIndex:2];
+    self.lewPopupAnimation = nil;
+    self.lewPopupAnimation = animation;
+    
+    UIView *sourceView = [self _lew_topView];
+   
+    
+
+    // Add overlay
+    if (self.lewOverlayView == nil) {
+        UIView *overlayView = [[UIView alloc] initWithFrame:sourceView.bounds];
+        overlayView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        overlayView.tag = kLEWOverlayViewTag;
+        overlayView.backgroundColor = [UIColor clearColor];
+        
+        // BackgroundView
+        UIView *backgroundView = [[LewPopupBackgroundView alloc] initWithFrame:sourceView.bounds];
+        backgroundView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        backgroundView.backgroundColor = [UIColor clearColor];
+        
+        [overlayView addSubview:backgroundView];
+        
+        if (clickable) {
+          
+            UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(lew_dismissPopupViews)];
+            [backgroundView addGestureRecognizer:tap];
+         
+        }
+        self.lewOverlayView = overlayView;
+    }
+    
+    [self.lewOverlayView addSubview:picView];
+    [self.lewOverlayView addSubview:countView];
+    [self.lewOverlayView addSubview:pointView];
+    [sourceView addSubview:self.lewOverlayView];
+    
+    self.lewOverlayView.alpha = 1.0f;
+    
+    if (animation) {
+        [animation showView:picView overlayView:self.lewOverlayView];
+        [animation showView:countView overlayView:self.lewOverlayView];
+        [animation showView:pointView overlayView:self.lewOverlayView];
+        
+    }
+    
+    [self setLewDismissCallback:dismissed];
+    
+}
+- (void)_dismissPopupViewsWithAnimation:(id<LewPopupAnimation>)animation{
+    
+    if (animation) {
+        [animation dismissView:self.lewPopupView1 overlayView:self.lewOverlayView completion:^(void) {
+            [self.lewOverlayView removeFromSuperview];
+            [self.lewPopupView1 removeFromSuperview];
+             self.lewPopupView1 = nil;
+            self.lewOverlayView=nil;
+            self.lewPopupAnimation = nil;
+            id dismissed = [self lewDismissCallback];
+            if (dismissed != nil){
+                ((void(^)(void))dismissed)();
+                [self setLewDismissCallback:nil];
+            }
+        }];
+        [animation dismissView:self.lewPopupView2 overlayView:self.lewOverlayView completion:^(void) {
+            [self.lewOverlayView removeFromSuperview];
+            [self.lewPopupView2 removeFromSuperview];
+            self.lewPopupView2 = nil;
+            self.lewPopupAnimation = nil;
+            id dismissed = [self lewDismissCallback];
+            if (dismissed != nil){
+                ((void(^)(void))dismissed)();
+                [self setLewDismissCallback:nil];
+            }
+        }];
+        [animation dismissView:self.lewPopupView3 overlayView:self.lewOverlayView completion:^(void) {
+            [self.lewOverlayView removeFromSuperview];
+            [self.lewPopupView3 removeFromSuperview];
+            self.lewPopupView3 = nil;
+            self.lewPopupAnimation = nil;
+            id dismissed = [self lewDismissCallback];
+            if (dismissed != nil){
+                ((void(^)(void))dismissed)();
+                [self setLewDismissCallback:nil];
+            }
+        }];
+        
+    }else{
+        [self.lewOverlayView removeFromSuperview];
+        self.lewOverlayView=nil;
+        [self.lewPopupView1 removeFromSuperview];
+        self.lewPopupView1 = nil;
+        [self.lewPopupView2 removeFromSuperview];
+        self.lewPopupView2 = nil;
+        [self.lewPopupView2 removeFromSuperview];
+        self.lewPopupView2 = nil;
+        self.lewPopupAnimation = nil;
+        id dismissed = [self lewDismissCallback];
+        if (dismissed != nil){
+            ((void(^)(void))dismissed)();
+            [self setLewDismissCallback:nil];
+        }
+    }
+    
+}
 - (void)_dismissPopupViewWithAnimation:(id<LewPopupAnimation>)animation{
     if (animation) {
         [animation dismissView:self.lewPopupView overlayView:self.lewOverlayView completion:^(void) {
@@ -163,6 +333,7 @@
             [self.lewPopupView removeFromSuperview];
             self.lewPopupView = nil;
             self.lewPopupAnimation = nil;
+            self.lewOverlayView=nil;
             
             id dismissed = [self lewDismissCallback];
             if (dismissed != nil){
@@ -175,7 +346,7 @@
         [self.lewPopupView removeFromSuperview];
         self.lewPopupView = nil;
         self.lewPopupAnimation = nil;
-        
+        self.lewOverlayView=nil;
         id dismissed = [self lewDismissCallback];
         if (dismissed != nil){
             ((void(^)(void))dismissed)();
