@@ -353,6 +353,7 @@
 		8F75398A1D48A4620090A7C2 /* tabbarSelectBg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8F75391A1D48A4620090A7C2 /* tabbarSelectBg@2x.png */; };
 		8F7539911D4AEE560090A7C2 /* EaseSDKHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F7539901D4AEE560090A7C2 /* EaseSDKHelper.m */; };
 		8F75399A1D50307E0090A7C2 /* DiscoveryViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F7539991D50307E0090A7C2 /* DiscoveryViewCell.m */; };
+		8F7539A41D51825C0090A7C2 /* CallViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F7539A31D51825C0090A7C2 /* CallViewController.m */; };
 		8F823D6C1D2A3B0000178B01 /* libicucore.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F823D6B1D2A3B0000178B01 /* libicucore.tbd */; };
 		8F823D6E1D2A3B1800178B01 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F823D6D1D2A3B1800178B01 /* MessageUI.framework */; };
 		8F823D701D2A3B2800178B01 /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F823D6F1D2A3B2800178B01 /* JavaScriptCore.framework */; };
@@ -370,7 +371,6 @@
 		8FB6FA6B1D48379400E6C71A /* PersonModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FB6FA6A1D48379400E6C71A /* PersonModel.m */; };
 		8FB6FA801D484CDD00E6C71A /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FB6FA7F1D484CDD00E6C71A /* CoreLocation.framework */; };
 		8FB6FA881D485AEC00E6C71A /* ChatDemoHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FB6FA861D485AEC00E6C71A /* ChatDemoHelper.m */; };
-		8FB6FA8C1D48768000E6C71A /* CallViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FB6FA8A1D48768000E6C71A /* CallViewController.m */; };
 		8FF22DA41CE1733800EAE9BA /* forgetViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FF22DA31CE1733800EAE9BA /* forgetViewController.m */; };
 		8FF7E9781D12A04D0026D07D /* ChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FF7E9771D12A04D0026D07D /* ChatViewController.m */; };
 		AF0E0FF01D4068B2009FB44D /* DialogView.m in Sources */ = {isa = PBXBuildFile; fileRef = AF0E0FEF1D4068B2009FB44D /* DialogView.m */; };
@@ -1032,6 +1032,8 @@
 		8F7539901D4AEE560090A7C2 /* EaseSDKHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EaseSDKHelper.m; sourceTree = "<group>"; };
 		8F7539981D50307E0090A7C2 /* DiscoveryViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiscoveryViewCell.h; sourceTree = "<group>"; };
 		8F7539991D50307E0090A7C2 /* DiscoveryViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiscoveryViewCell.m; sourceTree = "<group>"; };
+		8F7539A21D51824B0090A7C2 /* CallViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CallViewController.h; sourceTree = "<group>"; };
+		8F7539A31D51825C0090A7C2 /* CallViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CallViewController.m; sourceTree = "<group>"; };
 		8F823D6B1D2A3B0000178B01 /* libicucore.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libicucore.tbd; path = usr/lib/libicucore.tbd; sourceTree = SDKROOT; };
 		8F823D6D1D2A3B1800178B01 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		8F823D6F1D2A3B2800178B01 /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
@@ -1058,8 +1060,6 @@
 		8FB6FA7F1D484CDD00E6C71A /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		8FB6FA851D485AEC00E6C71A /* ChatDemoHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatDemoHelper.h; sourceTree = "<group>"; };
 		8FB6FA861D485AEC00E6C71A /* ChatDemoHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatDemoHelper.m; sourceTree = "<group>"; };
-		8FB6FA891D48768000E6C71A /* CallViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CallViewController.h; sourceTree = "<group>"; };
-		8FB6FA8A1D48768000E6C71A /* CallViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CallViewController.m; sourceTree = "<group>"; };
 		8FF22DA21CE1733800EAE9BA /* forgetViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = forgetViewController.h; sourceTree = "<group>"; };
 		8FF22DA31CE1733800EAE9BA /* forgetViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = forgetViewController.m; sourceTree = "<group>"; };
 		8FF7E9761D12A0470026D07D /* ChatViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ChatViewController.h; sourceTree = "<group>"; };
@@ -2385,6 +2385,15 @@
 			path = tabbar;
 			sourceTree = "<group>";
 		};
+		8F7539A11D5182380090A7C2 /* Call */ = {
+			isa = PBXGroup;
+			children = (
+				8F7539A21D51824B0090A7C2 /* CallViewController.h */,
+				8F7539A31D51825C0090A7C2 /* CallViewController.m */,
+			);
+			name = Call;
+			sourceTree = "<group>";
+		};
 		8FAFCD2D1CDAD99E008F4B48 /* youLinITabModule */ = {
 			isa = PBXGroup;
 			children = (
@@ -2510,16 +2519,6 @@
 			name = Models;
 			sourceTree = "<group>";
 		};
-		8FB6FA8B1D48768000E6C71A /* Call */ = {
-			isa = PBXGroup;
-			children = (
-				8FB6FA891D48768000E6C71A /* CallViewController.h */,
-				8FB6FA8A1D48768000E6C71A /* CallViewController.m */,
-			);
-			name = Call;
-			path = "../../ChatDemo_V3.1.3_BQMM1.6/ChatDemo-UI3.0/ChatDemo-UI3.0/Class/Call";
-			sourceTree = "<group>";
-		};
 		AF4B306D1D34C0C100CBF257 /* SignedCalendar */ = {
 			isa = PBXGroup;
 			children = (
@@ -2626,7 +2625,7 @@
 		AFCE1F931CDAD1B20085F10F /* nfsYouLin */ = {
 			isa = PBXGroup;
 			children = (
-				8FB6FA8B1D48768000E6C71A /* Call */,
+				8F7539A11D5182380090A7C2 /* Call */,
 				8F51E1E81D33242C0094A4E5 /* Data */,
 				AF5293C91D12964E00503975 /* Gloable */,
 				AF7850071CFFC587009F6982 /* FMDB */,
@@ -3200,7 +3199,6 @@
 				8F73C95D1D2B8634009C83C2 /* MBProgressHUBTool.m in Sources */,
 				AF4B304E1D33282800CBF257 /* FeedbackViewController.m in Sources */,
 				AF4B30571D3329AB00CBF257 /* PopupFeedBackTypeView.m in Sources */,
-				8FB6FA8C1D48768000E6C71A /* CallViewController.m in Sources */,
 				8F648CE11D00547900E3B155 /* EaseUI.m in Sources */,
 				8F51E2861D338FBF0094A4E5 /* UIImage+MultiFormat.m in Sources */,
 				8F648D151D00547A00E3B155 /* UIButton+EMWebCache.m in Sources */,
@@ -3216,6 +3214,7 @@
 				8F648D4C1D00547A00E3B155 /* EaseBubbleView+Voice.m in Sources */,
 				AF4B30311D2F930000CBF257 /* scanQrCodeViewController.m in Sources */,
 				8F648D261D00547A00E3B155 /* PSTGridLayoutItem.m in Sources */,
+				8F7539A41D51825C0090A7C2 /* CallViewController.m in Sources */,
 				8F648CEA1D00547900E3B155 /* wav.mm in Sources */,
 				8F648D381D00547A00E3B155 /* EaseEmotionEscape.m in Sources */,
 				8F6491321D0653CB00E3B155 /* NDetailTableViewCell.m in Sources */,
