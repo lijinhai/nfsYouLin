@@ -10,7 +10,7 @@
 #import "multiTableViewCell.h"
 #import "ShowImageView.h"
 
-@interface ITVC : UITableViewController <cellDelegate>
+@interface ITVC : UITableViewController <cellDelegate,UINavigationControllerDelegate>
 
 - (id) init;
 @end
