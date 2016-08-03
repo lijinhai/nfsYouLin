@@ -7,7 +7,6 @@
 //
 
 #import "NeighborTableViewCell.h"
-#import "NDetailTableViewController.h"
 #import "UIImageView+WebCache.h"
 #import "StringMD5.h"
 #import "MBProgressHUBTool.h"

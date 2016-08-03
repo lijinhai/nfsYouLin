@@ -25,6 +25,10 @@
 @property(nonatomic,strong)NSString* profession;
 
 
+// userId
+@property(nonatomic,assign)NSInteger userId;
+
+
 - (id) initWithDict:(NSDictionary*)dict;
 
 @end

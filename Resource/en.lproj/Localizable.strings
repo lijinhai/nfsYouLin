@@ -197,6 +197,7 @@
 "call.reject"="Reject";
 "call.answer"="Answer";
 "call.hangup"="Hangup";
+"call.autoHangup"="No response and Hang up";
 "call.connectFailed"="Connect failed";
 "call.failed"="Call failed";
 "call.suspended"="Call has been suspended";
@@ -215,6 +216,8 @@
 "call.videoLostcnt"="Lostcnt: ";
 "call.videoLocalBitrate"="Local Bitrate: ";
 "call.videoRemoteBitrate"="Remote Bitrate: ";
+"call.switchCamera"="Switch Camera";
+
 
 //message
 "message.image" = "image";

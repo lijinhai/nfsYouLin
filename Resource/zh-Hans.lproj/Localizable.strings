@@ -196,6 +196,7 @@
 "call.speaker"="免提";
 "call.reject"="拒接";
 "call.answer"="接听";
+"call.autoHangup"="没有响应，自动挂断";
 "call.hangup"="挂断";
 "call.connectFailed"="建立连接失败";
 "call.failed"="通话失败";
@@ -215,6 +216,7 @@
 "call.videoLostcnt"="丢包数: ";
 "call.videoLocalBitrate"="本地比特率: ";
 "call.videoRemoteBitrate"="对方比特率: ";
+"call.switchCamera"="切换摄像头";
 
 //message
 "message.image" = "图片";
