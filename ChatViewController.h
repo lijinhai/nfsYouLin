@@ -14,6 +14,6 @@
 
 @interface ChatViewController : EaseMessageViewController <EaseMessageViewControllerDelegate, EaseMessageViewControllerDataSource>
 
-
+@property(strong, nonatomic) NSMutableDictionary* modelDict;
 
 @end

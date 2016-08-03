@@ -204,6 +204,7 @@
             
             NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
             [defaults setInteger:[[personDic valueForKey:@"user_community_id"] integerValue] forKey:@"communityId"];
+            [defaults setObject:[personDic valueForKey:@"user_portrait"] forKey:@"portrait"];
             [defaults synchronize];
             
             SqlDictionary* sqlDict = [[SqlDictionary alloc] init];
@@ -224,7 +225,6 @@
             personInfoDic[@"user_email"] = personDic[@"user_email"];
             personInfoDic[@"user_type"] = personDic[@"user_type"];
             personInfoDic[@"user_time"] = personDic[@"user_time"];
-            personInfoDic[@"user_json"] = personDic[@"user_json"];
             personInfoDic[@"user_json"] = personDic[@"user_json"];
             
             if(![SqliteOperation insertUsersSqlite:personInfoDic View:self.view])

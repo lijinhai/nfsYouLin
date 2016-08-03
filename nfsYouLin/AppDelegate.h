@@ -8,9 +8,12 @@
 
 #import <UIKit/UIKit.h>
 #import "FMDB.h"
+#import "FriendsVC.h"
 
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
+
+@property(strong, nonatomic)FriendsVC* friendVC;
 
 @property (strong, nonatomic) UIWindow *window;
 @property (strong, nonatomic) NSString *dbPath;

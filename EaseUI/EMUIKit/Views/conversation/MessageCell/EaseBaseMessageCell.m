@@ -14,6 +14,8 @@
 
 #import "UIImageView+EMWebCache.h"
 
+#import "PersonModel.h"
+
 @interface EaseBaseMessageCell()
 
 @property (strong, nonatomic) UILabel *nameLabel;
@@ -225,13 +227,15 @@
 {
     [super setModel:model];
     
+    NSString *from = model.message.from;
+    model.avatarURLPath = [[PersonModel sharedPersonModel].userDict valueForKey:from];
+    model.nickname = @"";
     if (model.avatarURLPath) {
         [self.avatarView sd_setImageWithURL:[NSURL URLWithString:model.avatarURLPath] placeholderImage:model.avatarImage];
     } else {
         self.avatarView.image = model.avatarImage;
     }
     _nameLabel.text = model.nickname;
-    
     if (self.model.isSender) {
         _hasRead.hidden = YES;
         switch (self.model.messageStatus) {
