@@ -10,8 +10,7 @@
 #import "multiTableViewCell.h"
 #import "ShowImageView.h"
 
-@interface iViewController : UITableViewController <cellDelegate,UINavigationControllerDelegate>
-@property (strong, nonatomic) IBOutlet UITabBarItem *iTabBarItem;
+@interface ITVC : UITableViewController <cellDelegate>
 
 - (id) init;
 @end

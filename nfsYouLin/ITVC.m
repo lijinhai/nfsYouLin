@@ -15,14 +15,7 @@
 #import "AboutYouLinViewController.h"
 #import "PersonalInformationViewController.h"
 #import "SignIntegralViewController.h"
-#import "IntegralMallViewController.h"
 #import "AFHTTPSessionManager.h"
-#import "StringMD5.h"
-#import "HeaderFile.h"
-#import "SqliteOperation.h"
-#import "SqlDictionary.h"
-#import "MBProgressHUBTool.h"
-
 
 @interface ITVC ()
 
@@ -33,7 +26,6 @@
     UIColor* _viewColor;
     NSArray* _images;
     NSArray* _cellNames;
-    UILabel *integralLab;
     addressInfomationViewController *_addressInfomationController;
     FeedbackViewController *FeedbackController;
     ISettingViewController *ISettingController;
@@ -41,34 +33,43 @@
     PersonalInformationViewController *PersonalInformationController;
     multiTableViewCell *multiTableCell;
     SignIntegralViewController *SignIntegralController;
-    IntegralMallViewController *IntegralMallController;
     UIBarButtonItem* backItemTitle;
     UIButton *signButton;
-    NSInteger nowPoints;
-    __block NSString *initIntegralValue;
     Users* user;
     
 }
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-     [self initUser];
-    /*改变BarItem 图片系统颜色为 自定义颜色 ffba20 */
-    UIImage *iImageA = [UIImage imageNamed:@"btn_wo_a.png"];
-    iImageA = [iImageA imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    self.iTabBarItem.selectedImage = iImageA;
-    /* uicolor ffba20*/
-    UIColor *fontColor= [UIColor colorWithRed:255/255.0 green:186/255.0 blue:2/255.0 alpha:1];
-    
-    [self.iTabBarItem setTitleTextAttributes:@{NSFontAttributeName : [UIFont fontWithName:@"HelveticaNeue-Bold" size:10.0f],NSForegroundColorAttributeName : fontColor
-                                               } forState:UIControlStateSelected];
-    
-    _viewColor = [UIColor colorWithRed:243/255.0 green:243/255.0 blue:240/255.0 alpha:1];
-    
-    self.view.backgroundColor = _viewColor;
-    
-    if ([self.tableView respondsToSelector:@selector(setSeparatorInset:)]) {
-        [self.tableView setSeparatorInset:UIEdgeInsetsZero];
+- (id) init
+{
+    self = [super init];
+    if(self)
+    {
+        [self initUser];
+        self.tableView.bounces = NO;
+        _viewColor = [UIColor colorWithRed:243/255.0 green:243/255.0 blue:240/255.0 alpha:1];
+        self.view.backgroundColor = _viewColor;
+        
+        if ([self.tableView respondsToSelector:@selector(setSeparatorInset:)]) {
+            [self.tableView setSeparatorInset:UIEdgeInsetsZero];
+        }
+        
+        if ([self.tableView respondsToSelector:@selector(setLayoutMargins:)]) {
+            [self.tableView setLayoutMargins:UIEdgeInsetsZero];
+        }
+        
+        _images = @[@"dizhixinxi.png", @"yijianfankui.png", @"shezhi.png", @"guanyu.png"];
+        _cellNames = @[@"地址信息", @"意见反馈", @"设置", @"关于"];
+        /*跳转至地址信息页面*/
+        UIStoryboard* storyBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+        _addressInfomationController=[storyBoard instantiateViewControllerWithIdentifier:@"addressInfomationController"];
+        backItemTitle = [[UIBarButtonItem alloc] initWithTitle:@"地址信息" style:UIBarButtonItemStylePlain target:nil action:nil];
+        UIStoryboard* iStoryBoard = [UIStoryboard storyboardWithName:@"Me" bundle:nil];
+        FeedbackController=[iStoryBoard instantiateViewControllerWithIdentifier:@"feedbackcontroller"];
+        ISettingController=[iStoryBoard instantiateViewControllerWithIdentifier:@"isettingcontroller"];
+        AboutYouLinController=[iStoryBoard instantiateViewControllerWithIdentifier:@"aboutyoulincontroller"];
+        PersonalInformationController=[iStoryBoard instantiateViewControllerWithIdentifier:@"personalinformationcontroller"];
+        SignIntegralController=[iStoryBoard instantiateViewControllerWithIdentifier:@"signintegralcontroller"];
+
     }
     
     return self;
@@ -78,45 +79,16 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    _images = @[@"dizhixinxi.png", @"yijianfankui.png", @"shezhi.png", @"guanyu.png"];
-    _cellNames = @[@"地址信息", @"意见反馈", @"设置", @"关于"];
-    
-
-    
 }
--(void)viewWillAppear:(BOOL)animated{
 
-    UIControl *integralView=(UIControl *)[self.view viewWithTag:2016];
-    integralView.backgroundColor=[UIColor whiteColor];
-    UIControl *favoriteView=(UIControl *)[self.view viewWithTag:2017];
-    favoriteView.backgroundColor=[UIColor whiteColor];
-    UIControl *publishView=(UIControl *)[self.view viewWithTag:2018];
-    publishView.backgroundColor=[UIColor whiteColor];
-    /*跳转至地址信息页面*/
-    UIStoryboard* storyBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-    _addressInfomationController=[storyBoard instantiateViewControllerWithIdentifier:@"addressInfomationController"];
-    backItemTitle = [[UIBarButtonItem alloc] initWithTitle:@"地址信息" style:UIBarButtonItemStylePlain target:nil action:nil];
-    UIStoryboard* iStoryBoard = [UIStoryboard storyboardWithName:@"Me" bundle:nil];
-    FeedbackController=[iStoryBoard instantiateViewControllerWithIdentifier:@"feedbackcontroller"];
-    ISettingController=[iStoryBoard instantiateViewControllerWithIdentifier:@"isettingcontroller"];
-    AboutYouLinController=[iStoryBoard instantiateViewControllerWithIdentifier:@"aboutyoulincontroller"];
-    PersonalInformationController=[iStoryBoard instantiateViewControllerWithIdentifier:@"personalinformationcontroller"];
-    SignIntegralController=[iStoryBoard instantiateViewControllerWithIdentifier:@"signintegralcontroller"];
-    IntegralMallController=[iStoryBoard instantiateViewControllerWithIdentifier:@"integralmallcontroller"];
-    self.navigationController.delegate=self;
-
-    /*获取返回后积分数*/
-    [IntegralMallController returnText:^(NSString *showText) {
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    // 自定义导航返回箭头
+    UIImage *backButtonImage = [[UIImage imageNamed:@"mm_title_back.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 25, 0,0)];
     
-        initIntegralValue=showText;
-    }];
-    if(initIntegralValue!=nil)
-    {
-        integralLab.text= [NSString stringWithFormat:@"%@",initIntegralValue];
-    }
-    /*获取返回后收藏数*/
-
-    /*获取返回后我发的数*/
+    [[UIBarButtonItem appearance] setBackButtonBackgroundImage:backButtonImage forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
+    [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -163,7 +135,6 @@
         if(rowNo == 0)
         {
             cell = (multiTableViewCell*)[tableView dequeueReusableCellWithIdentifier:cellZero];
-
             if(cell == nil)
             {
                 cell = [[multiTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellZero];
@@ -180,22 +151,6 @@
             if(cell == nil)
             {
                 cell = [[multiTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellOne];
-                /*积分*/
-                UIControl *pointsView=cell.integralView;
-                pointsView.tag=2016;
-                [pointsView addTarget:self action:@selector(touchDownIntegral:) forControlEvents:UIControlEventTouchDown];
-                integralLab=cell.integralLabel;
-                /*收藏*/
-                UIControl *favoriteControlView=cell.favoriteView;
-                //cell.integralView.backgroundColor=[UIColor whiteColor];
-                favoriteControlView.tag=2017;
-                [favoriteControlView addTarget:self action:@selector(touchDownFavorite:) forControlEvents:UIControlEventTouchDown];
-                /*我发的*/
-                UIControl *publishControlView=cell.publishView;
-                //cell.integralView.backgroundColor=[UIColor whiteColor];
-                publishControlView.tag=2018;
-                [publishControlView addTarget:self action:@selector(touchDownPublish:) forControlEvents:UIControlEventTouchDown];
-                
             }
         }
     }
@@ -221,99 +176,24 @@
     
     return cell;
 }
-- (void) touchDownIntegral:(id) sender{
-    
-    UIControl *integralView=(UIControl *)[self.view viewWithTag:[sender tag]];
-    integralView.backgroundColor=[UIColor colorWithRed:227/255.0 green:227/255.0 blue:227/255.0 alpha:1.0];
-    UILabel *integtalLabel=(UILabel *)[self.view  viewWithTag:1024];
-    AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
-    manager.securityPolicy.allowInvalidCertificates = YES;
-    manager.responseSerializer.stringEncoding=NSUTF8StringEncoding;
-    [manager.securityPolicy setValidatesDomainName:NO];
-    NSString* communityId = [NSString stringWithFormat:@"%ld", [SqliteOperation getNowCommunityId]];
-    NSString* hashString =[StringMD5 stringAddMD5:[NSString stringWithFormat:@"community_id%@",communityId]];
-    NSString* hashMD5 = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"%@2016",hashString]];
-    NSDictionary* parameter = @{@"community_id" : communityId,
-                                @"deviceType":@"ios",
-                                @"apitype" : @"exchange",
-                                @"tag" : @"getgiftlist",
-                                @"salt" : @"2016",
-                                @"hash" : hashMD5,
-                                @"keyset" : @"community_id:",
-                                };
-    
-    [manager POST:POST_URL parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
-        
-    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        
-        NSMutableArray * goodsMutableAry=[responseObject objectForKey:@"info"];
-        IntegralMallController.goodsArray=goodsMutableAry;
-        IntegralMallController.pointStr=integtalLabel.text;
-    
-        backItemTitle = [[UIBarButtonItem alloc] initWithTitle:@"积分" style:UIBarButtonItemStylePlain target:nil action:nil];
-        [self.parentViewController.navigationItem setBackBarButtonItem:backItemTitle];
-        [self.parentViewController.navigationController pushViewController:IntegralMallController animated:YES];
-        
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        NSLog(@"请求失败:%@", error.description);
-        
-        return;
-    }];
-
-    
-}
-
-- (void) touchDownFavorite:(id) sender{
-    
-    UIControl *favoriteView=(UIControl *)[self.view viewWithTag:[sender tag]];
-    favoriteView.backgroundColor=[UIColor colorWithRed:227/255.0 green:227/255.0 blue:227/255.0 alpha:1.0];
-    backItemTitle = [[UIBarButtonItem alloc] initWithTitle:@"我的收藏" style:UIBarButtonItemStylePlain target:nil action:nil];
-    [self.parentViewController.navigationItem setBackBarButtonItem:backItemTitle];
-    //[self.parentViewController.navigationController pushViewController:IntegralMallController animated:YES];
-}
-
-- (void) touchDownPublish:(id) sender{
-    
-    UIControl *publishView=(UIControl *)[self.view viewWithTag:[sender tag]];
-    publishView.backgroundColor=[UIColor colorWithRed:227/255.0 green:227/255.0 blue:227/255.0 alpha:1.0];
-    backItemTitle = [[UIBarButtonItem alloc] initWithTitle:@"我发的" style:UIBarButtonItemStylePlain target:nil action:nil];
-    [self.parentViewController.navigationItem setBackBarButtonItem:backItemTitle];
-    //[self.parentViewController.navigationController pushViewController:IntegralMallController animated:YES];
-}
-
 -(void)signGetIntegralAction{
 
     AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
     manager.securityPolicy.allowInvalidCertificates = YES;
-    manager.responseSerializer.stringEncoding=NSUTF8StringEncoding;
     [manager.securityPolicy setValidatesDomainName:NO];
-    NSString* userId = [NSString stringWithFormat:@"%ld", [SqliteOperation getUserId]];
-    NSString* hashString =[StringMD5 stringAddMD5:[NSString stringWithFormat:@"user_id%@",userId]];
-    NSString* hashMD5 = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"%@729",hashString]];
-    NSDictionary* parameter = @{@"user_id" : userId,
-                                @"deviceType":@"ios",
-                                @"apitype" : @"users",
-                                @"tag" : @"getsigndate",
-                                @"salt" : @"729",
-                                @"hash" : hashMD5,
-                                @"keyset" : @"user_id:",
-                                };
-    
-    [manager POST:POST_URL parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
-        
+    [manager GET:@"https://123.57.9.62/youlin/api1.0/?tag=getsigndate&apitype=users&access=9527&user_id=47" parameters:nil progress:^(NSProgress * _Nonnull downloadProgress) {
+        // 这里可以获取到目前的数据请求的进度
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-
+        // 请求成功，解析数据
+        NSLog(@"%@", [[responseObject objectAtIndex:0][@"credit"] stringValue]);
         SignIntegralController.nowWeekSignedArray=[[NSMutableArray alloc] init];
         SignIntegralController.monthSignedArray=[[NSMutableArray alloc] init];
-        NSLog(@"responseObject is %@",responseObject);
-        NSMutableArray *responseObjectAry=[responseObject objectForKey:@"info"];
-        SignIntegralController.todayPoints=[[responseObjectAry objectAtIndex:0][@"credit"] intValue];
-        for(int i=1;i<[responseObjectAry count];i++)
+
+        for(int i=1;i<[responseObject count];i++)
         {
-            
-            NSString *year=[[responseObjectAry objectAtIndex:i][@"year"] stringValue];
-            NSString *month=[[responseObjectAry objectAtIndex:i][@"month"] stringValue];
-            NSString *day=[[responseObjectAry objectAtIndex:i][@"day"] stringValue];
+            NSString *year=[[responseObject objectAtIndex:i][@"year"] stringValue];
+            NSString *month=[[responseObject objectAtIndex:i][@"month"] stringValue];
+            NSString *day=[[responseObject objectAtIndex:i][@"day"] stringValue];
             NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
             [formatter setDateStyle:NSDateFormatterMediumStyle];
             [formatter setTimeStyle:NSDateFormatterShortStyle];
@@ -325,7 +205,7 @@
               [formatter setDateFormat:@"MM.dd"];
             }
             
-            NSDate *date = [NSDate dateWithTimeIntervalSince1970:[[[responseObjectAry objectAtIndex:i][@"timestamp"] stringValue]intValue]];
+            NSDate *date = [NSDate dateWithTimeIntervalSince1970:[[[responseObject objectAtIndex:i][@"timestamp"] stringValue]intValue]];
             
             NSString *dateString=[formatter stringFromDate:date];
             /*获取本周签到日期*/
@@ -529,13 +409,12 @@
         default:
             break;
     }
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 #pragma mark - 圆形头像点击事件回调
 - (void)showCircularImageViewWithImage:(UIImage*) image
 {
-    
+
     UIView* addView = [[UIView alloc] initWithFrame:self.parentViewController.parentViewController.view.bounds];
     addView.alpha = 1.0;
     addView.backgroundColor = [UIColor whiteColor];
@@ -570,14 +449,12 @@
         NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
         NSString* phoneNum = [defaults stringForKey:@"phoneNum"];
         user.phoneNum = phoneNum;
-        FMResultSet *result = [db executeQuery:@"SELECT user_name, user_portrait ,user_id FROM table_users WHERE user_phone_number = ?",phoneNum];
+        FMResultSet *result = [db executeQuery:@"SELECT user_name, user_portrait FROM table_users WHERE user_phone_number = ?",phoneNum];
         while ([result next]) {
             NSString *name = [result stringForColumn:@"user_name"];
             NSString *portrait = [result stringForColumn:@"user_portrait"];
-            long userid = [result longForColumn:@"user_id"];
             user.userName = name;
             user.userPortrait = portrait;
-            user.userId=userid;
             NSLog(@"name = %@",user.userName);
             NSLog(@"phoneNum = %@",user.phoneNum);
             NSLog(@"userPortrait = %@",user.userPortrait);
@@ -595,15 +472,4 @@
     return YES;
 }
 
-- (void)navigationController:(UINavigationController*)navigationController willShowViewController:(UIViewController*)viewController animated:(BOOL)animated{
-    if([[viewController class]isSubclassOfClass:[self class]]) {
-   
-    }
-    ///删除代理，防止该controller销毁后引起
-    if(![[viewController class]isSubclassOfClass:[self class]]) {
-        
-        self.navigationController.delegate=nil;
-    }
-    
-}
 @end
