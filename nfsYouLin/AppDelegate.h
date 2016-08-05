@@ -15,6 +15,7 @@
 
 @property(strong, nonatomic)FriendsVC* friendVC;
 
+//@property (strong, nonatomic) NSString *remoteUser;
 @property (strong, nonatomic) UIWindow *window;
 @property (strong, nonatomic) NSString *dbPath;
 @property (strong, nonatomic) FMDatabase *db;

@@ -579,10 +579,7 @@
             long userid = [result longForColumn:@"user_id"];
             user.userName = name;
             user.userPortrait = portrait;
-            user.userId=userid;
-            NSLog(@"name = %@",user.userName);
-            NSLog(@"phoneNum = %@",user.phoneNum);
-            NSLog(@"userPortrait = %@",user.userPortrait);
+            user.userId = userid;
         }
         [db close];
         

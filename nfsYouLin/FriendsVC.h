@@ -28,6 +28,7 @@
 - (id) init;
 - (void)playSoundAndVibration;
 - (void)showNotificationWithMessage:(EMMessage *)message;
+- (void)jumpToChatList:(NSString*)userId;
 - (void)didReceiveLocalNotification:(UILocalNotification *)notification;
 -(void)setupUnreadMessageCount;
 

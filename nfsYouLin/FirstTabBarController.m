@@ -7,7 +7,7 @@
 //
 
 #import "FirstTabBarController.h"
-#import "NewTopicViewController.h"
+#import "CreateTopicVC.h"
 #import "BackgroundView.h"
 #import "ListTableView.h"
 #import "ChatDemoHelper.h"
@@ -15,6 +15,7 @@
 #import "NeighborTVC.h"
 #import "DiscoveryTVC.h"
 #import "ITVC.h"
+#import "PersonModel.h"
 
 @implementation FirstTabBarController
 {
@@ -45,12 +46,35 @@
 
 //    EMOptions *options = [EMOptions optionsWithAppkey:@"nfs-hlj#youlinapp"];
 //    [[EMClient sharedClient] initializeSDKWithOptions:options];
-    EMError *error = [[EMClient sharedClient] loginWithUsername:userId password:userId];
+//    EMError *error = [[EMClient sharedClient] loginWithUsername:userId password:userId];
     
-    if (!error)
-    {
+    
+    [[EMClient sharedClient] asyncLoginWithUsername:userId password:userId success:^{
         NSLog(@"环信登陆成功");
-    }
+        NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+        NSString* nick = [defaults stringForKey:@"nick"];
+        NSLog(@"环信nick = %@",nick);
+        //设置推送设置
+        [[EMClient sharedClient] setApnsNickname:nick];
+        
+        EMPushOptions *options = [[EMClient sharedClient] pushOptions];
+        options.displayStyle = EMPushDisplayStyleMessageSummary;
+        [[EMClient sharedClient] updatePushOptionsToServer];
+
+    } failure:^(EMError *aError) {
+        NSLog(@"环信登录失败 aError:%@",aError);
+    }];
+    
+//    if (!error)
+//    {
+//        NSLog(@"环信登陆成功");
+//        NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+//        NSString* nick = [defaults stringForKey:@"nick"];
+//
+//        EMPushOptions *options = [[EMClient sharedClient] pushOptions];
+//        options.displayStyle = EMPushDisplayStyleMessageSummary;
+//        [[EMClient sharedClient] updatePushOptionsToServer];
+//    }
 
     [self setupSubviews];
     [ChatDemoHelper shareHelper].discoveryVC = _discoveryVC;
@@ -63,6 +87,7 @@
     }
 
     [ChatDemoHelper shareHelper];
+    [[ChatDemoHelper shareHelper] asyncPushOptions];
     [ChatDemoHelper shareHelper].friendVC = app.friendVC;
     [ChatDemoHelper shareHelper].mainVC = self;
     UINavigationController* navigationController = self.navigationController;
@@ -72,22 +97,24 @@
     BackgroundView* backGroundView = _backGroundView;
     NSArray* nameArray = @[@"新建话题", @"发起活动", @"闲品会", @"邀请"];
     NSArray* imageArray = @[@"huati", @"huodong", @"change", @"nav_yaoqinghaoyou"];
-    
+    __block CreateTopicVC* topicVC = [[CreateTopicVC alloc] init];
+
     [_listTableView setListTableView:nameArray image:imageArray block:^(NSString* string){
         NSLog(@"string = %@",string);
         [backGroundView removeFromSuperview];
         if([string isEqualToString:@"新建话题"])
         {
             NSLog(@"开始新建话题~~");
-            NewTopicViewController* newTopicViewController = [[NewTopicViewController alloc] initWithTitle:string];
-            [navigationController pushViewController:newTopicViewController animated:YES];
+            UIBarButtonItem* topicItem = [[UIBarButtonItem alloc] initWithTitle:@"话题" style:UIBarButtonItemStylePlain target:nil action:nil];
+            [topicItem setTintColor:[UIColor whiteColor]];
+            [navigationController.navigationItem setBackBarButtonItem:topicItem];
+            [navigationController pushViewController:topicVC animated:YES];
         }
         
     }];
-    
-    
        // 去掉tableview 顶部空白区域
 //    self.automaticallyAdjustsScrollViewInsets = false;
+    
     
 }
 

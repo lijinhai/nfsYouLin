@@ -43,4 +43,6 @@
  */
 @property(strong, nonatomic) EaseRecordView *recordView;
 
+
+- (id) init;
 @end
