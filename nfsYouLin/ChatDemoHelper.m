@@ -194,7 +194,6 @@ static ChatDemoHelper *helper = nil;
 
 - (void)didReceiveMessages:(NSArray *)aMessages
 {
-    NSLog(@"didReceiveMessages-----");
     BOOL isRefreshCons = YES;
     for(EMMessage *message in aMessages){
         BOOL needShowNotification = (message.chatType != EMChatTypeChat) ? [self _needShowNotification:message.conversationId] : YES;

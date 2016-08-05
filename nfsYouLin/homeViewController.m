@@ -205,6 +205,7 @@
             NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
             [defaults setInteger:[[personDic valueForKey:@"user_community_id"] integerValue] forKey:@"communityId"];
             [defaults setObject:[personDic valueForKey:@"user_portrait"] forKey:@"portrait"];
+            [defaults setObject:[personDic valueForKey:@"user_nick"] forKey:@"nick"];
             [defaults synchronize];
             
             SqlDictionary* sqlDict = [[SqlDictionary alloc] init];

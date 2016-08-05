@@ -16,10 +16,11 @@
 #import "ChatDemoHelper.h"
 
 
-#define appKey @"d3f836c7d14c"
-#define appSecret @"203b2509d7f89a3a97bb44ee489f5f38"
+#define MobAppKey @"d3f836c7d14c"
+#define MobAppSecret @"203b2509d7f89a3a97bb44ee489f5f38"
 
-
+#define HXAppKey @"nfs-hlj#youlinapp"
+#define HXApnsCertName @"chatCertName"
 
 @interface AppDelegate ()
 
@@ -33,16 +34,15 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
-    
-    [[EaseSDKHelper shareHelper] hyphenateApplication:application didFinishLaunchingWithOptions:launchOptions appkey:@"nfs-hlj#youlinapp" apnsCertName:nil otherConfig:@{kSDKConfigEnableConsoleLogger:[NSNumber numberWithBool:YES]}];
-    
-//    [ChatDemoHelper shareHelper];
+    [[EaseSDKHelper shareHelper] hyphenateApplication:application didFinishLaunchingWithOptions:launchOptions appkey:HXAppKey apnsCertName:HXApnsCertName otherConfig:@{kSDKConfigEnableConsoleLogger:[NSNumber numberWithBool:YES]}];
+
+    //    [ChatDemoHelper shareHelper];
     
     //监听服务器网络变化
     [self listenNetwork];
 
     // 短信验证初始化
-    [SMSSDK registerApp:appKey withSecret:appSecret];
+    [SMSSDK registerApp:MobAppKey withSecret:MobAppSecret];
     
     NSLog(@"创建数据库");
     self.dbPath = [self dataFilePath];
@@ -86,6 +86,15 @@
     }
 }
 
+- (void)application:(UIApplication*)application didReceiveRemoteNotification:(NSDictionary*)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
+{
+    NSString* fromId = [userInfo valueForKey:@"f"];
+    if(_friendVC)
+    {
+      
+        [_friendVC jumpToChatList:fromId];
+    }
+}
 //应用程序的沙盒路径
 - (NSString *) dataFilePath
 {
@@ -230,6 +239,25 @@
     [manager startMonitoring];
 }
 
+// 将得到的deviceToken传给SDK
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
+{
+    NSLog(@"walk----------device Token = %@---------walk",deviceToken);
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [[EMClient sharedClient] bindDeviceToken:deviceToken];
+    });
+}
+
+// 注册deviceToken失败，此处失败，与环信SDK无关，一般是您的环境配置或者证书配置有误
+- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
+{
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"apns.failToRegisterApns", Fail to register apns)
+                                                    message:error.description
+                                                   delegate:nil
+                                          cancelButtonTitle:NSLocalizedString(@"ok", @"OK")
+                                          otherButtonTitles:nil];
+    [alert show];
+}
 
 @end
 

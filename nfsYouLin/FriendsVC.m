@@ -495,7 +495,8 @@ static NSString *kConversationChatter = @"ConversationChatter";
         [backgroundView removeFromSuperview];
         [PersonModel sharedPersonModel].userDict = userDict;
         [PersonModel sharedPersonModel].nickDict = nickDict;
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        
+        } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         NSLog(@"获取邻居列表请求失败:%@", error.description);
         return;
     }];
@@ -504,13 +505,16 @@ static NSString *kConversationChatter = @"ConversationChatter";
 
 
 
+
 // 消息推送
 - (void)showNotificationWithMessage:(EMMessage *)message
 {
     EMPushOptions *options = [[EMClient sharedClient] pushOptions];
+    
     //发送本地推送
     UILocalNotification *notification = [[UILocalNotification alloc] init];
-    notification.fireDate = [NSDate date]; //触发通知的时间
+    //触发通知的时间
+    notification.fireDate = [NSDate date];
     
     if (options.displayStyle == EMPushDisplayStyleMessageSummary) {
         EMMessageBody *messageBody = message.body;
@@ -665,6 +669,29 @@ static NSString *kConversationChatter = @"ConversationChatter";
     
     [self setupUnreadMessageCount];
 }
+
+- (void)jumpToChatList:(NSString*)userId
+{
+//    UIWindow *window = [UIApplication sharedApplication].keyWindow;
+//    UIViewController* rootVC = window.rootViewController;
+//    NSArray *viewControllers = rootVC.navigationController.viewControllers;
+//    __block ChatViewController *chatViewController = nil;
+//    chatViewController = [[ChatViewController alloc] initWithConversationChatter:userId conversationType:EMConversationTypeChat];
+//    NSString* title = [[PersonModel sharedPersonModel].nickDict valueForKey:userId];
+//    chatViewController.title = title;
+//    
+//    [viewControllers enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(id obj, NSUInteger idx, BOOL *stop)
+//     {
+//         if([obj isKindOfClass:[ChatViewController class]])
+//         {
+//             [rootVC.navigationController popViewControllerAnimated:NO];
+//             
+//         }
+//     }];
+//    [self setupUnreadMessageCount];
+
+}
+
 
 //- (EMConversationType)conversationTypeFromMessageType:(EMChatType)type
 //{

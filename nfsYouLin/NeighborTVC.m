@@ -847,7 +847,6 @@ static BOOL upState = YES;
                                 @"hash" : hashString,
                                 @"keyset" : @"user_id:community_id:topic_id:",
                                 };
-    NSLog(@"parameter = %@",parameter);
     [manager POST:POST_URL parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
         
         

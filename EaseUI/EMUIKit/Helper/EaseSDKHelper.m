@@ -85,7 +85,7 @@ static EaseSDKHelper *helper = nil;
 - (void)_registerRemoteNotification
 {
     UIApplication *application = [UIApplication sharedApplication];
-    application.applicationIconBadgeNumber = 0;
+//    application.applicationIconBadgeNumber = 0;
     
     if([application respondsToSelector:@selector(registerUserNotificationSettings:)])
     {
