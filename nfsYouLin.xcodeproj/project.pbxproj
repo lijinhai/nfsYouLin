@@ -371,6 +371,7 @@
 		8FB6FA6B1D48379400E6C71A /* PersonModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FB6FA6A1D48379400E6C71A /* PersonModel.m */; };
 		8FB6FA801D484CDD00E6C71A /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FB6FA7F1D484CDD00E6C71A /* CoreLocation.framework */; };
 		8FB6FA881D485AEC00E6C71A /* ChatDemoHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FB6FA861D485AEC00E6C71A /* ChatDemoHelper.m */; };
+		8FD637E31D541F6900F500D9 /* CreateTopicVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FD637E21D541F6900F500D9 /* CreateTopicVC.m */; };
 		8FF22DA41CE1733800EAE9BA /* forgetViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FF22DA31CE1733800EAE9BA /* forgetViewController.m */; };
 		8FF7E9781D12A04D0026D07D /* ChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FF7E9771D12A04D0026D07D /* ChatViewController.m */; };
 		AF0E0FF01D4068B2009FB44D /* DialogView.m in Sources */ = {isa = PBXBuildFile; fileRef = AF0E0FEF1D4068B2009FB44D /* DialogView.m */; };
@@ -407,7 +408,6 @@
 		AF4B4F1A1D07AAF60039BE42 /* PopupAddressSettingView.m in Sources */ = {isa = PBXBuildFile; fileRef = AF4B4F191D07AAF60039BE42 /* PopupAddressSettingView.m */; };
 		AF4B4F1D1D07ACF90039BE42 /* LewPopupViewAnimationRight.m in Sources */ = {isa = PBXBuildFile; fileRef = AF4B4F1C1D07ACF90039BE42 /* LewPopupViewAnimationRight.m */; };
 		AF5293D31D1297DC00503975 /* FirstTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = AF5293D21D1297DC00503975 /* FirstTabBarController.m */; };
-		AF5293D61D12982800503975 /* NewTopicViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AF5293D51D12982800503975 /* NewTopicViewController.m */; };
 		AF5293DC1D12985400503975 /* ListTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = AF5293D91D12985400503975 /* ListTableView.m */; };
 		AF5293DD1D12985400503975 /* BackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = AF5293DB1D12985400503975 /* BackgroundView.m */; };
 		AF54103B1CE1BE850037673F /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = AF54103A1CE1BE850037673F /* MBProgressHUD.m */; };
@@ -1069,6 +1069,8 @@
 		8FB6FA7F1D484CDD00E6C71A /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		8FB6FA851D485AEC00E6C71A /* ChatDemoHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatDemoHelper.h; sourceTree = "<group>"; };
 		8FB6FA861D485AEC00E6C71A /* ChatDemoHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatDemoHelper.m; sourceTree = "<group>"; };
+		8FD637E11D541F6900F500D9 /* CreateTopicVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CreateTopicVC.h; sourceTree = "<group>"; };
+		8FD637E21D541F6900F500D9 /* CreateTopicVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CreateTopicVC.m; sourceTree = "<group>"; };
 		8FF22DA21CE1733800EAE9BA /* forgetViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = forgetViewController.h; sourceTree = "<group>"; };
 		8FF22DA31CE1733800EAE9BA /* forgetViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = forgetViewController.m; sourceTree = "<group>"; };
 		8FF7E9761D12A0470026D07D /* ChatViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ChatViewController.h; sourceTree = "<group>"; };
@@ -1138,8 +1140,6 @@
 		AF4B4F1B1D07ACF90039BE42 /* LewPopupViewAnimationRight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LewPopupViewAnimationRight.h; sourceTree = "<group>"; };
 		AF4B4F1C1D07ACF90039BE42 /* LewPopupViewAnimationRight.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LewPopupViewAnimationRight.m; sourceTree = "<group>"; };
 		AF5293D21D1297DC00503975 /* FirstTabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FirstTabBarController.m; sourceTree = "<group>"; wrapsLines = 0; };
-		AF5293D41D12982000503975 /* NewTopicViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NewTopicViewController.h; sourceTree = "<group>"; };
-		AF5293D51D12982800503975 /* NewTopicViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewTopicViewController.m; sourceTree = "<group>"; };
 		AF5293D71D12982E00503975 /* FirstTabBarController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FirstTabBarController.h; sourceTree = "<group>"; };
 		AF5293D81D12985400503975 /* ListTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ListTableView.h; sourceTree = "<group>"; };
 		AF5293D91D12985400503975 /* ListTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ListTableView.m; sourceTree = "<group>"; };
@@ -2584,8 +2584,8 @@
 		8FD637DC1D54187700F500D9 /* Create */ = {
 			isa = PBXGroup;
 			children = (
-				AF5293D41D12982000503975 /* NewTopicViewController.h */,
-				AF5293D51D12982800503975 /* NewTopicViewController.m */,
+				8FD637E11D541F6900F500D9 /* CreateTopicVC.h */,
+				8FD637E21D541F6900F500D9 /* CreateTopicVC.m */,
 			);
 			name = Create;
 			sourceTree = "<group>";
@@ -3261,7 +3261,6 @@
 				8F648D341D00547A00E3B155 /* EaseConvertToCommonEmoticonsHelper.m in Sources */,
 				8F648D2D1D00547A00E3B155 /* EaseUserModel.m in Sources */,
 				8F648D4E1D00547A00E3B155 /* EaseChatToolbar.m in Sources */,
-				AF5293D61D12982800503975 /* NewTopicViewController.m in Sources */,
 				8F7539911D4AEE560090A7C2 /* EaseSDKHelper.m in Sources */,
 				8F648D391D00547A00E3B155 /* EaseEmotionManager.m in Sources */,
 				8F648D1B1D00547A00E3B155 /* UIView+EMWebCacheOperation.m in Sources */,
@@ -3317,6 +3316,7 @@
 				8F648D181D00547A00E3B155 /* UIImage+EMWebP.m in Sources */,
 				8F51E27F1D338FBF0094A4E5 /* SDWebImageDecoder.m in Sources */,
 				8F648D281D00547A00E3B155 /* PSTGridLayoutSection.m in Sources */,
+				8FD637E31D541F6900F500D9 /* CreateTopicVC.m in Sources */,
 				8F648D4C1D00547A00E3B155 /* EaseBubbleView+Voice.m in Sources */,
 				AF4B30311D2F930000CBF257 /* scanQrCodeViewController.m in Sources */,
 				8F648D261D00547A00E3B155 /* PSTGridLayoutItem.m in Sources */,

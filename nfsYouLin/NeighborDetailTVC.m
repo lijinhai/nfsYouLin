@@ -28,8 +28,21 @@
 
 }
 
+- (id) init
+{
+    self = [super init];
+    if(self)
+    {
+       
+
+    }
+    return self;
+}
+
+
 - (void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
     if (_chatToolbar)
     {
         [self.parentViewController.view addSubview:_chatToolbar];
@@ -39,7 +52,6 @@
         [self initInputView];
     }
 
-
 }
 
 - (void)viewDidLoad {
@@ -47,6 +59,12 @@
     _replyText = [[NSMutableArray alloc] init];
     _cellOtherHeight = [[NSMutableArray alloc] init];
     _cellHeight = [self heightOfScondRow];
+    
+    backgroundView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    backgroundView.backgroundColor = [UIColor grayColor];
+    backgroundView.alpha = 0.8;
+    dialogView = nil;
+    
     self.tableView.bounces = NO;
     if ([self.tableView respondsToSelector:@selector(setSeparatorInset:)]) {
         [self.tableView setSeparatorInset:UIEdgeInsetsZero];
@@ -55,19 +73,14 @@
     if ([self.tableView respondsToSelector:@selector(setLayoutMargins:)]) {
         [self.tableView setLayoutMargins:UIEdgeInsetsZero];
     }
-
+    
     _footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.tableView.frame), 44)];
     _footerView.backgroundColor = [UIColor whiteColor];
     self.tableView.tableFooterView = _footerView;
     self.tableView.separatorColor = [UIColor colorWithRed:245/255.0 green:245/255.0 blue:245/255.0 alpha:1];
     [self initInputView];
-   
-    backgroundView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
-    backgroundView.backgroundColor = [UIColor grayColor];
-    backgroundView.alpha = 0.8;
-    dialogView = nil;
-
-}
+    
+  }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -164,7 +177,7 @@
     //初始化页面
     CGFloat chatbarHeight = [EaseChatToolbar defaultHeight];
     EMChatToolbarType barType = EMChatToolbarTypeChat;
-    self.chatToolbar = [[EaseChatToolbar alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - chatbarHeight, self.view.frame.size.width, chatbarHeight) type:barType];
+    self.chatToolbar = [[EaseChatToolbar alloc] initWithFrame:CGRectMake(0, self.parentViewController.view.frame.size.height - chatbarHeight, self.view.frame.size.width, chatbarHeight) type:barType];
     self.chatToolbar.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
     
     //初始化手势

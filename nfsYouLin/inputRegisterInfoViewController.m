@@ -221,7 +221,7 @@
     [manager POST:POST_URL parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        NSLog(@"请求成功:%@", responseObject);
+        NSLog(@"注册请求成功:%@", responseObject);
         NSInteger flag = [[responseObject valueForKey:@"flag"] integerValue];
         if(flag == 1)
         {
@@ -230,8 +230,7 @@
             personInfoDic[@"user_portrait"] = [responseObject valueForKey:@"user_avatr"];
             if([SqliteOperation insertUsersSqlite:personInfoDic View:self.view])
             {
-                NSLog(@"页面跳转");
-                [self.navigationController pushViewController:cityController animated:YES];
+                [self huanxinRegisterNet:[responseObject valueForKey:@"user_id"]];
             }
             
             
@@ -242,6 +241,41 @@
     }];
 
 }
+
+- (void) huanxinRegisterNet:(NSString*)userId
+{
+    AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
+    manager.securityPolicy.allowInvalidCertificates = YES;
+    [manager.securityPolicy setValidatesDomainName:NO];
+    NSString* MD5String = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"user%@",userId]];
+    NSString* hashString = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"%@1",MD5String]];
+    
+    NSDictionary* parameter = @{@"user"   : userId,
+                                @"tag"      : @"regeasemob",
+                                @"apitype"  : @"users",
+                                @"salt"     : @"1",
+                                @"hash"     : hashString,
+                                @"keyset"   : @"user:"
+                                
+                                };
+    
+    [manager POST:POST_URL parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSLog(@"环信注册请求成功:%@", responseObject);
+        NSString* flag = [responseObject valueForKey:@"flag"];
+        if([flag isEqualToString:@"ok"])
+        {
+            NSLog(@"环信注册成功：页面跳转");
+            [self.navigationController pushViewController:cityController animated:YES];
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"请求失败:%@", error.description);
+        return;
+    }];
+
+}
+
 
 -(void)selectRadioClick:(UITapGestureRecognizer*)sender{
     UIImage *selectedImage = [UIImage imageNamed:@"checked_sex"];

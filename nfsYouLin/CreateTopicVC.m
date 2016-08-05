@@ -1,58 +1,50 @@
 //
-//  NewTopicViewController.m
+//  CreateTopicVC.m
 //  nfsYouLin
 //
-//  Created by Macx on 16/6/16.
+//  Created by Macx on 16/8/5.
 //  Copyright © 2016年 jinhai. All rights reserved.
 //
 
-#import "NewTopicViewController.h"
+#import "CreateTopicVC.h"
 
-@interface NewTopicViewController ()
+@interface CreateTopicVC ()
 
 @end
 
-@implementation NewTopicViewController
+@implementation CreateTopicVC
 
-- (id) initWithTitle: (NSString*) title
+- (id) init
 {
     self = [super init];
     if(self)
     {
-        self.navigationItem.title = title;
+        
+        self.view.backgroundColor = [UIColor whiteColor];
+        UILabel*label = [[UILabel alloc] initWithFrame:CGRectMake(50, 50, 100, 50)];
+        label.text = @"大师傅";
+        [self.view addSubview:label];
     }
-    
     return self;
-}
-
-- (void) viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-    
-    
 }
 
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
-    // 测
-    self.view.backgroundColor = [UIColor whiteColor];
-    UILabel* label = [[UILabel alloc] initWithFrame:CGRectMake(10, 80, 150, 50)];
-    [label setText:@"打发打发"];
-    [label setTextColor:[UIColor greenColor]];
-    [self.view addSubview:label];
-
-    
+    UIBarButtonItem* rightItem = [[UIBarButtonItem alloc] initWithTitle:@"发送" style:UIBarButtonItemStylePlain target:self action:@selector(sendResult:)];
+    self.navigationItem.rightBarButtonItem = rightItem;
+  
 }
-
-
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 
+- (IBAction)sendResult:(id)sender
+{
+    NSLog(@"发送");
+}
 /*
 #pragma mark - Navigation
 

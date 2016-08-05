@@ -43,9 +43,7 @@
     
     UIActivityIndicatorView *_indicatorView;
     UIColor* _color;
-    
-    NeighborDetailTVC* _detailController;
-    
+
     // 等待动画变量
     NSTimer* _changeTimer;
     int _sectionNum;
@@ -70,12 +68,12 @@
     //  帖子切换结束标志
     BOOL topicFlag;
     
-    
+    NeighborDetailTVC* neighborDetailVC;
     UIView* backgroundView;
     DialogView* dialogView;
     
     NSInteger sectionCount;
-    
+    UIViewController* rootVC;
 }
 
 - (id) init
@@ -83,105 +81,7 @@
     self = [super init];
     if(self)
     {
-        contentOffsetY = 0;
-                // uicolor ffba20
-       
-        UIView * tmpView = [[UIView alloc]initWithFrame:CGRectMake(0, -20, self.view.frame.size.width, 20)];
-        tmpView.backgroundColor = [UIColor blackColor];
-        [self.navigationController.navigationBar addSubview:tmpView];
-        self.tableView.bounces = NO;
-        self.neighborDataArray = [[NSMutableArray alloc] init];
         
-        _downView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.navigationController.navigationBar.frame.size.width, self.navigationController.navigationBar.frame.size.height)];
-        _downView.backgroundColor = _color;
-        _downLabel = [[UILabel alloc] init];
-        _downLabel.frame = _downView.frame;
-        _downLabel.text = @"下拉刷新";
-        _downLabel.textColor = [UIColor whiteColor];
-        _downLabel.textAlignment = NSTextAlignmentCenter;
-        [_downView addSubview:_downLabel];
-        
-        _downView0 = [[UIView alloc] init];
-        _downView0.backgroundColor = [UIColor whiteColor];
-        
-        _downView1 = [[UIView alloc] init];
-        _downView1.backgroundColor = [UIColor whiteColor];
-        
-        _downView2 = [[UIView alloc] init];
-        _downView2.backgroundColor = [UIColor whiteColor];
-        
-        _downView3 = [[UIView alloc] init];
-        _downView3.backgroundColor = [UIColor whiteColor];
-        
-        _downView4 = [[UIView alloc] init];
-        _downView4.backgroundColor = [UIColor whiteColor];
-        
-        
-        _downView5 = [[UIView alloc] init];
-        _downView5.backgroundColor = [UIColor whiteColor];
-        
-        _headView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.tableView.frame), 4)];
-        _headView.backgroundColor = [UIColor colorWithRed:51/255.0 green:181/255.0 blue:229/255.0 alpha:1];
-        
-        _finishLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.tableView.frame.size.width / 2 - 40, 5, 80, 40)];
-        _finishLabel.text = @"加载完成了";
-        _finishLabel.enabled = NO;
-        _finishLabel.font = [UIFont systemFontOfSize:12];
-        _finishLabel.textAlignment = NSTextAlignmentLeft;
-        
-        
-        _footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.tableView.frame), 44)];
-        _footerView.backgroundColor = [UIColor whiteColor];
-        
-        _viewX = (CGRectGetWidth(_headView.frame)) / 5;
-        
-        //进度环
-        _indicatorView = [[UIActivityIndicatorView alloc]
-                          initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-        _indicatorView.hidesWhenStopped  = YES;
-        _indicatorView.frame = CGRectMake(CGRectGetMidX(_footerView.frame) - 25, 0, 50, 50);
-        [_footerView addSubview:_indicatorView];
-        
-        
-        self.tableView.tableHeaderView = _headView;
-        [self.tableView.tableHeaderView setHidden:YES];
-        
-        self.tableView.tableFooterView = _footerView;
-        //    [self.tableView.tableFooterView setHidden:YES];
-        
-        _panGesture = self.tableView.panGestureRecognizer;
-        [_panGesture addTarget:self action:@selector(handlePan:)];
-        
-        
-        
-        if ([self.tableView respondsToSelector:@selector(setSeparatorInset:)]) {
-            [self.tableView setSeparatorInset:UIEdgeInsetsZero];
-        }
-        
-        if ([self.tableView respondsToSelector:@selector(setLayoutMargins:)]) {
-            [self.tableView setLayoutMargins:UIEdgeInsetsZero];
-        }
-        
-        
-        
-        //    UIStoryboard* storyBoard = [UIStoryboard storyboardWithName:@"Neighbour" bundle:nil];
-        //    _detailController = [storyBoard instantiateViewControllerWithIdentifier:@"details"];
-        
-        backgroundView = [[UIView alloc] initWithFrame:self.parentViewController.parentViewController.view.bounds];
-        backgroundView.backgroundColor = [UIColor grayColor];
-        backgroundView.alpha = 0.8;
-        dialogView = nil;
-        
-        downFlag = YES;
-        upFlag = YES;
-        topicFlag = YES;
-        Tag = @"gettopic";
-        category = 1;
-        sectionCount = 1;
-        [self initWaitImageAnimate];
-        [self.view addSubview:_waitImageView];
-        [self getTopicNet];
-
     }
     
     return self;
@@ -214,6 +114,104 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    UIWindow *window = [UIApplication sharedApplication].keyWindow;
+    rootVC = window.rootViewController;
+
+    backgroundView = [[UIView alloc] initWithFrame:rootVC.view.bounds];
+    backgroundView.backgroundColor = [UIColor grayColor];
+    backgroundView.alpha = 0.8;
+    dialogView = nil;
+    
+    contentOffsetY = 0;
+    
+    UIView * tmpView = [[UIView alloc]initWithFrame:CGRectMake(0, -20, self.view.frame.size.width, 20)];
+    tmpView.backgroundColor = [UIColor blackColor];
+    [self.navigationController.navigationBar addSubview:tmpView];
+    self.tableView.bounces = NO;
+    self.neighborDataArray = [[NSMutableArray alloc] init];
+    
+    _downView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.navigationController.navigationBar.frame.size.width, self.navigationController.navigationBar.frame.size.height)];
+    _downView.backgroundColor = _color;
+    _downLabel = [[UILabel alloc] init];
+    _downLabel.frame = _downView.frame;
+    _downLabel.text = @"下拉刷新";
+    _downLabel.textColor = [UIColor whiteColor];
+    _downLabel.textAlignment = NSTextAlignmentCenter;
+    [_downView addSubview:_downLabel];
+    
+    _downView0 = [[UIView alloc] init];
+    _downView0.backgroundColor = [UIColor whiteColor];
+    
+    _downView1 = [[UIView alloc] init];
+    _downView1.backgroundColor = [UIColor whiteColor];
+    
+    _downView2 = [[UIView alloc] init];
+    _downView2.backgroundColor = [UIColor whiteColor];
+    
+    _downView3 = [[UIView alloc] init];
+    _downView3.backgroundColor = [UIColor whiteColor];
+    
+    _downView4 = [[UIView alloc] init];
+    _downView4.backgroundColor = [UIColor whiteColor];
+    
+    
+    _downView5 = [[UIView alloc] init];
+    _downView5.backgroundColor = [UIColor whiteColor];
+    
+    _headView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.tableView.frame), 4)];
+    _headView.backgroundColor = [UIColor colorWithRed:51/255.0 green:181/255.0 blue:229/255.0 alpha:1];
+    
+    _finishLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.tableView.frame.size.width / 2 - 40, 5, 80, 40)];
+    _finishLabel.text = @"加载完成了";
+    _finishLabel.enabled = NO;
+    _finishLabel.font = [UIFont systemFontOfSize:12];
+    _finishLabel.textAlignment = NSTextAlignmentLeft;
+    
+    
+    _footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.tableView.frame), 44)];
+    _footerView.backgroundColor = [UIColor whiteColor];
+    
+    _viewX = (CGRectGetWidth(_headView.frame)) / 5;
+    
+    //进度环
+    _indicatorView = [[UIActivityIndicatorView alloc]
+                      initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    _indicatorView.hidesWhenStopped  = YES;
+    _indicatorView.frame = CGRectMake(CGRectGetMidX(_footerView.frame) - 25, 0, 50, 50);
+    [_footerView addSubview:_indicatorView];
+    
+    
+    self.tableView.tableHeaderView = _headView;
+    [self.tableView.tableHeaderView setHidden:YES];
+    
+    self.tableView.tableFooterView = _footerView;
+    //    [self.tableView.tableFooterView setHidden:YES];
+    
+    _panGesture = self.tableView.panGestureRecognizer;
+    [_panGesture addTarget:self action:@selector(handlePan:)];
+    
+    
+    
+    if ([self.tableView respondsToSelector:@selector(setSeparatorInset:)]) {
+        [self.tableView setSeparatorInset:UIEdgeInsetsZero];
+    }
+    
+    if ([self.tableView respondsToSelector:@selector(setLayoutMargins:)]) {
+        [self.tableView setLayoutMargins:UIEdgeInsetsZero];
+    }
+    
+    
+    downFlag = YES;
+    upFlag = YES;
+    topicFlag = YES;
+    Tag = @"gettopic";
+    category = 1;
+    sectionCount = 1;
+    [self initWaitImageAnimate];
+    [self.view addSubview:_waitImageView];
+    [self getTopicNet];
+
+
 
 }
 
@@ -601,11 +599,10 @@ static BOOL upState = YES;
 - (void)showCircularImageViewWithImage:(UIImage*) image
 {
     self.tableView.scrollEnabled = NO;
-//    UIView* addView = [[UIView alloc] initWithFrame:self.view.bounds];
-    UIView* addView = [[UIView alloc] initWithFrame:self.parentViewController.parentViewController.view.bounds];
+    UIView* addView = [[UIView alloc] initWithFrame:rootVC.view.bounds];
     addView.alpha = 1.0;
     addView.backgroundColor = [UIColor whiteColor];
-    [self.parentViewController.parentViewController.view addSubview:addView];
+    [rootVC.view addSubview:addView];
     ShowImageView* showImage = [[ShowImageView alloc] initWithFrame:self.view.frame circularImage:image];
     [showImage show:addView didFinish:^()
      {
@@ -630,9 +627,9 @@ static BOOL upState = YES;
     
     self.tableView.scrollEnabled = NO;
 //    UIView *maskview = [[UIView alloc] initWithFrame:self.view.bounds];
-    UIView *maskview = [[UIView alloc] initWithFrame:self.parentViewController.parentViewController.view.bounds];
+    UIView *maskview = [[UIView alloc] initWithFrame:rootVC.view.bounds];
     maskview.backgroundColor = [UIColor blackColor];
-    [self.parentViewController.parentViewController.view addSubview:maskview];
+    [rootVC.view addSubview:maskview];
 
 //    [self.view addSubview:maskview];
     ShowImageView* showImage = [[ShowImageView alloc] initWithFrame:self.parentViewController.view.bounds byClickTag:clickTag appendArray:imageViews];
@@ -729,8 +726,8 @@ static BOOL upState = YES;
     DialogView* applyView = [[DialogView alloc] initWithFrame:backgroundView.frame  View:backgroundView Flag:@"apply"];
     backgroundView.alpha = 0.0f;
     applyView.alpha = 0.0f;
-    [self.parentViewController.parentViewController.view  addSubview:backgroundView];
-    [self.parentViewController.parentViewController.view  addSubview:applyView];
+    [rootVC.view  addSubview:backgroundView];
+    [rootVC.view  addSubview:applyView];
     [UIView animateWithDuration:0.3f animations:^{
         backgroundView.alpha = 0.8f;
         applyView.alpha = 1.0f;
@@ -751,8 +748,8 @@ static BOOL upState = YES;
 {
     NSLog(@"取消报名");
     DialogView* cancelView = [[DialogView alloc] initWithFrame:backgroundView.frame  View:backgroundView Flag:@"cancelApply"];
-    [self.parentViewController.parentViewController.view  addSubview:backgroundView];
-    [self.parentViewController.parentViewController.view  addSubview:cancelView];
+    [rootVC.view  addSubview:backgroundView];
+    [rootVC.view  addSubview:cancelView];
     
     dialogView = cancelView;
     UIButton* okBtn = cancelView.cancelApplyYes;
@@ -774,18 +771,15 @@ static BOOL upState = YES;
      neighborData.viewCount = [NSString stringWithFormat:@"%ld",num];
     
     [self viewTopicNet:topicId];
-   
-    
-    
-    UIStoryboard* storyBoard = [UIStoryboard storyboardWithName:@"Neighbour" bundle:nil];
-    _detailController= [storyBoard instantiateViewControllerWithIdentifier:@"details"];
+
+    neighborDetailVC = [[NeighborDetailTVC alloc] init];
     UIBarButtonItem* detailItem = [[UIBarButtonItem alloc] initWithTitle:@"详情" style:UIBarButtonItemStylePlain target:nil action:nil];
     [self.parentViewController.navigationItem setBackBarButtonItem:detailItem];
-    _detailController.sectionNum = sectionNum - 1;
-    _detailController.neighborData = neighborData;
-    _detailController.neighborDF = neighborDataFrame;
-    _detailController.neighborDA = self.neighborDataArray;
-    [self.navigationController pushViewController:_detailController animated:YES];
+    neighborDetailVC.sectionNum = sectionNum - 1;
+    neighborDetailVC.neighborData = neighborData;
+    neighborDetailVC.neighborDF = neighborDataFrame;
+    neighborDetailVC.neighborDA = self.neighborDataArray;
+    [self.navigationController pushViewController:neighborDetailVC animated:YES];
     
 }
 
@@ -795,14 +789,14 @@ static BOOL upState = YES;
     NSLog(@"打招呼");
     DialogView* hiView = [[DialogView alloc] initWithFrame:backgroundView.frame  View:backgroundView Flag:@"sayHi"];
     hiView.sayHiTV.text = @"欢迎小宝宝来到本小区";
-    [self.parentViewController.parentViewController.view  addSubview:backgroundView];
-    [self.parentViewController.parentViewController.view  addSubview:hiView];
+    
+    [rootVC.view  addSubview:backgroundView];
+    [rootVC.view  addSubview:hiView];
     
     dialogView = hiView;
     UIButton* okBtn = hiView.send;
     okBtn.tag = topicId;
     [okBtn addTarget:self action:@selector(hiOkAction:) forControlEvents:UIControlEventTouchUpInside];
-    
     UIButton* cancelBtn = hiView.cancel;
     [cancelBtn addTarget:self action:@selector(hiNoAction:) forControlEvents:UIControlEventTouchUpInside];
 }
@@ -811,8 +805,8 @@ static BOOL upState = YES;
 - (void)deleteTopic:(NSInteger)topicId
 {
     DialogView* deleteView = [[DialogView alloc] initWithFrame:backgroundView.frame  View:backgroundView Flag:@"delete"];
-    [self.parentViewController.parentViewController.view  addSubview:backgroundView];
-    [self.parentViewController.parentViewController.view  addSubview:deleteView];
+    [rootVC.view  addSubview:backgroundView];
+    [rootVC.view  addSubview:deleteView];
 
     dialogView = deleteView;
     UIButton* okBtn = deleteView.deleteYes;

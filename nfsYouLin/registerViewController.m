@@ -246,7 +246,7 @@
         int flag = [[responseObject valueForKey:@"flag"] intValue];
         if(flag == 200)
         {
-            NSLog(@"验证码比对正确，跳转页面");
+            NSLog(@"验证码比对正确");
             [self inviteNetwork:phoneNum inviteCode:inviteCode];
         }
         else
