@@ -31,8 +31,6 @@
 
 -(void)viewWillAppear:(BOOL)animated{
 
-
-    
     /*页面跳转*/
     UIStoryboard* storyBoard = [UIStoryboard storyboardWithName:@"Me" bundle:nil];
     PersonalInformationController=[storyBoard instantiateViewControllerWithIdentifier:@"personalinformationcontroller"];

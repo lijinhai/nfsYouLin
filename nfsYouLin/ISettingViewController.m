@@ -102,7 +102,6 @@
     NSLog(@"打开swtich1");
     if([noticeflag isEqualToString:@"off"])
     {
-        //AudioServicesRemoveSystemSoundCompletion(kSystemSoundID_Vibrate);
         LxxPlaySound *sound =[[LxxPlaySound alloc] init];
         [sound vdealloc];
         noticeflag=@"on";

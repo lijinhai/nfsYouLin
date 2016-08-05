@@ -20,6 +20,7 @@
     NSURL *url=[[NSURL alloc]initWithString:@"http://123.57.9.62/yl/privacy_clause/"];
     //_request=[NSURLRequest requestWithURL:url];
     youlinServiceInfo.delegate=self;
+    youlinServiceInfo.scrollView.bounces=NO;
       [youlinServiceInfo setScalesPageToFit:YES];
     [youlinServiceInfo loadRequest:[NSURLRequest requestWithURL:url]];
 }

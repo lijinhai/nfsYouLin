@@ -88,6 +88,7 @@ static NSDateFormatter *dateFormattor;
         [_dateMutablearray addObject:tempArray[0]];
     }
     
+    
 }
 
 -(void) getSignMonthArray:(NSMutableArray *)datearray{
@@ -124,17 +125,17 @@ static NSDateFormatter *dateFormattor;
                         
                         if([submonthStr isEqualToString:_dateMutablearray[0]])
                         {
-                            //NSLog(@"_nowMonthSignedArray is %@",array[2]);
+                            
                            [_nowMonthSignedArray addObject:array[2]];
     
                         }else if([submonthStr isEqualToString:_dateMutablearray[1]]){
     
-                            //NSLog(@"_previousMonthSignedArray is %@",array[2]);
+                            
                             [_previousMonthSignedArray addObject:array[2]];
     
                         }else if([submonthStr isEqualToString:_dateMutablearray[2]])
                         {
-                            //NSLog(@"_lastMonthSignedArray is %@",array[2]);
+                            
                             [_lastMonthSignedArray addObject:array[2]];
                         }
                     
@@ -198,7 +199,7 @@ static NSDateFormatter *dateFormattor;
     self.scrollView.showsVerticalScrollIndicator = YES;
    [self.scrollView setFrame:CGRectMake(0, 25, DeviceWidth, self.centerCalendarItem.frame.size.height)];
     self.scrollView.contentSize = CGSizeMake(frameNum * self.scrollView.frame.size.width, self.scrollView.frame.size.height);
-     self.scrollView.contentOffset = CGPointMake(self.scrollView.frame.size.width * 2, 0);
+    self.scrollView.contentOffset = CGPointMake(self.scrollView.frame.size.width * (frameNum-1), 0);
     [self addSubview:self.scrollView];
     
 }
@@ -206,7 +207,6 @@ static NSDateFormatter *dateFormattor;
 // 设置3个日历的item
 - (void)setupCalendarItems:(NSInteger) calendarNum {
     self.scrollView = [[UIScrollView alloc] init];
-   
     if(calendarNum==3)
     {
         self.leftCalendarItem = [[FDCalendarItem alloc] init];
@@ -233,13 +233,13 @@ static NSDateFormatter *dateFormattor;
     
         self.centerCalendarItem = [[FDCalendarItem alloc] init];
         CGRect itemFrame = self.centerCalendarItem.frame;
-        itemFrame.origin.x = DeviceWidth;
+        itemFrame.origin.x = 0;
         self.centerCalendarItem.signedArray=_previousMonthSignedArray;
         self.centerCalendarItem.frame = itemFrame;
         self.centerCalendarItem.delegate = self;
         [self.scrollView addSubview:self.centerCalendarItem];
         
-        itemFrame.origin.x = DeviceWidth *2 ;
+        itemFrame.origin.x = DeviceWidth ;
         self.rightCalendarItem = [[FDCalendarItem alloc] init];
         self.rightCalendarItem.signedArray=self.nowMonthSignedArray;
         self.rightCalendarItem.frame = itemFrame;
@@ -249,7 +249,7 @@ static NSDateFormatter *dateFormattor;
     
        self.rightCalendarItem = [[FDCalendarItem alloc] init];
        CGRect itemFrame = self.rightCalendarItem.frame;
-       itemFrame.origin.x = DeviceWidth *2 ;
+       itemFrame.origin.x = 0 ;
        self.rightCalendarItem.signedArray=self.nowMonthSignedArray;
         self.rightCalendarItem.frame = itemFrame;
         [self.scrollView addSubview:self.rightCalendarItem];

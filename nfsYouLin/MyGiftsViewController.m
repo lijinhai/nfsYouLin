@@ -31,7 +31,7 @@
     ExchangingGiftsViewController *exchangingGiftView;
     ExchangedGiftsViewController *exchangedGiftView;
     UIActivityIndicatorView* _indicator;
-   
+    UIColor *_viewColor;
 
 }
 
@@ -45,6 +45,7 @@
     _indicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhiteLarge;
     
     _indicator.color = [UIColor redColor];
+    _viewColor = [UIColor colorWithRed:243/255.0 green:243/255.0 blue:240/255.0 alpha:1];
     
 }
 -(void)viewWillAppear:(BOOL)animated{
@@ -65,15 +66,23 @@
     
     _scrollView = [[UIScrollView alloc] init];
     _scrollView.backgroundColor = [UIColor redColor];
-    _scrollView.frame = CGRectMake(0,55,SCREEN_WIDTH,SCREEN_HEIGHT);
-    _scrollView.contentSize = CGSizeMake(SCREEN_WIDTH*2,SCREEN_HEIGHT);
+    _scrollView.frame = CGRectMake(0,55,SCREEN_WIDTH,SCREEN_HEIGHT-70);
+    _scrollView.contentSize = CGSizeMake(SCREEN_WIDTH*2,SCREEN_HEIGHT-70);
     _scrollView.pagingEnabled = YES;
     _scrollView.scrollEnabled = NO;
     [self.view addSubview:_scrollView];
     
     
+    // 状态栏(statusbar)
+    CGRect rectStatus = [[UIApplication sharedApplication] statusBarFrame];
+    // 导航栏（navigationbar）
+    CGRect rectNav = self.navigationController.navigationBar.frame;
     exchangingGiftView = [[ExchangingGiftsViewController alloc]init];
-    exchangingGiftView.view.frame = CGRectMake(0,0,SCREEN_WIDTH,SCREEN_HEIGHT);
+    exchangingGiftView.view.frame = CGRectMake(0,0,SCREEN_WIDTH,SCREEN_HEIGHT-70);
+    _downingRectLabel=[[UILabel alloc] initWithFrame:CGRectMake(0,self.view.frame.size.height-rectStatus.size.height-rectNav.size.height-70, SCREEN_WIDTH, 15)];
+    _downingRectLabel.tag=101;
+    _downingRectLabel.backgroundColor=_viewColor;
+    [exchangingGiftView.view addSubview:_downingRectLabel];
     
     [self addChildViewController:exchangingGiftView];
     [_scrollView addSubview:exchangingGiftView.view];
@@ -81,10 +90,13 @@
     
     
     exchangedGiftView = [[ExchangedGiftsViewController alloc]init];
-    CGRect aframe = CGRectMake(SCREEN_WIDTH,0,SCREEN_WIDTH,SCREEN_HEIGHT);
+    CGRect aframe = CGRectMake(SCREEN_WIDTH,0,SCREEN_WIDTH,SCREEN_HEIGHT-70);
     
     exchangedGiftView.view.frame =aframe;
-    
+    _downedRectLabel=[[UILabel alloc] initWithFrame:CGRectMake(0,self.view.frame.size.height-rectStatus.size.height-rectNav.size.height-70, SCREEN_WIDTH, 15)];
+    _downedRectLabel.backgroundColor=_viewColor;
+    _downedRectLabel.tag=102;
+    [exchangedGiftView.view addSubview:_downedRectLabel];
     [self addChildViewController:exchangedGiftView];
     [_scrollView addSubview:exchangedGiftView.view];
     
@@ -115,10 +127,9 @@
         //设置跳转的方法
         [segment addTarget:self action:@selector(change:) forControlEvents:UIControlEventValueChanged];
          UILabel *grayRectLabel=[[UILabel alloc] initWithFrame:CGRectMake(0, 43, SCREEN_WIDTH, 15)];
-         grayRectLabel.backgroundColor=[UIColor lightGrayColor];
+         grayRectLabel.backgroundColor=_viewColor;
         
-         UILabel *downRectLabel=[[UILabel alloc] initWithFrame:CGRectMake(0,50, SCREEN_WIDTH, 15)];
-         downRectLabel.backgroundColor=[UIColor lightGrayColor];
+        
         
          line1=[[UILabel alloc] initWithFrame:CGRectMake(0, 40, SCREEN_WIDTH/2, 3)];
          line1.backgroundColor=[UIColor redColor];
@@ -127,7 +138,6 @@
         [self.view addSubview:line1];
         [self.view addSubview:line2];
         [self.view addSubview:grayRectLabel];
-        [self.view addSubview:downRectLabel];
         [self.view addSubview:segment];
         
     }

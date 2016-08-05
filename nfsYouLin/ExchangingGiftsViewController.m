@@ -15,6 +15,7 @@
 #import "GoodsCollectionViewCell.h"
 #import "goodsInfo.h"
 #import "MJRefresh.h"
+#define SCREEN_WIDTH   ([[UIScreen mainScreen] bounds].size.width)
 
 @interface ExchangingGiftsViewController ()
 {
@@ -29,14 +30,16 @@
  UIActivityIndicatorView* _indicator;
  MJRefreshAutoNormalFooter *footer;
  NSMutableArray* goodsArr;
+ NSString*  lastGoodsIdStr;
+ BOOL updateFlag;
+ NSTimer *timer;
     
 }
 static NSString * const reuseIdentifier = @"Cell";
 
 
--(void) getExchangingGifts{
+-(void) getExchangingGifts:(NSString *)actionType ueId:(NSString *)goodsId{
     
-    goodsArr=[[NSMutableArray alloc] init];
     AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
     manager.securityPolicy.allowInvalidCertificates = YES;
     manager.responseSerializer.stringEncoding=NSUTF8StringEncoding;
@@ -44,13 +47,13 @@ static NSString * const reuseIdentifier = @"Cell";
     
     NSString* userId = [NSString stringWithFormat:@"%ld", [SqliteOperation getUserId]];
     NSString* communityId = [NSString stringWithFormat:@"%ld", [SqliteOperation getNowCommunityId]];
-    NSString* hashString =[StringMD5 stringAddMD5:[NSString stringWithFormat:@"user_id%@community_id%@action_type%@list_type%@ue_id%@",userId,communityId,@"1",@"1",@"0"]];
+    NSString* hashString =[StringMD5 stringAddMD5:[NSString stringWithFormat:@"user_id%@community_id%@action_type%@list_type%@ue_id%@",userId,communityId,actionType,@"1",goodsId]];
     NSString* hashMD5 = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"%@3",hashString]];
     NSDictionary* parameter = @{@"user_id" : userId,
                                 @"community_id" : communityId,
-                                @"action_type": @"1",
+                                @"action_type": actionType,
                                 @"list_type": @"1",
-                                @"ue_id" : @"0",
+                                @"ue_id" :goodsId,
                                 @"deviceType":@"ios",
                                 @"apitype":@"exchange",
                                 @"tag" : @"getmygiftlist",
@@ -63,6 +66,7 @@ static NSString * const reuseIdentifier = @"Cell";
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         
+        NSLog(@"responseObject is %@",responseObject);
         NSMutableArray *responseObjectAry=[responseObject objectForKey:@"info"];
         for(int i=0;i<[responseObjectAry count];i++){
             goodsInfo* goodsObj=[[goodsInfo alloc] init];
@@ -71,11 +75,19 @@ static NSString * const reuseIdentifier = @"Cell";
             goodsObj.exchangeNums=[[responseObjectAry objectAtIndex:i] objectForKey:@"ue_count"];
             goodsObj.exchangePoints=[[responseObjectAry objectAtIndex:i] objectForKey:@"ue_credit"];
            
+
             [goodsArr addObject:goodsObj];
             
         };
+        lastGoodsIdStr=[[responseObjectAry objectAtIndex:[responseObjectAry count]-1] objectForKey:@"ue_id"];
+        if(lastGoodsIdStr==NULL)
+        {
+            NSLog(@"lastGoodsIdStr is %@",lastGoodsIdStr);
+            updateFlag=NO;
+        }else{
         
-        NSLog(@"goodsArr is %ld",[goodsArr count]);
+            updateFlag=YES;
+        }
         [_indicator stopAnimating];
         [self.collectionView reloadData];
         
@@ -94,27 +106,43 @@ static NSString * const reuseIdentifier = @"Cell";
     
     [self.collectionView registerClass:[GoodsCollectionViewCell class] forCellWithReuseIdentifier:reuseIdentifier ];
     [self.collectionView setBackgroundColor:[UIColor whiteColor]];
-    footer  = [MJRefreshAutoNormalFooter   footerWithRefreshingTarget:self refreshingAction:@selector(loadMoreData)];
+    
+    
+    footer  = [MJRefreshAutoNormalFooter   footerWithRefreshingTarget:self refreshingAction:@selector(loadExchangeData)];
     self.collectionView.mj_footer = footer;
     
-    footer.refreshingTitleHidden=YES;
-
-    //footer.stateLabel.hidden=YES;
-    //self.collectionView.bounces = NO;
+    [footer setTitle:@"" forState:MJRefreshStateIdle];
+    [footer setTitle:@"放开以刷新" forState:MJRefreshStatePulling];
+    [footer setTitle:@"正在载入" forState:MJRefreshStateRefreshing];
+    [footer setTitle:@"没有更多数据" forState:MJRefreshStateNoMoreData];
+    [self setUpdateLabelState];
     
 }
 
 - (void)viewWillAppear:(BOOL)animated{
 
-   [self getExchangingGifts];
-
+    self.collectionView.translatesAutoresizingMaskIntoConstraints=NO;
+    self.collectionView.alwaysBounceVertical=YES;
+    goodsArr=[[NSMutableArray alloc] init];
+    [self getExchangingGifts:@"1" ueId:@"0"];
+    
 }
 
--(void)loadMoreData{
-
-
-
-
+-(void)loadExchangeData{
+   
+    if(updateFlag)
+    {
+    [self.collectionView.mj_footer beginRefreshing];
+    [self getExchangingGifts:@"2" ueId:lastGoodsIdStr];
+    
+    [self performSelector:@selector(doneWithView) withObject:nil afterDelay:2.0];
+    }
+}
+- (void)doneWithView
+{
+    [self.collectionView reloadData];
+    
+    [self.collectionView.mj_footer endRefreshing];
 }
 
 
@@ -162,7 +190,6 @@ static NSString * const reuseIdentifier = @"Cell";
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     
     GoodsCollectionViewCell* cell = (GoodsCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier  forIndexPath:indexPath];
-    NSLog(@"indexPath.section is %ld",indexPath.section);
     goodsInfo* cellGoods=[goodsArr objectAtIndex:indexPath.section];
     cell.goodsData=cellGoods;
     return cell;
@@ -191,7 +218,55 @@ static NSString * const reuseIdentifier = @"Cell";
 {
     return UIEdgeInsetsMake(0.5, 0.5, 0.5, 0.5);//分别为上、左、下、右
 }
+#pragma mark- *UIScrollViewDelegate*
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView{
+    
+    float offset=self.collectionView.contentOffset.y;
+    if(offset<=0)
+    {
+        [self.collectionView setContentOffset:CGPointMake(0,0) animated:YES];
+        //[self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UICollectionViewScrollPositionNone animated:NO];
+    }
+}
 
+-(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+{
+    float offset=self.collectionView.contentOffset.y;
+    NSLog(@"offset is %f",offset);
+    if(offset<5.0){
+        
+        [self.collectionView setContentOffset:CGPointMake(0,0) animated:YES];
+        //[self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UICollectionViewScrollPositionNone animated:NO];
+        [footer setTitle:@"" forState:MJRefreshStateNoMoreData];
+        [footer endRefreshingWithNoMoreData];
+    }else{
+        [footer setTitle:@"正在载入中..." forState:MJRefreshStateRefreshing];
+        
+    }
+    [self setUpdateLabelState];
+    
+}
+-(void)dismissLabelText{
+    
+    UILabel* label1=(UILabel *)[self.view viewWithTag:101];
+    label1.text=@"";
+}
+/*设置下拉刷新后标签显示状态*/
+-(void)setUpdateLabelState{
 
+    if(updateFlag==NO)
+    {
+        UILabel* label1=(UILabel *)[self.view viewWithTag:101];
+        label1.textAlignment=NSTextAlignmentCenter;
+        label1.font=[UIFont systemFontOfSize:12];
+        label1.text=@"没有更多";
+        timer=[NSTimer scheduledTimerWithTimeInterval:3
+                                               target:self
+                                             selector:@selector(dismissLabelText)
+                                             userInfo:nil
+                                            repeats:NO];
+    }
+    
+}
 
 @end

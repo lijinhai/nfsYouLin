@@ -73,14 +73,11 @@
 
 -(void)toggleQuitButton{
 
-    NSLog(@"退出登录");
     [self dismissMyTable];
 }
 
 -(void)toggleCancelButton{
     
-    
-    NSLog(@"取消");
     [self dismissMyTable];
 }
 
