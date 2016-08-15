@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface IntegralMallViewController : UIViewController<UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout>
+@interface IntegralMallViewController : UIViewController<UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout,UIScrollViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UILabel *integralValueLabel;
 
@@ -20,11 +20,12 @@
 @property (nonatomic, strong) NSString *pointStr;
 @property (weak, nonatomic) IBOutlet UICollectionView *goodsCollectView;
 
-
+@property (nonatomic, strong) UILabel *downRectLabel;
 
 
 
 typedef void (^ReturnTextBlock)(NSString *showText);
 @property (nonatomic, copy) ReturnTextBlock returnTextBlock;
 - (void)returnText:(ReturnTextBlock)block;
+
 @end

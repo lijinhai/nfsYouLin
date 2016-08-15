@@ -9,5 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @interface MyGiftsViewController : UIViewController
-
+@property (nonatomic, strong) UILabel *downingRectLabel;
+@property (nonatomic, strong) UILabel *downedRectLabel;
 @end

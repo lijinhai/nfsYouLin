@@ -39,6 +39,10 @@
     Users* user;
     NSTimer *timer;
     MJRefreshAutoNormalFooter *footer;
+    NSMutableArray* dataArray;
+    NSInteger sectionNum;
+    NSInteger updateNum;
+    
    
 }
 
@@ -49,13 +53,35 @@
     _integralRuleLabel.userInteractionEnabled=YES;
     UITapGestureRecognizer *labelTapGestureRecognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(integralRuleTouchUpInside:)];
     [_integralRuleLabel addGestureRecognizer:labelTapGestureRecognizer];
-    
+    /*数据源初始化*/
+    [self collectViewDataInit];
     footer  = [MJRefreshAutoNormalFooter   footerWithRefreshingTarget:self refreshingAction:@selector(loadMoreData)];
     self.goodsCollectView.mj_footer = footer;
-    //footer.refreshingTitleHidden=YES;
+    [footer setTitle:@"" forState:MJRefreshStateIdle];
 
-    footer.stateLabel.hidden=YES;
-    //[footer setImages:refreshingImages forState:MJRefreshStateRefreshing];
+}
+
+-(void)collectViewDataInit{
+
+    dataArray=[[NSMutableArray alloc] init];
+    if([_goodsArray count]<=6)
+    {
+    
+        [dataArray addObjectsFromArray:_goodsArray];
+
+    }else{
+        
+        
+        for(int i=0;i<6;i++){
+        
+            [dataArray addObject:[_goodsArray objectAtIndex:i]];
+        
+        }
+         /*更新数据计数初始化*/
+        updateNum=[_goodsArray count]-6;
+    }
+    sectionNum=ceilf([dataArray count]/2.0);
+
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -85,6 +111,12 @@
     UIStoryboard* iStoryBoard = [UIStoryboard storyboardWithName:@"Me" bundle:nil];
     IntegralRulesController=[iStoryBoard instantiateViewControllerWithIdentifier:@"integralrulescontroller"];
     MyGiftsController=[iStoryBoard instantiateViewControllerWithIdentifier:@"mygiftscontroller"];
+    /*底部view*/
+    _downRectLabel=[[UILabel alloc] initWithFrame:CGRectMake(0,[[UIScreen mainScreen] bounds].size.height-20, self.goodsCollectView.frame.size.width, 20)];
+    _downRectLabel.backgroundColor=[UIColor lightGrayColor];
+    [self.view addSubview:_downRectLabel];
+
+
 }
 
 -(void) meLabelTouchUpInside:(UITapGestureRecognizer *)recognizer{
@@ -131,20 +163,49 @@
 
 -(void)loadMoreData{
     
-    //footer.stateLabel.hidden=NO;
-    //[footer.stateLabel setText:@"加载更多"];
     [self.goodsCollectView.mj_footer beginRefreshing];
-    NSLog(@"下拉加载数据刷新");
+    if([_goodsArray count]<=6)
+    {
+        
+     [self.goodsCollectView.mj_footer endRefreshing];
+      return;
+    }
+    else{
+    
+       if(updateNum/6!=0)
+       {
+         for (NSUInteger i = [dataArray count]; i<[dataArray count]+6; i++) {
+            
+            [dataArray addObject:[_goodsArray objectAtIndex:i]];
+            
+          }
+           updateNum=updateNum-6;
+       }else{
+       
+           for (NSUInteger i = [dataArray count]; i<[_goodsArray count]; i++) {
+               
+               [dataArray addObject:[_goodsArray objectAtIndex:i]];
+               
+           }
+       
+       }
+    }
+     sectionNum=ceilf([dataArray count]/2.0);
+    [self performSelector:@selector(doneWithView) withObject:nil afterDelay:2.0];
+
+}
+- (void)doneWithView
+{
+    [self.goodsCollectView reloadData];
+   
     [self.goodsCollectView.mj_footer endRefreshing];
-    //footer.stateLabel.hidden=YES;
-    //[footer endRefreshingWithNoMoreData];
 }
 
 #pragma mark - UICollectionDatasource
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    int lastSection=ceilf([_goodsArray count]/2.0)-1;
-    if([_goodsArray count]%2==0)
+    int lastSection=ceilf([dataArray count]/2.0)-1;
+    if([dataArray count]%2==0)
     {
         return 2;
     }else{
@@ -163,10 +224,8 @@
 -(NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {
     
-    if(ceilf([_goodsArray count]/2.0)<=3)
-        return ceilf([_goodsArray count]/2.0);
-    else
-        return 3;
+    return sectionNum;
+    //ceilf([dataArray count]/2.0);
   
 }
 
@@ -176,17 +235,24 @@
     NSInteger section = indexPath.section;
     static NSString *CellIdentifier = @"GoodsCell";
     UICollectionViewCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:CellIdentifier forIndexPath:indexPath];
-    cell.backgroundColor = [UIColor whiteColor];
+    
+    if (!cell) {
+        cell = [[UICollectionViewCell alloc]init ];
+    }else{
+        while ([cell.contentView.subviews lastObject] != nil) {
+            [[cell.contentView.subviews lastObject] removeFromSuperview];
+        }
+     cell.backgroundColor = [UIColor whiteColor];
     
     UIColor *fontColor=[UIColor colorWithRed:255/255.0 green:186/255.0 blue:2/255.0 alpha:1];
     
-    NSURL* url = [NSURL URLWithString:[[_goodsArray objectAtIndex:(section*2+rowNo)] objectForKey:@"gl_pic"]];
+    NSURL* url = [NSURL URLWithString:[[dataArray objectAtIndex:(section*2+rowNo)] objectForKey:@"gl_pic"]];
     float scale=0.6;//缩放比例
     UIImageView* goodsPic=[[UIImageView alloc] init];
     UILabel* pointsLable=[[UILabel alloc] initWithFrame:CGRectMake(0, 0, 60, 20)];
     pointsLable.center=CGPointMake(cell.frame.size.width/2+30, 25);
     pointsLable.textColor=fontColor;
-    NSString *pointsInfo=[NSString stringWithFormat:@"%@%@",[[_goodsArray objectAtIndex:(section*2+rowNo)] objectForKey:@"gl_credit"],@"  分"];
+    NSString *pointsInfo=[NSString stringWithFormat:@"%@%@",[[dataArray objectAtIndex:(section*2+rowNo)] objectForKey:@"gl_credit"],@"  分"];
     NSMutableAttributedString *AttributedStr = [[NSMutableAttributedString alloc]initWithString:pointsInfo];
     
     [AttributedStr setAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:18]}
@@ -197,7 +263,7 @@
     pointsLable.textAlignment=NSTextAlignmentLeft;
 
     UILabel* nameLable=[[UILabel alloc] initWithFrame:CGRectMake(0, 0, 60, 20)];
-    nameLable.text=[[_goodsArray objectAtIndex:(section*2+rowNo)] objectForKey:@"gl_name"];
+    nameLable.text=[[dataArray objectAtIndex:(section*2+rowNo)] objectForKey:@"gl_name"];
     nameLable.font=[UIFont systemFontOfSize:14];
     nameLable.center=CGPointMake(cell.frame.size.width/2+30, 47);
     
@@ -221,6 +287,7 @@
     [cell.contentView addSubview:nameLable];
     [cell.contentView addSubview:pointsLable];
     [cell.contentView addSubview:clickGetGoods];
+    }
     return cell;
 }
 
@@ -248,8 +315,6 @@
 /*确定兑换商品*/
 -(void)submitAction:(id) sender{
 
-    //NSLog(@"submitAction is %ld",[sender tag]);
-    //NSLog(@"submint:::::::::::::submit");
     AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
     manager.securityPolicy.allowInvalidCertificates = YES;
     manager.responseSerializer.stringEncoding=NSUTF8StringEncoding;
@@ -353,7 +418,7 @@
     
     NSLog(@"sender is %ld",[sender tag]);
     NSInteger goodsNum=[view.countTextField.text intValue];
-    NSInteger goodCredit=[[[_goodsArray objectAtIndex:[sender tag]] objectForKey:@"gl_credit"] intValue];
+    NSInteger goodCredit=[[[dataArray objectAtIndex:[sender tag]] objectForKey:@"gl_credit"] intValue];
     NSString* goodsNumStr=[NSString stringWithFormat:@"%ld",++goodsNum];
     [self checkCountIntregal:[goodsNumStr intValue] goodsCredit:goodCredit];
     [view.countTextField setText:goodsNumStr];
@@ -361,7 +426,7 @@
 /*减计数*/
 -(void)jianCountAction:(id) sender{
     
-    NSInteger goodCredit=[[[_goodsArray objectAtIndex:[sender tag]] objectForKey:@"gl_credit"] intValue];
+    NSInteger goodCredit=[[[dataArray objectAtIndex:[sender tag]] objectForKey:@"gl_credit"] intValue];
     NSInteger goodsNum=[view.countTextField.text intValue];
     if(goodsNum>1)
     {
@@ -412,7 +477,31 @@
     
     
 }
+#pragma mark- *UIScrollViewDelegate*
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView{
 
+    float offset=self.goodsCollectView.contentOffset.y;
+    if(offset<=0)
+    {
+        [self.goodsCollectView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UICollectionViewScrollPositionNone animated:NO];
+    }
+}
+
+-(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+{
+    float offset=self.goodsCollectView.contentOffset.y;
+    NSLog(@"offset is %f",offset);
+    if(offset<5.0){
+    
+    [self.goodsCollectView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UICollectionViewScrollPositionNone animated:NO];
+        [footer setTitle:@"" forState:MJRefreshStateNoMoreData];
+        [footer endRefreshingWithNoMoreData];
+    }else{
+        [footer setTitle:@"正在载入中..." forState:MJRefreshStateRefreshing];
+
+    }
+
+}
 #pragma mark - UICollectionViewDelegate
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {

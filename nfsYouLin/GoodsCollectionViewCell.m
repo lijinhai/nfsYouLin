@@ -22,14 +22,14 @@
         _nameL = [[UILabel alloc] initWithFrame:CGRectMake(120, 10, 60, 20)];
         _nameL.font=[UIFont systemFontOfSize:14];
         // 积分数值
-        _pointsVL = [[UILabel alloc] initWithFrame:CGRectMake(frame.size.width-40, 10, 60, 20)];
+        _pointsVL = [[UILabel alloc] init];
         _pointsVL.font=[UIFont systemFontOfSize:14];
         // 商品数量
-        _countL =[[UILabel alloc] initWithFrame:CGRectMake(frame.size.width-25, 40, 60, 20)];
+        _countL =[[UILabel alloc] init];
         _countL.textColor=[UIColor lightGrayColor];
         _countL.font=[UIFont systemFontOfSize:13];
         // 送达时间
-        UILabel *sendTimeL=[[UILabel alloc] initWithFrame:CGRectMake(120, 60, 80, 22)];
+        UILabel *sendTimeL=[[UILabel alloc] initWithFrame:CGRectMake(120, 50, 80, 22)];
         sendTimeL.backgroundColor=[UIColor redColor];
         sendTimeL.textColor=[UIColor whiteColor];
         sendTimeL.font=[UIFont systemFontOfSize:14];
@@ -102,12 +102,19 @@
     float scale=0.6;
     [self.iconIV sd_setImageWithURL:[NSURL URLWithString:_goodsData.goodsPicUrl] placeholderImage:nil options:(SDWebImageRetryFailed) completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
         self.iconIV.frame = CGRectMake(0, 0, image.size.width*scale, image.size.height*scale);
-        self.iconIV.center=CGPointMake(55, 45);
+        self.iconIV.center=CGPointMake(55, 40);
     }];
       self.nameL.text=_goodsData.goodsName;
-      self.pointsVL.text=[NSString stringWithFormat:@"%@%@",_goodsData.exchangePoints,@"积分"];
-      self.countL.text=[NSString stringWithFormat:@"%@%@",@"×",_goodsData.exchangeNums];
     
-
+      self.pointsVL.text=[NSString stringWithFormat:@"%@%@",_goodsData.exchangePoints,@"积分"];
+      CGSize sizep = [self.pointsVL.text sizeWithAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIFont systemFontOfSize:14],NSFontAttributeName, nil]];
+      self.pointsVL.frame=CGRectMake(self.frame.size.width-sizep.width-10, 10, sizep.width, 20);
+      self.pointsVL.textAlignment=NSTextAlignmentLeft;
+    
+      self.countL.text=[NSString stringWithFormat:@"%@%@",@"× ",_goodsData.exchangeNums];
+      CGSize sizec = [self.pointsVL.text sizeWithAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIFont systemFontOfSize:14],NSFontAttributeName, nil]];
+      self.countL.frame=CGRectMake(self.frame.size.width-sizec.width-9, 40, sizec.width, 20);
+      self.countL.textAlignment=NSTextAlignmentRight;
+      
 }
 @end

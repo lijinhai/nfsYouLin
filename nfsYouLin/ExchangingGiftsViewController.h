@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ExchangingGiftsViewController : UICollectionViewController
+@interface ExchangingGiftsViewController : UICollectionViewController<UIScrollViewDelegate>
 @property (nonatomic, strong) NSMutableArray  *exchangingArray;
 
 
