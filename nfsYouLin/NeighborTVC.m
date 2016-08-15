@@ -210,9 +210,6 @@
     [self initWaitImageAnimate];
     [self.view addSubview:_waitImageView];
     [self getTopicNet];
-
-
-
 }
 
 - (void)initWaitImageAnimate
