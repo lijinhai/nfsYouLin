@@ -128,6 +128,7 @@
         self.headIV.layer.masksToBounds = YES;
         self.headIV.layer.cornerRadius = 30;
         self.headIV.userInteractionEnabled = YES;
+        self.headIV.tag=521;
         UITapGestureRecognizer* tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(headTapAction:)];
         [self.headIV addGestureRecognizer:tapGesture];
         [self.contentView addSubview:self.headIV];
@@ -136,6 +137,7 @@
         UIView* view = [[UIView alloc] initWithFrame:CGRectMake(70, 25, 400, 50)];
         self.nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 15, 10)];
         self.nameLabel.text = @"姓名";
+        self.nameLabel.tag=1314;
         self.phoneLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 15, 120, 15)];
         self.phoneLabel.text = @"15114599422";
         self.phoneLabel.enabled = NO;

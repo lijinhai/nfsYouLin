@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ProfessionSettingViewController : UIViewController<UITableViewDataSource,UITableViewDelegate>
+@interface ProfessionSettingViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate>
 {
 
     NSArray *DataSource;
@@ -20,9 +20,15 @@
 
 @property(nonatomic,retain) NSString *workerValue;
 
+@property(nonatomic,retain) NSString *statusState;
+
 typedef void (^ReturnWorkerTextBlock)(NSString *showText);
 @property (nonatomic, copy) ReturnWorkerTextBlock returnWorkerTextBlock;
 - (void)returnText:(ReturnWorkerTextBlock)block;
+
+typedef void (^ReturnWorkerShowBlock)(NSString *showVal);
+@property (nonatomic, copy) ReturnWorkerShowBlock returnWorkerShowBlock;
+- (void)returnShow:(ReturnWorkerShowBlock)block;
 @end
 
 

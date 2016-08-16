@@ -22,4 +22,7 @@
 
 // 获取用户ID
 + (long)getUserId;
+
+// 更新用户的职业信息
++(void)updateUserWorkInfo:(long)userId userVocation:(NSString*)uv publicStatus:(NSInteger) ps;
 @end

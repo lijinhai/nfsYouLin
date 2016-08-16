@@ -16,7 +16,7 @@
 @synthesize integralRulesWebView;
 - (void)viewDidLoad {
     [super viewDidLoad];
-    NSURL *url=[[NSURL alloc]initWithString:@"http://123.57.9.62/yl/web/integralinfo"];
+    NSURL *url=[[NSURL alloc]initWithString:@"https://123.57.9.62/yl/web/integralinfo"];
     integralRulesWebView.delegate=self;
     integralRulesWebView.scrollView.bounces=NO;
     [integralRulesWebView setScalesPageToFit:YES];

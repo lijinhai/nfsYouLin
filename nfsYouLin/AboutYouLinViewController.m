@@ -9,7 +9,9 @@
 #import "AboutYouLinViewController.h"
 #import "aboutTermsViewController.h"
 #import "UIViewLinkmanTouch.h"
-
+#import "AFHTTPSessionManager.h"
+#import "StringMD5.h"
+#import "HeaderFile.h"
 
 @interface AboutYouLinViewController (){
     UIColor *_viewColor;
@@ -61,11 +63,53 @@
 /*检查版本更新*/
 -(void)versionUpdateAction{
 
-
-    NSLog(@"版本更新了么");
-     //_checkUpdateView.backgroundColor=_viewColor;
+    //项目版本号
+    NSDictionary *infoDic=[[NSBundle mainBundle] infoDictionary];
+    NSString *currentVersion=infoDic[@"CFBundleShortVersionString"];
+    
+    //appStore版本号
+    NSError *error;
+    NSData *response = [NSURLConnection sendSynchronousRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",APP_URL]]] returningResponse:nil error:nil];
+    if (response == nil) {
+        NSLog(@"你没有连接网络哦");
+        return;
+    }
+    NSDictionary *appInfoDic = [NSJSONSerialization JSONObjectWithData:response options:NSJSONReadingMutableLeaves error:&error];
+    if (error) {
+        NSLog(@"hsUpdateAppError:%@",error);
+        return;
+    }
+    NSArray *array = appInfoDic[@"results"];
+    NSDictionary *dic = array[0];
+    NSString *appStoreVersion = dic[@"version"];
+    NSString *releaseNotes = [dic objectForKey:@"releaseNotes"];
+    NSString *trackViewUrl = [dic objectForKey:@"trackViewUrl"];
+    NSLog(@"trackViewUrl is %@",trackViewUrl);
+    //打印版本号
+    NSLog(@"当前版本号:%@\n商店版本号:%@",currentVersion,appStoreVersion);
+    //更新
+    if([currentVersion floatValue] < [appStoreVersion floatValue])
+    {
+        
+        UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:[NSString stringWithFormat:@"检测到新版本(%@),是否更新?",appStoreVersion] message:nil preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *cancelAction  = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+            NSLog(@"取消");
+        }];
+        
+        UIAlertAction *OKAction  = [UIAlertAction actionWithTitle:@"更新" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            NSLog(@"更新");
+            NSURL * url = [NSURL URLWithString:trackViewUrl];
+            [[UIApplication sharedApplication] openURL:url];
+        }];
+        [alertVC addAction:cancelAction];
+        [alertVC addAction:OKAction];
+        [self presentViewController:alertVC animated:YES completion:nil];
+    }else{
+        NSLog(@"不需要更新");
+    }
 
 }
+
 /*跳转到隐私协议页面*/
 - (void)yinSiTouchUpInside{
 
@@ -82,14 +126,5 @@
     // Dispose of any resources that can be recreated.
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

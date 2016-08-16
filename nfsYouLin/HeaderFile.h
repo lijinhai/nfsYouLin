@@ -16,4 +16,6 @@
 
 #define imageTag 2000
 #define POST_URL @"https://123.57.9.62/youlin/api1.0/?"
+#define APP_URL @"https://itunes.apple.com/cn/lookup?id=1093039842"
+
 #endif /* HeaderFile_h */
