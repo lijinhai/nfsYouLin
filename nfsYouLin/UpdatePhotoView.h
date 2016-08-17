@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface UpdatePhotoView : UIView
+@interface UpdatePhotoView : UIView<UIImagePickerControllerDelegate>
 
 @property (nonatomic, weak)UIViewController *parentVC;
 //@property (nonatomic, strong)UIView *bGView;

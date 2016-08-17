@@ -286,23 +286,9 @@
                     <view key="view" contentMode="scaleToFill" id="xNI-CL-zVc">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JVf-eN-WTc">
-                                <rect key="frame" x="69" y="410" width="277" height="30"/>
-                                <state key="normal" title="提交" backgroundImage="btn_yanzhengma_n">
-                                    <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="0.79964978450000002" colorSpace="calibratedRGB"/>
-                                </state>
-                                <connections>
-                                    <action selector="submitAction:" destination="Gil-a7-9xB" eventType="touchUpInside" id="KOd-h6-cvp"/>
-                                </connections>
-                            </button>
-                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina55"/>
-                    <connections>
-                        <outlet property="submitBtn" destination="JVf-eN-WTc" id="Mnv-bV-dXD"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="IWw-Ph-5bI" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -510,29 +496,23 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="siU-Qi-Fjq">
-                                <rect key="frame" x="19" y="86" width="376" height="167"/>
+                                <rect key="frame" x="19" y="86" width="376" height="249"/>
                                 <subviews>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="请再次输入新密码" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="QMB-5J-jkC">
-                                        <rect key="frame" x="2" y="115" width="374" height="45"/>
+                                        <rect key="frame" x="2" y="96" width="374" height="45"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
                                     </textField>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="请先输入旧密码" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="sZH-xO-b7r">
-                                        <rect key="frame" x="2" y="4" width="374" height="46"/>
+                                        <rect key="frame" x="2" y="4" width="374" height="45"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
                                     </textField>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="请设置新密码（6-16位）" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="IkL-Se-0wR">
-                                        <rect key="frame" x="2" y="62" width="374" height="44"/>
+                                        <rect key="frame" x="2" y="51" width="374" height="45"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
                                     </textField>
-                                    <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" fixedFrame="YES" image="fengexian" translatesAutoresizingMaskIntoConstraints="NO" id="KSL-FE-L4q" userLabel="fengexian2">
-                                        <rect key="frame" x="0.0" y="101" width="376" height="21"/>
-                                    </imageView>
-                                    <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" fixedFrame="YES" image="fengexian" translatesAutoresizingMaskIntoConstraints="NO" id="VXR-KH-AO0" userLabel="fengexian1">
-                                        <rect key="frame" x="0.0" y="49" width="376" height="15"/>
-                                    </imageView>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
@@ -631,8 +611,6 @@
     <resources>
         <image name="bg" width="1080" height="780"/>
         <image name="btn_qiandao_a" width="107" height="108"/>
-        <image name="btn_yanzhengma_n" width="115" height="53"/>
-        <image name="fengexian" width="860" height="1"/>
         <image name="pic_youlin" width="220" height="220"/>
         <image name="wode" width="39" height="46"/>
         <image name="zhouqi" width="894" height="51"/>

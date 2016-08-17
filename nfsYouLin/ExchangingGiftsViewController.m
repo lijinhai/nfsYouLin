@@ -34,6 +34,7 @@
  BOOL updateFlag;
  NSTimer *timer;
     
+    
 }
 static NSString * const reuseIdentifier = @"Cell";
 

@@ -153,4 +153,23 @@
     }
     
 }
++(void)updateUserWorkInfo:(long)userId userVocation:(NSString*)uv publicStatus:(NSInteger) ps{
+
+
+    AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+    FMDatabase *db = delegate.db;
+    if([db open])
+    {
+        NSLog(@"执行sql语句");
+        NSString *updateSQL = [[NSString alloc] initWithFormat:@"UPDATE table_users SET user_vocation = '%@',user_public_status ='%ld' where user_id = '%ld'", uv,ps,userId];
+        [db executeUpdate:updateSQL];
+        [db close];
+        NSLog(@"updateSQL is %@",updateSQL);
+        
+    }
+    else
+    {
+        NSLog(@"iVC: db open error!");
+    }
+}
 @end

@@ -41,7 +41,7 @@
     
     
     UILabel *Photograph=[[touchLabel alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 60)];
-    Photograph.text=@"相册";
+    Photograph.text=@"拍照";
     Photograph.textAlignment=NSTextAlignmentCenter;
     Photograph.userInteractionEnabled=YES;
     UITapGestureRecognizer *labelTapGestureRecognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(photographTouchUpInside:)];
@@ -100,9 +100,19 @@
 
 -(void) photographTouchUpInside:(UITapGestureRecognizer *)recognizer{
     
+    [self dismissMyTable];
     UILabel *label=(UILabel*)recognizer.view;
     NSLog(@"%@",label.text);
-    [self dismissMyTable];
+    UIImagePickerController *imagePickerController = [[UIImagePickerController alloc] init];
+    
+    imagePickerController.delegate = self;
+    
+    imagePickerController.allowsEditing = YES;
+    
+    imagePickerController.sourceType = UIImagePickerControllerSourceTypeCamera;
+    
+    [self.parentVC presentViewController:imagePickerController animated:YES completion:^{}];
+    
 }
 
 -(void) photogalleryTouchUpInside:(UITapGestureRecognizer *)recognizer{

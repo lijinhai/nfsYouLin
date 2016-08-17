@@ -208,12 +208,13 @@
 
             [defaults setObject:[personDic valueForKey:@"user_portrait"] forKey:@"portrait"];
             [defaults setObject:[personDic valueForKey:@"user_nick"] forKey:@"nick"];
+            [defaults setObject:[personDic valueForKey:@"user_password"] forKey:@"password"];
             [defaults synchronize];
             
             SqlDictionary* sqlDict = [[SqlDictionary alloc] init];
             NSMutableDictionary* personInfoDic = [sqlDict getInitUserDictionary];
             personInfoDic[@"user_public_status"] = personDic[@"user_public_status"];
-            personInfoDic[@"user_vocation"] = personDic[@"user_vocation"];
+            personInfoDic[@"user_vocation"] = personDic[@"user_profession"];//user_profession
             personInfoDic[@"user_level"] = personDic[@"user_level"];
             personInfoDic[@"user_id"] = [NSNumber numberWithLong:userId];
             

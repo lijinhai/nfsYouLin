@@ -15,6 +15,12 @@
 #import "LewPopupViewController.h"
 #import "UpdatePhotoView.h"
 #import "MBProgressHUD.h"
+#import "StringMD5.h"
+#import "UIImageView+WebCache.h"
+#import "AFHTTPSessionManager.h"
+#import "HeaderFile.h"
+#import "AppDelegate.h"
+#import "SqliteOperation.h"
 @interface PersonalInformationViewController ()<UITableViewDelegate,UITableViewDataSource,UINavigationControllerDelegate>
 
 @end
@@ -23,13 +29,7 @@
 
     UIColor *_viewColor;
     UIBarButtonItem *backItemTitle;
-    UISwitch *switchFamliyAddressButton;
-    UILabel *sexLabel;
-    UILabel *birthdayLabel;
-    UILabel *nicknameLabel;
     UILabel *dateLabel;
-    UILabel *professionLabel;
-    UIImageView *imageView;
     NickNameViewController *NickNameController;
     ModifyPasswordViewController *ModifyPasswordController;
     ChooseSexTypeViewController  *ChooseSexTypeController;
@@ -45,30 +45,42 @@
     UIAlertController *alert;
     UIDatePicker *datePicker;
     NSString *birthdayString;
-    
+    NSInteger addressStatusInt;
+    //NSString *statusValue;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     _viewColor = [UIColor colorWithRed:243/255.0 green:243/255.0 blue:240/255.0 alpha:1];
     self.view.backgroundColor = _viewColor;
-
     // Do any additional setup after loading the view.
 }
 
 -(void)viewWillAppear:(BOOL)animated{
   
     NSLog(@"viewWillAppear");
+    
     /*个人信息表格初始化*/
     _personalInfoTable.delegate=self;
     _personalInfoTable.dataSource=self;
     _personalInfoTable.scrollEnabled=NO;
     /*数据源初始化*/
     dataSource = @[@"头像", @"昵称", @"修改密码", @"生日", @"性别", @"职业", @"家庭住址是否公开"];
-    switchFamliyAddressButton = [[UISwitch alloc] initWithFrame:CGRectMake(_personalInfoTable.frame.size.width-70, 10, 40, 5)];
-    [switchFamliyAddressButton setOn:YES];
-    [switchFamliyAddressButton addTarget:self action:@selector(showFamliyAddressAction) forControlEvents:UIControlEventValueChanged];
-    /*tableViewCell 下划线 长度设置为屏幕的宽*/
+    _switchFamliyAddressButton = [[UISwitch alloc] initWithFrame:CGRectMake(_personalInfoTable.frame.size.width-70, 10, 40, 5)];
+    [_switchFamliyAddressButton addTarget:self action:@selector(showFamliyAddressAction:) forControlEvents:UIControlEventValueChanged];
+    
+    /*初始化地址发布状态*/
+    NSLog(@"family_statusValue is %@",_statusValue);
+    addressStatusInt=[_statusValue intValue];
+    if([_statusValue isEqualToString:@"2"]||[_statusValue isEqualToString:@"4"])
+    {
+         NSLog(@"abc");
+        [_switchFamliyAddressButton setOn:YES];
+    }else{
+         NSLog(@"def");
+        [_switchFamliyAddressButton setOn:NO];
+    }
+       /*tableViewCell 下划线 长度设置为屏幕的宽*/
     if ([self.personalInfoTable respondsToSelector:@selector(setSeparatorInset:)]) {
         [self.personalInfoTable setSeparatorInset:UIEdgeInsetsZero];
     }
@@ -82,12 +94,13 @@
     [[UIBarButtonItem appearance] setBackButtonBackgroundImage:backButtonImage forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
     [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
      self.navigationItem.title=@"";
+
     /*图片设置*/
-    imageView=[[UIImageView alloc] initWithFrame:CGRectMake(_personalInfoTable.frame.size.width-80, 20, 40, 40)];
-    imageView.image = [UIImage imageNamed:@"account.png"];
-    imageView.userInteractionEnabled = YES;
+    _imageView.frame = CGRectMake(_personalInfoTable.frame.size.width-100, 10, 60, 60);
+    _imageView.userInteractionEnabled = YES;
+    
     UITapGestureRecognizer* tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(headTapAction:)];
-    [imageView addGestureRecognizer:tapGesture];
+    [_imageView addGestureRecognizer:tapGesture];
     /*页面跳转*/
     UIStoryboard* storyBoard = [UIStoryboard storyboardWithName:@"Me" bundle:nil];
     NickNameController=[storyBoard instantiateViewControllerWithIdentifier:@"nicknamecontroller"];
@@ -99,7 +112,7 @@
     /*获取返回的昵称*/
     [NickNameController returnText:^(NSString *showText) {
         NSLog(@"showText is %@",showText);
-        if([showText isEqualToString:nicknameLabel.text])
+        if([showText isEqualToString:_nicknameLabel.text])
         {
             
             nickflag=@"yes";
@@ -113,7 +126,7 @@
     /*获取返回的性别*/
     [ChooseSexTypeController returnText:^(NSString *showText) {
         NSLog(@"showText is %@",showText);
-        if([showText isEqualToString:nicknameLabel.text])
+        if([showText isEqualToString:_nicknameLabel.text])
         {
             
             sexflag=@"yes";
@@ -128,7 +141,8 @@
     /*获取返回的职业*/
     [ProfessionSettingController returnText:^(NSString *showText) {
         NSLog(@"showText is %@",showText);
-        if([showText isEqualToString:professionLabel.text])
+        //[self obtainPublicStateInit];
+        if([showText isEqualToString:_professionLabel.text])
         {
             
             workflag=@"yes";
@@ -140,8 +154,16 @@
         }
         
     }];
-
-
+   /*返回职业显示状态*/
+    [ProfessionSettingController returnShow:^(NSString *showVal) {
+        NSLog(@"showVal is %@",showVal);
+        //[self obtainPublicStateInit];
+        if(![showVal isEqualToString:_statusValue])
+        {
+            _statusValue = showVal;
+            
+        }        
+    }];
     /*生日信息初始化*/
     datePicker = [[UIDatePicker alloc] init];
     UILabel *line=[[UILabel alloc] initWithFrame:CGRectMake(0, 38, 270, 0.6)];
@@ -179,7 +201,12 @@
               birthdayflag=@"YES";
              
          }else{
+             NSDate* inputDate = [dateFormat dateFromString:birthdayString];
+             NSString *timeSp = [NSString stringWithFormat:@"%ld", (long)[inputDate timeIntervalSince1970]*1000];
               birthdayflag=@"NO";
+              //更新服务器中用户的生日
+             NSLog(@"timeSp is %@",timeSp);
+             [self changeUserBirthDay:timeSp];
              [_personalInfoTable reloadData];
          }
         
@@ -189,7 +216,88 @@
     [ok setValue:[UIColor blackColor] forKey:@"titleTextColor"];
     [alert addAction:cancel];
     [alert addAction:ok];
+
     
+}
+/*改变用户的生日*/
+-(void)changeUserBirthDay:(NSString*)timeStr{
+
+    AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
+    manager.securityPolicy.allowInvalidCertificates = YES;
+    manager.responseSerializer.stringEncoding=NSUTF8StringEncoding;
+    [manager.securityPolicy setValidatesDomainName:NO];
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSString* phoneNum = [defaults stringForKey:@"phoneNum"];
+    NSString* userId = [NSString stringWithFormat:@"%ld", [SqliteOperation getUserId]];
+    NSString* hashString =[StringMD5 stringAddMD5:[NSString stringWithFormat:@"user_phone_number%@user_id%@user_birthday%@",phoneNum,userId,timeStr]];
+    NSString* hashMD5 = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"%@813",hashString]];
+    NSDictionary* parameter = @{@"user_phone_number" : phoneNum,
+                                @"user_id" : userId,
+                                @"user_birthday":timeStr,
+                                @"deviceType":@"ios",
+                                @"apitype" : @"users",
+                                @"tag" : @"upload",
+                                @"salt" : @"813",
+                                @"hash" : hashMD5,
+                                @"keyset" : @"user_phone_number:user_id:user_birthday:",
+                                };
+    
+    [manager POST:POST_URL parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
+        NSLog(@"tiemresponseObject equal %@",responseObject);
+        if([[responseObject objectForKey:@"flag"] isEqualToString:@"ok"])
+        {
+        
+        }
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        
+        NSLog(@"%@", [error localizedDescription]);
+    }];
+    
+}
+/*获取初始公布状态*/
+-(void)obtainPublicStateInit{
+
+    AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
+    manager.securityPolicy.allowInvalidCertificates = YES;
+    manager.responseSerializer.stringEncoding=NSUTF8StringEncoding;
+    [manager.securityPolicy setValidatesDomainName:NO];
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSString* phoneNum = [defaults stringForKey:@"phoneNum"];
+    NSString* userId = [NSString stringWithFormat:@"%ld", [SqliteOperation getUserId]];
+    NSString* hashString =[StringMD5 stringAddMD5:[NSString stringWithFormat:@"user_phone%@user_id%@",phoneNum,userId]];
+    NSString* hashMD5 = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"%@810",hashString]];
+    NSDictionary* parameter = @{@"user_phone" : phoneNum,
+                                @"user_id" : userId,
+                                @"deviceType":@"ios",
+                                @"apitype" : @"users",
+                                @"tag" : @"getstatus",
+                                @"salt" : @"810",
+                                @"hash" : hashMD5,
+                                @"keyset" : @"user_phone:user_id:",
+                                };
+    
+    [manager POST:POST_URL parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
+        NSLog(@"responseObject equal %@",responseObject);
+        if([[responseObject objectForKey:@"flag"] isEqualToString:@"ok"])
+        {
+            _statusValue=[[responseObject objectForKey:@"status"] stringValue];
+
+        }else{
+            
+            return;
+        }
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        
+        NSLog(@"%@", [error localizedDescription]);
+    }];
     
 }
 
@@ -227,7 +335,6 @@
 - (void)navigationController:(UINavigationController*)navigationController willShowViewController:(UIViewController*)viewController animated:(BOOL)animated{
     if([[viewController class]isSubclassOfClass:[self class]]) {
         ///执行刷新操作
-        
           [_personalInfoTable reloadData];
            NSLog(@"执行刷新");
          }
@@ -244,13 +351,24 @@
 
 - (void) headTapAction: (UITapGestureRecognizer*) recognizer
 {
-    [self showCircularImageViewWithImage:imageView.image];
+    [self showCircularImageViewWithImage:_imageView.image];
 }
 
--(void)showFamliyAddressAction{
-
-    NSLog(@"展示地址");
-
+-(void)showFamliyAddressAction:(UISwitch *)sw{
+    
+    if(sw.isOn)
+    {
+        addressStatusInt=addressStatusInt+1;
+        
+    }else{
+        
+        addressStatusInt=addressStatusInt-1;
+    }
+    NSLog(@"addressStatusInt is %ld",addressStatusInt);
+       [self changeAddressShow];
+       _statusValue=[NSString stringWithFormat:@"%ld",addressStatusInt];
+   
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -295,7 +413,7 @@
     if(initNikeName==NULL)
     {
         
-        initNikeName=@"大神";
+        initNikeName=@"";
     }
     if(initWorkName==NULL)
     {
@@ -303,31 +421,25 @@
         initWorkName=@"";
     }
     /*性别*/
-    sexLabel =[[UILabel alloc]initWithFrame:CGRectMake(_personalInfoTable.frame.size.width-70, 15, 70, 15)];
-    sexLabel.tag=1126;
-    sexLabel.text=initSexName;
+    _sexLabel.frame=CGRectMake(_personalInfoTable.frame.size.width-70, 15, 70, 15);
+    _sexLabel.tag=1126;
     
     /*生日*/
-    birthdayLabel=[[UILabel alloc]initWithFrame:CGRectMake(_personalInfoTable.frame.size.width-160, 15, 150, 15)];
-    birthdayLabel.text=@"1970年01月01日";
-    birthdayLabel.tag=1988;
+    _birthdayLabel.frame=CGRectMake(_personalInfoTable.frame.size.width-160, 15, 150, 15);
+    _birthdayLabel.tag=1988;
     
     /*昵称*/
-    nicknameLabel=[[UILabel alloc] init];
     UIFont *fnt = [UIFont fontWithName:@"HelveticaNeue" size:15.0f];
-    nicknameLabel.font = fnt;
-    nicknameLabel.text = initNikeName;
-    CGSize size = [nicknameLabel.text sizeWithAttributes:[NSDictionary dictionaryWithObjectsAndKeys:fnt,NSFontAttributeName, nil]];
-    nicknameLabel.frame=CGRectMake(_personalInfoTable.frame.size.width-size.width-40, 15, size.width, 20);
-    nicknameLabel.tag=2016;
+    _nicknameLabel.font = fnt;
+    CGSize size = [_nicknameLabel.text sizeWithAttributes:[NSDictionary dictionaryWithObjectsAndKeys:fnt,NSFontAttributeName, nil]];
+    _nicknameLabel.frame=CGRectMake(_personalInfoTable.frame.size.width-size.width-40, 15, size.width, 20);
+    _nicknameLabel.tag=2016;
     
     /*职业*/
-    professionLabel=[[UILabel alloc] init];
-    professionLabel.font = fnt;
-    professionLabel.text = initWorkName;
-    CGSize professionSize = [professionLabel.text sizeWithAttributes:[NSDictionary dictionaryWithObjectsAndKeys:fnt,NSFontAttributeName, nil]];
-    professionLabel.frame=CGRectMake(_personalInfoTable.frame.size.width-professionSize.width-40, 15, professionSize.width, 20);
-    professionLabel.tag=614;
+    _professionLabel.font = fnt;
+    CGSize professionSize = [_professionLabel.text sizeWithAttributes:[NSDictionary dictionaryWithObjectsAndKeys:fnt,NSFontAttributeName, nil]];
+    _professionLabel.frame=CGRectMake(_personalInfoTable.frame.size.width-professionSize.width-40, 15, professionSize.width, 20);
+    _professionLabel.tag=614;
     
     
     
@@ -343,14 +455,14 @@
         {
             if(rowNo == 0)
             {
-                
-                [cell.contentView addSubview:imageView];
+                //_imageView.center=CGPointMake(cell.frame.size.width-10, cell.frame.size.height/2-10);
+                [cell.contentView addSubview:_imageView];
             }
             else if(rowNo == 1)
             {
                 
                 //NSLog(@"调用昵称 %@",nicknameLabel.text);
-                [cell.contentView addSubview:nicknameLabel];
+                [cell.contentView addSubview:_nicknameLabel];
                 
             }
             
@@ -368,22 +480,22 @@
             else if(rowNo == 1)
             {
                 
-                [cell.contentView addSubview:birthdayLabel];
+                [cell.contentView addSubview:_birthdayLabel];
                 cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
                 
             }else if(rowNo==2){
                 
-                [cell.contentView addSubview:sexLabel];
+                [cell.contentView addSubview:_sexLabel];
                 cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
                 
             }else if(rowNo==3){
                 
-                [cell.contentView addSubview:professionLabel];
+                [cell.contentView addSubview:_professionLabel];
                 cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
                 
             }else if(rowNo==4){
                 
-                [cell.contentView addSubview:switchFamliyAddressButton];
+                [cell.contentView addSubview:_switchFamliyAddressButton];
                 cell.selectionStyle = UITableViewCellSelectionStyleNone;
             }
             cell.textLabel.text = dataSource[rowNo+2];
@@ -400,32 +512,32 @@
     {
 
         [(UILabel *)[self.view viewWithTag:2016] removeFromSuperview];
-        nicknameLabel.text=initNikeName;
-        [cell.contentView addSubview:nicknameLabel];
+        _nicknameLabel.text=initNikeName;
+        [cell.contentView addSubview:_nicknameLabel];
     }
     /*更新生日*/
     if(section == 1&&rowNo == 1&&[birthdayflag isEqualToString:@"NO"])
     {
     
         [(UILabel *)[self.view viewWithTag:1988] removeFromSuperview];
-        birthdayLabel.text=birthdayString;
-        [cell.contentView addSubview:birthdayLabel];
+        _birthdayLabel.text=birthdayString;
+        [cell.contentView addSubview:_birthdayLabel];
     }
       /*更新性别*/
     if(section == 1&&rowNo == 2&&[sexflag isEqualToString:@"no"])
     {
         
         [(UILabel *)[self.view viewWithTag:1126] removeFromSuperview];
-        sexLabel.text=initSexName;
-        [cell.contentView addSubview:sexLabel];
+        _sexLabel.text=initSexName;
+        [cell.contentView addSubview:_sexLabel];
     }
     /*更新工作*/
     if(section == 1&&rowNo == 3&&[workflag isEqualToString:@"no"])
     {
         
         [(UILabel *)[self.view viewWithTag:614] removeFromSuperview];
-        professionLabel.text=initWorkName;
-        [cell.contentView addSubview:professionLabel];
+        _professionLabel.text=initWorkName;
+        [cell.contentView addSubview:_professionLabel];
     }
 
         return cell;
@@ -493,7 +605,6 @@
 {
     NSInteger rowInSection = indexPath.row;
     NSInteger section = indexPath.section;
-    //UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     NSLog(@"section %ld  rowInSection %ld" ,section,rowInSection);
     switch (section) {
         case 0:
@@ -517,8 +628,8 @@
                 case 1:
                 {
                     // 昵称
-                    NickNameController.nikeNameValue=nicknameLabel.text;
-                    NSLog(@"NickNameController.nikeNameValue is %@",nicknameLabel.text);
+                    NickNameController.nikeNameValue=_nicknameLabel.text;
+                    NSLog(@"NickNameController.nikeNameValue is %@",_nicknameLabel.text);
                     backItemTitle = [[UIBarButtonItem alloc] initWithTitle:@"昵称" style:UIBarButtonItemStylePlain target:nil action:nil];
                     [self.navigationItem setBackBarButtonItem:backItemTitle];
                     [self.navigationController pushViewController:NickNameController animated:YES];
@@ -550,7 +661,7 @@
                 case 2:
                 {
                     // 性别
-                    ChooseSexTypeController.sexValue=sexLabel.text;
+                    ChooseSexTypeController.sexValue=_sexLabel.text;
                     backItemTitle = [[UIBarButtonItem alloc] initWithTitle:@"性别" style:UIBarButtonItemStylePlain target:nil action:nil];
                     [self.navigationItem setBackBarButtonItem:backItemTitle];
                     [self.navigationController pushViewController:ChooseSexTypeController animated:YES];
@@ -559,7 +670,9 @@
                 case 3:
                 {
                     // 职业
-                    ProfessionSettingController.workerValue=professionLabel.text;
+                    NSLog(@"statusValue is %@",_statusValue);
+                    ProfessionSettingController.workerValue=_professionLabel.text;
+                    ProfessionSettingController.statusState=_statusValue;
                     backItemTitle = [[UIBarButtonItem alloc] initWithTitle:@"职业" style:UIBarButtonItemStylePlain target:nil action:nil];
                     [self.navigationItem setBackBarButtonItem:backItemTitle];
                     [self.navigationController pushViewController:ProfessionSettingController animated:YES];
@@ -641,6 +754,42 @@
     hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
     
     [hud hideAnimated:YES afterDelay:2.f];
+}
+-(void)changeAddressShow{
+    
+    AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
+    manager.securityPolicy.allowInvalidCertificates = YES;
+    manager.responseSerializer.stringEncoding=NSUTF8StringEncoding;
+    [manager.securityPolicy setValidatesDomainName:NO];
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSString* phoneNum = [defaults stringForKey:@"phoneNum"];
+    NSString* userId = [NSString stringWithFormat:@"%ld", [SqliteOperation getUserId]];
+    NSString* statusStr=[NSString stringWithFormat:@"%ld",addressStatusInt];
+    NSString* hashString =[StringMD5 stringAddMD5:[NSString stringWithFormat:@"user_phone_number%@user_id%@user_public_status%@",phoneNum,userId,statusStr]];
+    NSString* hashMD5 = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"%@810",hashString]];
+    NSDictionary* parameter = @{@"user_phone_number" : phoneNum,
+                                @"user_id" : userId,
+                                @"user_public_status":statusStr,
+                                @"deviceType":@"ios",
+                                @"apitype" : @"users",
+                                @"tag" : @"upload",
+                                @"salt" : @"810",
+                                @"hash" : hashMD5,
+                                @"keyset" : @"user_phone_number:user_id:user_public_status:",
+                                };
+    
+    [manager POST:POST_URL parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
+        NSLog(@"addressShowresponseObject is %@",responseObject);
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        
+        NSLog(@"%@", [error localizedDescription]);
+    }];
+    
+    
 }
 
 @end

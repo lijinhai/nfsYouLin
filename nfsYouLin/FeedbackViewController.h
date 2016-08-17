@@ -11,10 +11,6 @@
 @interface FeedbackViewController : UIViewController<UITableViewDelegate,UITableViewDataSource,UITextViewDelegate>
 @property (strong, nonatomic) UITableView *otherTableView;
 
-@property (weak, nonatomic) IBOutlet UITextView *suggestTextView;
 @property(nonatomic,retain) NSString *selectTypeValue;
-
-@property (weak, nonatomic) IBOutlet UIButton *submitBtn;
-- (IBAction)submitAction:(id)sender;
 
 @end

@@ -7,6 +7,11 @@
 //
 
 #import "ChooseSexTypeViewController.h"
+#import "AFHTTPSessionManager.h"
+#import "StringMD5.h"
+#import "HeaderFile.h"
+#import "SqliteOperation.h"
+#import "SqlDictionary.h"
 
 @interface ChooseSexTypeViewController ()
 
@@ -19,6 +24,7 @@
     UIImageView *imageView;
     NSInteger rowid;
     NSTimer *timer;
+    NSString *newSetSexVal;
 }
 
 - (void)viewDidLoad {
@@ -74,7 +80,7 @@
         cell = [[UITableViewCell alloc]
                 initWithStyle:UITableViewCellStyleDefault
                 reuseIdentifier:CellIdentifier];
-        NSLog(@"%@",_sexValue);
+        NSLog(@"*************%@",_sexValue);
         if([_sexValue isEqualToString:@"男"]&&rowNo==0)
         {
             _rightView.frame=CGRectMake(_sexTable.frame.size.width-25, 15, 30, 20);
@@ -105,6 +111,7 @@
         [cell.contentView addSubview:_rightView];
         if (self.returnSexTextBlock != nil) {
              self.returnSexTextBlock(cell.textLabel.text);
+            newSetSexVal=cell.textLabel.text;
              NSLog(@"cell.textLabel.text is %@",cell.textLabel.text);
              timer=[NSTimer scheduledTimerWithTimeInterval:0.8
                                                    target:self
@@ -118,9 +125,62 @@
 
 -(void)jumpView{
     
+[self changeSexValue];
 [self.navigationController popViewControllerAnimated:YES];
 }
 
+-(void)changeSexValue{
+
+    NSLog(@"newSetSexVal is %@",newSetSexVal);
+    NSString* sexStr=NULL;
+    if([newSetSexVal isEqualToString:@"男"]){
+    
+      sexStr=@"1";
+    }else if([newSetSexVal isEqualToString:@"女"]){
+    
+      sexStr=@"2";
+    }else{
+    
+      sexStr=@"3";
+    }
+    AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
+    manager.securityPolicy.allowInvalidCertificates = YES;
+    manager.responseSerializer.stringEncoding=NSUTF8StringEncoding;
+    [manager.securityPolicy setValidatesDomainName:NO];
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSString* phoneNum = [defaults stringForKey:@"phoneNum"];
+    NSString* userId = [NSString stringWithFormat:@"%ld", [SqliteOperation getUserId]];
+    NSString* hashString =[StringMD5 stringAddMD5:[NSString stringWithFormat:@"user_phone_number%@user_id%@user_gender%@",phoneNum,userId,sexStr]];
+    NSString* hashMD5 = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"%@812",hashString]];
+    NSDictionary* parameter = @{@"user_phone_number" : phoneNum,
+                                @"user_id" : userId,
+                                @"user_gender":sexStr,
+                                @"deviceType":@"ios",
+                                @"apitype" : @"users",
+                                @"tag" : @"upload",
+                                @"salt" : @"812",
+                                @"hash" : hashMD5,
+                                @"keyset" : @"user_phone_number:user_id:user_gender:",
+                                };
+    
+    [manager POST:POST_URL parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
+        NSLog(@"sexresponseObject is %@",responseObject);
+        if([[responseObject objectForKey:@"flag"] isEqualToString:@"ok"])
+        {
+            
+            NSLog(@"更改性别成功");
+        }
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        
+        NSLog(@"%@", [error localizedDescription]);
+    }];
+
+
+}
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     

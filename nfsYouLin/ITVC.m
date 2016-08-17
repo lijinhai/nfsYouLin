@@ -22,6 +22,7 @@
 #import "SqliteOperation.h"
 #import "SqlDictionary.h"
 #import "MBProgressHUBTool.h"
+#import "UIImageView+WebCache.h"
 
 @interface ITVC ()
 
@@ -484,7 +485,51 @@
             
             //个人信息
             backItemTitle = [[UIBarButtonItem alloc] initWithTitle:@"个人信息" style:UIBarButtonItemStylePlain target:nil action:nil];
+            //初始化头像
+            UIImageView *headPhotoView=[[UIImageView alloc] init];
+            [headPhotoView sd_setImageWithURL:[NSURL URLWithString:user.userPortrait] placeholderImage:[UIImage imageNamed:@"bg_error.png"] options:SDWebImageAllowInvalidSSLCertificates];
+            PersonalInformationController.imageView=headPhotoView;
+            //初始化昵称
+            UILabel* nicklabel=[[UILabel alloc] init];
+            nicklabel.text=user.userName;
+            PersonalInformationController.nicknameLabel=nicklabel;
+            //初始化性别
+            UILabel* sexlab=[[UILabel alloc] init];
+            switch (user.userGender) {
+                case 1:
+                    sexlab.text=@"男";
+                    break;
+                case 2:
+                    sexlab.text=@"女";
+                    break;
+                case 3:
+                    sexlab.text=@"保密";
+                    break;
+                default:
+                    break;
+            }
+            PersonalInformationController.sexLabel=sexlab;
+            //初始化生日
+            UILabel* birthdaylab=[[UILabel alloc] init];
+            if(user.userBirthday==0)
+            {
+            
+                birthdaylab.text=@"1970年01月01日";
+            }else{
+             
+                birthdaylab.text=[self getShowDateWithTime:[NSString stringWithFormat:@"%ld",user.userBirthday]];
+            }
+            PersonalInformationController.birthdayLabel=birthdaylab;
+            //初始化职业
+            UILabel* vocationlab=[[UILabel alloc] init];
+            vocationlab.text=user.vocation;
+            PersonalInformationController.professionLabel=vocationlab;
+            //初始化工作相关信息
+            PersonalInformationController.statusValue=[NSString stringWithFormat:@"%ld",user.publicStatus];
+            
+            
             [self.parentViewController.navigationItem setBackBarButtonItem:backItemTitle];
+
             [self.parentViewController.navigationController pushViewController:PersonalInformationController animated:YES];
             break;
         }
@@ -572,14 +617,24 @@
         NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
         NSString* phoneNum = [defaults stringForKey:@"phoneNum"];
         user.phoneNum = phoneNum;
-        FMResultSet *result = [db executeQuery:@"SELECT user_name, user_portrait ,user_id FROM table_users WHERE user_phone_number = ?",phoneNum];
+        FMResultSet *result = [db executeQuery:@"SELECT user_name, user_portrait ,user_id,user_gender,user_birthday,user_vocation,user_public_status FROM table_users WHERE user_phone_number = ?",phoneNum];
         while ([result next]) {
             NSString *name = [result stringForColumn:@"user_name"];
             NSString *portrait = [result stringForColumn:@"user_portrait"];
             long userid = [result longForColumn:@"user_id"];
+            NSInteger sexVal=[result intForColumn:@"user_gender"];
+            long birthdayVal=[result longForColumn:@"user_birthday"];
+            NSString* vocationStr=[result stringForColumn:@"user_vocation"];
+            NSInteger status=[result intForColumn:@"user_public_status"];
             user.userName = name;
             user.userPortrait = portrait;
             user.userId = userid;
+            user.userBirthday = birthdayVal;
+            user.userGender=sexVal;
+            user.vocation=vocationStr;
+            user.publicStatus=status;
+            NSLog(@"user.userBirthday is %ld",(long)user.userBirthday);
+            
         }
         [db close];
         
@@ -590,8 +645,16 @@
         return NO;
     }
     
-    
     return YES;
+}
+
+/*计算毫秒数对应的生日*/
+-(NSString *)getShowDateWithTime:(NSString *)time{
+    NSDate *timeDate = [[NSDate alloc]initWithTimeIntervalSince1970:[time longLongValue]/1000.0];
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    dateFormatter.dateFormat = @"yyyy年MM月dd日";
+    NSString *timeStr = [dateFormatter stringFromDate:timeDate];
+    return timeStr;
 }
 
 - (void)navigationController:(UINavigationController*)navigationController willShowViewController:(UIViewController*)viewController animated:(BOOL)animated{

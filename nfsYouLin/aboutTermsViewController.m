@@ -17,8 +17,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    NSURL *url=[[NSURL alloc]initWithString:@"http://123.57.9.62/yl/privacy_clause/"];
-    //_request=[NSURLRequest requestWithURL:url];
+    NSURL *url=[[NSURL alloc]initWithString:@"https://123.57.9.62/yl/privacy_clause/"];
     youlinServiceInfo.delegate=self;
     youlinServiceInfo.scrollView.bounces=NO;
       [youlinServiceInfo setScalesPageToFit:YES];
@@ -41,8 +40,10 @@
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType;
 {
     NSLog(@"Did start loading: %@ auth:%d", [[request URL] absoluteString], _authenticated);
+    
     @try {
-        if (!_authenticated) {
+
+         if (!_authenticated) {
             _authenticated = NO;
             
             [[[NSURLSession sharedSession] dataTaskWithRequest:_request] resume];
@@ -57,6 +58,7 @@
 }
 
 
+
 #pragma mark - NURLConnection delegate
 
 - (void)connection:(NSURLConnection *)connection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge;
@@ -66,9 +68,7 @@
     if ([challenge previousFailureCount] == 0)
     {
         _authenticated = YES;
-        
         NSURLCredential *credential = [NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust];
-        
         [challenge.sender useCredential:credential forAuthenticationChallenge:challenge];
         
     } else
@@ -92,4 +92,5 @@
 {
     return [protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust];
 }
+
 @end
