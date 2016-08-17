@@ -1,5 +1,5 @@
 //
-//  PublicLimitTVC.h
+//  PublishLimitTVC.h
 //  Test3
 //
 //  Created by Macx on 16/8/10.
@@ -8,9 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
-@interface PublicLimitTVC : UITableViewCell
+@interface PublishLimitTVC : UITableViewCell
 
-@property (strong, nonatomic)UILabel* limitLabel;
+@property (assign, nonatomic)NSInteger where;
 
 - (id) initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier;
 

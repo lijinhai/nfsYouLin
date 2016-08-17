@@ -16,5 +16,6 @@
 - (id) init;
 
 @property (nonatomic,strong)NSMutableArray *neighborDataArray;
+@property (assign, nonatomic)BOOL refresh;
 
 @end

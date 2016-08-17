@@ -22,7 +22,8 @@
 		8F1FB5CF1D5C025800676743 /* UIView+Layout.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F1FB5C41D5C025800676743 /* UIView+Layout.m */; };
 		8F1FB5D41D5C02F800676743 /* PickerCVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F1FB5D31D5C02F800676743 /* PickerCVC.m */; };
 		8F1FB5D71D5C030C00676743 /* LxGridViewFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F1FB5D61D5C030C00676743 /* LxGridViewFlowLayout.m */; };
-		8F1FB5DA1D5C031D00676743 /* PublicLimitTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F1FB5D91D5C031D00676743 /* PublicLimitTVC.m */; };
+		8F1FB5DA1D5C031D00676743 /* PublishLimitTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F1FB5D91D5C031D00676743 /* PublishLimitTVC.m */; };
+		8F1FB6221D6307CF00676743 /* PublishLimitVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F1FB6211D6307CF00676743 /* PublishLimitVC.m */; };
 		8F51E1E71D2E945B0094A4E5 /* SqlDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F51E1E61D2E945B0094A4E5 /* SqlDictionary.m */; };
 		8F51E1EB1D3324750094A4E5 /* Users.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F51E1EA1D3324750094A4E5 /* Users.m */; };
 		8F51E27B1D338FBF0094A4E5 /* MKAnnotationView+WebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F51E25B1D338FBF0094A4E5 /* MKAnnotationView+WebCache.m */; };
@@ -521,8 +522,10 @@
 		8F1FB5D31D5C02F800676743 /* PickerCVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PickerCVC.m; sourceTree = "<group>"; };
 		8F1FB5D51D5C030C00676743 /* LxGridViewFlowLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LxGridViewFlowLayout.h; sourceTree = "<group>"; };
 		8F1FB5D61D5C030C00676743 /* LxGridViewFlowLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LxGridViewFlowLayout.m; sourceTree = "<group>"; };
-		8F1FB5D81D5C031D00676743 /* PublicLimitTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PublicLimitTVC.h; sourceTree = "<group>"; };
-		8F1FB5D91D5C031D00676743 /* PublicLimitTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PublicLimitTVC.m; sourceTree = "<group>"; };
+		8F1FB5D81D5C031D00676743 /* PublishLimitTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PublishLimitTVC.h; sourceTree = "<group>"; };
+		8F1FB5D91D5C031D00676743 /* PublishLimitTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PublishLimitTVC.m; sourceTree = "<group>"; };
+		8F1FB6201D6307CF00676743 /* PublishLimitVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PublishLimitVC.h; sourceTree = "<group>"; };
+		8F1FB6211D6307CF00676743 /* PublishLimitVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PublishLimitVC.m; sourceTree = "<group>"; };
 		8F51E1E51D2E945B0094A4E5 /* SqlDictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SqlDictionary.h; sourceTree = "<group>"; };
 		8F51E1E61D2E945B0094A4E5 /* SqlDictionary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SqlDictionary.m; sourceTree = "<group>"; };
 		8F51E1E91D3324750094A4E5 /* Users.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Users.h; sourceTree = "<group>"; };
@@ -1373,8 +1376,8 @@
 			children = (
 				8F1FB5D21D5C02F800676743 /* PickerCVC.h */,
 				8F1FB5D31D5C02F800676743 /* PickerCVC.m */,
-				8F1FB5D81D5C031D00676743 /* PublicLimitTVC.h */,
-				8F1FB5D91D5C031D00676743 /* PublicLimitTVC.m */,
+				8F1FB5D81D5C031D00676743 /* PublishLimitTVC.h */,
+				8F1FB5D91D5C031D00676743 /* PublishLimitTVC.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -1384,6 +1387,8 @@
 			children = (
 				8FD637E11D541F6900F500D9 /* CreateTopicVC.h */,
 				8FD637E21D541F6900F500D9 /* CreateTopicVC.m */,
+				8F1FB6201D6307CF00676743 /* PublishLimitVC.h */,
+				8F1FB6211D6307CF00676743 /* PublishLimitVC.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -3370,7 +3375,7 @@
 				8F648D2B1D00547A00E3B155 /* EaseConversationModel.m in Sources */,
 				AF5410441CE3072E0037673F /* redrawTextField.m in Sources */,
 				8FB6FA5C1D41BAAE00E6C71A /* Friends.m in Sources */,
-				8F1FB5DA1D5C031D00676743 /* PublicLimitTVC.m in Sources */,
+				8F1FB5DA1D5C031D00676743 /* PublishLimitTVC.m in Sources */,
 				8F648CE61D00547900E3B155 /* EMCDDeviceManager+ProximitySensor.m in Sources */,
 				8F648D081D00547A00E3B155 /* MWTapDetectingImageView.m in Sources */,
 				8F648CFF1D00547A00E3B155 /* MJRefreshConst.m in Sources */,
@@ -3430,6 +3435,7 @@
 				8F648D131D00547A00E3B155 /* MKAnnotationView+EMWebCache.m in Sources */,
 				8F648D3A1D00547A00E3B155 /* FixFopen.c in Sources */,
 				8F51E28A1D338FBF0094A4E5 /* UIView+WebCacheOperation.m in Sources */,
+				8F1FB6221D6307CF00676743 /* PublishLimitVC.m in Sources */,
 				8F648D321D00547A00E3B155 /* UIViewController+HUD.m in Sources */,
 				8FB6FA561D41B97700E6C71A /* FriendViewCell.m in Sources */,
 				AF4B30511D33286600CBF257 /* PlaceholderTextView.m in Sources */,
@@ -3667,7 +3673,7 @@
 				OTHER_LIBTOOLFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = nfs.Youlin;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "5c314fb7-e679-43ca-aae2-13aaaadd3cf4";
 			};
 			name = Debug;
 		};
@@ -3697,7 +3703,7 @@
 				OTHER_LIBTOOLFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = nfs.Youlin;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "5c314fb7-e679-43ca-aae2-13aaaadd3cf4";
 			};
 			name = Release;
 		};

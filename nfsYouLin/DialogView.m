@@ -31,9 +31,9 @@
             [self initSayHiView:frame];
 
         }
-        else if([flag isEqualToString:@"delete"])
+        else if([flag isEqualToString:@"common"])
         {
-            [self initDeleteView:frame];
+            [self initCommonView:frame];
         }
         else if([flag isEqualToString:@"apply"])
         {
@@ -92,45 +92,39 @@
 
 }
 
-// 删除
-- (void) initDeleteView: (CGRect) frame
+
+// 通用对话框 删除  放弃
+- (void) initCommonView: (CGRect) frame 
 {
     self.backgroundColor = [UIColor clearColor];
     self.backView = [[UIView alloc] initWithFrame:CGRectMake(60, (frame.size.height - 80) / 2, frame.size.width - 120, 80)];
     self.backView.backgroundColor = [UIColor lightGrayColor];
     
-    self.deleteTV = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.backView.frame), 40)];
-    self.deleteTV.backgroundColor = [UIColor colorWithRed:255/255.0 green:186/255.0 blue:2/255.0 alpha:1];
-    self.deleteTV.font = [UIFont systemFontOfSize:15];
-    self.deleteTV.text = @"  确定要删除该内容吗？";
-    self.deleteTV.editable = NO;
-    self.deleteTV.bounces = NO;
-    self.deleteTV.textColor = [UIColor whiteColor];
+    UIView* titleV = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.backView.frame), 40)];
+    titleV.backgroundColor = [UIColor colorWithRed:255/255.0 green:186/255.0 blue:2/255.0 alpha:1];
+    [self.backView addSubview:titleV];
     
+    self.titleL = [[UILabel alloc] initWithFrame:CGRectMake(20, 0, CGRectGetWidth(titleV.frame) - 20, 40)];
+//    self.titleL.text = @"xxxxx";
+    self.titleL.font = [UIFont systemFontOfSize:15];
+    self.titleL.textColor = [UIColor whiteColor];
+    [titleV addSubview:self.titleL];
     
-    [self.backView addSubview:self.deleteTV];
-    
-    self.deleteYes = [[UIButton alloc] initWithFrame:CGRectMake(0, 41, CGRectGetWidth(self.backView.frame) / 2 - 0.5, 39)];
-    [self.deleteYes setTitle:@"确定" forState:UIControlStateNormal];
-    self.deleteYes.backgroundColor = [UIColor whiteColor];
-    [self.deleteYes setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-//    [self.deleteYes addTarget:self action:@selector(deleteYBtn:) forControlEvents:UIControlEventTouchUpInside];
-//    [self.deleteYes addTarget:self action:@selector(deleteYColor:) forControlEvents:UIControlEventTouchDown];
-    [self.backView addSubview:self.deleteYes];
-    
-    
-    self.deleteNo = [[UIButton alloc] initWithFrame:CGRectMake(CGRectGetWidth(self.backView.frame) / 2 + 0.5 , 41, CGRectGetWidth(self.backView.frame) / 2 - 0.5, 39)];
-    [self.deleteNo setTitle:@"取消" forState:UIControlStateNormal];
-    self.deleteNo.backgroundColor = [UIColor whiteColor];
-    [self.deleteNo setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-//    [self.deleteNo addTarget:self action:@selector(deleteNBtn:) forControlEvents:UIControlEventTouchUpInside];
-//    [self.deleteNo addTarget:self action:@selector(deleteNColor:) forControlEvents:UIControlEventTouchDown];
-    
-    [self.backView addSubview:self.deleteNo];
+    self.OKbtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 41, CGRectGetWidth(self.backView.frame) / 2 - 0.5, 39)];
+    [self.OKbtn setTitle:@"确定" forState:UIControlStateNormal];
+    self.OKbtn.backgroundColor = [UIColor whiteColor];
+    [self.OKbtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [self.backView addSubview:self.OKbtn];
+    self.NOBtn = [[UIButton alloc] initWithFrame:CGRectMake(CGRectGetWidth(self.backView.frame) / 2 + 0.5 , 41, CGRectGetWidth(self.backView.frame) / 2 - 0.5, 39)];
+    [self.NOBtn setTitle:@"取消" forState:UIControlStateNormal];
+    self.NOBtn.backgroundColor = [UIColor whiteColor];
+    [self.NOBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [self.backView addSubview:self.NOBtn];
     [self addSubview:self.backView];
-
-
+    
+    
 }
+
 
 
 

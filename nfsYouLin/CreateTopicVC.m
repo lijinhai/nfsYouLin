@@ -12,8 +12,15 @@
 #import <AssetsLibrary/AssetsLibrary.h>
 #import <Photos/Photos.h>
 #import "TZImageManager.h"
-#import "PublicLimitTVC.h"
-
+#import "PublishLimitTVC.h"
+#import "AppDelegate.h"
+#import "HeaderFile.h"
+#import "AFHTTPSessionManager.h"
+#import "StringMD5.h"
+#import "ChatDemoHelper.h"
+#import "WaitView.h"
+#import "PublishLimitVC.h"
+#import "DialogView.h"
 
 @interface CreateTopicVC ()
 
@@ -45,6 +52,25 @@
     CGRect imageCVFrame2;
     CGRect imageCVFrame3;
     CGFloat originalCVH;
+
+    PublishLimitVC* limitVC;
+    
+    UIImageView* emptyIV;
+    
+    NSString* userId;
+    NSString* familyId;
+    NSString* portrait;
+    NSString* nick;
+    NSString* familyAddress;
+    NSString* communityAddress;
+    long cityId;
+    long communityId;
+    
+    UIImageView* _backIV;
+    UILabel* _backLabel;
+    UIView* backgroundView;
+    DialogView* dialogView;
+    UIViewController* rootVC;
 
 }
 
@@ -130,6 +156,13 @@
     [self.titleTV addSubview:self.titlePlaceholder];
     [self.bgView addSubview:self.titleTV];
     
+    emptyIV = [[UIImageView alloc] initWithFrame:CGRectMake(CGRectGetMaxX(line2.frame) - 10, 10, 20, 20)];
+    emptyIV.image = [UIImage imageNamed:@"tanhao.png"];
+    emptyIV.layer.masksToBounds = YES;
+    emptyIV.layer.cornerRadius = 10;
+    emptyIV.hidden = YES;
+    [self.bgView addSubview:emptyIV];
+    
     
     self.contentTV = [[UITextView alloc] initWithFrame:CGRectMake(20, CGRectGetMaxY(line2.frame), CGRectGetWidth(self.bgView.frame) - 40, 38)];
     
@@ -201,6 +234,22 @@
                                                object:nil];
     [self.scrollView addSubview:self.bgView];
     [self.view addSubview:self.scrollView];
+    [self searchSql];
+    limitVC = [[PublishLimitVC alloc] init];
+    
+    UIWindow *window = [UIApplication sharedApplication].keyWindow;
+    rootVC = window.rootViewController.navigationController;
+    backgroundView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    backgroundView.backgroundColor = [UIColor grayColor];
+    backgroundView.alpha = 0.8;
+    dialogView = nil;
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self createBackItemBtn];
+    [self.tableView reloadData];
 }
 
 
@@ -235,10 +284,10 @@
         TZImagePickerController *imagePickerVc = [[TZImagePickerController alloc] initWithSelectedAssets:selectedAssets selectedPhotos:selectedPhotos index:indexPath.row];
         imagePickerVc.allowPickingOriginalPhoto = YES;
         imagePickerVc.isSelectOriginalPhoto = isSelectOriginalPhoto;
-        [imagePickerVc setDidFinishPickingPhotosHandle:^(NSArray<UIImage *> *photos, NSArray *assets, BOOL isSelectOriginalPhoto) {
+        [imagePickerVc setDidFinishPickingPhotosHandle:^(NSArray<UIImage *> *photos, NSArray *assets, BOOL selectOriginalPhoto) {
             selectedPhotos = [NSMutableArray arrayWithArray:photos];
             selectedAssets = [NSMutableArray arrayWithArray:assets];
-            isSelectOriginalPhoto = isSelectOriginalPhoto;
+            isSelectOriginalPhoto = selectOriginalPhoto;
             imagesLayout.itemCount = selectedPhotos.count;
             [_imagesCView reloadData];
         }];
@@ -399,12 +448,13 @@
 - (UITableViewCell*) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSString* cellId = @"cellId";
-    PublicLimitTVC* cell = [tableView dequeueReusableCellWithIdentifier:cellId];
+    PublishLimitTVC* cell = [tableView dequeueReusableCellWithIdentifier:cellId];
     if(cell == nil)
     {
-        cell = [[PublicLimitTVC alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
+        cell = [[PublishLimitTVC alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
     }
     cell.textLabel.text = @"发布范围";
+    cell.where = limitVC.which;
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     
     
@@ -418,7 +468,11 @@
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSLog(@"didSelectRowAtIndexPath");
+    UIBarButtonItem* backItemTitle = [[UIBarButtonItem alloc] initWithTitle:@"选择可见范围" style:UIBarButtonItemStylePlain target:nil action:nil];
+    [self.navigationItem setBackBarButtonItem:backItemTitle];
+    limitVC.communityName = communityAddress;
+    
+    [self.navigationController pushViewController:limitVC animated:YES];
 }
 #pragma mark UITextViewDelegate
 
@@ -446,6 +500,7 @@
         if(textView.text.length > 0)
         {
             self.titlePlaceholder.text = @"";
+            [emptyIV setHidden:YES];
         }
         else
         {
@@ -712,8 +767,255 @@
 - (IBAction)sendResult:(id)sender
 {
     NSLog(@"发送");
+    
+    NSString* title = self.titleTV.text;
+    NSString* content = self.contentTV.text;
+    
+    if(title.length == 0)
+    {
+        [emptyIV setHidden:NO];
+        return;
+    }
+    
+    if(content.length > 1000)
+    {
+        UIAlertView * alert = [[UIAlertView alloc]initWithTitle:@"无法发送" message:@"发送内容过长" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:nil, nil];
+        [alert show];
+        return;
+    }
+    
+    WaitView* waitView = [[WaitView alloc] initWithFrame:self.parentViewController.view.frame Title:@"正在发布..."];
+//    UIView* backgroundView = [[UIView alloc] initWithFrame:self.parentViewController.view.frame];
+    backgroundView.backgroundColor = [UIColor clearColor];
+    [backgroundView addSubview:waitView];
+    [self.parentViewController.view addSubview:backgroundView];
+    
+    
+    NSDate* date = [NSDate dateWithTimeIntervalSinceNow:0];
+    long topicTime = [date timeIntervalSince1970]*1000;
+    NSString* displayName = [NSString stringWithFormat:@"%@@%@",nick,communityAddress];
+    
+    // 手机序列号
+    NSString* identifierNumber = [[UIDevice currentDevice].identifierForVendor UUIDString] ;
+    
+    NSInteger forumId = limitVC.which;
+    NSString* forumName;
+    switch (forumId) {
+        case 0:
+            forumName = @"本小区";
+            break;
+        case 1:
+            forumName = @"周边";
+            break;
+        case 2:
+            forumName = @"同城";
+            break;
+        default:
+            break;
+    }
+    
+    // 发布新话题网络请求
+    AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
+    manager.securityPolicy.allowInvalidCertificates = YES;
+    [manager.securityPolicy setValidatesDomainName:NO];
+    
+    NSString* MD5String;
+    if([selectedPhotos count] == 0)
+    {
+        MD5String = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"topic_title%@topic_content%@forum_id%ldforum_name%@sender_id%@sender_name%@sender_portrait%@sender_family_id%@sender_family_address%@sender_city_id%ldsender_community_id%ldsend_status0display_name%@topic_time%ldtokenvalue%@",title, content, forumId,forumName,userId,nick,portrait,familyId,familyAddress,cityId,communityId,displayName,topicTime,identifierNumber]];
+    }
+    else
+    {
+         MD5String = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"topic_title%@topic_content%@forum_id%ldforum_name%@sender_id%@sender_name%@sender_portrait%@sender_family_id%@sender_family_address%@sender_city_id%ldsender_community_id%ldsend_status1display_name%@topic_time%ldtokenvalue%@",title, content,forumId,forumName,userId,nick,portrait,familyId,familyAddress,cityId,communityId,displayName,topicTime,identifierNumber]];
+    }
+    NSString* hashString = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"%@1", MD5String]];
+    NSString* keySet = @"topic_title:topic_content:forum_id:forum_name:sender_id:sender_name:sender_portrait:sender_family_id:sender_family_address:sender_city_id:sender_community_id:send_status:display_name:topic_time:tokenvalue:";
+    NSMutableDictionary* parameter = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+                                      title, @"topic_title",
+                                      content, @"topic_content",
+                                      @"2",  @"topic_category_type",
+                                      [NSNumber numberWithInteger:forumId], @"forum_id",
+                                      forumName, @"forum_name" ,
+                                      userId, @"sender_id",
+                                      nick, @"sender_name",
+                                      portrait, @"sender_portrait",
+                                      @"0", @"sender_nc_role",
+                                      familyId, @"sender_family_id",
+                                      familyAddress, @"sender_family_address",
+                                      @"0", @"object_data_id",
+                                      @"1", @"circle_type",
+                                      identifierNumber, @"tokenvalue",
+                                      [NSNumber numberWithLong:cityId], @"sender_city_id",
+                                      [NSNumber numberWithLong:communityId], @"sender_community_id",
+                                      [NSNumber numberWithLong:topicTime], @"topic_time",
+                                       displayName, @"display_name",
+                                      @"0", @"send_status",
+                                      @"0", @"sender_lever",
+                                      @"comm", @"apitype",
+                                      @"addtopic", @"tag",
+                                      @"1", @"salt",
+                                      hashString, @"hash",
+                                      keySet,@"keyset",
+                                    nil];
+    
+    NSMutableArray* imagesName = [[NSMutableArray alloc] init];
+    if([selectedPhotos count] != 0)
+    {
+        parameter[@"send_status"] = @"1";
+        for(int i = 0; i < [selectedPhotos count]; i++)
+        {
+            // 设置时间格式
+            NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+            formatter.dateFormat = @"yyyyMMddHHmmss";
+            NSString *str = [formatter stringFromDate:[NSDate date]];
+            NSString *fileName = [NSString stringWithFormat:@"%@.jpg", str];
+            [imagesName addObject:fileName];
+            NSString* key = [NSString stringWithFormat:@"img_%d",i];
+            parameter[key] = fileName;
+        }
+        
+    }
+    
+    
+    [manager POST:POST_URL parameters:parameter constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
+        if([selectedPhotos count] != 0)
+        {
+             for(int i = 0; i < [selectedPhotos count]; i++)
+             {
+                 UIImage* image = selectedPhotos[i];
+                 NSData *data = UIImageJPEGRepresentation(image,0.1);
+                 [formData appendPartWithFileData:data name:[NSString stringWithFormat:@"img_%d",i] fileName:imagesName[i] mimeType:@"image/jpg"];
+
+             }
+        }
+        
+    } progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSLog(@" 发布新话题网络请求请求:%@", responseObject);
+        NSString* flag = [responseObject valueForKey:@"flag"];
+        if([flag isEqualToString:@"ok"])
+        {
+            NSLog(@"发布新话题网络请求成功");
+            [ChatDemoHelper shareHelper].neighborVC.refresh = YES;
+            [self.navigationController popViewControllerAnimated:YES];
+            
+        }
+        else if([flag isEqualToString:@"full"])
+        {
+            NSString* msg = [responseObject valueForKey:@"yl_msg"];
+            UIAlertView * alert = [[UIAlertView alloc]initWithTitle:@"发送" message:msg delegate:self cancelButtonTitle:@"取消" otherButtonTitles:nil, nil];
+            [alert show];
+            return;
+        }
+        [waitView removeFromSuperview];
+        [backgroundView removeFromSuperview];
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"上传失败 %@", error);
+        [waitView removeFromSuperview];
+        [backgroundView removeFromSuperview];
+    }];
+    
 }
 
+// 数据库取数据
+- (void) searchSql
+{
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    userId = [defaults stringForKey:@"userId"];
+    familyId = [defaults stringForKey:@"familyId"];
+    portrait = [defaults stringForKey:@"portrait"];
+    nick = [defaults stringForKey:@"nick"];
+    
+    AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+    FMDatabase *db = delegate.db;
+    
+    if([db open])
+    {
+        NSLog(@"CreateTopicVC table_all_family: db open success!");
+        FMResultSet *result = [db executeQuery:@"SELECT family_address, family_city_id ,family_community_id,family_community_nickname FROM table_all_family WHERE family_id = ?",familyId];
+        while ([result next]) {
+            familyAddress = [result stringForColumn:@"family_address"];
+            communityAddress = [result stringForColumn:@"family_community_nickname"];
+            cityId = [result longForColumn:@"family_city_id"];
+            communityId = [result longForColumn:@"family_community_id"];
+        }
+        [db close];
+        
+    }
+    else
+    {
+        NSLog(@"CreateTopicVC table_all_family: db open error!");
+    }
 
+}
+
+- (void) createBackItemBtn
+{
+    CGSize size = [StringMD5 sizeWithString:@"话题" font:[UIFont systemFontOfSize:20] maxSize:CGSizeMake(MAXFLOAT, MAXFLOAT)];
+    UIControl* view = [[UIControl alloc] initWithFrame:CGRectMake(0, 0, 25 + size.width, self.navigationController.navigationBar.frame.size.height)];
+    view.backgroundColor = [UIColor clearColor];
+    _backIV = [[UIImageView alloc] initWithFrame:CGRectMake(0, view.frame.size.height / 4, 20, view.frame.size.height / 2)];
+    _backIV.image = [UIImage imageNamed:@"mm_title_back.png"];
+    _backLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(_backIV.frame) + 5, 0, size.width, view.frame.size.height)];
+    
+    _backLabel.text = @"话题";
+    _backLabel.textColor = [UIColor whiteColor];
+    [view addSubview:_backIV];
+    [view addSubview:_backLabel];
+    
+    [view addTarget:self action:@selector(changeAlpha) forControlEvents:UIControlEventTouchDown];
+    [view addTarget:self action:@selector(backAction) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem* leftItem = [[UIBarButtonItem alloc] initWithCustomView:view];
+    self.navigationItem.leftBarButtonItem = leftItem;
+    
+}
+
+- (void) backAction
+{
+    _backLabel.alpha = 1.0;
+    _backIV.alpha = 1.0;
+    
+    DialogView* deleteView = [[DialogView alloc] initWithFrame:backgroundView.frame  View:backgroundView Flag:@"common"];
+    [rootVC.view  addSubview:backgroundView];
+    [rootVC.view  addSubview:deleteView];
+    
+    deleteView.titleL.text = @"确定要放弃此次编辑吗？";
+    dialogView = deleteView;
+    UIButton* okBtn = deleteView.OKbtn;
+    [okBtn addTarget:self action:@selector(OkAction:) forControlEvents:UIControlEventTouchUpInside];
+    
+    UIButton* noBtn = deleteView.NOBtn;
+    [noBtn addTarget:self action:@selector(NoAction:) forControlEvents:UIControlEventTouchUpInside];
+}
+
+- (void)OkAction:(id) sender
+{
+    [backgroundView removeFromSuperview];
+    if(dialogView)
+    {
+        [dialogView removeFromSuperview];
+        dialogView = nil;
+    }
+    
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (void)NoAction:(id) sender
+{
+    [backgroundView removeFromSuperview];
+    if(dialogView)
+    {
+        [dialogView removeFromSuperview];
+        dialogView = nil;
+    }
+    return;
+}
+
+- (void) changeAlpha
+{
+    _backLabel.alpha = 0.2;
+    _backIV.alpha = 0.2;
+}
 
 @end

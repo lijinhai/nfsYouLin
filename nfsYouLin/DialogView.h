@@ -16,10 +16,11 @@
 @property(strong, nonatomic)UIButton* cancel;
 @property(strong, nonatomic)UITextView* sayHiTV;
 
-@property(strong, nonatomic)UITextView* deleteTV;
-@property(strong, nonatomic)UIButton* deleteYes;
-@property(strong, nonatomic)UIButton* deleteNo;
-
+// 确定
+@property(strong, nonatomic)UIButton* OKbtn;
+// 取消
+@property(strong, nonatomic)UIButton* NOBtn;
+@property(strong, nonatomic)UILabel* titleL;
 
 @property(strong, nonatomic)UIButton* applyYes;
 @property(strong, nonatomic)UIButton* applyNo;
