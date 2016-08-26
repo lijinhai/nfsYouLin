@@ -78,7 +78,7 @@
 
     [self setupSubviews];
     [ChatDemoHelper shareHelper].discoveryVC = _discoveryVC;
-    
+    [ChatDemoHelper shareHelper].neighborVC = _neighborVC;
     AppDelegate* app = [[UIApplication sharedApplication] delegate];
     if(!app.friendVC)
     {
@@ -90,14 +90,13 @@
     [[ChatDemoHelper shareHelper] asyncPushOptions];
     [ChatDemoHelper shareHelper].friendVC = app.friendVC;
     [ChatDemoHelper shareHelper].mainVC = self;
-    UINavigationController* navigationController = self.navigationController;
+    UIViewController* controller = self;
     _listTableView = [[ListTableView alloc] initWithFrame:CGRectMake(self.view.frame.size.width - 150, CGRectGetMaxY(self.navigationController.navigationBar.frame), 150, 200)];
     
     _backGroundView = [[BackgroundView alloc] initWithFrame:self.parentViewController.view.frame view:_listTableView];
     BackgroundView* backGroundView = _backGroundView;
     NSArray* nameArray = @[@"新建话题", @"发起活动", @"闲品会", @"邀请"];
     NSArray* imageArray = @[@"huati", @"huodong", @"change", @"nav_yaoqinghaoyou"];
-    __block CreateTopicVC* topicVC = [[CreateTopicVC alloc] init];
 
     [_listTableView setListTableView:nameArray image:imageArray block:^(NSString* string){
         NSLog(@"string = %@",string);
@@ -105,10 +104,8 @@
         if([string isEqualToString:@"新建话题"])
         {
             NSLog(@"开始新建话题~~");
-            UIBarButtonItem* topicItem = [[UIBarButtonItem alloc] initWithTitle:@"话题" style:UIBarButtonItemStylePlain target:nil action:nil];
-            [topicItem setTintColor:[UIColor whiteColor]];
-            [navigationController.navigationItem setBackBarButtonItem:topicItem];
-            [navigationController pushViewController:topicVC animated:YES];
+            CreateTopicVC* topicVC = [[CreateTopicVC alloc] init];
+            [controller.navigationController pushViewController:topicVC animated:YES];
         }
         
     }];

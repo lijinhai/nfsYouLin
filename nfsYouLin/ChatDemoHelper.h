@@ -20,6 +20,7 @@
 #import "FriendsVC.h"
 #import "DiscoveryTVC.h"
 #import "FirstTabBarController.h"
+#import "NeighborTVC.h"
 
 #define kHaveUnreadAtMessage    @"kHaveAtMessage"
 #define kAtYouMessage           1
@@ -36,6 +37,8 @@
 //@property (nonatomic, weak) ConversationListController *conversationListVC;
 //
 @property (nonatomic, weak) FriendsVC *friendVC;
+@property (nonatomic, weak) NeighborTVC *neighborVC;
+
 @property (nonatomic, weak) FirstTabBarController *mainVC;
 @property (nonatomic, weak) DiscoveryTVC *discoveryVC;
 

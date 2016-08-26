@@ -38,13 +38,13 @@
 {
     /*设置导航*/
     self.navigationController.navigationBarHidden = NO;
-    /*自定义导航返回箭头*/
+    // 自定义导航返回箭头
     UIImage *backButtonImage = [[UIImage imageNamed:@"mm_title_back.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 25, 0,0)];
     
     [[UIBarButtonItem appearance] setBackButtonBackgroundImage:backButtonImage forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
     [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
     UIBarButtonItem *barrightBtn=[[UIBarButtonItem alloc]initWithTitle:@"下一步" style:UIBarButtonItemStylePlain target:self action:@selector(selectNextAction)];
-    self.navigationItem.rightBarButtonItem=barrightBtn;
+    self.navigationItem.rightBarButtonItem = barrightBtn;
     self.navigationItem.title=@"";
     
     [self createBackItemBtn];
@@ -81,7 +81,7 @@
     _backIV.image = [UIImage imageNamed:@"mm_title_back.png"];
     _backLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(_backIV.frame) + 5, 0, size.width, view.frame.size.height)];
     
-    _backLabel.text = @"请选你城市";
+    _backLabel.text = @"请选择城市";
     _backLabel.textColor = [UIColor whiteColor];
     [view addSubview:_backIV];
     [view addSubview:_backLabel];

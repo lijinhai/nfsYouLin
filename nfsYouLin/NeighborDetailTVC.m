@@ -12,7 +12,6 @@
 #import "DialogView.h"
 #import "AFHTTPSessionManager.h"
 
-
 @interface NeighborDetailTVC ()
 
 @end
@@ -362,16 +361,17 @@
 - (void)deleteTopic:(NSInteger)topicId
 {
     NSLog(@"Detail 删除帖子回调");
-    DialogView* deleteView = [[DialogView alloc] initWithFrame:backgroundView.frame  View:backgroundView Flag:@"delete"];
+    DialogView* deleteView = [[DialogView alloc] initWithFrame:backgroundView.frame  View:backgroundView Flag:@"common"];
     [self.parentViewController.view addSubview:backgroundView];
     [self.parentViewController.view addSubview:deleteView];
     
+    deleteView.titleL.text = @"确定要删除该内容嘛？";
     dialogView = deleteView;
-    UIButton* okBtn = deleteView.deleteYes;
+    UIButton* okBtn = deleteView.OKbtn;
     okBtn.tag = topicId;
     [okBtn addTarget:self action:@selector(deleteOkAction:) forControlEvents:UIControlEventTouchUpInside];
     
-    UIButton* cancelBtn = deleteView.deleteNo;
+    UIButton* cancelBtn = deleteView.NOBtn;
     [cancelBtn addTarget:self action:@selector(deleteNoAction:) forControlEvents:UIControlEventTouchUpInside];
 
 }

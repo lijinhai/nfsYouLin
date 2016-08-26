@@ -90,7 +90,6 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    _color = [UIColor colorWithRed:255/255.0 green:186/255.0 blue:2/255.0 alpha:1];
     // 修改导航栏颜色
     [self.navigationController.navigationBar setBarTintColor:_color];
     
@@ -101,23 +100,32 @@
     [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
 
     
-    if(self.neighborDataArray)
+    if(self.refresh)
     {
-        if([self.neighborDataArray count] != (sectionCount - 1))
-        {
-            sectionCount = sectionCount - 1;
-        }
+        [self refreshData];
     }
-    [self.tableView reloadData];
+    else
+    {
+        if(self.neighborDataArray)
+        {
+            if([self.neighborDataArray count] != (sectionCount - 1))
+            {
+                sectionCount = sectionCount - 1;
+            }
+        }
+        [self.tableView reloadData];
+
+    }
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    UIWindow *window = [UIApplication sharedApplication].keyWindow;
-    rootVC = window.rootViewController;
+    _color = [UIColor colorWithRed:255/255.0 green:222/255.0 blue:31/255.0 alpha:1];
 
-    backgroundView = [[UIView alloc] initWithFrame:rootVC.view.bounds];
+    UIWindow *window = [UIApplication sharedApplication].keyWindow;
+    rootVC = window.rootViewController.navigationController;
+    backgroundView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
     backgroundView.backgroundColor = [UIColor grayColor];
     backgroundView.alpha = 0.8;
     dialogView = nil;
@@ -135,6 +143,8 @@
     _downLabel = [[UILabel alloc] init];
     _downLabel.frame = _downView.frame;
     _downLabel.text = @"下拉刷新";
+//    _downLabel.textColor = _color;
+
     _downLabel.textColor = [UIColor whiteColor];
     _downLabel.textAlignment = NSTextAlignmentCenter;
     [_downView addSubview:_downLabel];
@@ -204,15 +214,15 @@
     downFlag = YES;
     upFlag = YES;
     topicFlag = YES;
+    
+    self.refresh = NO;
+    
     Tag = @"gettopic";
     category = 1;
     sectionCount = 1;
     [self initWaitImageAnimate];
     [self.view addSubview:_waitImageView];
     [self getTopicNet];
-
-
-
 }
 
 - (void)initWaitImageAnimate
@@ -388,46 +398,11 @@
     [self readTotalInformation:indexPath.section];
 }
 
-
-//拖动后开始滑行
--(void)scrollViewWillBeginDecelerating:(UIScrollView *)scrollView{
-}
-
-
- //拖动后滑行结束
-// 滚动停止时，触发该函数
--(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
-}
-
-// scrollView 已经滑动
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView
-{
-    
-}
-
-// 触摸屏幕并拖拽画面，再松开，最后停止时，触发该函数
-- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
-
-}
-
-//开始拖拽
--(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
-//    NSLog(@"scrollViewWillBeginDragging 开始拖拽 y=%f",self.tableView.contentOffset.y);
-}
-
-- (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView {
-//    NSLog(@"scrollViewDidEndScrollingAnimation");
-}
-
-
-
-
 static BOOL downState = YES;
 static BOOL upState = YES;
-//static BOOL refreshState = YES;
+
 - (void) handlePan:(UIPanGestureRecognizer*)gesture
 {
-//    CGPoint velocity = [gesture velocityInView:self.tableView];
     CGPoint translation = [gesture translationInView:self.tableView];
     
 //    NSLog(@"水平速度:%g 垂直速度为:%g 水平位移:%g 垂直位移:%g",velocity.x ,velocity.y, translation.x ,translation.y);
@@ -441,7 +416,7 @@ static BOOL upState = YES;
         {
 //            NSLog(@"began 下拉");
             downState = NO;
-//            [self.navigationController.navigationBar setBarTintColor:[UIColor blackColor]];
+//            [self.navigationController.navigationBar setBarTintColor:[UIColor whiteColor]];
             [self.navigationController.navigationBar addSubview:_downView];
         }
         // 底部上拉条件
@@ -591,7 +566,7 @@ static BOOL upState = YES;
         [self.tableView.tableHeaderView setHidden:YES];
         [_downView removeFromSuperview];
         _panGesture.enabled = YES;
-        [self.tableView reloadData];
+//        [self.tableView reloadData];
     }
 }
 
@@ -626,20 +601,16 @@ static BOOL upState = YES;
 - (void)showImageViewWithImageViews:(NSArray *)imageViews byClickWhich:(NSInteger)clickTag{
     
     self.tableView.scrollEnabled = NO;
-//    UIView *maskview = [[UIView alloc] initWithFrame:self.view.bounds];
-    UIView *maskview = [[UIView alloc] initWithFrame:rootVC.view.bounds];
+    UIView *maskview = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
     maskview.backgroundColor = [UIColor blackColor];
     [rootVC.view addSubview:maskview];
-
+    
 //    [self.view addSubview:maskview];
     ShowImageView* showImage = [[ShowImageView alloc] initWithFrame:self.parentViewController.view.bounds byClickTag:clickTag appendArray:imageViews];
     [showImage show:maskview didFinish:^(){
-        
         [UIView animateWithDuration:0.5f animations:^{
-            
             showImage.alpha = 0.0f;
             maskview.alpha = 0.0f;
-            
         } completion:^(BOOL finished) {
             [showImage removeFromSuperview];
             [maskview removeFromSuperview];
@@ -804,23 +775,25 @@ static BOOL upState = YES;
 // 删除帖子回调
 - (void)deleteTopic:(NSInteger)topicId
 {
-    DialogView* deleteView = [[DialogView alloc] initWithFrame:backgroundView.frame  View:backgroundView Flag:@"delete"];
+    DialogView* deleteView = [[DialogView alloc] initWithFrame:backgroundView.frame  View:backgroundView Flag:@"common"];
     [rootVC.view  addSubview:backgroundView];
     [rootVC.view  addSubview:deleteView];
-
+    
+    deleteView.titleL.text = @"确定要删除该内容嘛？";
     dialogView = deleteView;
-    UIButton* okBtn = deleteView.deleteYes;
+    UIButton* okBtn = deleteView.OKbtn;
     okBtn.tag = topicId;
     [okBtn addTarget:self action:@selector(deleteOkAction:) forControlEvents:UIControlEventTouchUpInside];
     
-    UIButton* cancelBtn = deleteView.deleteNo;
-    [cancelBtn addTarget:self action:@selector(deleteNoAction:) forControlEvents:UIControlEventTouchUpInside];
+    UIButton* noBtn = deleteView.NOBtn;
+    [noBtn addTarget:self action:@selector(deleteNoAction:) forControlEvents:UIControlEventTouchUpInside];
 
 }
 
 // 发起获取帖子网络请求 全部 话题 活动
 - (void) getTopicNet
 {
+    NSLog(@"getTopicNet");
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     NSString* communityId = [defaults stringForKey:@"communityId"];
     NSString* userId = [defaults stringForKey:@"userId"];
@@ -841,6 +814,7 @@ static BOOL upState = YES;
                                 @"hash" : hashString,
                                 @"keyset" : @"user_id:community_id:topic_id:",
                                 };
+    
     [manager POST:POST_URL parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
         
         
@@ -861,14 +835,9 @@ static BOOL upState = YES;
             }
             
             NSDictionary* dict = [self getResponseDictionary:responseObject[i]];
-            
-            
             NeighborData *neighborData = [[NeighborData alloc] initWithDict:dict];
-
             NeighborDataFrame *neighborDataFrame = [[NeighborDataFrame alloc]init];
-
             neighborDataFrame.neighborData = neighborData;
-
             [self.neighborDataArray addObject:neighborDataFrame];
 
         }
@@ -949,11 +918,15 @@ static BOOL upState = YES;
     
 }
 
+- (void) refreshData
+{
+    [self downRefreshNet];
+    self.refresh = NO;
+}
 
 // 下拉刷新网络请求 全部 话题 活动
 - (void) downRefreshNet
 {
-    
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     NSString* communityId = [defaults stringForKey:@"communityId"];
     NSString* userId = [defaults stringForKey:@"userId"];
@@ -968,7 +941,6 @@ static BOOL upState = YES;
     
     NSString* MD5String = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"user_id%@community_id%@topic_id%@",userId,communityId, newTopicId]];
     NSString* hashString = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"%@1", MD5String]];
-    
     NSDictionary* parameter = @{@"user_id" : userId,
                                 @"community_id" : communityId,
                                 @"topic_id" : newTopicId,
@@ -984,7 +956,7 @@ static BOOL upState = YES;
         
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        //        NSLog(@"获取下拉所有帖子网络请求:%@", responseObject);
+//        NSLog(@"获取下拉所有帖子网络请求:%@", responseObject);
         if([responseObject isKindOfClass:[NSArray class]])
         {
             for (NSInteger i = [responseObject count] - 1; i >=0 ; i--,sectionCount++)
@@ -994,7 +966,8 @@ static BOOL upState = YES;
                 
                 if(i == [responseObject count] - 1)
                 {
-                    newTopicId = responseDict[@"topic_id"];
+                    newTopicId = responseDict[@"topicId"];
+
                 }
                 NeighborData *neighborData = [[NeighborData alloc] initWithDict:dict];
                 
@@ -1006,10 +979,11 @@ static BOOL upState = YES;
         }
         else if([responseObject isKindOfClass:[NSDictionary class]])
         {
+            
             NSString* flag = [responseObject valueForKey:@"flag"];
-            //            NSLog(@"下拉 flag = %@",flag);
         }
         downFlag = NO;
+        [self.tableView reloadData];
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         NSLog(@"请求失败:%@", error.description);
         downFlag = NO;
@@ -1134,18 +1108,14 @@ static BOOL upState = YES;
                 NeighborData *neighborData = [[NeighborData alloc] initWithDict:dict];
                 
                 NeighborDataFrame *neighborDataFrame = [[NeighborDataFrame alloc]init];
-                
                 neighborDataFrame.neighborData = neighborData;
-                
                 [self.neighborDataArray addObject:neighborDataFrame];
-                
             }
             
         }
         else if([responseObject isKindOfClass:[NSDictionary class]])
         {
             NSString* flag = [responseObject valueForKey:@"flag"];
-            NSLog(@"上拉 flag = %@",flag);
         }
         upFlag = NO;
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
@@ -1248,12 +1218,6 @@ static BOOL upState = YES;
         @"topicId" : responseDict[@"topicId"],
 
         };
-
-    if([responseDict[@"topicTitle"] isEqualToString:@"刚刚好"])
-    {
-//        NSArray* array =
-        NSLog(@"walk topicId = %@",responseDict[@"topicId"]);
-    }
     return dict;
 }
 
