@@ -40,6 +40,7 @@
     [[UIBarButtonItem appearance] setBackButtonBackgroundImage:backButtonImage forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
     [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
     self.navigationItem.title=@"";
+    _pointsLabel.text=[NSString stringWithFormat:@"%ld",_allPoints];
     /*设置周label日期*/
     _weekDateArray=[self getWeekTime];
     self.MONLabel.text=[_weekDateArray objectAtIndex:0];
@@ -116,6 +117,9 @@
     if(signFlag==NULL)
     {
         [self userTodaySign];
+        NSInteger nowAllPoints=0;
+        //nowAllPoints=_todayPoints+_allPoints;
+        //_pointsLabel.text=[NSString stringWithFormat:@"%ld",nowAllPoints];
         NSCalendar *calendar = [NSCalendar currentCalendar];
         NSDateComponents *comp = [calendar components:NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay | NSCalendarUnitWeekday | NSCalendarUnitDay fromDate:[NSDate date]];
         NSInteger weekDay = [comp weekday];
@@ -139,14 +143,15 @@
     }
     else
     {
-        
-        NSInteger points=_todayPoints;//今天签到所得分数
-        PopupCalendarView *view = [PopupCalendarView defaultPopupView:points tFrame:CGRectMake(0, 0, 365, 375) signArray:self.monthSignedArray];
-        view.parentVC = self;
-        //NSLog(@"self.monthSignedArray is %ld",[self.monthSignedArray count]);
-        [self lew_presentPopupView:view animation:[LewPopupViewAnimationRight new] dismissed:^{
-            NSLog(@"动画结束");
-        }];
+        [self signTodayIntegral];
+//        NSInteger points=_todayPoints;//今天签到所得分数
+//        NSLog(@"points is %ld",points);
+//        PopupCalendarView *view = [PopupCalendarView defaultPopupView:points tFrame:CGRectMake(0, 0, 365, 375) signArray:self.monthSignedArray];
+//        view.parentVC = self;
+//        //NSLog(@"self.monthSignedArray is %ld",[self.monthSignedArray count]);
+//        [self lew_presentPopupView:view animation:[LewPopupViewAnimationRight new] dismissed:^{
+//            NSLog(@"动画结束");
+//        }];
     }
 
 }
@@ -174,7 +179,6 @@
 /*用户签到*/
 -(void)userTodaySign{
 
-    /*用户签到*/
     AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
     manager.securityPolicy.allowInvalidCertificates = YES;
     manager.responseSerializer.stringEncoding=NSUTF8StringEncoding;
@@ -195,7 +199,8 @@
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         
-        NSLog(@"responseObject is %@",[responseObject objectForKey:@"credit"]);
+        NSLog(@"signresponseObject is %@",responseObject);
+        _pointsLabel.text=[NSString stringWithFormat:@"%@",[responseObject objectForKey:@"credit"]];
         signFlag=@"signed";
         
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
@@ -281,5 +286,43 @@
           return NO;
 }
 
+-(void)signTodayIntegral{
+    
+    AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
+    manager.securityPolicy.allowInvalidCertificates = YES;
+    manager.responseSerializer.stringEncoding=NSUTF8StringEncoding;
+    [manager.securityPolicy setValidatesDomainName:NO];
+    NSString* userId = [NSString stringWithFormat:@"%ld", [SqliteOperation getUserId]];
+    NSString* hashString =[StringMD5 stringAddMD5:[NSString stringWithFormat:@"user_id%@",userId]];
+    NSString* hashMD5 = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"%@729",hashString]];
+    NSDictionary* parameter = @{@"user_id" : userId,
+                                @"deviceType":@"ios",
+                                @"apitype" : @"users",
+                                @"tag" : @"getsigndate",
+                                @"salt" : @"729",
+                                @"hash" : hashMD5,
+                                @"keyset" : @"user_id:",
+                                };
+    
+    [manager POST:POST_URL parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
+
+        NSMutableArray *responseObjectAry=[responseObject objectForKey:@"info"];
+        _todayPoints=[[responseObjectAry objectAtIndex:0][@"credit"] intValue];
+        NSInteger points=_todayPoints;//今天签到所得分数
+        NSLog(@"points is %ld",points);
+        PopupCalendarView *view = [PopupCalendarView defaultPopupView:points tFrame:CGRectMake(0, 0, 365, 375) signArray:self.monthSignedArray];
+        view.parentVC = self;
+        [self lew_presentPopupView:view animation:[LewPopupViewAnimationRight new] dismissed:^{
+            NSLog(@"动画结束");
+        }];
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        // 请求失败
+        NSLog(@"%@", [error localizedDescription]);
+    }];
+}
 
 @end

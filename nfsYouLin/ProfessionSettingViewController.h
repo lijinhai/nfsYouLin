@@ -29,6 +29,11 @@ typedef void (^ReturnWorkerTextBlock)(NSString *showText);
 typedef void (^ReturnWorkerShowBlock)(NSString *showVal);
 @property (nonatomic, copy) ReturnWorkerShowBlock returnWorkerShowBlock;
 - (void)returnShow:(ReturnWorkerShowBlock)block;
+
+- (IBAction)profession_DiaEndOnExit:(id)sender;
+- (IBAction)View_TouchDown:(id)sender;
+
+
 @end
 
 

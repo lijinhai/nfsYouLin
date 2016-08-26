@@ -69,7 +69,7 @@
     }
     self.navigationItem.title=@"";
     _workerNameTextField.backgroundColor=[UIColor whiteColor];
-    _workerNameTextField.delegate=self;
+    //_workerNameTextField.delegate=self;
     [_workerNameTextField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
     if(![_workerValue isEqualToString:@""])
     {
@@ -86,6 +86,17 @@
 -(void)returnShow:(ReturnWorkerShowBlock)block
 {
     self.returnWorkerShowBlock=block;
+}
+
+- (IBAction)profession_DiaEndOnExit:(id)sender {
+    
+    // 隐藏键盘.
+    [sender resignFirstResponder];
+}
+
+- (IBAction)View_TouchDown:(id)sender {
+    
+    [[UIApplication sharedApplication] sendAction:@selector(resignFirstResponder) to:nil from:nil forEvent:nil];
 }
 -(void)sureAction{
     

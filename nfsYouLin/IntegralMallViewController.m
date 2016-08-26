@@ -247,6 +247,7 @@
     UIColor *fontColor=[UIColor colorWithRed:255/255.0 green:186/255.0 blue:2/255.0 alpha:1];
     
     NSURL* url = [NSURL URLWithString:[[dataArray objectAtIndex:(section*2+rowNo)] objectForKey:@"gl_pic"]];
+    NSLog(@"url is %@",url);
     float scale=0.6;//缩放比例
     UIImageView* goodsPic=[[UIImageView alloc] init];
     UILabel* pointsLable=[[UILabel alloc] initWithFrame:CGRectMake(0, 0, 60, 20)];
@@ -278,7 +279,7 @@
     [clickGetGoods setTitle:@"点击领取" forState:UIControlStateNormal];
     [clickGetGoods addTarget:self action:@selector(clickGetGoods:) forControlEvents:UIControlEventTouchUpInside];
 
-    [goodsPic sd_setImageWithURL:url placeholderImage:nil options:(SDWebImageRetryFailed) completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+    [goodsPic sd_setImageWithURL:url placeholderImage:[UIImage imageNamed:@"bg_error.png"] options:(SDWebImageAllowInvalidSSLCertificates) completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
         
         goodsPic.frame = CGRectMake(0, 0, image.size.width*scale, image.size.height*scale);
         goodsPic.center=CGPointMake(55, 40);

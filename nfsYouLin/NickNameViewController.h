@@ -10,11 +10,15 @@
 
 @interface NickNameViewController : UIViewController
 @property (weak, nonatomic) IBOutlet UITextField *nikeNameTextField;
+
 @property (weak, nonatomic) IBOutlet UILabel *tipLabel;
 @property(nonatomic,retain) NSString *nikeNameValue;
 
 typedef void (^ReturnTextBlock)(NSString *showText);
 @property (nonatomic, copy) ReturnTextBlock returnTextBlock;
 - (void)returnText:(ReturnTextBlock)block;
+- (IBAction)View_TouchDown:(id)sender;
+
+- (IBAction)nick_DidEndExit:(id)sender;
 
 @end

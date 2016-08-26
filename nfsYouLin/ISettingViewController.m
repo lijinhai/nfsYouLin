@@ -11,7 +11,6 @@
 #import "quitView.h"
 #import "LxxPlaySound.h"
 #import "BlackListViewController.h"
-#import "MBProgressHUD.h"
 #import "AFHTTPSessionManager.h"
 #import "MBProgressHUBTool.h"
 #import "StringMD5.h"
@@ -39,6 +38,12 @@
     LoginNC* loginNC;
     UIView* backgroundView;
     
+    NSURLSessionDataTask *dataTask;
+    UIView *updatebgView;
+    CGSize size;
+    UIFont *fnt;
+    
+    
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -54,9 +59,8 @@
     [switchShockButton addTarget:self action:@selector(switchShockAction) forControlEvents:UIControlEventValueChanged];
     shockflag=@"off";
     noticeflag=@"off";
-    /*计算缓存大小并初始化cacheCountLable*/
-    cacheCountLable=[[UILabel alloc] initWithFrame:CGRectMake(_tableView.frame.size.width-70,24,50, 20) ];
-    cacheCountLable.text=@"0 B";
+   
+    
 
 }
 - (void)viewDidLoad {
@@ -79,6 +83,11 @@
     backgroundView.backgroundColor = [UIColor clearColor];
     [backgroundView addSubview:waitView];
     
+    WaitView* waitView1 = [[WaitView alloc] initWithFrame:self.parentViewController.view.frame Title:@"检查中..."];
+    updatebgView = [[UIView alloc] initWithFrame:self.parentViewController.view.frame];
+    updatebgView.backgroundColor = [UIColor clearColor];
+    [updatebgView addSubview:waitView1];
+
     
     UIStoryboard* storyBoard = [UIStoryboard storyboardWithName:@"Me" bundle:nil];
    
@@ -92,51 +101,134 @@
     [[UIBarButtonItem appearance] setBackButtonBackgroundImage:backButtonImage forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
     [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
     
-    
-    
+    /*计算缓存大小并初始化cacheCountLable*/
+    fnt = [UIFont fontWithName:@"HelveticaNeue" size:15.0f];
+    cacheCountLable=[[UILabel alloc] init];
+    cacheCountLable.font = fnt;
+    cacheCountLable.text=[self getCacheSize];
+    size = [cacheCountLable.text sizeWithAttributes:[NSDictionary dictionaryWithObjectsAndKeys:fnt,NSFontAttributeName, nil]];
+    cacheCountLable.frame=CGRectMake(_tableView.frame.size.width-size.width-40, 24, size.width, 20);
 }
 
+
+
+//开关声音
 - (void)switchNoticeAction
 {
 
-    NSLog(@"打开swtich1");
     if([noticeflag isEqualToString:@"off"])
     {
         LxxPlaySound *sound =[[LxxPlaySound alloc] init];
         [sound vdealloc];
         noticeflag=@"on";
-        NSLog(@"关闭");
         
     }else{
         
         LxxPlaySound *sound = [[LxxPlaySound alloc]initForPlayingSystemSoundEffectWith:@"Tock" ofType:@"aiff"];
         [sound play];
         noticeflag=@"off";
-        NSLog(@"开启");
     }
 
 }
 
+//开关振动
 - (void)switchShockAction
 {
-
-    NSLog(@"打开swtich2");
     if([shockflag isEqualToString:@"off"])
     {
         AudioServicesRemoveSystemSoundCompletion(kSystemSoundID_Vibrate);
         shockflag=@"on";
-        NSLog(@"关闭");
     
     }else{
     
         LxxPlaySound *playSound =[[LxxPlaySound alloc]initForPlayingVibrate];
         [playSound play];
         shockflag=@"off";
-        NSLog(@"开启");
     }
 
 }
 
+//计算缓存
+- (NSString *)getCacheSize
+{
+    
+    long long sumSize = 0;
+    NSString *cacheFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Library/Caches"];
+    NSFileManager *filemanager = [NSFileManager defaultManager];
+    NSArray *subPaths = [filemanager subpathsOfDirectoryAtPath:cacheFilePath error:nil];
+    for (NSString *subPath in subPaths) {
+                 NSString *filePath = [cacheFilePath stringByAppendingFormat:@"/%@",subPath];
+                 long long fileSize = [[filemanager attributesOfItemAtPath:filePath error:nil]fileSize];
+                sumSize += fileSize;
+        }
+   float size_m = sumSize/(1000*1000);
+    
+   return [NSString stringWithFormat:@"%.2fM",size_m];
+}
+
+//清除缓存
+-(void)clearCacheSize{
+
+    cacheCountLable.text=@"0.00M";
+    size = [cacheCountLable.text sizeWithAttributes:[NSDictionary dictionaryWithObjectsAndKeys:fnt,NSFontAttributeName, nil]];
+    cacheCountLable.frame=CGRectMake(_tableView.frame.size.width-size.width-40, 24, size.width, 20);
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSString *cacheFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Library/Caches"];
+    [fileManager removeItemAtPath:cacheFilePath error:nil];
+    
+}
+//获取黑名单
+-(void)getBlackListInfo{
+
+    BlackListController.blackListAry=nil;
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSString* userId = [defaults stringForKey:@"userId"];
+
+    AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
+    manager.securityPolicy.allowInvalidCertificates = YES;
+    [manager.securityPolicy setValidatesDomainName:NO];
+    
+    NSString* MD5String = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"user_id%@",userId]];
+    NSString* hashString = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"%@1", MD5String]];
+    
+    NSDictionary* parameter = @{@"user_id" : userId,
+                                @"deviceType": @"ios",
+                                @"apitype" : @"users",
+                                @"salt" : @"1",
+                                @"tag" : @"getblacklist",
+                                @"hash" : hashString,
+                                @"keyset" : @"user_id:",
+                                };
+    
+    [manager POST:POST_URL parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+        
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSLog(@"黑名单信息:%@", responseObject);
+        
+        UIBarButtonItem *backItemTitle = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
+        [self.navigationItem setBackBarButtonItem:backItemTitle];
+        if([[responseObject valueForKey:@"flag"] isEqualToString:@"ok"])
+        {
+            NSLog(@"成功");
+            BlackListController.blackListAry=[[responseObject objectForKey:@"black_users_id"] mutableCopy];
+            NSLog(@"BlackListController.blackListAry is %@",BlackListController.blackListAry);
+            
+        }
+        else
+        {
+            BlackListController.blackListAry=nil;
+            NSLog(@"无黑名单");
+        }
+        [self.navigationController pushViewController:BlackListController animated:YES];
+       
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"请求失败:%@", error.description);
+        return;
+    }];
+    
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -299,20 +391,19 @@
                 case 0:
                 {
                     // 黑名单
-                    UIBarButtonItem *backItemTitle = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
-                    [self.navigationItem setBackBarButtonItem:backItemTitle];
-                    [self.navigationController pushViewController:BlackListController animated:YES];
+                    [self getBlackListInfo];
                     break;
                 }
                 case 1:
                 {
                     // 检查更新
-                    [self textToast:@"已经是最新版本！"];
+                    [self versionUpdateAction];
                     break;
                 }
                 case 2:
                 {
                     // 清除缓存
+                    [self clearCacheSize];
                     break;
                 }
                 default:
@@ -340,6 +431,67 @@
     }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
+
+/*版本更新*/
+-(void)versionUpdateAction{
+    
+    [self.parentViewController.view addSubview:updatebgView];
+    dataTask=[[NSURLSession sharedSession] dataTaskWithRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",APP_URL]]] completionHandler:^(NSData *data,NSURLResponse *response,NSError *error)
+              {
+                  
+                  NSDictionary *infoDic=[[NSBundle mainBundle] infoDictionary];
+                  NSString *currentVersion=infoDic[@"CFBundleShortVersionString"];
+                  if (data == nil) {
+                      NSLog(@"你没有连接网络哦");
+                      return;
+                  }
+                  NSDictionary *appInfoDic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableLeaves error:&error];
+                  if (error) {
+                      NSLog(@"hsUpdateAppError:%@",error);
+                      return;
+                  }
+                  NSArray *array = appInfoDic[@"results"];
+                  NSDictionary *dic = array[0];
+                  NSString *appStoreVersion = dic[@"version"];
+                  //NSString *releaseNotes = [dic objectForKey:@"releaseNotes"];
+                  NSString *trackViewUrl = [dic objectForKey:@"trackViewUrl"];
+                  NSLog(@"trackViewUrl is %@",trackViewUrl);
+                  //打印版本号
+                  NSLog(@"当前版本号:%@\n商店版本号:%@",currentVersion,appStoreVersion);
+                  //更新
+                  [self performSelectorOnMainThread:@selector(updateUI) withObject:self.view waitUntilDone:NO];
+                  if([currentVersion floatValue] < [appStoreVersion floatValue])
+                  {
+                      
+                      UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:[NSString stringWithFormat:@"检测到新版本(%@),是否更新?",appStoreVersion] message:nil preferredStyle:UIAlertControllerStyleAlert];
+                      alertVC.view.tintColor = [UIColor blackColor];
+                      UIAlertAction *cancelAction  = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                          NSLog(@"取消");
+                      }];
+                      
+                      UIAlertAction *OKAction  = [UIAlertAction actionWithTitle:@"更新" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                          NSURL * url = [NSURL URLWithString:trackViewUrl];
+                          [[UIApplication sharedApplication] openURL:url];
+                      }];
+                      [alertVC addAction:cancelAction];
+                      [alertVC addAction:OKAction];
+                      [self presentViewController:alertVC animated:YES completion:nil];
+                  }else{
+                      [MBProgressHUBTool textToast:self.view Tip:@"已经是最新版本！"];
+                      
+                  }
+                  
+              }];
+    
+    [dataTask resume];
+    
+}
+-(void)updateUI{
+    
+    [updatebgView removeFromSuperview];
+    
+}
+
 - (void)textToast:(NSString *)tips {
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.parentViewController.view    animated:YES];
     
