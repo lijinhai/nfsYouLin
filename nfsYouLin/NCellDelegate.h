@@ -14,6 +14,7 @@
 @protocol cellDelegate <NSObject>
 
 - (void)showCircularImageViewWithImage:(UIImage*) image;
+- (void)showRectImageViewWithImage:(UIImage*) image;
 - (void)showImageViewWithImageViews:(NSArray *)imageViews byClickWhich:(NSInteger)clickTag;
 // 查看全文
 - (void)readTotalInformation:(NSInteger)sectionNum;
@@ -28,11 +29,17 @@
 // 删除按钮事件
 - (void)deleteTopic:(NSInteger)topicId;
 
-// 报名详情
+// 我要报名
 - (void)applyDetail:(NSInteger) activityId;
 
 // 取消报名
 - (void) cancelApply:(NSInteger) activityId;
+
+// 查看报名详情
+- (void) lookApplyDetail:(NSInteger) activityId;
+
+// 添加回复、删除回复
+- (void) replyEvent:(NSInteger) sctionNum btnText:(NSString*) btnText;
 
 @end
 

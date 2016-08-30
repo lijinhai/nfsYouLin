@@ -25,6 +25,6 @@
     hud.label.font= [UIFont systemFontOfSize:15];
     // Move to bottm center.
     hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
-    [hud hideAnimated:YES afterDelay:3.f];
+    [hud hideAnimated:YES afterDelay:1.f];
 }
 @end

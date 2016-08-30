@@ -16,6 +16,9 @@
 #import "DiscoveryTVC.h"
 #import "ITVC.h"
 #import "PersonModel.h"
+#import "AFHTTPSessionManager.h"
+#import "JPUSHService.h"
+#import "CreateActivityVC.h"
 
 @implementation FirstTabBarController
 {
@@ -43,7 +46,7 @@
     // 环信登录
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     NSString* userId = [defaults stringForKey:@"userId"];
-
+    NSLog(@"userid = %@",userId);
 //    EMOptions *options = [EMOptions optionsWithAppkey:@"nfs-hlj#youlinapp"];
 //    [[EMClient sharedClient] initializeSDKWithOptions:options];
 //    EMError *error = [[EMClient sharedClient] loginWithUsername:userId password:userId];
@@ -54,7 +57,7 @@
         NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
         NSString* nick = [defaults stringForKey:@"nick"];
         NSLog(@"环信nick = %@",nick);
-        //设置推送设置
+        //设置环信推送设置
         [[EMClient sharedClient] setApnsNickname:nick];
         
         EMPushOptions *options = [[EMClient sharedClient] pushOptions];
@@ -65,17 +68,13 @@
         NSLog(@"环信登录失败 aError:%@",aError);
     }];
     
-//    if (!error)
-//    {
-//        NSLog(@"环信登陆成功");
-//        NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-//        NSString* nick = [defaults stringForKey:@"nick"];
-//
-//        EMPushOptions *options = [[EMClient sharedClient] pushOptions];
-//        options.displayStyle = EMPushDisplayStyleMessageSummary;
-//        [[EMClient sharedClient] updatePushOptionsToServer];
-//    }
-
+    // 设置极光推送设置
+    [JPUSHService setTags:nil
+                    alias:@"youlin_alias_10000"
+         callbackSelector:@selector(tagsAliasCallback:tags:alias:)
+                   target:self];
+    [self JGPushSetNet];
+    
     [self setupSubviews];
     [ChatDemoHelper shareHelper].discoveryVC = _discoveryVC;
     [ChatDemoHelper shareHelper].neighborVC = _neighborVC;
@@ -106,6 +105,12 @@
             NSLog(@"开始新建话题~~");
             CreateTopicVC* topicVC = [[CreateTopicVC alloc] init];
             [controller.navigationController pushViewController:topicVC animated:YES];
+        }
+        else if([string isEqualToString:@"发起活动"])
+        {
+            CreateActivityVC* activityVC = [[CreateActivityVC alloc] init];
+            [controller.navigationController pushViewController:activityVC animated:YES];
+
         }
         
     }];
@@ -164,6 +169,76 @@
     
     self.viewControllers = @[_neighborVC, _discoveryVC,_iVC];
     
+}
+
+// 极光推送设置网络请求
+- (void) JGPushSetNet
+{
+    AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
+    manager.securityPolicy.allowInvalidCertificates = YES;
+    [manager.securityPolicy setValidatesDomainName:NO];
+    
+    NSString* identifierNumber = [[UIDevice currentDevice].identifierForVendor UUIDString] ;
+    
+//    NSString* MD5String = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"user_phone_number%@user_id%ldimei%@",phoneNum,userId,identifierNumber]];
+//    NSString* hashString = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"%@1", MD5String]];
+    
+   
+    
+    NSDictionary* parameter = @{@"access" : @"9527",
+                                @"push_alias" : @"10000",
+                                @"apitype" : @"jpush",
+                                @"push_type" : @"msg",
+                                @"tag" : @"test",
+                                };
+//    NSDictionary* parameter = @{@"user_phone_number" : phoneNum,
+//                                @"user_id" : [NSString stringWithFormat:@"%ld",userId],
+//                                @"imei" : identifierNumber,
+//                                @"apitype" : @"users",
+//                                @"tag" : @"upload",
+//                                @"salt" : @"1",
+//                                @"hash" : hashString,
+//                                @"keyset" : @"user_phone_number:user_id:imei:",
+//                                };
+    
+    [manager POST:POST_URL parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSLog(@"极光推送网络请求:%@", responseObject);
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"极光推送网络请求失败:%@", error.description);
+        return;
+    }];
+
+}
+
+- (void)tagsAliasCallback:(int)iResCode
+                     tags:(NSSet *)tags
+                    alias:(NSString *)alias {
+    NSString *callbackString =
+    [NSString stringWithFormat:@"%d, \ntags: %@, \nalias: %@\n", iResCode,
+    [self logSet:tags], alias];
+    NSLog(@"TagsAlias回调:%@", callbackString);
+}
+
+- (NSString *)logSet:(NSSet *)dic {
+    if (![dic count]) {
+        return nil;
+    }
+    NSString *tempStr1 =
+    [[dic description] stringByReplacingOccurrencesOfString:@"\\u"
+                                                 withString:@"\\U"];
+    NSString *tempStr2 =
+    [tempStr1 stringByReplacingOccurrencesOfString:@"\"" withString:@"\\\""];
+    NSString *tempStr3 =
+    [[@"\"" stringByAppendingString:tempStr2] stringByAppendingString:@"\""];
+    NSData *tempData = [tempStr3 dataUsingEncoding:NSUTF8StringEncoding];
+    NSString *str =
+    [NSPropertyListSerialization propertyListFromData:tempData
+                                     mutabilityOption:NSPropertyListImmutable
+                                               format:NULL
+                                     errorDescription:NULL];
+    return str;
 }
 
 @end

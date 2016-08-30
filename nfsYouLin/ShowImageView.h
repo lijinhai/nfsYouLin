@@ -17,6 +17,8 @@ typedef  void(^didRemoveImage)(void);
 @property (nonatomic,assign)BOOL doubleClick;
 
 - (void) show:(UIView*) bgView didFinish:(didRemoveImage)tempBlock;
+
+- (id) initWithFrame:(CGRect)frame rectImage:(UIImage*) image;
 // 展示圆形头像
 - (id) initWithFrame:(CGRect)frame circularImage:(UIImage*) image;
 // 展示图片

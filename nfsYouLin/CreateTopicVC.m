@@ -12,7 +12,7 @@
 #import <AssetsLibrary/AssetsLibrary.h>
 #import <Photos/Photos.h>
 #import "TZImageManager.h"
-#import "PublishLimitTVC.h"
+#import "CreateTVC.h"
 #import "AppDelegate.h"
 #import "HeaderFile.h"
 #import "AFHTTPSessionManager.h"
@@ -120,7 +120,7 @@
     self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 80, CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame) - 80)];
     self.scrollView.backgroundColor = [UIColor colorWithRed:243.0/255.0 green:243.0/255.0 blue:240.0/255.0 alpha:1];
     self.scrollView.bounces = NO;
-    self.scrollView.contentSize = CGSizeMake(CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame));
+//    self.scrollView.contentSize = CGSizeMake(CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame));
     self.scrollView.delegate = self;
     self.bgView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.frame), 300)];
     self.bgView.bounces = NO;
@@ -132,7 +132,7 @@
     line2 = [[UIView alloc] initWithFrame:CGRectMake(40, 40, CGRectGetWidth(self.bgView.frame) - 80, 1)];
     line2.backgroundColor = lineColor;
     
-    line3 = [[UIView alloc] initWithFrame:CGRectMake(0, CGRectGetHeight(self.bgView.frame) - 60, CGRectGetWidth(self.bgView.frame), 1)];
+    line3 = [[UIView alloc] initWithFrame:CGRectMake(0, CGRectGetHeight(self.bgView.frame) - 51, CGRectGetWidth(self.bgView.frame), 1)];
     line3.backgroundColor = lineColor;
     
     line4 = [[UIView alloc] initWithFrame:CGRectMake(0, CGRectGetHeight(self.bgView.frame)-1, CGRectGetWidth(self.bgView.frame), 1)];
@@ -208,7 +208,7 @@
     [_imagesCView registerClass:[PickerCVC class] forCellWithReuseIdentifier:@"PickerCVC"];
     [self.bgView addSubview:_imagesCView];
     
-    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(line3.frame), CGRectGetWidth(self.bgView.frame), 58) style:UITableViewStylePlain];
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(line3.frame), CGRectGetWidth(self.bgView.frame), 50) style:UITableViewStylePlain];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.backgroundColor = [UIColor orangeColor];
@@ -447,11 +447,11 @@
 
 - (UITableViewCell*) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSString* cellId = @"cellId";
-    PublishLimitTVC* cell = [tableView dequeueReusableCellWithIdentifier:cellId];
+    NSString* cellId = @"limit";
+    CreateTVC* cell = [tableView dequeueReusableCellWithIdentifier:cellId];
     if(cell == nil)
     {
-        cell = [[PublishLimitTVC alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
+        cell = [[CreateTVC alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
     }
     cell.textLabel.text = @"发布范围";
     cell.where = limitVC.which;
@@ -463,7 +463,7 @@
 
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 58;
+    return 50;
 }
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

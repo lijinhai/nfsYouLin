@@ -12,6 +12,7 @@
 #import "StringMD5.h"
 #import "MBProgressHUBTool.h"
 #import "DialogView.h"
+#import "ApplyDetailTVC.h"
 
 @interface NeighborTVC ()
 
@@ -113,9 +114,8 @@
                 sectionCount = sectionCount - 1;
             }
         }
-        [self.tableView reloadData];
-
     }
+    [self.tableView reloadData];
 }
 
 - (void)viewDidLoad
@@ -693,7 +693,6 @@ static BOOL upState = YES;
 // 报名
 - (void) applyDetail:(NSInteger)activityId
 {
-    NSLog(@"报名详情");
     DialogView* applyView = [[DialogView alloc] initWithFrame:backgroundView.frame  View:backgroundView Flag:@"apply"];
     backgroundView.alpha = 0.0f;
     applyView.alpha = 0.0f;
@@ -731,26 +730,103 @@ static BOOL upState = YES;
     [cancelBtn addTarget:self action:@selector(cancelNoApplyAction:) forControlEvents:UIControlEventTouchUpInside];
 }
 
+// 查看报名详情回调
+- (void)lookApplyDetail:(NSInteger)activityId
+{
+    NSLog(@"lookApplyDetail 回调");
+    [self lookApplyNet:activityId];
+}
 
 // 查看全文回调事件
-- (void)readTotalInformation:(NSInteger)sectionNum 
+- (void)readTotalInformation:(NSInteger)sectionNum
 {
     NeighborDataFrame* neighborDataFrame = self.neighborDataArray[sectionNum - 1];
     NeighborData* neighborData = neighborDataFrame.neighborData;
     NSInteger topicId = [[neighborData valueForKey:@"topicId"] integerValue];
+    NSInteger senderId = [[neighborData valueForKey:@"senderId"] integerValue];
     NSInteger num = [neighborData.viewCount integerValue] + 1;
-     neighborData.viewCount = [NSString stringWithFormat:@"%ld",num];
-    
+    neighborData.viewCount = [NSString stringWithFormat:@"%ld",num];
     [self viewTopicNet:topicId];
 
-    neighborDetailVC = [[NeighborDetailTVC alloc] init];
-    UIBarButtonItem* detailItem = [[UIBarButtonItem alloc] initWithTitle:@"详情" style:UIBarButtonItemStylePlain target:nil action:nil];
-    [self.parentViewController.navigationItem setBackBarButtonItem:detailItem];
-    neighborDetailVC.sectionNum = sectionNum - 1;
-    neighborDetailVC.neighborData = neighborData;
-    neighborDetailVC.neighborDF = neighborDataFrame;
-    neighborDetailVC.neighborDA = self.neighborDataArray;
-    [self.navigationController pushViewController:neighborDetailVC animated:YES];
+    
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSString* communityId = [defaults stringForKey:@"communityId"];
+    NSString* userId = [defaults stringForKey:@"userId"];
+    
+    // 获取帖子状态网络请求
+    AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
+    manager.securityPolicy.allowInvalidCertificates = YES;
+    [manager.securityPolicy setValidatesDomainName:NO];
+    NSString* MD5String = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"user_id%@community_id%@topic_id%ldsender_id%ld",userId,communityId,topicId,senderId]];
+    NSString* hashString = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"%@1", MD5String]];
+    
+    NSDictionary* parameter = @{@"user_id" : userId,
+                                @"community_id" : communityId,
+                                @"topic_id" : [NSNumber numberWithInteger:topicId],
+                                @"sender_id" : [NSNumber numberWithInteger:senderId],
+                                @"apitype" : @"comm",
+                                @"tag" : @"delstatus",
+                                @"salt" : @"1",
+                                @"hash" : hashString,
+                                @"keyset" : @"user_id:community_id:topic_id:sender_id:",
+                                };
+    
+    [manager POST:POST_URL parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+        
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    NSLog(@"获取帖子状态网络请求:%@", responseObject);
+        NSString* flag = [responseObject valueForKey:@"flag"];
+        if([flag isEqualToString:@"ok"])
+        {
+            neighborDetailVC = [[NeighborDetailTVC alloc] init];
+            UIBarButtonItem* detailItem = [[UIBarButtonItem alloc] initWithTitle:@"详情" style:UIBarButtonItemStylePlain target:nil action:nil];
+            [self.parentViewController.navigationItem setBackBarButtonItem:detailItem];
+            neighborDetailVC.sectionNum = sectionNum - 1;
+            neighborDetailVC.neighborData = neighborData;
+            neighborDetailVC.neighborDF = neighborDataFrame;
+            neighborDetailVC.neighborDA = self.neighborDataArray;
+            [neighborDetailVC getReplyNet];
+            [self.navigationController pushViewController:neighborDetailVC animated:YES];
+        }
+        else
+        {
+            for(int i = 0; i < [self.neighborDataArray count] ;i++)
+            {
+                NeighborDataFrame* neighborDataFrame = self.neighborDataArray[i];
+                NeighborData* neighborData = neighborDataFrame.neighborData;
+                
+                if([neighborData.topicId integerValue] == topicId)
+                {
+                    [self.neighborDataArray removeObject:neighborDataFrame];
+                    sectionCount = sectionCount - 1;
+                    break;
+                }
+            }
+            [self.tableView reloadData];
+            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"帖子信息" message:@"此贴已不可见" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:nil, nil];
+            [alert show];
+            return;
+
+        }
+    
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"请求失败:%@", error.description);
+        return;
+    }];
+
+    
+    
+    
+//    neighborDetailVC = [[NeighborDetailTVC alloc] init];
+//    UIBarButtonItem* detailItem = [[UIBarButtonItem alloc] initWithTitle:@"详情" style:UIBarButtonItemStylePlain target:nil action:nil];
+//    [self.parentViewController.navigationItem setBackBarButtonItem:detailItem];
+//    neighborDetailVC.sectionNum = sectionNum - 1;
+//    neighborDetailVC.neighborData = neighborData;
+//    neighborDetailVC.neighborDF = neighborDataFrame;
+//    neighborDetailVC.neighborDA = self.neighborDataArray;
+//    [self.navigationController pushViewController:neighborDetailVC animated:YES];
     
 }
 
@@ -1373,6 +1449,59 @@ static BOOL upState = YES;
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSLog(@"浏览帖子次数网络请求:%@", responseObject);
         
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"请求失败:%@", error.description);
+        return;
+    }];
+    
+}
+
+
+// 查看报名详情网络请求
+- (void) lookApplyNet: (NSInteger)activityId
+{
+    AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
+    manager.securityPolicy.allowInvalidCertificates = YES;
+    [manager.securityPolicy setValidatesDomainName:NO];
+    
+    NSString* MD5String = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"activityId%ld",activityId]];
+    NSString* hashString = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"%@1", MD5String]];
+    
+    NSDictionary* parameter = @{@"activityId" : [NSNumber numberWithInteger:activityId],
+                                @"apitype" : @"comm",
+                                @"salt" : @"1",
+                                @"tag" : @"detenroll",
+                                @"hash" : hashString,
+                                @"keyset" : @"activityId:",
+                                };
+    
+    [manager POST:POST_URL parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject){
+        NSLog(@"查看报名详情网络请求:%@", responseObject);
+        
+        ApplyDetailTVC* applyDetailVC = [[ApplyDetailTVC alloc] initWithStyle:UITableViewStyleGrouped];
+        UIBarButtonItem* detailItem = [[UIBarButtonItem alloc] initWithTitle:@"报名详情" style:UIBarButtonItemStylePlain target:nil action:nil];
+        [self.parentViewController.navigationItem setBackBarButtonItem:detailItem];
+        
+        applyDetailVC.totalNum = [[responseObject valueForKey:@"enrollTotal"] integerValue];
+        applyDetailVC.peopleA = [responseObject valueForKey:@"enrollData"];
+        NSInteger activityId = [[responseObject valueForKey:@"activityId"] integerValue];
+        
+        for(int i = 0; i < [self.neighborDataArray count] ;i++)
+        {
+            NeighborDataFrame* neighborDataFrame = self.neighborDataArray[i];
+            NeighborData* neighborData = neighborDataFrame.neighborData;
+            NSDictionary* dict = neighborData.infoArray[0];
+            NSMutableDictionary* dataDict = [NSMutableDictionary dictionaryWithDictionary:dict];
+            if ([[dict valueForKey:@"activityId"] integerValue] == activityId) {
+                [dataDict setObject:[responseObject valueForKey:@"enrollTotal"] forKey:@"enrollTotal"];
+                NSArray* array = [NSArray arrayWithObject:dataDict];
+                neighborDataFrame.neighborData.infoArray = [array mutableCopy];
+                [self.neighborDataArray replaceObjectAtIndex:i withObject:neighborDataFrame];
+            }
+        }
+        [self.navigationController pushViewController:applyDetailVC animated:YES];
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         NSLog(@"请求失败:%@", error.description);
         return;

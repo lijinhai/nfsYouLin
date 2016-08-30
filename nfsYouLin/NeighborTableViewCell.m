@@ -519,17 +519,25 @@
         
         if([self.applyView.applyLabel.text isEqualToString:@"我要报名"])
         {
-             [self.applyView removeTarget:self action:@selector(cancelApplyAction:) forControlEvents:UIControlEventTouchUpInside];
+            [self.applyView removeTarget:self action:@selector(lookDetail:) forControlEvents:UIControlEventTouchUpInside];
+            [self.applyView removeTarget:self action:@selector(cancelApplyAction:) forControlEvents:UIControlEventTouchUpInside];
+
             [self.applyView addTarget:self action:@selector(wantApplyAction:) forControlEvents:UIControlEventTouchUpInside];
         }
-        
-        if([self.applyView.applyLabel.text isEqualToString:@"取消报名"])
+        else if([self.applyView.applyLabel.text isEqualToString:@"取消报名"])
         {
+            [self.applyView removeTarget:self action:@selector(lookDetail:) forControlEvents:UIControlEventTouchUpInside];
             [self.applyView removeTarget:self action:@selector(wantApplyAction:) forControlEvents:UIControlEventTouchUpInside];
             [self.applyView addTarget:self action:@selector(cancelApplyAction:) forControlEvents:UIControlEventTouchUpInside];
         }
+        else if([self.applyView.applyLabel.text isEqualToString:@"报名详情"])
+        {
+            [self.applyView removeTarget:self action:@selector(wantApplyAction:) forControlEvents:UIControlEventTouchUpInside];
+            [self.applyView removeTarget:self action:@selector(cancelApplyAction:) forControlEvents:UIControlEventTouchUpInside];
 
-        
+            [self.applyView addTarget:self action:@selector(lookDetail:) forControlEvents:UIControlEventTouchUpInside];
+        }
+
         CGPoint point = self.neighborDataFrame.applyPoint;
         [self.applyView initApplyView:point];
         [self.contentView addSubview:self.applyView];
@@ -719,6 +727,7 @@
     }
 }
 
+
 // 取消报名
 - (void)cancelApplyAction:(id) sender
 {
@@ -735,9 +744,15 @@
         [MBProgressHUBTool textToast:self Tip:@"此活动已过期"];
         
     }
-    
 }
 
+// 查看报名详情
+- (void)lookDetail:(id) sender
+{
+    NSDictionary* activityDict = self.neighborDataFrame.neighborData.infoArray[0];
+    NSInteger activiId = [[activityDict valueForKey:@"activityId"] integerValue];
+    [_delegate lookApplyDetail:activiId];
+}
 
 // 点击删除
 - (void) deleteBtn
