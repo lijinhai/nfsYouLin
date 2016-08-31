@@ -31,4 +31,5 @@
 @property (nonatomic, strong) NSMutableArray *monthSignedArray;
 @property (nonatomic, strong) NSMutableArray *weekDateArray;
 @property (nonatomic, assign) NSInteger todayPoints;
+@property (nonatomic, assign) NSInteger allPoints;
 @end

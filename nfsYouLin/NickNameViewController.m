@@ -46,25 +46,40 @@
     UIBarButtonItem *barrightBtn=[[UIBarButtonItem alloc]initWithTitle:@"确定" style:UIBarButtonItemStylePlain target:self action:@selector(sureAction)];
     self.navigationItem.rightBarButtonItem=barrightBtn;
     /*设置textfield属性*/
-     _nikeNameTextField.backgroundColor=[UIColor whiteColor];
+    _nikeNameTextField.backgroundColor=[UIColor whiteColor];
+    
     [_nikeNameTextField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+    //_tipLabel.backgroundColor=[UIColor whiteColor];
+    
     if(![_nikeNameValue isEqualToString:@""])
     {
       _nikeNameTextField.text=_nikeNameValue;
     }
-    }
+    
+}
 
 - (void)returnText:(ReturnTextBlock)block {
    
     self.returnTextBlock = block;
 }
+
+- (IBAction)View_TouchDown:(id)sender {
+    
+      [[UIApplication sharedApplication] sendAction:@selector(resignFirstResponder) to:nil from:nil forEvent:nil];
+}
+
+
+- (IBAction)nick_DidEndExit:(id)sender {
+    
+    [sender resignFirstResponder];
+}
 -(void)sureAction{
 
+    [self changeNickName];
     if (self.returnTextBlock != nil) {
         self.returnTextBlock(_nikeNameTextField.text);
         NSLog(@"nikeNameTextField.text is %@",_nikeNameTextField.text);
     }
-    [self changeNickName];
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -97,7 +112,7 @@
         NSLog(@"sexresponseObject is %@",responseObject);
         if([[responseObject objectForKey:@"flag"] isEqualToString:@"ok"])
         {
-            
+            [SqliteOperation updateUserNickInfo:[userId longLongValue] nickName:_nikeNameTextField.text];
             NSLog(@"更改昵称成功");
         }else{
         

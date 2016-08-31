@@ -46,6 +46,8 @@
     UIDatePicker *datePicker;
     NSString *birthdayString;
     NSInteger addressStatusInt;
+    UIImage *headPhoto;
+    NSTimer *timer;
     //NSString *statusValue;
 }
 
@@ -70,6 +72,7 @@
     [_switchFamliyAddressButton addTarget:self action:@selector(showFamliyAddressAction:) forControlEvents:UIControlEventValueChanged];
     
     /*初始化地址发布状态*/
+    //[self obtainPublicStateInit];
     NSLog(@"family_statusValue is %@",_statusValue);
     addressStatusInt=[_statusValue intValue];
     if([_statusValue isEqualToString:@"2"]||[_statusValue isEqualToString:@"4"])
@@ -407,7 +410,7 @@
     /*信息初始化*/
     if(initSexName==NULL)
     {
-        initSexName=@"男";
+        initSexName=@"";
         
     }
     if(initNikeName==NULL)
@@ -613,16 +616,53 @@
             switch (rowInSection) {
                 case 0:
                 {
-                    UpdatePhotoView *view = [UpdatePhotoView defaultPopupView];
-                    view.parentVC = self;
-                    view.alpha=1.0;
-                    view.backgroundColor=[UIColor clearColor];
-                    [self lew_presentPopupView:view animation:[LewPopupViewAnimationDownSlide new] dismissed:^{
-                        //[self.otherTableView reloadData];
+//                    UpdatePhotoView *view = [UpdatePhotoView defaultPopupView];
+//                    view.parentVC = self;
+//                    view.alpha=1.0;
+//                    view.backgroundColor=[UIColor clearColor];
+//                    [self lew_presentPopupView:view animation:[LewPopupViewAnimationDownSlide new] dismissed:^{
+//                        //[self.otherTableView reloadData];
+//                        
+//                        NSLog(@"动画结束");
+//                    }];
+                    
+                    UIAlertController *photoAlert = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+                    
+                    
+                    [photoAlert addAction:[UIAlertAction actionWithTitle:@"拍照" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                        //点击按钮的响应事件；
                         
-                        NSLog(@"动画结束");
-                    }];
-
+                        if (![UIImagePickerController isSourceTypeAvailable:
+                              UIImagePickerControllerSourceTypeCamera]) return;
+                        UIImagePickerController *picker = [[UIImagePickerController alloc] init];//初始化
+                        picker.delegate = self;
+                        picker.allowsEditing = YES;//设置可编辑  
+                        picker.sourceType = UIImagePickerControllerSourceTypeCamera;
+                       [self presentViewController:picker animated:YES completion:nil];//进入照相界面
+                        NSLog(@"点击了相机");
+                    }]];
+                    
+                    [photoAlert addAction:[UIAlertAction actionWithTitle:@"从相册选择" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                        //点击按钮的响应事件；
+                        UIImagePickerController *pickerImage = [[UIImagePickerController alloc] init];
+                        if([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary]) {
+                            pickerImage.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+                            pickerImage.mediaTypes = [UIImagePickerController availableMediaTypesForSourceType:pickerImage.sourceType];
+                            
+                        }  
+                        pickerImage.delegate = self;  
+                        pickerImage.allowsEditing = YES;
+                        [self  presentViewController:pickerImage animated:YES completion:nil];
+                        NSLog(@"点击了相册");
+                    }]];
+                    
+                    [photoAlert addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                
+                        NSLog(@"点击了取消");
+                    }]];
+                    
+                    //弹出提示框；
+                    [self presentViewController:photoAlert animated:true completion:nil];
                     break;
                 }
                 case 1:
@@ -694,6 +734,235 @@
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
+#pragma mark -
+#pragma UIImagePickerController Delegate
+
+-(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    NSString* type = [info objectForKey:UIImagePickerControllerMediaType];
+    if (![type isEqualToString:(NSString*)kUTTypeImage])
+    {
+     [self dismissViewControllerAnimated:YES completion:nil];
+      return;
+    }
+    //从字典key获取image的地址
+    UIImage *image =[info objectForKey:UIImagePickerControllerEditedImage];
+   [self performSelector:@selector(saveImage:)  withObject:image afterDelay:0.5];
+   [self dismissViewControllerAnimated:YES completion:nil];
+    
+    
+}
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
+{
+
+    [picker dismissViewControllerAnimated:YES completion:nil];
+}
+- (void)saveImage:(UIImage *)image {
+
+    BOOL success;
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSError *error;
+    
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    NSString *imageFilePath = [documentsDirectory stringByAppendingPathComponent:@"selfPhoto.jpg"];
+    
+    
+    success = [fileManager fileExistsAtPath:imageFilePath];
+    if(success) {
+        success = [fileManager removeItemAtPath:imageFilePath error:&error];
+    }
+    //UIImage *smallImage=[self scaleFromImage:image toSize:CGSizeMake(80.0f, 80.0f)];
+     UIImage *smallImage = [self imageCompressForSize:image targetSize:CGSizeMake(60, 60)];
+    [UIImageJPEGRepresentation(smallImage, 1.0f) writeToFile:imageFilePath atomically:YES];
+     //_imageView.image=NULL;
+     UIImage* newHeadPhoto = [UIImage imageWithContentsOfFile:imageFilePath];
+     _imageView.image=newHeadPhoto;
+    [_imageView.layer setCornerRadius:CGRectGetHeight([_imageView bounds]) / 2];
+     _imageView.layer.masksToBounds = YES;
+     NSData *imgData= UIImageJPEGRepresentation(smallImage, 1.0f);
+    [self changeUserHeadPhoto:imgData];
+}
+/*改变用户头像*/
+-(void)changeUserHeadPhoto:(NSData*)headImgData{
+
+    AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
+    manager.securityPolicy.allowInvalidCertificates = YES;
+    manager.responseSerializer.stringEncoding=NSUTF8StringEncoding;
+    [manager.securityPolicy setValidatesDomainName:NO];
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSString* phoneNum = [defaults stringForKey:@"phoneNum"];
+    NSString* userId = [NSString stringWithFormat:@"%ld", [SqliteOperation getUserId]];
+    NSString* hashString =[StringMD5 stringAddMD5:[NSString stringWithFormat:@"user_phone_number%@user_id%@",phoneNum,userId]];
+    NSString* hashMD5 = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"%@818",hashString]];
+    NSDictionary* parameter = @{@"user_phone_number" : phoneNum,
+                                @"user_id" : userId,
+                                @"deviceType" : @"ios",
+                                @"apitype" : @"users",
+                                @"tag" : @"upload",
+                                @"salt" : @"818",
+                                @"hash" : hashMD5,
+                                @"keyset" : @"user_phone_number:user_id:",
+                                };
+    
+    [manager POST:POST_URL parameters:parameter constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData)  {
+        
+        [formData appendPartWithFileData:headImgData name:@"user_portrait" fileName:@"selfPhoto.jpg" mimeType:@"image/jpg"];
+        
+    }progress:^(NSProgress * _Nonnull uploadProgress) {
+    
+    }
+      success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
+        NSLog(@"headresponseObject is %@",responseObject);
+        if([[responseObject objectForKey:@"flag"] isEqualToString:@"ok"])
+        {
+            
+            NSLog(@"head success");
+            [self userHeadPhotoUpdate];
+            
+        }else{
+            
+            
+            NSLog(@"head error");
+        }
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        
+        NSLog(@"%@", [error localizedDescription]);
+    }];
+
+}
+/*获取头像信息*/
+-(void)userHeadPhotoUpdate{
+
+        AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
+        manager.securityPolicy.allowInvalidCertificates = YES;
+        manager.responseSerializer.stringEncoding=NSUTF8StringEncoding;
+        [manager.securityPolicy setValidatesDomainName:NO];
+    
+        NSString* userId = [NSString stringWithFormat:@"%ld", [SqliteOperation getUserId]];
+        NSString* hashString =[StringMD5 stringAddMD5:[NSString stringWithFormat:@"my_user_id%@user_id%@",userId,userId]];
+        NSString* hashMD5 = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"%@812",hashString]];
+        NSDictionary* parameter = @{@"my_user_id" : userId,
+                                    @"user_id" : userId,
+                                    @"deviceType":@"ios",
+                                    @"apitype" : @"users",
+                                    @"tag" : @"userdetailinfo",
+                                    @"salt" : @"812",
+                                    @"hash" : hashMD5,
+                                    @"keyset" : @"my_user_id:user_id:",
+                                    };
+    
+        [manager POST:POST_URL parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
+    
+        } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    
+            NSLog(@"userresponseObject is %@",responseObject);
+            [SqliteOperation updateUserPhotoInfo:[userId longLongValue] photoUrl:[responseObject objectForKey:@"user_portrait"]];
+            return;
+    
+        } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+            
+            NSLog(@"%@", [error localizedDescription]);
+        }];
+
+}
+/*改变图像的尺寸，方便上传服务器*/
+- (UIImage *) scaleFromImage: (UIImage *) image toSize: (CGSize) size
+{
+    UIGraphicsBeginImageContext(size);
+    [image drawInRect:CGRectMake(0, 0, size.width, size.height)];
+    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return newImage;
+}
+-(UIImage *)imageCompressForSize:(UIImage *)sourceImage targetSize:(CGSize)size{
+    
+    UIImage *newImage = nil;
+    CGSize imageSize = sourceImage.size;
+    CGFloat width = imageSize.width;
+    CGFloat height = imageSize.height;
+    CGFloat targetWidth = size.width;
+    CGFloat targetHeight = size.height;
+    CGFloat scaleFactor = 0.0;
+    CGFloat scaledWidth = targetWidth;
+    CGFloat scaledHeight = targetHeight;
+    CGPoint thumbnailPoint = CGPointMake(0.0, 0.0);
+    if(CGSizeEqualToSize(imageSize, size) == NO){
+
+        CGFloat widthFactor = targetWidth / width;
+        CGFloat heightFactor = targetHeight / height;
+        if(widthFactor > heightFactor){
+            
+            scaleFactor = widthFactor;
+            
+        }else{
+            
+            scaleFactor = heightFactor;
+            
+        }
+        scaledWidth = width * scaleFactor;
+        scaledHeight = height * scaleFactor;
+        if(widthFactor > heightFactor){
+            
+            thumbnailPoint.y = (targetHeight - scaledHeight) * 0.5;
+            
+        }else if(widthFactor < heightFactor){
+            
+            thumbnailPoint.x = (targetWidth - scaledWidth) * 0.5;
+            
+        }
+    }
+    UIGraphicsBeginImageContextWithOptions(size, NO, 3.0);
+    CGRect thumbnailRect = CGRectZero;
+    thumbnailRect.origin = thumbnailPoint;
+    thumbnailRect.size.width = scaledWidth;
+    thumbnailRect.size.height = scaledHeight;
+    [sourceImage drawInRect:thumbnailRect];
+    newImage = UIGraphicsGetImageFromCurrentImageContext();
+    if(newImage == nil){
+        
+        NSLog(@"scale image fail");
+        
+    }
+    UIGraphicsEndImageContext();
+    return newImage;
+}
+
+/*保持原来的长宽比，生成一个缩略图*/
+- (UIImage *)thumbnailWithImageWithoutScale:(UIImage *)image size:(CGSize)asize
+{
+    UIImage *newimage;
+    if (nil == image) {
+        newimage = nil;
+    }
+    else{
+        CGSize oldsize = image.size;
+        CGRect rect;
+        if (asize.width/asize.height > oldsize.width/oldsize.height) {
+            rect.size.width = asize.height*oldsize.width/oldsize.height;
+            rect.size.height = asize.height;
+            rect.origin.x = (asize.width - rect.size.width)/2;
+            rect.origin.y = 0;
+        }
+        else{
+            rect.size.width = asize.width;
+            rect.size.height = asize.width*oldsize.height/oldsize.width;
+            rect.origin.x = 0;
+            rect.origin.y = (asize.height - rect.size.height)/2;
+        }
+        UIGraphicsBeginImageContext(asize);
+        CGContextRef context = UIGraphicsGetCurrentContext();
+        CGContextSetFillColorWithColor(context, [[UIColor clearColor] CGColor]);
+        UIRectFill(CGRectMake(0, 0, asize.width, asize.height));//clear background
+        [image drawInRect:rect];
+        newimage = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+    }
+    return newimage;
+}
+
 #pragma mark - 圆形头像点击事件回调
 - (void)showCircularImageViewWithImage:(UIImage*) image
 {
@@ -788,6 +1057,94 @@
         
         NSLog(@"%@", [error localizedDescription]);
     }];
+    
+    
+}
+
+- (void)submitUpdatePhotoInfo:(NSData*)headImgData
+{
+    dispatch_queue_t queue = dispatch_queue_create("**.test.youlin", DISPATCH_QUEUE_CONCURRENT);
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSString* phoneNum = [defaults stringForKey:@"phoneNum"];
+    NSString* userId = [NSString stringWithFormat:@"%ld", [SqliteOperation getUserId]];
+    dispatch_async(queue, ^{
+        
+        AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
+        manager.securityPolicy.allowInvalidCertificates = YES;
+        manager.responseSerializer.stringEncoding=NSUTF8StringEncoding;
+        [manager.securityPolicy setValidatesDomainName:NO];
+        NSString* hashString =[StringMD5 stringAddMD5:[NSString stringWithFormat:@"user_phone_number%@user_id%@",phoneNum,userId]];
+        NSString* hashMD5 = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"%@818",hashString]];
+        NSDictionary* parameter = @{@"user_phone_number" : phoneNum,
+                                    @"user_id" : userId,
+                                    @"deviceType" : @"ios",
+                                    @"apitype" : @"users",
+                                    @"tag" : @"upload",
+                                    @"salt" : @"818",
+                                    @"hash" : hashMD5,
+                                    @"keyset" : @"user_phone_number:user_id:",
+                                    };
+        
+        [manager POST:POST_URL parameters:parameter constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData)  {
+            
+            [formData appendPartWithFileData:headImgData name:@"user_portrait" fileName:@"selfPhoto.jpg" mimeType:@"image/jpg"];
+            
+        }progress:^(NSProgress * _Nonnull uploadProgress) {
+            
+        }
+              success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+                  
+                  NSLog(@"headresponseObject is %@",responseObject);
+                  if([[responseObject objectForKey:@"flag"] isEqualToString:@"ok"])
+                  {
+                      
+                      NSLog(@"head success");
+                      
+                  }else{
+                      
+                      
+                      NSLog(@"head error");
+                  }
+                  
+              } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+                  
+                  NSLog(@"%@", [error localizedDescription]);
+              }];
+        
+    });
+
+    dispatch_barrier_async(queue, ^{
+        
+        AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
+        manager.securityPolicy.allowInvalidCertificates = YES;
+        manager.responseSerializer.stringEncoding=NSUTF8StringEncoding;
+        [manager.securityPolicy setValidatesDomainName:NO];
+        NSString* hashString =[StringMD5 stringAddMD5:[NSString stringWithFormat:@"my_user_id%@user_id%@",userId,userId]];
+        NSString* hashMD5 = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"%@812",hashString]];
+        NSDictionary* parameter = @{@"my_user_id" : userId,
+                                    @"user_id" : userId,
+                                    @"deviceType":@"ios",
+                                    @"apitype" : @"users",
+                                    @"tag" : @"userdetailinfo",
+                                    @"salt" : @"812",
+                                    @"hash" : hashMD5,
+                                    @"keyset" : @"my_user_id:user_id:",
+                                    };
+        
+        [manager POST:POST_URL parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
+            
+        } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+            
+            NSLog(@"userresponseObject is %@",responseObject);
+            [SqliteOperation updateUserPhotoInfo:[userId longLongValue] photoUrl:[responseObject objectForKey:@"user_portrait"]];
+            
+        } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+            
+            NSLog(@"%@", [error localizedDescription]);
+          
+        }];
+    
+    });
     
     
 }

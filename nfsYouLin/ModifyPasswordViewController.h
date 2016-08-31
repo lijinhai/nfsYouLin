@@ -14,7 +14,14 @@
 
 @property (weak, nonatomic) IBOutlet UITextField *firstPasswordTextField;
 @property (weak, nonatomic) IBOutlet UIView *bgView;
+- (IBAction)oldTextField_DidEndOnExit:(id)sender;
 
+- (IBAction)firstTextField_DidEndOnExit:(id)sender;
+
+- (IBAction)repeatTextField_DidEndOnExit:(id)sender;
+
+
+- (IBAction)View_TouchDown:(id)sender;
 
 
 @end

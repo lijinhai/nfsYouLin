@@ -40,8 +40,8 @@
     
     if([reuseIdentifier isEqualToString:@"cellOne"])
     {
-        /*获取用户积分*/
-        [self getUserIntegral:[SqliteOperation getUserId]];
+        /*获取用户积分、收藏数，发帖数*/
+        //[self getCredPostCol:[SqliteOperation getUserId]];
         self.integralView = [[UIControl alloc] initWithFrame:CGRectMake(0, 0, self.contentView.frame.size.width / 3 - 1 , 80)];
         self.integralView.backgroundColor = [UIColor whiteColor];
         UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(self.integralView.bounds.size.width + 1 , 20.0f, 1.0f, 40)];
@@ -153,39 +153,57 @@
     
     return self;
 }
+-(void)getCredPostCol:(long) userid
+{
 
--(void)getUserIntegral:(long) userid{
-    
     AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
     manager.securityPolicy.allowInvalidCertificates = YES;
     manager.responseSerializer.stringEncoding=NSUTF8StringEncoding;
     [manager.securityPolicy setValidatesDomainName:NO];
     NSString* myId = [NSString stringWithFormat:@"%ld",userid];
-    NSString* hashString =[StringMD5 stringAddMD5:[NSString stringWithFormat:@"user_id%@",myId]];
+    NSString* commId= [NSString stringWithFormat:@"%ld",[SqliteOperation getNowCommunityId]];
+    NSString* hashString =[StringMD5 stringAddMD5:[NSString stringWithFormat:@"user_id%@community_id%@",myId,commId]];
     NSString* hashMD5 = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"%@1024",hashString]];
     NSDictionary* parameter = @{@"user_id" : myId,
+                                @"community_id" :commId,
                                 @"deviceType":@"ios",
-                                @"apitype" : @"users",
-                                @"tag" : @"usercredit",
+                                @"apitype" : @"comm",
+                                @"tag" : @"getcount",
                                 @"salt" : @"1024",
                                 @"hash" : hashMD5,
-                                @"keyset" : @"user_id:",
+                                @"keyset" : @"user_id:community_id:",
                                 };
     
     [manager POST:POST_URL parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSLog(@"responseObject is %@",responseObject);
         
-        self.integralCount=[[responseObject objectForKey:@"credit"] intValue];
-        self.integralLabel.text = [NSString stringWithFormat:@"%ld",self.integralCount];
-        self.integralLabel.tag=1024;
-        
+        if([[responseObject objectForKey:@"flag"] isEqualToString:@"ok"])
+        {
+            
+         self.integralCount=[[responseObject objectForKey:@"myCredit"] intValue];
+         self.integralLabel.text = [NSString stringWithFormat:@"%ld",self.integralCount];
+         self.integralLabel.tag=1024;
+         self.favoriteCount=[[responseObject objectForKey:@"mycolNum"] intValue];
+         self.favoriteLabel.text = [NSString stringWithFormat:@"%ld",self.favoriteCount];
+         self.favoriteLabel.tag=1025;
+         self.publishCount=[[responseObject objectForKey:@"myPost"] intValue];
+         self.publishLable.text = [NSString stringWithFormat:@"%ld",self.publishCount];
+         self.publishLable.tag=1026;
+            
+        }else{
+          
+            return;
+        }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         NSLog(@"请求失败:%@", error.description);
         
         return;
     }];
+
 }
+
 
 /*获取父view的UIViewController*/
 //- (UIViewController *)viewController
@@ -214,7 +232,7 @@
     {
   
         NSURL* url = [NSURL URLWithString:_userData.userPortrait];
-
+        
         [self.headIV sd_setImageWithURL:url placeholderImage:[UIImage imageNamed:@"bg_error.png"] options:SDWebImageAllowInvalidSSLCertificates];
         
         CGSize phoneSize = [StringMD5 sizeWithString:_userData.phoneNum font:[UIFont systemFontOfSize:17] maxSize:CGSizeMake(MAXFLOAT, MAXFLOAT)];

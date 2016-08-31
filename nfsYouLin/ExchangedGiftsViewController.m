@@ -226,7 +226,6 @@ static NSString * const reuseIdentifier = @"Cell";
     if(offset<=0)
     {
         [self.collectionView setContentOffset:CGPointMake(0,0) animated:YES];
-        //[self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UICollectionViewScrollPositionNone animated:NO];
     }
 }
 
@@ -237,7 +236,6 @@ static NSString * const reuseIdentifier = @"Cell";
     if(offset<5.0){
         
         [self.collectionView setContentOffset:CGPointMake(0,0) animated:YES];
-        //[self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UICollectionViewScrollPositionNone animated:NO];
         [footer setTitle:@"" forState:MJRefreshStateNoMoreData];
         [footer endRefreshingWithNoMoreData];
         

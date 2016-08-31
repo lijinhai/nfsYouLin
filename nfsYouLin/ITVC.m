@@ -23,6 +23,8 @@
 #import "SqlDictionary.h"
 #import "MBProgressHUBTool.h"
 #import "UIImageView+WebCache.h"
+#import "IPostVC.h"
+#import "ICollectVC.h"
 
 @interface ITVC ()
 
@@ -35,6 +37,8 @@
     NSArray* _images;
     NSArray* _cellNames;
     UILabel *integralLab;
+    UILabel *favoriteLab;
+    UILabel *postLab;
     addressInfomationViewController *_addressInfomationController;
     FeedbackViewController *FeedbackController;
     ISettingViewController *ISettingController;
@@ -43,6 +47,8 @@
     multiTableViewCell *multiTableCell;
     SignIntegralViewController *SignIntegralController;
     IntegralMallViewController *IntegralMallController;
+    IPostVC *postVC;
+    ICollectVC *collectVC;
     UIBarButtonItem* backItemTitle;
     UIButton *signButton;
     NSInteger nowPoints;
@@ -82,6 +88,8 @@
         PersonalInformationController=[iStoryBoard instantiateViewControllerWithIdentifier:@"personalinformationcontroller"];
         SignIntegralController=[iStoryBoard instantiateViewControllerWithIdentifier:@"signintegralcontroller"];
         IntegralMallController=[iStoryBoard instantiateViewControllerWithIdentifier:@"integralmallcontroller"];
+        postVC=[iStoryBoard instantiateViewControllerWithIdentifier:@"ipostid"];
+        collectVC=[iStoryBoard instantiateViewControllerWithIdentifier:@"icollectid"];
         
     }
     
@@ -96,7 +104,9 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    
     [super viewWillAppear:animated];
+  
     UIControl *integralView=(UIControl *)[self.view viewWithTag:2016];
     integralView.backgroundColor=[UIColor whiteColor];
     UIControl *favoriteView=(UIControl *)[self.view viewWithTag:2017];
@@ -122,12 +132,60 @@
     /*获取返回后收藏数*/
     
     /*获取返回后我发的数*/
-
+    
+    [self initUser];
+    [self.tableView reloadData];
+    
+    
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+-(void)getCredPostCol:(long) userid
+{
+    
+    AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
+    manager.securityPolicy.allowInvalidCertificates = YES;
+    manager.responseSerializer.stringEncoding=NSUTF8StringEncoding;
+    [manager.securityPolicy setValidatesDomainName:NO];
+    NSString* myId = [NSString stringWithFormat:@"%ld",userid];
+    NSString* commId= [NSString stringWithFormat:@"%ld",[SqliteOperation getNowCommunityId]];
+    NSString* hashString =[StringMD5 stringAddMD5:[NSString stringWithFormat:@"user_id%@community_id%@",myId,commId]];
+    NSString* hashMD5 = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"%@1024",hashString]];
+    NSDictionary* parameter = @{@"user_id" : myId,
+                                @"community_id" :commId,
+                                @"deviceType":@"ios",
+                                @"apitype" : @"comm",
+                                @"tag" : @"getcount",
+                                @"salt" : @"1024",
+                                @"hash" : hashMD5,
+                                @"keyset" : @"user_id:community_id:",
+                                };
+    
+    [manager POST:POST_URL parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSLog(@"ifpresponseObject is %@",responseObject);
+        
+        if([[responseObject objectForKey:@"flag"] isEqualToString:@"ok"])
+        {
+            
+            integralLab.text = [NSString stringWithFormat:@"%@",[responseObject objectForKey:@"myCredit"]];
+            favoriteLab.text = [NSString stringWithFormat:@"%@",[responseObject objectForKey:@"mycolNum"]];
+            postLab.text = [NSString stringWithFormat:@"%@",[responseObject objectForKey:@"myPost"]];
+            
+        }else{
+            
+            return;
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"请求失败:%@", error.description);
+        
+        return;
+    }];
+    
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -154,6 +212,7 @@
 
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    
     NSInteger rowNo = indexPath.row;
     NSInteger section = indexPath.section;
     multiTableViewCell* cell = nil;
@@ -168,6 +227,7 @@
         NSString* cellOne = @"cellOne";
         if(rowNo == 0)
         {
+            
             cell = (multiTableViewCell*)[tableView dequeueReusableCellWithIdentifier:cellZero];
             if(cell == nil)
             {
@@ -195,12 +255,15 @@
                 //cell.integralView.backgroundColor=[UIColor whiteColor];
                 favoriteControlView.tag=2017;
                 [favoriteControlView addTarget:self action:@selector(touchDownFavorite:) forControlEvents:UIControlEventTouchDown];
+                favoriteLab=cell.favoriteLabel;
                 /*我发的*/
                 UIControl *publishControlView=cell.publishView;
                 //cell.integralView.backgroundColor=[UIColor whiteColor];
                 publishControlView.tag=2018;
                 [publishControlView addTarget:self action:@selector(touchDownPublish:) forControlEvents:UIControlEventTouchDown];
+                postLab=cell.publishLable;
             }
+            [self getCredPostCol:[SqliteOperation getUserId]];
         }
     }
     else if(section == 1)
@@ -229,7 +292,7 @@
     
     UIControl *integralView=(UIControl *)[self.view viewWithTag:[sender tag]];
     integralView.backgroundColor=[UIColor colorWithRed:227/255.0 green:227/255.0 blue:227/255.0 alpha:1.0];
-    UILabel *integtalLabel=(UILabel *)[self.view  viewWithTag:1024];
+    //UILabel *integtalLabel=(UILabel *)[self.view  viewWithTag:1024];
     AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
     manager.securityPolicy.allowInvalidCertificates = YES;
     manager.responseSerializer.stringEncoding=NSUTF8StringEncoding;
@@ -252,7 +315,7 @@
         
         NSMutableArray * goodsMutableAry=[responseObject objectForKey:@"info"];
         IntegralMallController.goodsArray=goodsMutableAry;
-        IntegralMallController.pointStr=integtalLabel.text;
+        IntegralMallController.pointStr=integralLab.text;
         
         backItemTitle = [[UIBarButtonItem alloc] initWithTitle:@"积分" style:UIBarButtonItemStylePlain target:nil action:nil];
         [self.parentViewController.navigationItem setBackBarButtonItem:backItemTitle];
@@ -273,7 +336,7 @@
     favoriteView.backgroundColor=[UIColor colorWithRed:227/255.0 green:227/255.0 blue:227/255.0 alpha:1.0];
     backItemTitle = [[UIBarButtonItem alloc] initWithTitle:@"我的收藏" style:UIBarButtonItemStylePlain target:nil action:nil];
     [self.parentViewController.navigationItem setBackBarButtonItem:backItemTitle];
-    //[self.parentViewController.navigationController pushViewController:IntegralMallController animated:YES];
+    [self.parentViewController.navigationController pushViewController:collectVC animated:YES];
 }
 
 - (void) touchDownPublish:(id) sender{
@@ -282,7 +345,7 @@
     publishView.backgroundColor=[UIColor colorWithRed:227/255.0 green:227/255.0 blue:227/255.0 alpha:1.0];
     backItemTitle = [[UIBarButtonItem alloc] initWithTitle:@"我发的" style:UIBarButtonItemStylePlain target:nil action:nil];
     [self.parentViewController.navigationItem setBackBarButtonItem:backItemTitle];
-    //[self.parentViewController.navigationController pushViewController:IntegralMallController animated:YES];
+    [self.parentViewController.navigationController pushViewController:postVC animated:YES];
 }
 
 -(void)signGetIntegralAction{
@@ -309,9 +372,9 @@
         
         SignIntegralController.nowWeekSignedArray=[[NSMutableArray alloc] init];
         SignIntegralController.monthSignedArray=[[NSMutableArray alloc] init];
-        NSLog(@"responseObject is %@",responseObject);
         NSMutableArray *responseObjectAry=[responseObject objectForKey:@"info"];
-        SignIntegralController.todayPoints=[[responseObjectAry objectAtIndex:0][@"credit"] intValue];
+        SignIntegralController.allPoints=[integralLab.text intValue];
+        //SignIntegralController.todayPoints=[[responseObjectAry objectAtIndex:0][@"credit"] intValue];
         for(int i=1;i<[responseObjectAry count];i++)
         {
             
@@ -488,6 +551,7 @@
             //初始化头像
             UIImageView *headPhotoView=[[UIImageView alloc] init];
             [headPhotoView sd_setImageWithURL:[NSURL URLWithString:user.userPortrait] placeholderImage:[UIImage imageNamed:@"bg_error.png"] options:SDWebImageAllowInvalidSSLCertificates];
+            //PersonalInformationController.imageView=[[UIImageView alloc] init];
             PersonalInformationController.imageView=headPhotoView;
             //初始化昵称
             UILabel* nicklabel=[[UILabel alloc] init];
@@ -607,7 +671,6 @@
 - (BOOL) initUser
 {
     user = [[Users alloc] init];
-    
     AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
     FMDatabase *db = delegate.db;
     
@@ -633,7 +696,7 @@
             user.userGender=sexVal;
             user.vocation=vocationStr;
             user.publicStatus=status;
-            NSLog(@"user.userBirthday is %ld",(long)user.userBirthday);
+            NSLog(@"user.userPortrait is %@",user.userPortrait);
             
         }
         [db close];

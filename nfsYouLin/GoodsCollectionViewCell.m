@@ -100,7 +100,7 @@
 
     _goodsData=goodsData;
     float scale=0.6;
-    [self.iconIV sd_setImageWithURL:[NSURL URLWithString:_goodsData.goodsPicUrl] placeholderImage:nil options:(SDWebImageRetryFailed) completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+    [self.iconIV sd_setImageWithURL:[NSURL URLWithString:_goodsData.goodsPicUrl] placeholderImage:nil options:(SDWebImageAllowInvalidSSLCertificates) completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
         self.iconIV.frame = CGRectMake(0, 0, image.size.width*scale, image.size.height*scale);
         self.iconIV.center=CGPointMake(55, 40);
     }];

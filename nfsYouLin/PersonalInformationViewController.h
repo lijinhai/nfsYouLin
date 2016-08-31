@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "Users.h"
 
-@interface PersonalInformationViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,UINavigationControllerDelegate>
+@interface PersonalInformationViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
 {
 
     NSArray *dataSource;

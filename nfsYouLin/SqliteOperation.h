@@ -25,4 +25,12 @@
 
 // 更新用户的职业信息
 +(void)updateUserWorkInfo:(long)userId userVocation:(NSString*)uv publicStatus:(NSInteger) ps;
+
+// 更新用户头像信息
++(void)updateUserPhotoInfo:(long)userId photoUrl:(NSString*)url;
+
+// 更新用户昵称
++(void)updateUserNickInfo:(long)userId nickName:(NSString*)name;
+
+
 @end

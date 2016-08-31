@@ -339,7 +339,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="lp1-YF-aZw">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="540"/>
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <connections>
                                     <outlet property="dataSource" destination="hqu-SJ-BlH" id="I2k-6v-nrp"/>
@@ -415,6 +415,44 @@
             </objects>
             <point key="canvasLocation" x="1950" y="205"/>
         </scene>
+        <!--我发的-->
+        <scene sceneID="YVv-wS-BVr">
+            <objects>
+                <viewController storyboardIdentifier="ipostid" title="我发的" useStoryboardIdentifierAsRestorationIdentifier="YES" id="qLs-Hy-2PO" customClass="IPostVC" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Niz-pJ-WMF"/>
+                        <viewControllerLayoutGuide type="bottom" id="iYi-Vb-2VW"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="ZsG-jz-6AQ">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina55"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="kMm-p1-3b0" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1038" y="1849"/>
+        </scene>
+        <!--我的收藏-->
+        <scene sceneID="JHz-Jq-Dgr">
+            <objects>
+                <viewController storyboardIdentifier="icollectid" title="我的收藏" useStoryboardIdentifierAsRestorationIdentifier="YES" id="427-aN-Fd9" customClass="ICollectVC" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="UPB-5Y-eiy"/>
+                        <viewControllerLayoutGuide type="bottom" id="aTm-Db-ONH"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Is3-0a-aA7">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina55"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="nO2-gx-THZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1038" y="2661"/>
+        </scene>
         <!--个人信息-->
         <scene sceneID="tiY-s0-Vh5">
             <objects>
@@ -455,7 +493,7 @@
                         <viewControllerLayoutGuide type="top" id="ggu-0A-4Ye"/>
                         <viewControllerLayoutGuide type="bottom" id="caj-KQ-zbs"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="nsx-g4-CCC">
+                    <view key="view" contentMode="scaleToFill" id="nsx-g4-CCC" customClass="UIControl">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
@@ -463,6 +501,9 @@
                                 <rect key="frame" x="16" y="80" width="384" height="45"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
+                                <connections>
+                                    <action selector="nick_DidEndExit:" destination="Gq1-Pj-wVp" eventType="editingDidEndOnExit" id="rkZ-Rf-AGh"/>
+                                </connections>
                             </textField>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="起个拉风的名字（2~10个字）,让你的邻居更容易记住你。" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kDe-Gq-giK">
                                 <rect key="frame" x="16" y="139" width="384" height="21"/>
@@ -472,10 +513,13 @@
                             </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <connections>
+                            <action selector="View_TouchDown:" destination="Gq1-Pj-wVp" eventType="editingDidEndOnExit" id="FsF-Mz-fKF"/>
+                        </connections>
                     </view>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina55"/>
                     <connections>
-                        <outlet property="nikeNameTextField" destination="dWK-oA-g8T" id="pHf-qb-Fge"/>
+                        <outlet property="nikeNameTextField" destination="dWK-oA-g8T" id="AIy-KK-qdp"/>
                         <outlet property="tipLabel" destination="kDe-Gq-giK" id="JMo-IV-g79"/>
                     </connections>
                 </viewController>
@@ -491,7 +535,7 @@
                         <viewControllerLayoutGuide type="top" id="imN-NU-sRa"/>
                         <viewControllerLayoutGuide type="bottom" id="NHk-4A-hJb"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="73E-gz-Xa1">
+                    <view key="view" contentMode="scaleToFill" id="73E-gz-Xa1" customClass="UIControl">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
@@ -502,22 +546,34 @@
                                         <rect key="frame" x="2" y="96" width="374" height="45"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
+                                        <connections>
+                                            <action selector="repeatTextField_DidEndOnExit:" destination="NOq-nH-H0Q" eventType="editingDidEndOnExit" id="TSM-r3-Zk8"/>
+                                        </connections>
                                     </textField>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="请先输入旧密码" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="sZH-xO-b7r">
                                         <rect key="frame" x="2" y="4" width="374" height="45"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
+                                        <connections>
+                                            <action selector="oldTextField_DidEndOnExit:" destination="NOq-nH-H0Q" eventType="editingDidEndOnExit" id="ipq-ac-tQs"/>
+                                        </connections>
                                     </textField>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="请设置新密码（6-16位）" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="IkL-Se-0wR">
                                         <rect key="frame" x="2" y="51" width="374" height="45"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
+                                        <connections>
+                                            <action selector="firstTextField_DidEndOnExit:" destination="NOq-nH-H0Q" eventType="editingDidEndOnExit" id="xtc-yN-nMa"/>
+                                        </connections>
                                     </textField>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <connections>
+                            <action selector="View_TouchDown:" destination="NOq-nH-H0Q" eventType="touchDown" id="Niw-NH-DzE"/>
+                        </connections>
                     </view>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina55"/>
                     <connections>
@@ -571,7 +627,7 @@
                         <viewControllerLayoutGuide type="top" id="Fdx-qx-xye"/>
                         <viewControllerLayoutGuide type="bottom" id="g7c-x0-WOU"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="yc5-Gy-Y3h">
+                    <view key="view" contentMode="scaleToFill" id="yc5-Gy-Y3h" customClass="UIControl">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
@@ -579,6 +635,9 @@
                                 <rect key="frame" x="20" y="82" width="374" height="49"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
+                                <connections>
+                                    <action selector="profession_DiaEndOnExit:" destination="yWY-k6-Ov1" eventType="editingDidEndOnExit" id="fLn-py-rOt"/>
+                                </connections>
                             </textField>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="请输入职业名称，如：音乐教师，与更多的业内人士进行交流。" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Qs0-xz-5CK">
                                 <rect key="frame" x="20" y="148" width="394" height="21"/>
@@ -596,6 +655,9 @@
                             </tableView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <connections>
+                            <action selector="View_TouchDown:" destination="yWY-k6-Ov1" eventType="editingDidEndOnExit" id="DxW-tQ-CWZ"/>
+                        </connections>
                     </view>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina55"/>
                     <connections>

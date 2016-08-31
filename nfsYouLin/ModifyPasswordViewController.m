@@ -533,4 +533,25 @@
 }
 */
 
+- (IBAction)oldTextField_DidEndOnExit:(id)sender {
+    
+    [self.firstPasswordTextField becomeFirstResponder];
+}
+
+- (IBAction)firstTextField_DidEndOnExit:(id)sender {
+    
+    [self.repeatPassWordTextField becomeFirstResponder];
+}
+
+- (IBAction)repeatTextField_DidEndOnExit:(id)sender {
+    
+    // 隐藏键盘.
+    [sender resignFirstResponder];
+    
+}
+
+- (IBAction)View_TouchDown:(id)sender {
+    
+    [[UIApplication sharedApplication] sendAction:@selector(resignFirstResponder) to:nil from:nil forEvent:nil];
+}
 @end

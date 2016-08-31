@@ -160,8 +160,45 @@
     FMDatabase *db = delegate.db;
     if([db open])
     {
-        NSLog(@"执行sql语句");
+
         NSString *updateSQL = [[NSString alloc] initWithFormat:@"UPDATE table_users SET user_vocation = '%@',user_public_status ='%ld' where user_id = '%ld'", uv,ps,userId];
+        [db executeUpdate:updateSQL];
+        [db close];
+    }
+    else
+    {
+        NSLog(@"iVC: db open error!");
+    }
+}
+
++(void)updateUserPhotoInfo:(long)userId photoUrl:(NSString*)url
+{
+
+    AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+    FMDatabase *db = delegate.db;
+    if([db open])
+    {
+        NSString *updateSQL = [[NSString alloc] initWithFormat:@"UPDATE table_users SET user_portrait = '%@' where user_id = '%ld'", url,userId];
+        [db executeUpdate:updateSQL];
+        [db close];
+        
+    }
+    else
+    {
+        NSLog(@"iVC: db open error!");
+    }
+
+}
++(void)updateUserNickInfo:(long)userId nickName:(NSString*)name
+{
+    
+    
+    AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+    FMDatabase *db = delegate.db;
+    if([db open])
+    {
+        NSLog(@"执行sql语句");
+        NSString *updateSQL = [[NSString alloc] initWithFormat:@"UPDATE table_users SET user_name = '%@' where user_id = '%ld'", name,userId];
         [db executeUpdate:updateSQL];
         [db close];
         NSLog(@"updateSQL is %@",updateSQL);
@@ -171,5 +208,6 @@
     {
         NSLog(@"iVC: db open error!");
     }
+    
 }
 @end
