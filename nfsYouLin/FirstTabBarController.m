@@ -19,6 +19,8 @@
 #import "AFHTTPSessionManager.h"
 #import "JPUSHService.h"
 #import "CreateActivityVC.h"
+#import "ExchangeVC.h"
+#import "InviteVC.h"
 
 @implementation FirstTabBarController
 {
@@ -112,6 +114,21 @@
             [controller.navigationController pushViewController:activityVC animated:YES];
 
         }
+        else if([string isEqualToString:@"闲品会"])
+        {
+            ExchangeVC* exchangeVC = [[ExchangeVC alloc] init];
+            [controller.navigationController pushViewController:exchangeVC animated:YES];
+
+        }
+        else if([string isEqualToString:@"邀请"])
+        {
+            InviteVC* inviteVC = [[InviteVC alloc] init];
+            
+            UIBarButtonItem* backItemTitle = [[UIBarButtonItem alloc] initWithTitle:@"邀请好友" style:UIBarButtonItemStylePlain target:nil action:nil];
+            [controller.navigationItem setBackBarButtonItem:backItemTitle];
+            [controller.navigationController pushViewController:inviteVC animated:YES];
+
+        }
         
     }];
        // 去掉tableview 顶部空白区域
@@ -119,6 +136,8 @@
     
     
 }
+
+
 
 - (IBAction)addBar:(id)sender {
     NSLog(@"addBar");

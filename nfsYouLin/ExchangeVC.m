@@ -1,18 +1,17 @@
 //
-//  CreateTopicVC.m
+//  ExchangeVC.m
 //  nfsYouLin
 //
-//  Created by Macx on 16/8/5.
+//  Created by Macx on 16/8/31.
 //  Copyright © 2016年 jinhai. All rights reserved.
 //
 
-#import "CreateTopicVC.h"
+#import "ExchangeVC.h"
 #import "LxGridViewFlowLayout.h"
 #import "PickerCVC.h"
 #import <AssetsLibrary/AssetsLibrary.h>
 #import <Photos/Photos.h>
 #import "TZImageManager.h"
-#import "CreateTVC.h"
 #import "AppDelegate.h"
 #import "HeaderFile.h"
 #import "AFHTTPSessionManager.h"
@@ -21,12 +20,14 @@
 #import "WaitView.h"
 #import "PublishLimitVC.h"
 #import "DialogView.h"
+#import "MBProgressHUBTool.h"
+#import "BackgroundV.h"
 
-@interface CreateTopicVC ()
+@interface ExchangeVC ()
 
 @end
 
-@implementation CreateTopicVC
+@implementation ExchangeVC
 {
     CGFloat titlePreHeight;
     CGFloat titleMinHeight;
@@ -34,7 +35,7 @@
     CGFloat contentPreHeight;
     CGFloat contentMinHeight;
     CGFloat contentMaxHeight;
-
+    
     
     UIView* line1;
     UIView* line2;
@@ -52,7 +53,7 @@
     CGRect imageCVFrame2;
     CGRect imageCVFrame3;
     CGFloat originalCVH;
-
+    
     PublishLimitVC* limitVC;
     
     UIImageView* emptyIV;
@@ -71,7 +72,12 @@
     UIView* backgroundView;
     DialogView* dialogView;
     UIViewController* rootVC;
-
+    
+    GoodsLevelV* goodsView;
+    BackgroundV* goodsBgV;
+    
+    NSInteger goodsLevel;
+    NSInteger _price;
 }
 
 - (id) init
@@ -79,7 +85,7 @@
     self = [super init];
     if(self)
     {
-    
+        
     }
     return self;
 }
@@ -116,24 +122,22 @@
     self.navigationItem.rightBarButtonItem = rightItem;
     UIColor* lineColor = [UIColor colorWithRed:217.0 / 255.0 green:216.0 / 255.0 blue:213.0 / 255.0 alpha:1];
     self.view.backgroundColor = [UIColor colorWithRed:243.0/255.0 green:243.0/255.0 blue:240.0/255.0 alpha:1];
-    self.view.backgroundColor = [UIColor colorWithRed:243.0/255.0 green:243.0/255.0 blue:240.0/255.0 alpha:1];
     self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 80, CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame) - 80)];
     self.scrollView.backgroundColor = [UIColor colorWithRed:243.0/255.0 green:243.0/255.0 blue:240.0/255.0 alpha:1];
     self.scrollView.bounces = NO;
-//    self.scrollView.contentSize = CGSizeMake(CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame));
+    
     self.scrollView.delegate = self;
-    self.bgView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.frame), 300)];
+    self.bgView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.frame), 400)];
     self.bgView.bounces = NO;
     self.bgView.backgroundColor = [UIColor whiteColor];
     self.scrollView.contentSize = CGSizeMake(CGRectGetWidth(self.view.frame), CGRectGetHeight(self.bgView.frame));
-
     line1 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.bgView.frame), 1)];
     line1.backgroundColor = lineColor;
     
     line2 = [[UIView alloc] initWithFrame:CGRectMake(40, 40, CGRectGetWidth(self.bgView.frame) - 80, 1)];
     line2.backgroundColor = lineColor;
     
-    line3 = [[UIView alloc] initWithFrame:CGRectMake(0, CGRectGetHeight(self.bgView.frame) - 51, CGRectGetWidth(self.bgView.frame), 1)];
+    line3 = [[UIView alloc] initWithFrame:CGRectMake(0, CGRectGetHeight(self.bgView.frame) - 150, CGRectGetWidth(self.bgView.frame), 1)];
     line3.backgroundColor = lineColor;
     
     line4 = [[UIView alloc] initWithFrame:CGRectMake(0, CGRectGetHeight(self.bgView.frame)-1, CGRectGetWidth(self.bgView.frame), 1)];
@@ -150,7 +154,7 @@
     titleMinHeight = titlePreHeight;
     
     self.titlePlaceholder = [[UILabel alloc] initWithFrame:CGRectMake(2, 10, CGRectGetWidth(self.titleTV.frame), 18)];
-    self.titlePlaceholder.text = @"标题";
+    self.titlePlaceholder.text = @"给物品起个名字吧...";
     self.titlePlaceholder.textAlignment = NSTextAlignmentLeft;
     self.titlePlaceholder.font = [UIFont boldSystemFontOfSize:18];
     self.titlePlaceholder.enabled = NO;
@@ -177,7 +181,7 @@
     contentPreHeight = ceilf([self.contentTV sizeThatFits:self.contentTV.frame.size].height);
     contentMinHeight = contentPreHeight;
     self.contentPlaceholder = [[UILabel alloc] initWithFrame:CGRectMake(2, 10, CGRectGetWidth(self.contentTV.frame), 14)];
-    self.contentPlaceholder.text = @"描述内容...";
+    self.contentPlaceholder.text = @"物品描述(选填)";
     self.contentPlaceholder.textAlignment = NSTextAlignmentLeft;
     self.contentPlaceholder.font = [UIFont systemFontOfSize:14];
     self.contentPlaceholder.enabled = NO;
@@ -209,12 +213,18 @@
     [_imagesCView registerClass:[PickerCVC class] forCellWithReuseIdentifier:@"PickerCVC"];
     [self.bgView addSubview:_imagesCView];
     
-    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(line3.frame), CGRectGetWidth(self.bgView.frame), 50) style:UITableViewStylePlain];
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(line3.frame), CGRectGetWidth(self.bgView.frame), 150) style:UITableViewStylePlain];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.backgroundColor = [UIColor orangeColor];
     self.tableView.bounces = NO;
     self.tableView.scrollEnabled = NO;
+    if ([self.tableView respondsToSelector:@selector(setSeparatorInset:)]) {
+        [self.tableView setSeparatorInset:UIEdgeInsetsZero];
+    }
+    if ([self.tableView respondsToSelector:@selector(setLayoutMargins:)]) {
+        [self.tableView setLayoutMargins:UIEdgeInsetsZero];
+    }
     [self.bgView addSubview:self.tableView];
     
     [self.bgView addSubview:line1];
@@ -244,6 +254,14 @@
     backgroundView.backgroundColor = [UIColor grayColor];
     backgroundView.alpha = 0.8;
     dialogView = nil;
+    
+    goodsView = [[GoodsLevelV alloc] init];
+    goodsView.delegate = self;
+    goodsBgV = [[BackgroundV alloc] initWithView:goodsView];
+    goodsBgV.backgroundColor = [UIColor clearColor];
+    goodsBgV.alpha = 0.1;
+    _price = 0;
+    goodsLevel = -1;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -276,6 +294,7 @@
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    [self.view endEditing:YES];
     if (indexPath.row == selectedPhotos.count) {
         UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"拍照",@"去相册选择", nil];
         [sheet showInView:self.view];
@@ -438,7 +457,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 1;
+    return 3;
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -448,14 +467,52 @@
 
 - (UITableViewCell*) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSString* cellId = @"limit";
-    CreateTVC* cell = [tableView dequeueReusableCellWithIdentifier:cellId];
-    if(cell == nil)
+    NSString* cellId;
+    NSInteger row = indexPath.row;
+    CreateTVC* cell;
+    
+    if(row == 0)
     {
-        cell = [[CreateTVC alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
+        cellId = @"limit";
+        cell = [tableView dequeueReusableCellWithIdentifier:cellId];
+        if(cell == nil)
+        {
+            cell = [[CreateTVC alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
+        }
+        cell.textLabel.text = @"发布范围";
+        cell.where = limitVC.which;
     }
-    cell.textLabel.text = @"发布范围";
-    cell.where = limitVC.which;
+    else if(row == 1)
+    {
+        cellId = @"level";
+        cell = [tableView dequeueReusableCellWithIdentifier:cellId];
+        if(cell == nil)
+        {
+            cell = [[CreateTVC alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
+        }
+        cell.level = goodsLevel;
+        cell.textLabel.text = @"新旧";
+    }
+    else if(row == 2)
+    {
+        cellId = @"price";
+        cell = [tableView dequeueReusableCellWithIdentifier:cellId];
+        if(cell == nil)
+        {
+            cell = [[CreateTVC alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
+        }
+        cell.textLabel.text = @"价格";
+        cell.delegate = self;
+        if(_price == -1)
+        {
+            cell.priceB = NO;
+        }
+        else
+        {
+            cell.priceB = YES;
+        }
+    }
+
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     
     
@@ -469,12 +526,46 @@
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UIBarButtonItem* backItemTitle = [[UIBarButtonItem alloc] initWithTitle:@"选择可见范围" style:UIBarButtonItemStylePlain target:nil action:nil];
-    [self.navigationItem setBackBarButtonItem:backItemTitle];
-    limitVC.communityName = communityAddress;
+    [self.view endEditing:YES];
+    NSInteger row = indexPath.row;
+    switch (row) {
+        case 0:
+        {
+            UIBarButtonItem* backItemTitle = [[UIBarButtonItem alloc] initWithTitle:@"选择可见范围" style:UIBarButtonItemStylePlain target:nil action:nil];
+            [self.navigationItem setBackBarButtonItem:backItemTitle];
+            limitVC.communityName = communityAddress;
+            
+            [self.navigationController pushViewController:limitVC animated:YES];
+            break;
+        }
+        case 1:
+        {
+            [self.parentViewController.view addSubview:goodsBgV];
+            [self.parentViewController.view addSubview:goodsView];
+            break;
+        }
+        case 2:
+        {
+            break;
+        }
+        default:
+            break;
+    }
     
-    [self.navigationController pushViewController:limitVC animated:YES];
 }
+
+-(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if ([cell respondsToSelector:@selector(setSeparatorInset:)]) {
+        [cell setSeparatorInset:UIEdgeInsetsZero];
+    }
+    
+    if ([cell respondsToSelector:@selector(setLayoutMargins:)]) {
+        [cell setLayoutMargins:UIEdgeInsetsZero];
+    }
+}
+
+
 #pragma mark UITextViewDelegate
 
 -(BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
@@ -505,7 +596,7 @@
         }
         else
         {
-            self.titlePlaceholder.text = @"标题";
+            self.titlePlaceholder.text = @"给物品起个名字吧...";
         }
         
         CGFloat toHeight = ceilf([textView sizeThatFits:textView.frame.size].height);
@@ -609,7 +700,7 @@
         }
         else
         {
-            self.contentPlaceholder.text = @"描述内容...";
+            self.contentPlaceholder.text = @"物品描述(选填)";
         }
         
         CGFloat toHeight = ceilf([textView sizeThatFits:textView.frame.size].height);
@@ -768,10 +859,8 @@
 - (IBAction)sendResult:(id)sender
 {
     NSLog(@"发送");
-    
     NSString* title = self.titleTV.text;
     NSString* content = self.contentTV.text;
-    
     if(title.length == 0)
     {
         [emptyIV setHidden:NO];
@@ -785,8 +874,29 @@
         return;
     }
     
+    
+    if([selectedPhotos count] == 0)
+    {
+        [MBProgressHUBTool textToast:self.view Tip:@"图片不能为空"];
+        return;
+    }
+    
+    
+    if(goodsLevel == -1)
+    {
+        goodsLevel = -2;
+        [self.tableView reloadData];
+        return;
+    }
+    
+    if(_price == 0)
+    {
+        _price = -1;
+        [self.tableView reloadData];
+    }
+    
     WaitView* waitView = [[WaitView alloc] initWithFrame:self.parentViewController.view.frame Title:@"正在发布..."];
-//    UIView* backgroundView = [[UIView alloc] initWithFrame:self.parentViewController.view.frame];
+    //    UIView* backgroundView = [[UIView alloc] initWithFrame:self.parentViewController.view.frame];
     backgroundView.backgroundColor = [UIColor clearColor];
     [backgroundView addSubview:waitView];
     [self.parentViewController.view addSubview:backgroundView];
@@ -815,7 +925,7 @@
             break;
     }
     
-    // 发布新话题网络请求
+    // 发布以物换物网络请求
     AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
     manager.securityPolicy.allowInvalidCertificates = YES;
     [manager.securityPolicy setValidatesDomainName:NO];
@@ -827,7 +937,7 @@
     }
     else
     {
-         MD5String = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"topic_title%@topic_content%@forum_id%ldforum_name%@sender_id%@sender_name%@sender_portrait%@sender_family_id%@sender_family_address%@sender_city_id%ldsender_community_id%ldsend_status1display_name%@topic_time%ldtokenvalue%@",title, content,forumId,forumName,userId,nick,portrait,familyId,familyAddress,cityId,communityId,displayName,topicTime,identifierNumber]];
+        MD5String = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"topic_title%@topic_content%@forum_id%ldforum_name%@sender_id%@sender_name%@sender_portrait%@sender_family_id%@sender_family_address%@sender_city_id%ldsender_community_id%ldsend_status1display_name%@topic_time%ldtokenvalue%@",title, content,forumId,forumName,userId,nick,portrait,familyId,familyAddress,cityId,communityId,displayName,topicTime,identifierNumber]];
     }
     NSString* hashString = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"%@1", MD5String]];
     NSString* keySet = @"topic_title:topic_content:forum_id:forum_name:sender_id:sender_name:sender_portrait:sender_family_id:sender_family_address:sender_city_id:sender_community_id:send_status:display_name:topic_time:tokenvalue:";
@@ -843,13 +953,15 @@
                                       @"0", @"sender_nc_role",
                                       familyId, @"sender_family_id",
                                       familyAddress, @"sender_family_address",
-                                      @"0", @"object_data_id",
-                                      @"1", @"circle_type",
+                                      @"4", @"object_data_id",
+                                      @"0", @"circle_type",
+                                      [NSNumber numberWithInteger:_price],@"price",
+                                      [NSNumber numberWithInteger:goodsLevel],@"oldornew",
                                       identifierNumber, @"tokenvalue",
                                       [NSNumber numberWithLong:cityId], @"sender_city_id",
                                       [NSNumber numberWithLong:communityId], @"sender_community_id",
                                       [NSNumber numberWithLong:topicTime], @"topic_time",
-                                       displayName, @"display_name",
+                                      displayName, @"display_name",
                                       @"0", @"send_status",
                                       @"0", @"sender_lever",
                                       @"comm", @"apitype",
@@ -857,7 +969,7 @@
                                       @"1", @"salt",
                                       hashString, @"hash",
                                       keySet,@"keyset",
-                                    nil];
+                                      nil];
     
     NSMutableArray* imagesName = [[NSMutableArray alloc] init];
     if([selectedPhotos count] != 0)
@@ -881,19 +993,19 @@
     [manager POST:POST_URL parameters:parameter constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
         if([selectedPhotos count] != 0)
         {
-             for(int i = 0; i < [selectedPhotos count]; i++)
-             {
-                 UIImage* image = selectedPhotos[i];
-                 NSData *data = UIImageJPEGRepresentation(image,0.1);
-                 [formData appendPartWithFileData:data name:[NSString stringWithFormat:@"img_%d",i] fileName:imagesName[i] mimeType:@"image/jpg"];
-
-             }
+            for(int i = 0; i < [selectedPhotos count]; i++)
+            {
+                UIImage* image = selectedPhotos[i];
+                NSData *data = UIImageJPEGRepresentation(image,0.1);
+                [formData appendPartWithFileData:data name:[NSString stringWithFormat:@"img_%d",i] fileName:imagesName[i] mimeType:@"image/jpg"];
+                
+            }
         }
         
     } progress:^(NSProgress * _Nonnull uploadProgress) {
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        NSLog(@" 发布新话题网络请求请求:%@", responseObject);
+        NSLog(@" 发布以物换物请求:%@", responseObject);
         NSString* flag = [responseObject valueForKey:@"flag"];
         if([flag isEqualToString:@"ok"])
         {
@@ -909,6 +1021,8 @@
             [alert show];
             return;
         }
+        [waitView removeFromSuperview];
+        [backgroundView removeFromSuperview];
         [waitView removeFromSuperview];
         [backgroundView removeFromSuperview];
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
@@ -948,19 +1062,19 @@
     {
         NSLog(@"CreateTopicVC table_all_family: db open error!");
     }
-
+    
 }
 
 - (void) createBackItemBtn
 {
-    CGSize size = [StringMD5 sizeWithString:@"话题" font:[UIFont systemFontOfSize:20] maxSize:CGSizeMake(MAXFLOAT, MAXFLOAT)];
+    CGSize size = [StringMD5 sizeWithString:@"以物换物" font:[UIFont systemFontOfSize:20] maxSize:CGSizeMake(MAXFLOAT, MAXFLOAT)];
     UIControl* view = [[UIControl alloc] initWithFrame:CGRectMake(0, 0, 25 + size.width, self.navigationController.navigationBar.frame.size.height)];
     view.backgroundColor = [UIColor clearColor];
     _backIV = [[UIImageView alloc] initWithFrame:CGRectMake(0, view.frame.size.height / 4, 20, view.frame.size.height / 2)];
     _backIV.image = [UIImage imageNamed:@"mm_title_back.png"];
     _backLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(_backIV.frame) + 5, 0, size.width, view.frame.size.height)];
     
-    _backLabel.text = @"话题";
+    _backLabel.text = @"以物换物";
     _backLabel.textColor = [UIColor whiteColor];
     [view addSubview:_backIV];
     [view addSubview:_backLabel];
@@ -1017,6 +1131,21 @@
 {
     _backLabel.alpha = 0.2;
     _backIV.alpha = 0.2;
+}
+
+#pragma mark -GoodsLevelDelegate
+- (void) didSelectedLevel:(NSInteger)level
+{
+    goodsLevel = level;
+    [goodsView removeFromSuperview];
+    [goodsBgV removeFromSuperview];
+    [self.tableView reloadData];
+}
+
+#pragma mark -CreateTVCDelegate
+- (void)getPrice:(NSInteger)price
+{
+    _price = price;
 }
 
 @end

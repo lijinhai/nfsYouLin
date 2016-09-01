@@ -366,7 +366,9 @@
     
     // 初始化头部按钮（取消、现在时间、确定）
     UIView *buttonContentView = [[UIView alloc] initWithFrame:CGRectMake(-2.0, 0.0, kWidthOfTotal + 4.0, kHeightOfButtonContentView)];
-    buttonContentView.backgroundColor = [UIColor blueColor];
+//    buttonContentView.backgroundColor = [UIColor blueColor];
+    buttonContentView.backgroundColor = [UIColor colorWithRed:255/255.0 green:222/255.0 blue:31/255.0 alpha:1];
+
     buttonContentView.layer.borderColor = [UIColor lightGrayColor].CGColor;
     buttonContentView.layer.borderWidth = 0.5;
     [self addSubview:buttonContentView];

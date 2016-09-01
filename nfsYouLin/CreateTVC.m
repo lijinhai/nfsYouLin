@@ -19,6 +19,15 @@
     UIImageView* startIV;
     UIImageView* endIV;
     UIImageView* addressIV;
+    
+    UILabel* LevelL;
+    UIImageView* LevelIV;
+
+    UITextField* _priceTF;
+    CGFloat priceW;
+    UIImageView* priceIV;
+    NSNumberFormatter* numberFormatter;
+    NSCharacterSet* inputCharacterSet;
 
 }
 
@@ -31,9 +40,49 @@
         {
             limitLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetWidth(self.contentView.frame), 2, 60, CGRectGetHeight(self.contentView.frame))];
             limitLabel.font = [UIFont systemFontOfSize:15];
-
-            limitLabel.textAlignment = NSTextAlignmentCenter;
+            limitLabel.textAlignment = NSTextAlignmentRight;
             [self.contentView addSubview:limitLabel];
+        }
+        else if([reuseIdentifier isEqualToString:@"level"])
+        {
+            UILabel* levelL = [[UILabel alloc] initWithFrame:CGRectMake(60, 2, CGRectGetWidth(self.contentView.frame), CGRectGetHeight(self.contentView.frame))];
+            levelL.font = [UIFont systemFontOfSize:15];
+            levelL.textAlignment = NSTextAlignmentRight;
+            LevelL = levelL;
+            [self.contentView addSubview:levelL];
+            
+            UIImageView* emptyIV = [[UIImageView alloc] initWithFrame:CGRectMake(CGRectGetMaxX(levelL.frame) - 20, 15, 20, 20)];
+            emptyIV.image = [UIImage imageNamed:@"tanhao.png"];
+            emptyIV.layer.masksToBounds = YES;
+            emptyIV.layer.cornerRadius = 10;
+            [self.contentView addSubview:emptyIV];
+            LevelIV = emptyIV;
+        }
+        else if([reuseIdentifier isEqualToString:@"price"])
+        {
+            inputCharacterSet = [[NSCharacterSet decimalDigitCharacterSet] invertedSet];
+            numberFormatter = [[NSNumberFormatter alloc] init];
+            numberFormatter.numberStyle = NSNumberFormatterRoundDown;
+            [numberFormatter setMinimumFractionDigits:0];
+            [numberFormatter setMaximumFractionDigits:0];
+
+            priceW = CGRectGetWidth(self.contentView.frame);
+            UITextField* priceTF = [[UITextField alloc] initWithFrame:CGRectMake(60, 2, priceW, CGRectGetHeight(self.contentView.frame))];
+            priceTF.font = [UIFont systemFontOfSize:15];
+            priceTF.keyboardType = UIKeyboardTypeNumberPad;
+            priceTF.textAlignment = NSTextAlignmentRight;
+            priceTF.delegate = self;
+            [priceTF setText:[numberFormatter stringFromNumber:[NSNumber numberWithInt:0]]];
+            _priceTF = priceTF;
+            [self.contentView addSubview:priceTF];
+            
+            UIImageView* emptyIV = [[UIImageView alloc] initWithFrame:CGRectMake(CGRectGetWidth(self.contentView.frame) + 40, 15, 20, 20)];
+            emptyIV.image = [UIImage imageNamed:@"tanhao.png"];
+            emptyIV.layer.masksToBounds = YES;
+            emptyIV.layer.cornerRadius = 10;
+            [self.contentView addSubview:emptyIV];
+             priceIV = emptyIV;
+
         }
         else if([reuseIdentifier isEqualToString:@"start"])
         {
@@ -189,6 +238,137 @@
         addressIV.hidden = NO;
     }
 }
+
+- (void)setPriceB:(BOOL)priceB
+{
+    _priceB = priceB;
+    if(_priceB)
+    {
+        CGRect rect = _priceTF.frame;
+        rect.size.width = priceW;
+        _priceTF.frame = rect;
+        priceIV.hidden = YES;
+    }
+    else
+    {
+        CGRect rect = _priceTF.frame;
+        rect.size.width = priceW - 30;
+        _priceTF.frame = rect;
+        priceIV.hidden = NO;
+    }
+
+}
+
+- (void)setLevel:(NSInteger)level
+{
+    _level = level;
+    if(level == -2)
+    {
+        LevelIV.hidden = NO;
+        return;
+    }
+    
+    LevelIV.hidden = YES;
+    switch (level) {
+        case -1:
+        {
+            LevelL.text = @"";
+            break;
+        }
+        case 0:
+        {
+            LevelL.text = @"全新";
+            break;
+        }
+        case 1:
+        {
+            LevelL.text = @"九成新";
+            break;
+        }
+        case 2:
+        {
+            LevelL.text = @"八成新";
+            break;
+        }
+        case 3:
+        {
+            LevelL.text = @"七成新";
+            break;
+        }
+        case 4:
+        {
+            LevelL.text = @"六成新";
+            break;
+        }
+        case 5:
+        {
+            LevelL.text = @"五成新";
+            break;
+        }
+        case 6:
+        {
+            LevelL.text = @"五成新以下";
+            break;
+        }
+        default:
+            break;
+    }
+
+}
+
+
+- (void) setCaratPosition: (NSInteger) pos
+{
+    [self setSelectionRange: NSMakeRange(pos, 0)];
+}
+
+- (void) setSelectionRange: (NSRange) range
+{
+    UITextPosition *start = [_priceTF positionFromPosition: [_priceTF beginningOfDocument] offset: range.location];
+    UITextPosition *end = [_priceTF positionFromPosition: start offset: range.length];
+    [_priceTF setSelectedTextRange: [_priceTF textRangeFromPosition:start toPosition:end]];
+}
+
+
+#pragma mark -UITextFieldDelegate
+
+-(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    
+    if(!self.priceB)
+    {
+        self.priceB = YES;
+    }
+    
+    if (string.length == 0 && range.length == 1 && [inputCharacterSet characterIsMember: [textField.text characterAtIndex: range.location]] )
+    {
+        [self setCaratPosition: range.location];
+        return NO;
+    }
+    NSInteger distanceFromEnd = textField.text.length - (range.location + range.length);
+    NSString* changed = [textField.text stringByReplacingCharactersInRange: range withString: string];
+    NSString* digitString = [[changed componentsSeparatedByCharactersInSet: inputCharacterSet] componentsJoinedByString: @""];
+    if(changed.length == 0)
+    {
+        [textField setText:[numberFormatter stringFromNumber:[NSNumber numberWithInt:0]]];
+        [_delegate getPrice:0];
+    }
+    else
+    {
+        if(digitString.length > 11)
+        {
+            return NO;
+        }
+        [textField setText:[numberFormatter stringFromNumber:[NSNumber numberWithInteger:digitString.integerValue]]];
+        [_delegate getPrice:digitString.integerValue];
+    }
+    NSInteger pos = textField.text.length - distanceFromEnd;
+    if ( pos >= 0 && pos <= textField.text.length )
+    {
+        [self setCaratPosition:pos];
+    }
+    return NO;
+}
+
 
 - (void)awakeFromNib {
     [super awakeFromNib];
