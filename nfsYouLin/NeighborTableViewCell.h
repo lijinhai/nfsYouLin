@@ -63,6 +63,7 @@
 
 
 // 查看全文按钮
+//@property (strong, nonatomic)UIButton* readButton;
 @property (strong, nonatomic)UIButton* readButton;
 
 

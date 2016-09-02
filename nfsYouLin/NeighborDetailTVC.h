@@ -11,8 +11,9 @@
 #import "NeighborData.h"
 #import "NeighborDataFrame.h"
 #import "ShowImageView.h"
+#import "DetailListView.h"
 
-@interface NeighborDetailTVC : UITableViewController <EMChatToolbarDelegate, EaseChatBarMoreViewDelegate,EMLocationViewDelegate,cellDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
+@interface NeighborDetailTVC : UITableViewController <DetailListViewDelegate,EMChatToolbarDelegate, EaseChatBarMoreViewDelegate,EMLocationViewDelegate,cellDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
 
 @property (nonatomic, strong) NeighborData* neighborData;
 @property (assign, nonatomic) NSInteger sectionNum;

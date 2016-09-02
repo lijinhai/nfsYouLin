@@ -420,6 +420,8 @@
 		8FD121501D74674D0066C8E3 /* mapapi.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 8FD1214F1D74674D0066C8E3 /* mapapi.bundle */; };
 		8FD121531D7468270066C8E3 /* MapVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FD121521D7468270066C8E3 /* MapVC.m */; };
 		8FD637E31D541F6900F500D9 /* CreateTopicVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FD637E21D541F6900F500D9 /* CreateTopicVC.m */; };
+		8FE39CD51D7942EA00BA4332 /* DetailListView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FE39CD41D7942EA00BA4332 /* DetailListView.m */; };
+		8FE39CD81D7960B800BA4332 /* DetailListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FE39CD71D7960B800BA4332 /* DetailListCell.m */; };
 		8FF22DA41CE1733800EAE9BA /* forgetViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FF22DA31CE1733800EAE9BA /* forgetViewController.m */; };
 		8FF7E9781D12A04D0026D07D /* ChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FF7E9771D12A04D0026D07D /* ChatViewController.m */; };
 		8FFBDF791D7557FC00FFF334 /* ApplyDetailTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FFBDF781D7557FC00FFF334 /* ApplyDetailTVC.m */; };
@@ -1215,6 +1217,10 @@
 		8FD121521D7468270066C8E3 /* MapVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapVC.m; sourceTree = "<group>"; };
 		8FD637E11D541F6900F500D9 /* CreateTopicVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CreateTopicVC.h; sourceTree = "<group>"; };
 		8FD637E21D541F6900F500D9 /* CreateTopicVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CreateTopicVC.m; sourceTree = "<group>"; };
+		8FE39CD31D7942EA00BA4332 /* DetailListView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailListView.h; sourceTree = "<group>"; };
+		8FE39CD41D7942EA00BA4332 /* DetailListView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailListView.m; sourceTree = "<group>"; };
+		8FE39CD61D7960B800BA4332 /* DetailListCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailListCell.h; sourceTree = "<group>"; };
+		8FE39CD71D7960B800BA4332 /* DetailListCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailListCell.m; sourceTree = "<group>"; };
 		8FF22DA21CE1733800EAE9BA /* forgetViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = forgetViewController.h; sourceTree = "<group>"; };
 		8FF22DA31CE1733800EAE9BA /* forgetViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = forgetViewController.m; sourceTree = "<group>"; };
 		8FF7E9761D12A0470026D07D /* ChatViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ChatViewController.h; sourceTree = "<group>"; };
@@ -2832,6 +2838,10 @@
 				8F6491311D0653CB00E3B155 /* NDetailTableViewCell.m */,
 				8FFBDF7A1D75589200FFF334 /* ApplyDetailCell.h */,
 				8FFBDF7B1D75589200FFF334 /* ApplyDetailCell.m */,
+				8FE39CD31D7942EA00BA4332 /* DetailListView.h */,
+				8FE39CD41D7942EA00BA4332 /* DetailListView.m */,
+				8FE39CD61D7960B800BA4332 /* DetailListCell.h */,
+				8FE39CD71D7960B800BA4332 /* DetailListCell.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -3827,6 +3837,7 @@
 				8F648D1C1D00547A00E3B155 /* NSIndexPath+PSTCollectionViewAdditions.m in Sources */,
 				8F648D4B1D00547A00E3B155 /* EaseBubbleView+Video.m in Sources */,
 				8FF7E9781D12A04D0026D07D /* ChatViewController.m in Sources */,
+				8FE39CD81D7960B800BA4332 /* DetailListCell.m in Sources */,
 				AF4B30451D33279D00CBF257 /* PersonalInformationViewController.m in Sources */,
 				8F648CF51D00547A00E3B155 /* MJRefreshAutoGifFooter.m in Sources */,
 				AF1DBD941CED4D8500557E43 /* chooseCityViewController.m in Sources */,
@@ -3862,6 +3873,7 @@
 				8F648D1D1D00547A00E3B155 /* PSTCollectionView.m in Sources */,
 				8F1FB6D31D6444A200676743 /* MASCompositeConstraint.m in Sources */,
 				AF4B301C1D2F8FE200CBF257 /* LewPopupViewAnimationDownSlide.m in Sources */,
+				8FE39CD51D7942EA00BA4332 /* DetailListView.m in Sources */,
 				8F648D171D00547A00E3B155 /* UIImage+EMMultiFormat.m in Sources */,
 				8F648CEB1D00547900E3B155 /* EMVoiceConverter.mm in Sources */,
 				AFEB365E1D503F050081A5E6 /* GoodsCollectionViewCell.m in Sources */,

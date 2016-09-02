@@ -14,6 +14,7 @@
 #import "MJRefresh.h"
 #import "MBProgressHUBTool.h"
 #import "ApplyDetailTVC.h"
+#import "BackgroundView.h"
 
 @interface NeighborDetailTVC ()
 
@@ -33,6 +34,9 @@
     NSMutableArray* replyArr;
     UIPanGestureRecognizer* _panGesture;
     NSInteger replyOtherId;
+    
+    DetailListView* listView;
+    BackgroundView* bgView;
 
 }
 
@@ -64,6 +68,16 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    UIButton* rightBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
+    [rightBtn setBackgroundImage:[UIImage imageNamed:@"circle_more.png"] forState:UIControlStateNormal];
+    [rightBtn addTarget:self action:@selector(rightAction:) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem* rightItem = [[UIBarButtonItem alloc] initWithCustomView:rightBtn];
+//    [rightBtn addTarget:self action:@selector(handlePan:) forControlEvents:UIControlEventTouchUpInside];
+
+    self.navigationItem.rightBarButtonItem = rightItem;
+    
+    
     _replyText = [[NSMutableArray alloc] init];
     _cellHeight = [self heightOfScondRow];
     
@@ -106,8 +120,28 @@
     [self.view addSubview:indicatorBV];
     [self initInputView];
     
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSInteger senderId = [self.neighborData.senderId integerValue];
+    NSInteger userId = [[defaults stringForKey:@"userId"] integerValue];
+    NSArray* nameArray;
+    if(senderId == 1)
+    {
+        nameArray = [[NSArray alloc] initWithObjects:@"收藏", nil];
+    }
+    else if (senderId == userId)
+    {
+        nameArray = [[NSArray alloc] initWithObjects:@"修改",@"收藏", nil];
+    }
+    else
+    {
+        nameArray = [[NSArray alloc] initWithObjects:@"私信",@"举报",@"收藏", nil];
+    }
     
-  }
+    listView = [[DetailListView alloc] initWithArray:CGRectGetMaxY(self.navigationController.navigationBar.frame) array:nameArray];
+    listView.delegate = self;
+    bgView = [[BackgroundView alloc] initWithFrame:self.parentViewController.view.frame view:listView];
+    
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -395,6 +429,14 @@
     
     
 }
+
+
+#pragma mark -DetailListViewDelegate
+-(void) seletedAction:(NSString *)action
+{
+    NSLog(@"DetailListViewDelegate action = %@",action);
+}
+
 
 #pragma mark - cellDelegate
 - (void)showRectImageViewWithImage:(UIImage *)image
@@ -1443,6 +1485,15 @@
         }
     }
 }
+
+- (void)rightAction:(id)sender
+{
+    NSLog(@".....");
+    [self.parentViewController.view addSubview:bgView];
+    [self.parentViewController.view addSubview:listView];
+
+}
+
 
 - (void)upRefreshData
 {

@@ -741,8 +741,7 @@
                         NSLog(@"topicId = %ld",topicId);
                     }
                 }
-            }
-        
+            }        
             if([self.neighborDataArray count] == 0)
             {
                 [MBProgressHUBTool textToast:self.parentViewController.view Tip:@"没有搜到"];

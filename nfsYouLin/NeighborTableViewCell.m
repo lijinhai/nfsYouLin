@@ -575,7 +575,7 @@
     
 
     // 根据senderId 添加打招呼按钮
-    
+    // senderId =1 打招呼
     if([self.neighborDataFrame.neighborData.senderId integerValue] == 1)
     {
         if([self.neighborDataFrame.neighborData.cacheKey integerValue] != [userId integerValue])
