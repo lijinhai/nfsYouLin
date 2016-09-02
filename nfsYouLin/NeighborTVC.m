@@ -321,8 +321,6 @@
     cell.delegate = self;
     cell.sectionNum = indexPath.section;
     cell.rowNum = indexPath.row;
-    
-    
     return cell;
 }
 

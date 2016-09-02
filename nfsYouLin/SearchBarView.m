@@ -203,10 +203,13 @@
 
 - (BOOL) textFieldShouldReturn:(UITextField *)textField
 {
-    if(self.delegate && [self.delegate respondsToSelector:@selector(searchBarSearchButtonClicked:)])
-    {
-        [self.delegate SearchBarViewSearchButtonClicked:self];
-    }
+    [self.delegate SearchBarViewSearchButtonClicked:self];
+
+//    if(self.delegate && [self.delegate respondsToSelector:@selector(searchBarSearchButtonClicked:)])
+//    {
+//        NSLog(@"ffffff");
+//        [self.delegate SearchBarViewSearchButtonClicked:self];
+//    }
     return YES;
 }
 

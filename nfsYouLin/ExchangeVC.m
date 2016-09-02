@@ -1023,8 +1023,6 @@
         }
         [waitView removeFromSuperview];
         [backgroundView removeFromSuperview];
-        [waitView removeFromSuperview];
-        [backgroundView removeFromSuperview];
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         NSLog(@"上传失败 %@", error);
         [waitView removeFromSuperview];

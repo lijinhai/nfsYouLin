@@ -76,7 +76,7 @@
     backgroundView.alpha = 0.8;
     dialogView = nil;
     
-//    self.tableView.bounces = NO;
+    self.tableView.bounces = NO;
     self.tableView.showsVerticalScrollIndicator = NO;
     if ([self.tableView respondsToSelector:@selector(setSeparatorInset:)]) {
         [self.tableView setSeparatorInset:UIEdgeInsetsZero];
@@ -105,6 +105,7 @@
     [indicator startAnimating];
     [self.view addSubview:indicatorBV];
     [self initInputView];
+    
     
   }
 
@@ -143,10 +144,10 @@
         [cell setLayoutMargins:UIEdgeInsetsZero];
     }
     CGFloat h = self.tableView.contentSize.height;
-    CGFloat H = CGRectGetHeight(self.view.frame) + 1;
-    if(h < H)
+    CGFloat H = CGRectGetHeight(self.view.frame);
+    if(h <= H)
     {
-        self.tableView.contentSize = CGSizeMake(CGRectGetWidth(self.tableView.frame), H);
+        self.tableView.contentSize = CGSizeMake(CGRectGetWidth(self.tableView.frame), H + 5);
     }
 }
 
@@ -1249,11 +1250,15 @@
 // 获取上拉回复网络请求
 - (void) getUpReplyNet
 {
-    
+    if([replyArr count] < 6)
+    {
+        [self.tableView.mj_footer endRefreshing];
+        return;
+    }
+    NSDictionary* dict = [replyArr lastObject];
     NSInteger topicId = [self.neighborData.topicId integerValue];
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     NSString* userId = [defaults stringForKey:@"userId"];
-    NSDictionary* dict = [replyArr lastObject];
     NSString* commentId = [dict valueForKey:@"commId"];
     AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
     manager.securityPolicy.allowInvalidCertificates = YES;
@@ -1301,7 +1306,7 @@
             [self.tableView reloadData];
         }
         [self.tableView.mj_footer endRefreshing];
-        self.tableView.bounces = NO;
+//        self.tableView.bounces = NO;
         
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         NSLog(@"请求失败:%@", error.description);
@@ -1430,15 +1435,17 @@
     }
     else if(gesture.state == UIGestureRecognizerStateEnded)
     {
-        
+        CGFloat h = self.tableView.contentSize.height;
+        CGFloat H = CGRectGetHeight(self.view.frame);
+        if(h <= H)
+        {
+            self.tableView.contentSize = CGSizeMake(CGRectGetWidth(self.tableView.frame), H + 5);
+        }
     }
-    
-    
 }
 
 - (void)upRefreshData
 {
-    NSLog(@"upRefreshData");
     [self getUpReplyNet];
 }
 

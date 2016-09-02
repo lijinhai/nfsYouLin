@@ -8,9 +8,10 @@
 
 #import <UIKit/UIKit.h>
 #import "NCellDelegate.h"
+#import "SearchBarView.h"
+  
 
+@interface SearchTableViewController : UITableViewController <cellDelegate,SearchBarViewDelegate>
 
-@interface SearchTableViewController : UITableViewController <cellDelegate>
-
-
+@property (nonatomic,strong)NSMutableArray *neighborDataArray;
 @end
