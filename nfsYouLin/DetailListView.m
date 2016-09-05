@@ -11,10 +11,10 @@
 
 @implementation DetailListView
 {
-    NSArray* _nameArray;
+    NSMutableArray* _nameArray;
     UITableView* _tableView;
 }
-- (id)initWithArray:(CGFloat)frameY array:(NSArray*)nameArray
+- (id)initWithArray:(CGFloat)frameY array:(NSMutableArray*)nameArray
 {
     self = [super init];
     if(self)
@@ -96,5 +96,18 @@
     }
 }
 
+- (void)setCollectStatus:(BOOL)collectStatus
+{
+    _collectStatus = collectStatus;
+    if(_collectStatus)
+    {
+        [_nameArray replaceObjectAtIndex:[_nameArray count] -1 withObject:@"取消收藏"];
+    }
+    else
+    {
+        [_nameArray replaceObjectAtIndex:[_nameArray count] -1 withObject:@"收藏"];
+    }
+    [_tableView reloadData];
+}
 
 @end

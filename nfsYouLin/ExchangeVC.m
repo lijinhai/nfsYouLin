@@ -1045,7 +1045,6 @@
     
     if([db open])
     {
-        NSLog(@"CreateTopicVC table_all_family: db open success!");
         FMResultSet *result = [db executeQuery:@"SELECT family_address, family_city_id ,family_community_id,family_community_nickname FROM table_all_family WHERE family_id = ?",familyId];
         while ([result next]) {
             familyAddress = [result stringForColumn:@"family_address"];
@@ -1058,7 +1057,7 @@
     }
     else
     {
-        NSLog(@"CreateTopicVC table_all_family: db open error!");
+        NSLog(@"Create table_all_family: db open error!");
     }
     
 }

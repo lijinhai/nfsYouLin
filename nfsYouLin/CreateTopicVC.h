@@ -29,6 +29,7 @@
 
 @property (nonatomic, strong) UITableView *tableView;
 
+@property (nonatomic, strong) NSMutableDictionary *topicInfo;
 
 - (id) init;
 @end

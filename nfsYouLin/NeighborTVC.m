@@ -115,6 +115,7 @@
             }
         }
     }
+    
     [self.tableView reloadData];
 }
 
@@ -215,8 +216,7 @@
     upFlag = YES;
     topicFlag = YES;
     
-    self.refresh = NO;
-    
+    self.refresh = NO;    
     Tag = @"gettopic";
     category = 1;
     sectionCount = 1;
@@ -1290,7 +1290,11 @@ static BOOL upState = YES;
         @"praiseCount" : responseDict[@"likeNum"],
         @"replyCount" : responseDict[@"commentNum"],
         @"topicId" : responseDict[@"topicId"],
-
+        @"collectStatus" : responseDict[@"collectStatus"],
+        @"forumName" : responseDict[@"forumName"],
+        @"objectType" : responseDict[@"objectType"],
+        @"objectData" : responseDict[@"objectData"],
+        @"topicCategoryType" : responseDict[@"topicCategoryType"],
         };
     return dict;
 }

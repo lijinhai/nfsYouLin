@@ -15,6 +15,8 @@
 #import "MBProgressHUBTool.h"
 #import "ApplyDetailTVC.h"
 #import "BackgroundView.h"
+#import "CreateTopicVC.h"
+#import "CreateActivityVC.h"
 
 @interface NeighborDetailTVC ()
 
@@ -122,23 +124,46 @@
     
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     NSInteger senderId = [self.neighborData.senderId integerValue];
+    NSInteger category = [self.neighborData.objectType integerValue];
+    NSInteger caategoryType = [self.neighborData.topicCategoryType integerValue];
     NSInteger userId = [[defaults stringForKey:@"userId"] integerValue];
-    NSArray* nameArray;
+    NSMutableArray* nameArray;
+    
     if(senderId == 1)
     {
-        nameArray = [[NSArray alloc] initWithObjects:@"收藏", nil];
+        nameArray = [[NSMutableArray alloc] initWithObjects:@"收藏", nil];
     }
     else if (senderId == userId)
     {
-        nameArray = [[NSArray alloc] initWithObjects:@"修改",@"收藏", nil];
+        if(category != 4)
+        {
+            nameArray = [[NSMutableArray alloc] initWithObjects:@"修改",@"收藏", nil];
+        }
+        else
+        {
+            nameArray = [[NSMutableArray alloc] initWithObjects:@"删除",@"收藏", nil];
+        }
     }
     else
     {
-        nameArray = [[NSArray alloc] initWithObjects:@"私信",@"举报",@"收藏", nil];
+        if(caategoryType != 2)
+        {
+            nameArray = [[NSMutableArray alloc] initWithObjects:@"私信",@"收藏", nil];
+        }
+        else
+        {
+            nameArray = [[NSMutableArray alloc] initWithObjects:@"私信",@"举报",@"收藏", nil];
+        }
     }
+    
     
     listView = [[DetailListView alloc] initWithArray:CGRectGetMaxY(self.navigationController.navigationBar.frame) array:nameArray];
     listView.delegate = self;
+    if([self.neighborData.collectStatus integerValue] == 3)
+    {
+        [listView setCollectStatus:YES];
+    }
+
     bgView = [[BackgroundView alloc] initWithFrame:self.parentViewController.view.frame view:listView];
     
 }
@@ -434,7 +459,74 @@
 #pragma mark -DetailListViewDelegate
 -(void) seletedAction:(NSString *)action
 {
-    NSLog(@"DetailListViewDelegate action = %@",action);
+    if([action isEqualToString:@"收藏"])
+    {
+        [self collectTopicNet];
+    }
+    else if([action isEqualToString:@"取消收藏"])
+    {
+        [self delCollectTopicNet];
+    }
+    else if([action isEqualToString:@"修改"])
+    {
+        NSInteger type = [self.neighborData.objectType integerValue];
+        switch (type) {
+            // 话题
+            case 0:
+            {
+                CreateTopicVC* topicVC = [[CreateTopicVC alloc] init];
+                NSMutableDictionary* dict = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+                                             @"update",@"option",
+                                             self.neighborData.titleName, @"title",
+                                             self.neighborData.publishText, @"content",
+                                             self.neighborData.forumName, @"forumName",
+                                             self.neighborData.topicId, @"topicId",
+                                             self.neighborDF , @"dataFrame",
+                                             nil];
+                [topicVC setTopicInfo:dict];
+                [self.navigationController pushViewController:topicVC animated:YES];
+                break;
+            }
+            // 活动
+            case 1:
+            {
+                CreateActivityVC* activityVC = [[CreateActivityVC alloc] init];
+                NSDictionary* objectDict = self.neighborData.objectData[0];
+                NSString* title = [self.neighborData.titleName substringFromIndex:4];
+                NSMutableDictionary* dict = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+                                             @"update",@"option",
+                                             title, @"title",
+                                             [objectDict valueForKey:@"content"], @"content",
+                                             self.neighborData.forumName, @"forumName",
+                                             self.neighborData.topicId, @"topicId",
+                                             [objectDict valueForKey:@"location"], @"location",
+                                             [objectDict valueForKey:@"startTime"], @"startTime",
+                                             [objectDict valueForKey:@"endTime"], @"endTime",
+                                             self.neighborDF , @"dataFrame",
+                                             nil];
+                [activityVC setTopicInfo:dict];
+                [self.navigationController pushViewController:activityVC animated:YES];
+                break;
+            }
+            // 物品置换
+            case 4:
+            {
+                break;
+            }
+            default:
+                break;
+        }
+        
+    }
+    else if([action isEqualToString:@"私信"])
+    {
+        
+    }
+    else if([action isEqualToString:@"举报"])
+    {
+        
+    }
+
 }
 
 
@@ -1455,6 +1547,97 @@
 
 }
 
+// 取消收藏网络请求
+- (void)delCollectTopicNet
+{
+    NSInteger topicId = [self.neighborData.topicId integerValue];
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSString* userId = [defaults stringForKey:@"userId"];
+    NSString* communityId = [defaults stringForKey:@"communityId"];
+    
+    AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
+    manager.securityPolicy.allowInvalidCertificates = YES;
+    [manager.securityPolicy setValidatesDomainName:NO];
+    
+    
+    NSString* MD5String = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"user_id%@topic_id%ldcommunity_id%@",userId,topicId,communityId]];
+    NSString* hashString = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"%@1", MD5String]];
+    
+    NSDictionary* parameter = @{@"user_id" : userId,
+                                @"topic_id" : [NSNumber numberWithInteger:topicId],
+                                @"community_id" : communityId,
+                                @"apitype" : @"comm",
+                                @"salt" : @"1",
+                                @"tag" : @"delcol",
+                                @"hash" : hashString,
+                                @"keyset" : @"user_id:topic_id:community_id:",
+                                };
+    [manager POST:POST_URL parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSLog(@"取消收藏网络请求:%@", responseObject);
+        self.neighborData.collectStatus = @"0";
+        [listView setCollectStatus:NO];
+        [MBProgressHUBTool textToast:self.parentViewController.view Tip:@"取消收藏成功"];
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"请求失败:%@", error.description);
+        return;
+    }];
+    
+
+}
+
+// 收藏网络请求
+- (void)collectTopicNet
+{
+    NSInteger topicId = [self.neighborData.topicId integerValue];
+    NSInteger senderId = [self.neighborData.senderId integerValue];
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSString* userId = [defaults stringForKey:@"userId"];
+    NSString* communityId = [defaults stringForKey:@"communityId"];
+    
+    AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
+    manager.securityPolicy.allowInvalidCertificates = YES;
+    [manager.securityPolicy setValidatesDomainName:NO];
+    
+    
+    NSString* MD5String = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"user_id%@topic_id%ldcommunity_id%@",userId,topicId,communityId]];
+    NSString* hashString = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"%@1", MD5String]];
+    
+    NSDictionary* parameter = @{@"user_id" : userId,
+                                @"sender_id" : [NSNumber numberWithInteger:senderId],
+                                @"topic_id" : [NSNumber numberWithInteger:topicId],
+                                @"community_id" : communityId,
+                                @"apitype" : @"comm",
+                                @"salt" : @"1",
+                                @"tag" : @"addcol",
+                                @"hash" : hashString,
+                                @"keyset" : @"user_id:topic_id:community_id:",
+                                };
+    NSLog(@"parameter = %@",parameter);
+    [manager POST:POST_URL parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSLog(@"收藏网络请求:%@", responseObject);
+        NSString* flag = [responseObject valueForKey:@"flag"];
+        if([flag isEqualToString:@"ok"])
+        {
+            self.neighborData.collectStatus = @"3";
+            [listView setCollectStatus:YES];
+            [MBProgressHUBTool textToast:self.parentViewController.view Tip:@"收藏成功"];
+        }
+        else{
+            
+        }
+    
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"请求失败:%@", error.description);
+        return;
+    }];
+    
+    
+}
+
+
 #pragma mark - selector
 
 - (void) handlePan:(UIPanGestureRecognizer*)gesture
@@ -1488,10 +1671,8 @@
 
 - (void)rightAction:(id)sender
 {
-    NSLog(@".....");
     [self.parentViewController.view addSubview:bgView];
     [self.parentViewController.view addSubview:listView];
-
 }
 
 

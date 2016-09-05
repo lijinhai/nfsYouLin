@@ -106,11 +106,19 @@
         {
             NSLog(@"开始新建话题~~");
             CreateTopicVC* topicVC = [[CreateTopicVC alloc] init];
+            NSMutableDictionary* dict = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+                                        @"create",@"option",
+                                        nil];
+            [topicVC setTopicInfo:dict];
             [controller.navigationController pushViewController:topicVC animated:YES];
         }
         else if([string isEqualToString:@"发起活动"])
         {
             CreateActivityVC* activityVC = [[CreateActivityVC alloc] init];
+            NSMutableDictionary* dict = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+                                         @"create",@"option",
+                                         nil];
+            [activityVC setTopicInfo:dict];
             [controller.navigationController pushViewController:activityVC animated:YES];
 
         }

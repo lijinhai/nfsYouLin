@@ -3242,7 +3242,6 @@
 			children = (
 				AF0E0FEE1D4068B2009FB44D /* DialogView.h */,
 				AF0E0FEF1D4068B2009FB44D /* DialogView.m */,
-				AF5293D81D12985400503975 /* ListTableView.h */,
 				AF5293D91D12985400503975 /* ListTableView.m */,
 				AF5293DA1D12985400503975 /* BackgroundView.h */,
 				AF5293DB1D12985400503975 /* BackgroundView.m */,
@@ -3252,6 +3251,7 @@
 				8F9220171D38C6AC00A72F90 /* ApplyDetailView.m */,
 				8FB6F9A51D3F53E100E6C71A /* WaitView.h */,
 				8FB6F9A61D3F53E100E6C71A /* WaitView.m */,
+				AF5293D81D12985400503975 /* ListTableView.h */,
 				AF197E451D6C2A4B0070AAC4 /* RectWaitView.h */,
 				AF197E461D6C2A4B0070AAC4 /* RectWaitView.m */,
 			);

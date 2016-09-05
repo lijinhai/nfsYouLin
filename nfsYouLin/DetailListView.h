@@ -17,6 +17,6 @@
 @interface DetailListView : UIView<UITableViewDelegate, UITableViewDataSource>
 
 @property(strong, nonatomic)id<DetailListViewDelegate> delegate;
-
-- (id)initWithArray:(CGFloat)frameY array:(NSArray*)nameArray;
+@property(assign, nonatomic) BOOL collectStatus;
+- (id)initWithArray:(CGFloat)frameY array:(NSMutableArray*)nameArray;
 @end

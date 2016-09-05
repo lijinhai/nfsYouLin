@@ -23,7 +23,8 @@
 #import "DialogView.h"
 #import "MapVC.h"
 #import "MBProgressHUBTool.h"
-
+#import "NeighborData.h"
+#import "NeighborDataFrame.h"
 @interface CreateActivityVC ()
 
 @end
@@ -289,6 +290,7 @@
     startTime = 0;
     endTime = 0;
     dialogView = nil;
+    [self initTopicData];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -303,7 +305,45 @@
 }
 
 
-#pragma mark UICollectionView
+- (void) initTopicData
+{
+    if([[self.topicInfo valueForKey:@"option"] isEqualToString:@"update"])
+    {
+        self.titleTV.text = [self.topicInfo valueForKey:@"title"];
+        [self textViewDidChange:self.titleTV];
+        self.contentTV.text = [self.topicInfo valueForKey:@"content"];
+        [self textViewDidChange:self.contentTV];
+        NSString* forum = [self.topicInfo valueForKey:@"forumName"];
+        if([forum isEqualToString:@"本小区"])
+        {
+            limitVC.which = 0;
+        }
+        else if([forum isEqualToString:@"周边"])
+        {
+            limitVC.which = 1;
+        }
+        else if([forum isEqualToString:@"同城"])
+        {
+            limitVC.which = 2;
+        }
+        
+        [self convertStartString:[[self.topicInfo valueForKey:@"startTime"] integerValue]];
+        [self convertEndString:[[self.topicInfo valueForKey:@"endTime"] integerValue]];
+        mapVC.address = [self.topicInfo valueForKey:@"location"];
+        [self.tableView reloadData];
+        self.navigationItem.rightBarButtonItem.title = @"完成";
+    }
+    
+}
+
+
+
+#pragma mark -setter
+- (void) setTopicInfo:(NSMutableDictionary *)topicInfo
+{
+    _topicInfo = topicInfo;
+}
+#pragma mark -UICollectionView
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
     return selectedPhotos.count + 1;
@@ -921,11 +961,8 @@
 
 - (IBAction)sendResult:(id)sender
 {
-    NSLog(@"发送");
-    
     NSString* title = self.titleTV.text;
     NSString* content = self.contentTV.text;
-    
     if(title.length == 0)
     {
         [emptyIV setHidden:NO];
@@ -1049,7 +1086,6 @@
                                       hashString, @"hash",
                                       keySet,@"keyset",
                                       nil];
-    NSLog(@"parameter = %@",parameter);
     NSMutableArray* imagesName = [[NSMutableArray alloc] init];
     if([selectedPhotos count] != 0)
     {
@@ -1068,7 +1104,12 @@
         
     }
     
-    
+    if([[self.topicInfo valueForKey:@"option"] isEqualToString:@"update"])
+    {
+        parameter[@"tag"] = @"updatetopic";
+        parameter[@"topic_id"] = [self.topicInfo valueForKey:@"topicId"];
+    }
+
     [manager POST:POST_URL parameters:parameter constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
         if([selectedPhotos count] != 0)
         {
@@ -1089,8 +1130,18 @@
         if([flag isEqualToString:@"ok"])
         {
             NSLog(@"发布新活动网络请求成功");
-            [ChatDemoHelper shareHelper].neighborVC.refresh = YES;
-            [self.navigationController popViewControllerAnimated:YES];
+            if([[self.topicInfo valueForKey:@"option"] isEqualToString:@"update"])
+            {
+//                NSInteger index = [[self.navigationController viewControllers]indexOfObject:self];
+//                [ChatDemoHelper shareHelper].neighborVC.topicId = [[self.topicInfo valueForKey:@"topicId"] integerValue];
+//                [self.navigationController popToViewController:[self.navigationController.viewControllers objectAtIndex:index - 2]animated:YES];
+                [self getSingleTopicNet];
+            }
+            else
+            {
+                [ChatDemoHelper shareHelper].neighborVC.refresh = YES;
+                [self.navigationController popViewControllerAnimated:YES];
+            }
             
         }
         else if([flag isEqualToString:@"full"])
@@ -1111,6 +1162,79 @@
         [backgroundView removeFromSuperview];
     }];
 
+}
+
+#pragma mark -Network
+// 获取单条帖子
+- (void) getSingleTopicNet
+{
+    AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
+    manager.securityPolicy.allowInvalidCertificates = YES;
+    [manager.securityPolicy setValidatesDomainName:NO];
+    NSString* topicId = [self.topicInfo valueForKey:@"topicId"];
+    
+    NSString* MD5String = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"user_id%@community_id%ldtopic_id%@",userId,communityId,topicId]];
+    NSString* hashString = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"%@1", MD5String]];
+    
+    NSDictionary* parameter = @{@"user_id" : userId,
+                                @"community_id" : [NSNumber numberWithInteger:communityId],
+                                @"topic_id" : topicId,
+                                @"count" : @"1",
+                                @"apitype" : @"comm",
+                                @"tag" : @"gettopic",
+                                @"salt" : @"1",
+                                @"hash" : hashString,
+                                @"keyset" : @"user_id:community_id:topic_id:",
+                                };
+    
+    [manager POST:POST_URL parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSLog(@"获取单条帖子网络请求:%@", responseObject);
+        if([responseObject isKindOfClass:[NSArray class]])
+        {
+            NSDictionary* dict = [self getResponseDictionary:responseObject[0]];
+            NeighborDataFrame* dateFrame = [self.topicInfo valueForKey:@"dataFrame"];
+            dateFrame.neighborData = [dateFrame.neighborData setWithDict:dict];
+        }
+        NSInteger index = [[self.navigationController viewControllers]indexOfObject:self];
+        [self.navigationController popToViewController:[self.navigationController.viewControllers objectAtIndex:index - 2]animated:YES];
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"请求失败:%@", error.description);
+        return;
+    }];
+    
+}
+
+        
+        
+- (NSDictionary*) getResponseDictionary: (NSDictionary *) responseDict
+{
+    NSDictionary* dict;
+    dict = @{
+             @"iconName" : responseDict[@"senderPortrait"],
+             @"titleName" : responseDict[@"topicTitle"],
+             @"accountName" : responseDict[@"displayName"],
+             @"publishText" : responseDict[@"topicContent"],
+             @"picturesArray" : responseDict[@"mediaFile"],
+             @"topicTime" : responseDict[@"topicTime"],
+             @"systemTime" : responseDict[@"systemTime"],
+             @"senderId" : responseDict[@"senderId"],
+             @"cacheKey" : responseDict[@"cacheKey"],
+             @"topicCategory" : responseDict[@"objectType"],
+             @"infoArray" : responseDict[@"objectData"],
+             @"praiseType" : responseDict[@"praiseType"],
+             @"viewCount" : responseDict[@"viewNum"],
+             @"praiseCount" : responseDict[@"likeNum"],
+             @"replyCount" : responseDict[@"commentNum"],
+             @"topicId" : responseDict[@"topicId"],
+             @"collectStatus" : responseDict[@"collectStatus"],
+             @"forumName" : responseDict[@"forumName"],
+             @"objectType" : responseDict[@"objectType"],
+             @"objectData" : responseDict[@"objectData"],
+             };
+    return dict;
 }
 
 // 数据库取数据
@@ -1273,4 +1397,27 @@
     return time;
 }
 
+- (void) convertStartString:(NSInteger)time
+{
+    NSDate *startDate = [NSDate dateWithTimeIntervalSince1970:time / 1000];
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init] ;
+    [formatter setDateFormat:@"yyyy年MM月dd日HH时mm分"];
+    [formatter setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
+    startStr = [formatter stringFromDate:startDate];
+    [formatter setDateFormat:@"yyyy-MM-dd- HH-mm"];
+    startStr1 = [formatter stringFromDate:startDate];
+    startTime = time;
+}
+
+- (void) convertEndString:(NSInteger)time
+{
+    NSDate *endDate = [NSDate dateWithTimeIntervalSince1970:time / 1000];
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init] ;
+    [formatter setDateFormat:@"yyyy年MM月dd日HH时mm分"];
+    [formatter setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
+    endStr = [formatter stringFromDate:endDate];
+    [formatter setDateFormat:@"yyyy-MM-dd- HH-mm"];
+    endStr1 = [formatter stringFromDate:endDate];
+    endTime = time;
+}
 @end

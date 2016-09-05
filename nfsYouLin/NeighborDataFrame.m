@@ -18,6 +18,10 @@
 {
     _neighborData = neighborData;
     
+    if(self.picturesFrame)
+    {
+        [self.picturesFrame removeAllObjects];
+    }
     // 头像位置大小
     CGFloat iconViewX = PADDING;
     CGFloat iconViewY = PADDING;
@@ -60,11 +64,6 @@
     CGFloat accountInfoLabelW = accountInfoLabelSize.width;
     CGFloat accountInfoLabelH = accountInfoLabelSize.height;
     self.accountInfoFrame = CGRectMake(accountInfoLabelX, accountInfoLabelY, accountInfoLabelW, accountInfoLabelH);
-    
-    
-    
-    
-    
     // 帖子内容位置大小
 //    UIFont *font = [UIFont systemFontOfSize:16];
     UIFont *font = [UIFont systemFontOfSize:15];
