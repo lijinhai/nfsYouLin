@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface InviteVC : UIViewController
+@interface InviteVC : UIViewController<UITextFieldDelegate>
 
 @end
