@@ -17,6 +17,8 @@
 #import "BackgroundView.h"
 #import "CreateTopicVC.h"
 #import "CreateActivityVC.h"
+#import "ChatViewController.h"
+#import "ReportVC.h"
 
 @interface NeighborDetailTVC ()
 
@@ -39,7 +41,7 @@
     
     DetailListView* listView;
     BackgroundView* bgView;
-
+    
 }
 
 - (id) init
@@ -520,11 +522,20 @@
     }
     else if([action isEqualToString:@"私信"])
     {
-        
+        NSString* senderId = [NSString stringWithFormat:@"%ld",[self.neighborData.senderId integerValue]];
+        NSString* nickName = self.neighborData.senderName;
+        ChatViewController *chatVC = [[ChatViewController alloc]initWithConversationChatter:senderId conversationType:EMConversationTypeChat];
+        chatVC.title = nickName;
+        [self.navigationController  pushViewController:chatVC animated:YES];
+
     }
     else if([action isEqualToString:@"举报"])
     {
-        
+        ReportVC* reportVC = [[ReportVC alloc] init];
+        reportVC.topicId = [self.neighborData.topicId integerValue];
+        reportVC.senderId = [self.neighborData.senderId integerValue];
+        [self.navigationController  pushViewController:reportVC animated:YES];
+
     }
 
 }

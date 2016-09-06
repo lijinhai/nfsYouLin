@@ -16,9 +16,11 @@
 // 帖子标题
 @property (strong, nonatomic) NSString* titleName;
 
-// 账户昵称
+// 账户名称
 @property (strong, nonatomic) NSString* accountName;
 
+// 昵称
+@property (strong, nonatomic) NSString* senderName;
 // 帖子发表时间
 @property (strong, nonatomic) NSString* topicTime;
 

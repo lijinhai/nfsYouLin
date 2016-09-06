@@ -1014,6 +1014,7 @@
              @"iconName" : responseDict[@"senderPortrait"],
              @"titleName" : responseDict[@"topicTitle"],
              @"accountName" : responseDict[@"displayName"],
+             @"senderName" : responseDict[@"senderName"],
              @"publishText" : responseDict[@"topicContent"],
              @"picturesArray" : responseDict[@"mediaFile"],
              @"topicTime" : responseDict[@"topicTime"],

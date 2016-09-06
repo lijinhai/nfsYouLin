@@ -1277,6 +1277,7 @@ static BOOL upState = YES;
         @"iconName" : responseDict[@"senderPortrait"],
         @"titleName" : responseDict[@"topicTitle"],
         @"accountName" : responseDict[@"displayName"],
+        @"senderName" : responseDict[@"senderName"],
         @"publishText" : responseDict[@"topicContent"],
         @"picturesArray" : responseDict[@"mediaFile"],
         @"topicTime" : responseDict[@"topicTime"],
@@ -1296,6 +1297,7 @@ static BOOL upState = YES;
         @"objectData" : responseDict[@"objectData"],
         @"topicCategoryType" : responseDict[@"topicCategoryType"],
         };
+    NSLog(@"res = %@",responseDict);
     return dict;
 }
 

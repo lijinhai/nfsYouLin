@@ -399,6 +399,8 @@
 		8F823D721D2A3B3D00178B01 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F823D711D2A3B3D00178B01 /* AddressBook.framework */; };
 		8F823D741D2A3B4800178B01 /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F823D731D2A3B4800178B01 /* AddressBookUI.framework */; };
 		8F9220181D38C6AC00A72F90 /* ApplyDetailView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F9220171D38C6AC00A72F90 /* ApplyDetailView.m */; };
+		8FA53CE61D7E4FFC00841B1D /* ReportVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FA53CE51D7E4FFC00841B1D /* ReportVC.m */; };
+		8FA53CE91D7E85A800841B1D /* ReportCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FA53CE81D7E85A800841B1D /* ReportCell.m */; };
 		8FB6F9A71D3F53E100E6C71A /* WaitView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FB6F9A61D3F53E100E6C71A /* WaitView.m */; };
 		8FB6F9AB1D3F67AD00E6C71A /* MOBFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FB6F9A91D3F67AD00E6C71A /* MOBFoundation.framework */; };
 		8FB6F9AC1D3F67AD00E6C71A /* SMS_SDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FB6F9AA1D3F67AD00E6C71A /* SMS_SDK.framework */; };
@@ -1186,6 +1188,10 @@
 		8F823D731D2A3B4800178B01 /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
 		8F9220161D38C6AC00A72F90 /* ApplyDetailView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApplyDetailView.h; sourceTree = "<group>"; };
 		8F9220171D38C6AC00A72F90 /* ApplyDetailView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApplyDetailView.m; sourceTree = "<group>"; };
+		8FA53CE41D7E4FFC00841B1D /* ReportVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReportVC.h; sourceTree = "<group>"; };
+		8FA53CE51D7E4FFC00841B1D /* ReportVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReportVC.m; sourceTree = "<group>"; };
+		8FA53CE71D7E85A800841B1D /* ReportCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReportCell.h; sourceTree = "<group>"; };
+		8FA53CE81D7E85A800841B1D /* ReportCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReportCell.m; sourceTree = "<group>"; };
 		8FB6F9A51D3F53E100E6C71A /* WaitView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WaitView.h; sourceTree = "<group>"; };
 		8FB6F9A61D3F53E100E6C71A /* WaitView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WaitView.m; sourceTree = "<group>"; };
 		8FB6F9A91D3F67AD00E6C71A /* MOBFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = MOBFoundation.framework; sourceTree = "<group>"; };
@@ -2842,6 +2848,8 @@
 				8FE39CD41D7942EA00BA4332 /* DetailListView.m */,
 				8FE39CD61D7960B800BA4332 /* DetailListCell.h */,
 				8FE39CD71D7960B800BA4332 /* DetailListCell.m */,
+				8FA53CE71D7E85A800841B1D /* ReportCell.h */,
+				8FA53CE81D7E85A800841B1D /* ReportCell.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -2855,6 +2863,8 @@
 				AFE569271CFE62F500C0F745 /* NeighborTVC.m */,
 				8FFBDF771D7557FC00FFF334 /* ApplyDetailTVC.h */,
 				8FFBDF781D7557FC00FFF334 /* ApplyDetailTVC.m */,
+				8FA53CE41D7E4FFC00841B1D /* ReportVC.h */,
+				8FA53CE51D7E4FFC00841B1D /* ReportVC.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -3803,12 +3813,14 @@
 				8F51E27F1D338FBF0094A4E5 /* SDWebImageDecoder.m in Sources */,
 				8F648D281D00547A00E3B155 /* PSTGridLayoutSection.m in Sources */,
 				8FD637E31D541F6900F500D9 /* CreateTopicVC.m in Sources */,
+				8FA53CE91D7E85A800841B1D /* ReportCell.m in Sources */,
 				8F648D4C1D00547A00E3B155 /* EaseBubbleView+Voice.m in Sources */,
 				8F1FB6D41D6444A200676743 /* MASConstraint.m in Sources */,
 				AF4B30311D2F930000CBF257 /* scanQrCodeViewController.m in Sources */,
 				8F648D261D00547A00E3B155 /* PSTGridLayoutItem.m in Sources */,
 				8F7539A41D51825C0090A7C2 /* CallViewController.m in Sources */,
 				8F648CEA1D00547900E3B155 /* wav.mm in Sources */,
+				8FA53CE61D7E4FFC00841B1D /* ReportVC.m in Sources */,
 				8F648D381D00547A00E3B155 /* EaseEmotionEscape.m in Sources */,
 				8F6491321D0653CB00E3B155 /* NDetailTableViewCell.m in Sources */,
 				8F648D031D00547A00E3B155 /* MWCaptionView.m in Sources */,
