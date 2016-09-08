@@ -13,6 +13,7 @@
 #import "MBProgressHUBTool.h"
 #import "DialogView.h"
 #import "ApplyDetailTVC.h"
+#import "PeopleInfoVC.h"
 
 @interface NeighborTVC ()
 
@@ -1751,5 +1752,14 @@ static BOOL upState = YES;
     
 }
 
+#pragma mark -查看个人信息代理 cellDelegate
+- (void) peopleInfoViewController:(NSInteger)peopleId
+{
+    PeopleInfoVC* peopleInfoVC = [[PeopleInfoVC alloc] init];
+    peopleInfoVC.peopleId = peopleId;
+    UIBarButtonItem* infoItem = [[UIBarButtonItem alloc] initWithTitle:@"邻居信息" style:UIBarButtonItemStylePlain target:nil action:nil];
+    [self.parentViewController.navigationItem setBackBarButtonItem:infoItem];
+    [self.navigationController pushViewController:peopleInfoVC animated:YES];
+}
 
 @end

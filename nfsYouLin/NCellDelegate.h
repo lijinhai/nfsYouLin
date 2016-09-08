@@ -41,6 +41,8 @@
 // 添加回复、删除回复
 - (void) replyEvent:(NSInteger) sctionNum btnText:(NSString*) btnText;
 
+// 获取个人详细信息
+- (void) peopleInfoViewController:(NSInteger) peopleId;
 @end
 
 

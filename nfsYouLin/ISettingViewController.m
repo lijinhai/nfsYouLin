@@ -18,6 +18,7 @@
 #import "LoginNC.h"
 #import "WaitView.h"
 #import "AppDelegate.h"
+#import "BlackListVC.h"
 
 @interface ISettingViewController ()<UITableViewDataSource,UITableViewDelegate>
 
@@ -391,7 +392,9 @@
                 case 0:
                 {
                     // 黑名单
-                    [self getBlackListInfo];
+//                    [self getBlackListInfo];
+                    BlackListVC* blackListVC = [[BlackListVC alloc] initWithStyle:UITableViewStyleGrouped];
+                    [self.navigationController pushViewController:blackListVC animated:YES];
                     break;
                 }
                 case 1:

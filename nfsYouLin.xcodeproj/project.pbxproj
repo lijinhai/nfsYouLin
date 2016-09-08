@@ -439,6 +439,8 @@
 		8FB6FA6B1D48379400E6C71A /* PersonModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FB6FA6A1D48379400E6C71A /* PersonModel.m */; };
 		8FB6FA801D484CDD00E6C71A /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FB6FA7F1D484CDD00E6C71A /* CoreLocation.framework */; };
 		8FB6FA881D485AEC00E6C71A /* ChatDemoHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FB6FA861D485AEC00E6C71A /* ChatDemoHelper.m */; };
+		8FBCF9661D81497E0005F50A /* BlackListVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FBCF9651D81497E0005F50A /* BlackListVC.m */; };
+		8FBCF9691D818A460005F50A /* PeopleInfoVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FBCF9681D818A460005F50A /* PeopleInfoVC.m */; };
 		8FD121481D7467150066C8E3 /* BaiduMapAPI_Base.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FD121411D7467150066C8E3 /* BaiduMapAPI_Base.framework */; };
 		8FD121491D7467150066C8E3 /* BaiduMapAPI_Cloud.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FD121421D7467150066C8E3 /* BaiduMapAPI_Cloud.framework */; };
 		8FD1214A1D7467150066C8E3 /* BaiduMapAPI_Location.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FD121431D7467150066C8E3 /* BaiduMapAPI_Location.framework */; };
@@ -1287,6 +1289,10 @@
 		8FB6FA7F1D484CDD00E6C71A /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		8FB6FA851D485AEC00E6C71A /* ChatDemoHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatDemoHelper.h; sourceTree = "<group>"; };
 		8FB6FA861D485AEC00E6C71A /* ChatDemoHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatDemoHelper.m; sourceTree = "<group>"; };
+		8FBCF9641D81497E0005F50A /* BlackListVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BlackListVC.h; sourceTree = "<group>"; };
+		8FBCF9651D81497E0005F50A /* BlackListVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BlackListVC.m; sourceTree = "<group>"; };
+		8FBCF9671D818A460005F50A /* PeopleInfoVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PeopleInfoVC.h; sourceTree = "<group>"; };
+		8FBCF9681D818A460005F50A /* PeopleInfoVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PeopleInfoVC.m; sourceTree = "<group>"; };
 		8FD121411D7467150066C8E3 /* BaiduMapAPI_Base.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = BaiduMapAPI_Base.framework; sourceTree = "<group>"; };
 		8FD121421D7467150066C8E3 /* BaiduMapAPI_Cloud.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = BaiduMapAPI_Cloud.framework; sourceTree = "<group>"; };
 		8FD121431D7467150066C8E3 /* BaiduMapAPI_Location.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = BaiduMapAPI_Location.framework; sourceTree = "<group>"; };
@@ -3061,6 +3067,8 @@
 				8F5303841CDB45B50078FD64 /* DiscoveryTVC.m */,
 				8FB6FA481D41B4EF00E6C71A /* FriendsVC.h */,
 				8FB6FA491D41B4EF00E6C71A /* FriendsVC.m */,
+				8FBCF9641D81497E0005F50A /* BlackListVC.h */,
+				8FBCF9651D81497E0005F50A /* BlackListVC.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -3108,6 +3116,8 @@
 				8FFBDF781D7557FC00FFF334 /* ApplyDetailTVC.m */,
 				8FA53CE41D7E4FFC00841B1D /* ReportVC.h */,
 				8FA53CE51D7E4FFC00841B1D /* ReportVC.m */,
+				8FBCF9671D818A460005F50A /* PeopleInfoVC.h */,
+				8FBCF9681D818A460005F50A /* PeopleInfoVC.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -4101,6 +4111,7 @@
 				8F1FB6DB1D6444A200676743 /* View+MASAdditions.m in Sources */,
 				8F648D371D00547A00E3B155 /* EaseEmojiEmoticons.m in Sources */,
 				8F51E2881D338FBF0094A4E5 /* UIImageView+HighlightedWebCache.m in Sources */,
+				8FBCF9691D818A460005F50A /* PeopleInfoVC.m in Sources */,
 				8F648D1C1D00547A00E3B155 /* NSIndexPath+PSTCollectionViewAdditions.m in Sources */,
 				8F648D4B1D00547A00E3B155 /* EaseBubbleView+Video.m in Sources */,
 				8FF7E9781D12A04D0026D07D /* ChatViewController.m in Sources */,
@@ -4144,6 +4155,7 @@
 				8F648D171D00547A00E3B155 /* UIImage+EMMultiFormat.m in Sources */,
 				8F648CEB1D00547900E3B155 /* EMVoiceConverter.mm in Sources */,
 				AFEB365E1D503F050081A5E6 /* GoodsCollectionViewCell.m in Sources */,
+				8FBCF9661D81497E0005F50A /* BlackListVC.m in Sources */,
 				8FB6FA4D1D41B56A00E6C71A /* SegmentView.m in Sources */,
 				8F648D431D00547A00E3B155 /* EaseCustomMessageCell.m in Sources */,
 				8F648CF71D00547A00E3B155 /* MJRefreshAutoStateFooter.m in Sources */,

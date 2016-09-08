@@ -550,9 +550,6 @@
 
     }
    
-    
-
-    
     if([self.neighborDataFrame.neighborData.senderId integerValue] == [userId integerValue])
     {
         // 添加删除按钮
@@ -564,9 +561,7 @@
 
     }
 
-    
     self.deleteButton.frame = self.neighborDataFrame.deleteFrame;
-    
     if(self.neighborDataFrame.textCount >= 4)
     {
         self.readButton.frame = self.neighborDataFrame.readFrame;
@@ -688,7 +683,16 @@
 
 - (void) headImageView: (UITapGestureRecognizer*) recognizer
 {
-    [_delegate showCircularImageViewWithImage:self.iconView.image];
+    NSInteger userId = [self.neighborDataFrame.neighborData.senderId integerValue];
+    if(userId == 1)
+    {
+        [_delegate showCircularImageViewWithImage:self.iconView.image];
+    }
+    else
+    {
+        [_delegate peopleInfoViewController:userId];
+    }
+    
 }
 
 - (void)tapImageView: (UITapGestureRecognizer*) recognizer

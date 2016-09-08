@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "NCellDelegate.h"
+#import "FriendViewCell.h"
 
-@interface FriendsVC : UIViewController <UITableViewDelegate,UITableViewDataSource,EaseConversationListViewControllerDelegate,EaseConversationListViewControllerDataSource,cellDelegate>
+@interface FriendsVC : UIViewController <UITableViewDelegate,UITableViewDataSource,EaseConversationListViewControllerDelegate,EaseConversationListViewControllerDataSource,cellDelegate,FriendViewDelegate>
 
 @property(strong, nonatomic) UITableView* tableView;
 

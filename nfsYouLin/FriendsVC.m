@@ -7,7 +7,6 @@
 //
 
 #import "FriendsVC.h"
-#import "FriendViewCell.h"
 #import "SegmentView.h"
 #import "AppDelegate.h"
 #import "AFHTTPSessionManager.h"
@@ -22,6 +21,7 @@
 #import "FirstTabBarController.h"
 #import "HeaderFile.h"
 #import "ShowImageView.h"
+#import "BlackListVC.h"
 
 //两次提示的默认间隔
 static const CGFloat kDefaultPlaySoundInterval = 1.0;
@@ -41,11 +41,14 @@ static NSString *kConversationChatter = @"ConversationChatter";
     UIColor *color;
     NSMutableArray* friendsArr;
     NSArray* keysArr;
-    NSDictionary* friendsDict;
+    NSMutableDictionary* friendsDict;
     UIActivityIndicatorView* indicator;
     UIView* backgroundView;
     UIView* headerView;
     UIPanGestureRecognizer* _panGesture;
+    
+    
+    NSInteger friendNum;
     
 }
 
@@ -98,7 +101,7 @@ static NSString *kConversationChatter = @"ConversationChatter";
         
         _panGesture = self.tableView.panGestureRecognizer;
         [_panGesture addTarget:self action:@selector(handlePan:)];
-        
+        friendNum = 0;
         [self.view addSubview:self.tableView];
         [self getNeighborsListNet];
         
@@ -217,7 +220,7 @@ static NSString *kConversationChatter = @"ConversationChatter";
  
 }
 
-- (NSString*)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+- (NSString*) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
     if(self.listFlag)
     {
@@ -268,6 +271,9 @@ static NSString *kConversationChatter = @"ConversationChatter";
             
         }
         
+        cell.delegate = self;
+        cell.row = indexPath.row;
+        cell.section = indexPath.section;
         return cell;
 
     }
@@ -479,7 +485,8 @@ static NSString *kConversationChatter = @"ConversationChatter";
             friendsDict = [manager friendsWithGroupAndSort];
             keysArr = [friendsDict allKeys];
             keysArr = [keysArr sortedArrayUsingSelector:@selector(compare:)];
-            [segmentView.neighborsBtn setTitle:[NSString stringWithFormat:@"附近邻居:%ld",[friendsArr count]] forState:UIControlStateNormal];
+            friendNum = [friendsArr count];
+            [segmentView.neighborsBtn setTitle:[NSString stringWithFormat:@"附近邻居:%ld",friendNum] forState:UIControlStateNormal];
         }
         [self.tableView reloadData];
         [self.tableView.mj_header endRefreshing];
@@ -849,5 +856,88 @@ static NSString *kConversationChatter = @"ConversationChatter";
     return attributedStr;
 }
 
+#pragma mark -FriendViewDelegate
+- (void)longPressGesture:(NSInteger)blackId row:(NSInteger)row section:(NSInteger)section
+{
+    UIAlertController *sheetController = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
+    UIAlertAction *addAction = [UIAlertAction actionWithTitle:@"加入黑名单" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+        UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"提示" message:@"加入黑名单，你将不再收到对方的消息，并且你们互相看不到对方朋友圈的更新" preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+            [self addBlackListNet:blackId row:row section:section];
+        }];
+        
+        [alert addAction:okAction];
+        [alert addAction:cancelAction];
+        [self presentViewController:alert animated:YES completion:nil];
+    }];
+    UIAlertAction *lookAction = [UIAlertAction actionWithTitle:@"查看黑名单" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        BlackListVC* blackVC = [[BlackListVC alloc] initWithStyle:UITableViewStyleGrouped];
+        [self.navigationController pushViewController:blackVC animated:YES];
+    }];
+    [sheetController addAction:cancelAction];
+    [sheetController addAction:addAction];
+    [sheetController addAction:lookAction];
+    [self presentViewController:sheetController animated:YES completion:nil];
+}
+
+#pragma mark -添加黑名单网络请求
+- (void) addBlackListNet: (NSInteger) blackId row:(NSInteger)row section:(NSInteger)section
+
+{
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSString* userId = [defaults valueForKey:@"userId"];
+    
+    AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
+    manager.securityPolicy.allowInvalidCertificates = YES;
+    [manager.securityPolicy setValidatesDomainName:NO];
+    
+    
+    NSString*  MD5String = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"user_id%@black_user_id%ld",userId,blackId]];
+    NSString* hashString = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"%@1", MD5String]];
+    
+    NSDictionary* parameter =@{
+                               @"user_id" : userId,
+                               @"black_user_id" : [NSNumber numberWithInteger:blackId],
+                               @"action_id" : @"1",
+                               @"apitype" : @"users",
+                               @"salt" : @"1",
+                               @"tag" : @"blacklist",
+                               @"hash" : hashString,
+                               @"keyset" : @"user_id:black_user_id:",
+                               };
+    
+    [manager POST:POST_URL parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSLog(@"添加黑名单网络请求:%@", responseObject);
+        NSString* flag = [responseObject valueForKey:@"flag"];
+        if([flag isEqualToString:@"ok"])
+        {
+            NSString* key = [keysArr objectAtIndex:section];
+            NSMutableArray* arr = [friendsDict objectForKey:key];
+            
+            [arr removeObjectAtIndex:row];
+            if(arr.count == 0)
+            {
+                [friendsDict removeObjectForKey:key];
+                keysArr = [friendsDict allKeys];
+                keysArr = [keysArr sortedArrayUsingSelector:@selector(compare:)];
+            }
+            else
+            {
+                friendsDict[key] = arr;
+            }
+            [friendsArr removeObject:arr];
+            friendNum -= 1;
+            [segmentView.neighborsBtn setTitle:[NSString stringWithFormat:@"附近邻居:%ld",friendNum] forState:UIControlStateNormal];
+            [self.tableView reloadData];
+        }
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"请求失败:%@", error.description);
+        return;
+    }];
+}
 
 @end
