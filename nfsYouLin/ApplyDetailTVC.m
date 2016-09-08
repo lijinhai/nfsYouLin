@@ -17,9 +17,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    NSLog(@"total = %ld,count = %ld",self.totalNum,self.peopleA.count);
-    
     self.view.backgroundColor = [UIColor whiteColor];
     //设置分割线的风格
     if ([self.tableView respondsToSelector:@selector(setSeparatorInset:)]) {

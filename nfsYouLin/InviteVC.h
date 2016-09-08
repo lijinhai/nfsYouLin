@@ -7,7 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <ContactsUI/ContactsUI.h>
+#import "PhonesView.h"
 
-@interface InviteVC : UIViewController<UITextFieldDelegate>
+#import <MessageUI/MessageUI.h>
+
+@interface InviteVC : UIViewController<UITextFieldDelegate,CNContactPickerDelegate,PhonesDelegate,MFMessageComposeViewControllerDelegate>
 
 @end
