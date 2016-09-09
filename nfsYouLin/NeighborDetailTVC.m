@@ -11,6 +11,14 @@
 #import "StringMD5.h"
 #import "DialogView.h"
 #import "AFHTTPSessionManager.h"
+#import "MJRefresh.h"
+#import "MBProgressHUBTool.h"
+#import "ApplyDetailTVC.h"
+#import "BackgroundView.h"
+#import "CreateTopicVC.h"
+#import "CreateActivityVC.h"
+#import "ChatViewController.h"
+#import "ReportVC.h"
 
 @interface NeighborDetailTVC ()
 
@@ -24,7 +32,16 @@
     NSMutableArray* _cellOtherHeight;   // 回复表格行高度
     UIView* backgroundView;
     DialogView* dialogView;
-
+    UIActivityIndicatorView* indicator;
+    UIView* indicatorBV;
+    
+    NSMutableArray* replyArr;
+    UIPanGestureRecognizer* _panGesture;
+    NSInteger replyOtherId;
+    
+    DetailListView* listView;
+    BackgroundView* bgView;
+    
 }
 
 - (id) init
@@ -32,8 +49,8 @@
     self = [super init];
     if(self)
     {
-       
-
+        replyArr = [[NSMutableArray alloc] init];
+        _cellOtherHeight = [[NSMutableArray alloc] init];
     }
     return self;
 }
@@ -55,9 +72,22 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    UIButton* rightBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
+    [rightBtn setBackgroundImage:[UIImage imageNamed:@"circle_more.png"] forState:UIControlStateNormal];
+    [rightBtn addTarget:self action:@selector(rightAction:) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem* rightItem = [[UIBarButtonItem alloc] initWithCustomView:rightBtn];
+//    [rightBtn addTarget:self action:@selector(handlePan:) forControlEvents:UIControlEventTouchUpInside];
+
+    self.navigationItem.rightBarButtonItem = rightItem;
+    
+    
     _replyText = [[NSMutableArray alloc] init];
-    _cellOtherHeight = [[NSMutableArray alloc] init];
     _cellHeight = [self heightOfScondRow];
+    
+    self.imagePicker = [[UIImagePickerController alloc] init];
+    self.imagePicker.modalPresentationStyle= UIModalPresentationOverFullScreen;
+    self.imagePicker.delegate = self;
     
     backgroundView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
     backgroundView.backgroundColor = [UIColor grayColor];
@@ -65,6 +95,7 @@
     dialogView = nil;
     
     self.tableView.bounces = NO;
+    self.tableView.showsVerticalScrollIndicator = NO;
     if ([self.tableView respondsToSelector:@selector(setSeparatorInset:)]) {
         [self.tableView setSeparatorInset:UIEdgeInsetsZero];
     }
@@ -77,9 +108,67 @@
     _footerView.backgroundColor = [UIColor whiteColor];
     self.tableView.tableFooterView = _footerView;
     self.tableView.separatorColor = [UIColor colorWithRed:245/255.0 green:245/255.0 blue:245/255.0 alpha:1];
+    self.tableView.mj_footer = [MJRefreshBackNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(upRefreshData)];
+    _panGesture = self.tableView.panGestureRecognizer;
+    [_panGesture addTarget:self action:@selector(handlePan:)];
+    replyOtherId = 0;
+    
+    indicatorBV = [[UIView alloc] initWithFrame:CGRectMake(0, _cellHeight + 100, CGRectGetWidth(self.view.frame), 100) ];
+//    indicatorBV.backgroundColor = [UIColor blueColor];
+    indicator = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(CGRectGetWidth(self.view.frame)/2 - 25, 0, 50, 50)];
+    indicator.hidesWhenStopped = YES;
+    indicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhiteLarge;
+    indicator.color =  [UIColor grayColor];
+    [indicatorBV addSubview:indicator];
+    [indicator startAnimating];
+    [self.view addSubview:indicatorBV];
     [self initInputView];
     
-  }
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSInteger senderId = [self.neighborData.senderId integerValue];
+    NSInteger category = [self.neighborData.objectType integerValue];
+    NSInteger caategoryType = [self.neighborData.topicCategoryType integerValue];
+    NSInteger userId = [[defaults stringForKey:@"userId"] integerValue];
+    NSMutableArray* nameArray;
+    
+    if(senderId == 1)
+    {
+        nameArray = [[NSMutableArray alloc] initWithObjects:@"收藏", nil];
+    }
+    else if (senderId == userId)
+    {
+        if(category != 4)
+        {
+            nameArray = [[NSMutableArray alloc] initWithObjects:@"修改",@"收藏", nil];
+        }
+        else
+        {
+            nameArray = [[NSMutableArray alloc] initWithObjects:@"删除",@"收藏", nil];
+        }
+    }
+    else
+    {
+        if(caategoryType != 2)
+        {
+            nameArray = [[NSMutableArray alloc] initWithObjects:@"私信",@"收藏", nil];
+        }
+        else
+        {
+            nameArray = [[NSMutableArray alloc] initWithObjects:@"私信",@"举报",@"收藏", nil];
+        }
+    }
+    
+    
+    listView = [[DetailListView alloc] initWithArray:CGRectGetMaxY(self.navigationController.navigationBar.frame) array:nameArray];
+    listView.delegate = self;
+    if([self.neighborData.collectStatus integerValue] == 3)
+    {
+        [listView setCollectStatus:YES];
+    }
+
+    bgView = [[BackgroundView alloc] initWithFrame:self.parentViewController.view.frame view:listView];
+    
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -89,18 +178,21 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if(indexPath.row == 0 || indexPath.row == 2)
+    NSInteger row = indexPath.row;
+    CGFloat height;
+    if(row == 0 || row == 2)
     {
-        return 44;
+        height = 44;
     }
     else if(indexPath.row == 1)
     {
-        return _cellHeight;
+        height = _cellHeight;
     }
     else
     {
-        return [[_cellOtherHeight objectAtIndex:indexPath.row - 3] floatValue];
+        height = [[_cellOtherHeight objectAtIndex:row - 3] floatValue];
     }
+    return height;
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
@@ -112,11 +204,18 @@
     if ([cell respondsToSelector:@selector(setLayoutMargins:)]) {
         [cell setLayoutMargins:UIEdgeInsetsZero];
     }
+    CGFloat h = self.tableView.contentSize.height;
+    CGFloat H = CGRectGetHeight(self.view.frame);
+    if(h <= H)
+    {
+        self.tableView.contentSize = CGSizeMake(CGRectGetWidth(self.tableView.frame), H + 5);
+    }
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [_replyText count] + 3;
+    return [replyArr count] + 3;
+//    return [_replyText count] + 3;
 }
 
 
@@ -151,7 +250,6 @@
             cell = [[NDetailTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellTwo];
         }
     }
-
     else
     {
         cell = [tableView dequeueReusableCellWithIdentifier:cellOther];
@@ -159,9 +257,21 @@
         {
             cell = [[NDetailTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellOther];
         }
+        else
+        {
+//            while ([cell.contentView.subviews lastObject] != nil)
+//            {
+//                 //删除并进行重新分配
+//                [(UIView*)[cell.contentView.subviews lastObject] removeFromSuperview];
+//            }
+//            for(UIView *view in cell.contentView.subviews) {
+//                [view removeFromSuperview];
+//            }
+//
+        }
         
-        cell.replyString = _replyText[indexPath.row - 3];
-        cell.replySize = [StringMD5 sizeWithString: _replyText[indexPath.row - 3] font:[UIFont fontWithName:@"AppleGothic" size:16] maxSize:CGSizeMake(screenWidth - 6 * PADDING, MAXFLOAT)];
+        NSDictionary* dict = replyArr[indexPath.row - 3];
+        [cell setOtherCellData:dict];
     }
     
     cell.rowNum = indexPath.row;
@@ -240,23 +350,35 @@
 
 }
 
-// 获取键盘输入文本
-- (void)didSendText:(NSString *)text
-{
-    if (text && text.length > 0) {
-        [_replyText insertObject:text atIndex: 0];
-        [_cellOtherHeight addObject:[NSNumber numberWithFloat:[self heightOfOtherRow:text]]];
-        [self.tableView reloadData];
-    }
-}
-
 // 计算回复表格行高度
-
-- (CGFloat) heightOfOtherRow: (NSString*)replyText
+// remark @标识
+- (CGFloat) heightOfOtherRow: (NSString*)replyText Remark:(BOOL) remark Type:(NSString*)type
 {
     CGFloat cellHeight = 5 * PADDING + 25;
-    cellHeight +=  [StringMD5 sizeWithString:[NSString stringWithFormat:@"%@",self.neighborData.accountName] font:[UIFont systemFontOfSize:15] maxSize:CGSizeMake(MAXFLOAT, MAXFLOAT)].height;
-    cellHeight += [StringMD5 sizeWithString:replyText font:[UIFont fontWithName:@"AppleGothic" size:16] maxSize:CGSizeMake(screenWidth - 6 * PADDING, MAXFLOAT)].height;
+    if(![type isKindOfClass:[NSNumber class]])
+    {
+        if([type isEqualToString:@"image"])
+        {
+            cellHeight += 100;
+        }
+        else if([type isEqualToString:@"video"])
+        {
+            cellHeight += 30;
+        }
+        
+    }
+    else if(![replyText isEqual:[NSNull null]])
+    {
+        cellHeight += [StringMD5 sizeWithString:replyText font:[UIFont fontWithName:@"AppleGothic" size:16] maxSize:CGSizeMake(screenWidth - 6 * PADDING, MAXFLOAT)].height;
+    }
+
+    cellHeight +=  [StringMD5 sizeWithString:[NSString stringWithFormat:@"%@",@"嗯嗯"] font:[UIFont systemFontOfSize:15] maxSize:CGSizeMake(MAXFLOAT, MAXFLOAT)].height;
+  
+    if(remark)
+    {
+        cellHeight += [StringMD5 sizeWithString:[NSString stringWithFormat:@"%@",@"嗯嗯"] font:[UIFont systemFontOfSize:15] maxSize:CGSizeMake(MAXFLOAT, MAXFLOAT)].height;
+    }
+
     return cellHeight;
 }
 
@@ -304,6 +426,145 @@
 }
 
 
+// 回复事件回调
+- (void) replyEvent:(NSInteger)rowNum btnText:(NSString *)btnText
+{
+    NSDictionary* dict = replyArr[rowNum - 3];
+    if([btnText isEqualToString:@"回复"])
+    {
+        EaseChatToolbar *chatToolbar = (EaseChatToolbar*)self.chatToolbar;
+        [chatToolbar.inputTextView becomeFirstResponder];
+        chatToolbar.inputTextView.text = [NSString stringWithFormat:@"回复 %@:",        [dict valueForKey:@"senderName"]];
+        replyOtherId = [[dict valueForKey:@"senderId"] integerValue];
+    }
+    else
+    {
+        NSLog(@"delete reply");
+        DialogView* deleteView = [[DialogView alloc] initWithFrame:backgroundView.frame  View:backgroundView Flag:@"common"];
+        [self.parentViewController.view addSubview:backgroundView];
+        [self.parentViewController.view addSubview:deleteView];
+        
+        deleteView.titleL.text = @"确定要删除该回复嘛？";
+        dialogView = deleteView;
+        UIButton* okBtn = deleteView.OKbtn;
+        okBtn.tag = rowNum;
+        [okBtn addTarget:self action:@selector(deleteOkReply:) forControlEvents:UIControlEventTouchUpInside];
+        
+        UIButton* cancelBtn = deleteView.NOBtn;
+        [cancelBtn addTarget:self action:@selector(deleteNoReply:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    
+    
+}
+
+
+#pragma mark -DetailListViewDelegate
+-(void) seletedAction:(NSString *)action
+{
+    if([action isEqualToString:@"收藏"])
+    {
+        [self collectTopicNet];
+    }
+    else if([action isEqualToString:@"取消收藏"])
+    {
+        [self delCollectTopicNet];
+    }
+    else if([action isEqualToString:@"修改"])
+    {
+        NSInteger type = [self.neighborData.objectType integerValue];
+        switch (type) {
+            // 话题
+            case 0:
+            {
+                CreateTopicVC* topicVC = [[CreateTopicVC alloc] init];
+                NSMutableDictionary* dict = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+                                             @"update",@"option",
+                                             self.neighborData.titleName, @"title",
+                                             self.neighborData.publishText, @"content",
+                                             self.neighborData.forumName, @"forumName",
+                                             self.neighborData.topicId, @"topicId",
+                                             self.neighborDF , @"dataFrame",
+                                             nil];
+                [topicVC setTopicInfo:dict];
+                [self.navigationController pushViewController:topicVC animated:YES];
+                break;
+            }
+            // 活动
+            case 1:
+            {
+                CreateActivityVC* activityVC = [[CreateActivityVC alloc] init];
+                NSDictionary* objectDict = self.neighborData.objectData[0];
+                NSString* title = [self.neighborData.titleName substringFromIndex:4];
+                NSMutableDictionary* dict = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+                                             @"update",@"option",
+                                             title, @"title",
+                                             [objectDict valueForKey:@"content"], @"content",
+                                             self.neighborData.forumName, @"forumName",
+                                             self.neighborData.topicId, @"topicId",
+                                             [objectDict valueForKey:@"location"], @"location",
+                                             [objectDict valueForKey:@"startTime"], @"startTime",
+                                             [objectDict valueForKey:@"endTime"], @"endTime",
+                                             self.neighborDF , @"dataFrame",
+                                             nil];
+                [activityVC setTopicInfo:dict];
+                [self.navigationController pushViewController:activityVC animated:YES];
+                break;
+            }
+            // 物品置换
+            case 4:
+            {
+                break;
+            }
+            default:
+                break;
+        }
+        
+    }
+    else if([action isEqualToString:@"私信"])
+    {
+        NSString* senderId = [NSString stringWithFormat:@"%ld",[self.neighborData.senderId integerValue]];
+        NSString* nickName = self.neighborData.senderName;
+        ChatViewController *chatVC = [[ChatViewController alloc]initWithConversationChatter:senderId conversationType:EMConversationTypeChat];
+        chatVC.title = nickName;
+        [self.navigationController  pushViewController:chatVC animated:YES];
+
+    }
+    else if([action isEqualToString:@"举报"])
+    {
+        ReportVC* reportVC = [[ReportVC alloc] init];
+        reportVC.topicId = [self.neighborData.topicId integerValue];
+        reportVC.senderId = [self.neighborData.senderId integerValue];
+        [self.navigationController  pushViewController:reportVC animated:YES];
+
+    }
+
+}
+
+
+#pragma mark - cellDelegate
+- (void)showRectImageViewWithImage:(UIImage *)image
+{
+    self.tableView.scrollEnabled = NO;
+    UIView* addView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    addView.alpha = 1.0;
+    [self.parentViewController.view addSubview:addView];
+    ShowImageView* showImage = [[ShowImageView alloc] initWithFrame:self.view.frame rectImage:image];
+    [showImage show:addView didFinish:^()
+     {
+         [UIView animateWithDuration:0.5f animations:^{
+             
+             showImage.alpha = 0.0f;
+             addView.alpha = 0.0f;
+             
+         } completion:^(BOOL finished) {
+             self.tableView.scrollEnabled = YES;
+             [showImage removeFromSuperview];
+             [addView removeFromSuperview];
+         }];
+         
+     }];
+
+}
 
 // 	圆形头像点击事件回调
 - (void)showCircularImageViewWithImage:(UIImage*) image
@@ -374,6 +635,14 @@
     UIButton* cancelBtn = deleteView.NOBtn;
     [cancelBtn addTarget:self action:@selector(deleteNoAction:) forControlEvents:UIControlEventTouchUpInside];
 
+}
+
+
+// 查看报名详情回调
+- (void)lookApplyDetail:(NSInteger)activityId
+{
+    NSLog(@"lookApplyDetail 回调");
+    [self lookApplyNet:activityId];
 }
 
 // 报名
@@ -501,6 +770,33 @@
     
 }
 
+// 确定删除回复
+- (void) deleteOkReply: (id) sender
+{
+    UIButton* button = (UIButton*)sender;
+    NSInteger rowNum = button.tag;
+    [self deleteReplyNet:rowNum];
+    [backgroundView removeFromSuperview];
+    if(dialogView)
+    {
+        [dialogView removeFromSuperview];
+        dialogView = nil;
+    }
+}
+
+// 取消删除回复
+- (void) deleteNoReply: (id) sender
+{
+    
+    [backgroundView removeFromSuperview];
+    if(dialogView)
+    {
+        [dialogView removeFromSuperview];
+        dialogView = nil;
+    }
+    
+}
+
 
 
 // 取消报名网络请求
@@ -546,6 +842,49 @@
         }
         [self.tableView reloadData];
 
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"请求失败:%@", error.description);
+        return;
+    }];
+    
+}
+
+// 查看报名详情网络请求
+- (void) lookApplyNet: (NSInteger)activityId
+{
+    AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
+    manager.securityPolicy.allowInvalidCertificates = YES;
+    [manager.securityPolicy setValidatesDomainName:NO];
+    
+    NSString* MD5String = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"activityId%ld",activityId]];
+    NSString* hashString = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"%@1", MD5String]];
+    
+    NSDictionary* parameter = @{@"activityId" : [NSNumber numberWithInteger:activityId],
+                                @"apitype" : @"comm",
+                                @"salt" : @"1",
+                                @"tag" : @"detenroll",
+                                @"hash" : hashString,
+                                @"keyset" : @"activityId:",
+                                };
+    
+    [manager POST:POST_URL parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject){
+        NSLog(@"查看报名详情网络请求:%@", responseObject);
+        
+        ApplyDetailTVC* applyDetailVC = [[ApplyDetailTVC alloc] initWithStyle:UITableViewStyleGrouped];
+        UIBarButtonItem* detailItem = [[UIBarButtonItem alloc] initWithTitle:@"报名详情" style:UIBarButtonItemStylePlain target:nil action:nil];
+        [self.parentViewController.navigationItem setBackBarButtonItem:detailItem];
+        
+        applyDetailVC.totalNum = [[responseObject valueForKey:@"enrollTotal"] integerValue];
+        applyDetailVC.peopleA = [responseObject valueForKey:@"enrollData"];
+        NSDictionary* dict = self.neighborData.infoArray[0];
+        NSMutableDictionary* dataDict = [NSMutableDictionary dictionaryWithDictionary:dict];
+        [dataDict setObject:[responseObject valueForKey:@"enrollTotal"] forKey:@"enrollTotal"];
+        NSArray* array = [NSArray arrayWithObject:dataDict];
+        self.neighborData.infoArray = [array mutableCopy];
+        [self.navigationController pushViewController:applyDetailVC animated:YES];
+        [self.tableView reloadData];
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         NSLog(@"请求失败:%@", error.description);
         return;
@@ -649,6 +988,876 @@
     }];
     
 }
+
+// 添加文本回复网络请求
+- (void) addTextReplyNet:(NSString*)content
+{
+    NSInteger topicId = [self.neighborData.topicId integerValue];
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSString* senderId = [defaults stringForKey:@"userId"];
+    NSString* communityId = [defaults stringForKey:@"communityId"];
+
+    AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
+    manager.securityPolicy.allowInvalidCertificates = YES;
+    [manager.securityPolicy setValidatesDomainName:NO];
+   
+    
+    NSString* MD5String = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"sender_id%@topic_id%ldcommunity_id%@content%@",senderId,topicId,communityId,content]];
+    NSString* hashString = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"%@1", MD5String]];
+    
+    NSDate* date = [NSDate dateWithTimeIntervalSinceNow:0];
+    long sendTime = [date timeIntervalSince1970]*1000;
+    NSDictionary* parameter;
+    if(replyOtherId == 0)
+    {
+        parameter = @{@"sender_id" : senderId,
+                      @"topic_id" : [NSNumber numberWithInteger:topicId],
+                      @"community_id" : communityId,
+                      @"contentType" : @"0",
+                      @"content" : content,
+                      @"sendTime" : [NSNumber numberWithLong:sendTime],
+                      @"apitype" : @"comm",
+                      @"salt" : @"1",
+                      @"tag" : @"addcomm",
+                      @"hash" : hashString,
+                      @"keyset" : @"sender_id:topic_id:community_id:content:",
+                      };
+    }
+    else
+    {
+        
+        parameter = @{@"sender_id" : senderId,
+                      @"topic_id" : [NSNumber numberWithInteger:topicId],
+                      @"community_id" : communityId,
+                      @"contentType" : @"0",
+                      @"content" : content,
+                      @"replay_user_id" : [NSNumber numberWithInteger:replyOtherId],
+                      @"sendTime" : [NSNumber numberWithLong:sendTime],
+                      @"apitype" : @"comm",
+                      @"salt" : @"1",
+                      @"tag" : @"addcomm",
+                      @"hash" : hashString,
+                      @"keyset" : @"sender_id:topic_id:community_id:content:",
+                      };
+
+    }
+    [manager POST:POST_URL parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSLog(@"添加回复网络请求:%@", responseObject);
+        NSString* flag = [responseObject valueForKey:@"flag"];
+        replyOtherId = 0;
+        if([flag isEqualToString:@"ok"])
+        {
+            NSDictionary* dict = [replyArr firstObject];
+            NSInteger commentId = [[dict valueForKey:@"commId"] integerValue];
+            [self getDownReplyNet:commentId];
+            
+        }
+        else if([flag isEqualToString:@"black"])
+        {
+            
+        }
+        else if([flag isEqualToString:@"none"])
+        {
+            
+        }
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"请求失败:%@", error.description);
+        return;
+    }];
+    
+
+}
+
+
+// 添加语音回复网络请求
+- (void) addVedioReplyNet:(NSString*)vedioPath Length:(NSInteger) length
+{
+    NSInteger topicId = [self.neighborData.topicId integerValue];
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSString* senderId = [defaults stringForKey:@"userId"];
+    NSString* communityId = [defaults stringForKey:@"communityId"];
+    NSString* fileName = [[vedioPath componentsSeparatedByString:@"/"] lastObject];
+    NSData* fileData = [NSData dataWithContentsOfFile:vedioPath];
+    
+    AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
+    manager.securityPolicy.allowInvalidCertificates = YES;
+    [manager.securityPolicy setValidatesDomainName:NO];
+    
+    
+    NSString* MD5String = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"sender_id%@topic_id%ldcommunity_id%@",senderId,topicId,communityId]];
+    NSString* hashString = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"%@1", MD5String]];
+    
+    NSDate* date = [NSDate dateWithTimeIntervalSinceNow:0];
+    long sendTime = [date timeIntervalSince1970]*1000;
+    NSDictionary* parameter;
+    if(replyOtherId == 0)
+    {
+        parameter = @{@"sender_id" : senderId,
+                      @"topic_id" : [NSNumber numberWithInteger:topicId],
+                      @"community_id" : communityId,
+                      @"contentType" : @"2",
+                      @"video_length" : [NSNumber numberWithInteger:length],
+                      @"video" : fileName,
+                      @"sendTime" : [NSNumber numberWithLong:sendTime],
+                      @"apitype" : @"comm",
+                      @"salt" : @"1",
+                      @"tag" : @"addcomm",
+                      @"hash" : hashString,
+                      @"keyset" : @"sender_id:topic_id:community_id:",
+                      };
+    }
+    else
+    {
+        
+        parameter = @{@"sender_id" : senderId,
+                      @"topic_id" : [NSNumber numberWithInteger:topicId],
+                      @"community_id" : communityId,
+                      @"contentType" : @"2",
+                      @"video_length" : [NSNumber numberWithInteger:length],
+                      @"video" : fileName,
+                      @"replay_user_id" : [NSNumber numberWithInteger:replyOtherId],
+                      @"sendTime" : [NSNumber numberWithLong:sendTime],
+                      @"apitype" : @"comm",
+                      @"salt" : @"1",
+                      @"tag" : @"addcomm",
+                      @"hash" : hashString,
+                      @"keyset" : @"sender_id:topic_id:community_id:",
+                      };
+        
+    }
+    
+    [manager POST:POST_URL parameters:parameter constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
+        [formData appendPartWithFileData:fileData name:@"video" fileName:fileName mimeType:@"amr"];
+        
+    } progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSLog(@"添加语音回复网络请求:%@", responseObject);
+        NSString* flag = [responseObject valueForKey:@"flag"];
+        replyOtherId = 0;
+        if([flag isEqualToString:@"ok"])
+        {
+            NSDictionary* dict = [replyArr firstObject];
+            NSInteger commentId = [[dict valueForKey:@"commId"] integerValue];
+            [self getDownReplyNet:commentId];
+            
+        }
+        else if([flag isEqualToString:@"black"])
+        {
+            
+        }
+        else if([flag isEqualToString:@"none"])
+        {
+            
+        }
+        
+
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"请求失败:%@", error.description);
+    }];
+
+}
+
+
+// 添加图片回复网络请求
+- (void) addImageReplyNet:(UIImage*)image
+{
+    NSInteger topicId = [self.neighborData.topicId integerValue];
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSString* senderId = [defaults stringForKey:@"userId"];
+    NSString* communityId = [defaults stringForKey:@"communityId"];
+    
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    formatter.dateFormat = @"yyyyMMddHHmmss";
+    NSString *imageName = [NSString stringWithFormat:@"%@.jpg",[formatter stringFromDate:[NSDate date]]];
+    
+    AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
+    manager.securityPolicy.allowInvalidCertificates = YES;
+    [manager.securityPolicy setValidatesDomainName:NO];
+    
+    
+    NSString* MD5String = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"sender_id%@topic_id%ldcommunity_id%@",senderId,topicId,communityId]];
+    NSString* hashString = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"%@1", MD5String]];
+    
+    NSDate* date = [NSDate dateWithTimeIntervalSinceNow:0];
+    long sendTime = [date timeIntervalSince1970]*1000;
+    NSDictionary* parameter;
+    if(replyOtherId == 0)
+    {
+        parameter = @{@"sender_id" : senderId,
+                      @"topic_id" : [NSNumber numberWithInteger:topicId],
+                      @"community_id" : communityId,
+                      @"contentType" : @"1",
+                      @"image" : imageName,
+                      @"sendTime" : [NSNumber numberWithLong:sendTime],
+                      @"apitype" : @"comm",
+                      @"salt" : @"1",
+                      @"tag" : @"addcomm",
+                      @"hash" : hashString,
+                      @"keyset" : @"sender_id:topic_id:community_id:",
+                      };
+    }
+    else
+    {
+        
+        parameter = @{@"sender_id" : senderId,
+                      @"topic_id" : [NSNumber numberWithInteger:topicId],
+                      @"community_id" : communityId,
+                      @"contentType" : @"1",
+                      @"image" : imageName,
+                      @"replay_user_id" : [NSNumber numberWithInteger:replyOtherId],
+                      @"sendTime" : [NSNumber numberWithLong:sendTime],
+                      @"apitype" : @"comm",
+                      @"salt" : @"1",
+                      @"tag" : @"addcomm",
+                      @"hash" : hashString,
+                      @"keyset" : @"sender_id:topic_id:community_id:",
+                      };
+        
+    }
+    
+    [manager POST:POST_URL parameters:parameter constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
+         NSData *data = UIImageJPEGRepresentation(image,0.1);
+        [formData appendPartWithFileData:data name:@"image" fileName:imageName mimeType:@"image/jpg"];
+        
+    } progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSLog(@"添加语音回复网络请求:%@", responseObject);
+        NSString* flag = [responseObject valueForKey:@"flag"];
+        replyOtherId = 0;
+        if([flag isEqualToString:@"ok"])
+        {
+            NSDictionary* dict = [replyArr firstObject];
+            NSInteger commentId = [[dict valueForKey:@"commId"] integerValue];
+            [self getDownReplyNet:commentId];
+            
+        }
+        else if([flag isEqualToString:@"black"])
+        {
+            
+        }
+        else if([flag isEqualToString:@"none"])
+        {
+            
+        }
+        
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"请求失败:%@", error.description);
+    }];
+    
+}
+
+// 获取回复网络请求
+- (void) getReplyNet
+{
+    
+    NSInteger topicId = [self.neighborData.topicId integerValue];
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSString* userId = [defaults stringForKey:@"userId"];
+    
+    AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
+    manager.securityPolicy.allowInvalidCertificates = YES;
+    [manager.securityPolicy setValidatesDomainName:NO];
+    [replyArr removeAllObjects];
+    [_cellOtherHeight removeAllObjects];
+    
+    NSString* MD5String = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"user_id%@topic_id%ld",userId,topicId]];
+    NSString* hashString = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"%@1", MD5String]];
+    
+    NSDictionary* parameter = @{@"user_id" : userId,
+                                @"topic_id" : [NSNumber numberWithInteger:topicId],
+                                @"type" : @"0",
+                                @"count" : @"6",
+                                @"apitype" : @"comm",
+                                @"salt" : @"1",
+                                @"tag" : @"getcomm",
+                                @"hash" : hashString,
+                                @"keyset" : @"user_id:topic_id:",
+                                };
+    [manager POST:POST_URL parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+        
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSLog(@"获取回复网络请求:%@", responseObject);
+        if([responseObject isKindOfClass:[NSArray class]])
+        {
+            for(NSInteger i = 0; i < [responseObject count]; i++)
+            {
+                NSDictionary* sourceDict = responseObject[i];
+                NSString* remarkName = [sourceDict valueForKey:@"remarkName"];
+                NSString* contentType = [sourceDict valueForKey:@"contentType"];
+
+                if([remarkName isEqualToString:@"null"])
+                {
+                    [_cellOtherHeight addObject:[NSNumber numberWithFloat:[self heightOfOtherRow:[sourceDict valueForKey:@"content"] Remark:NO Type:contentType]]];
+                }
+                else
+                {
+                    [_cellOtherHeight addObject:[NSNumber numberWithFloat:[self heightOfOtherRow:[sourceDict valueForKey:@"content"] Remark:YES Type:contentType]]];
+                }
+                
+               
+
+                [replyArr addObject:sourceDict];
+            }
+            [self.tableView reloadData];
+        }
+        [indicatorBV removeFromSuperview];
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"请求失败:%@", error.description);
+        return;
+    }];
+    
+}
+
+// 获取下拉回复网络请求
+- (void) getDownReplyNet:(NSInteger) commentId
+{
+    
+    NSInteger topicId = [self.neighborData.topicId integerValue];
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSString* userId = [defaults stringForKey:@"userId"];
+    
+    AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
+    manager.securityPolicy.allowInvalidCertificates = YES;
+    [manager.securityPolicy setValidatesDomainName:NO];
+    
+    NSString* MD5String = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"user_id%@topic_id%ldcomment_id%ld",userId,topicId,commentId]];
+    NSString* hashString = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"%@1", MD5String]];
+    
+    NSDictionary* parameter = @{@"user_id" : userId,
+                                @"topic_id" : [NSNumber numberWithInteger:topicId],
+                                @"comment_id" : [NSNumber numberWithInteger:commentId],
+                                @"type" : @"2",
+                                @"count" : @"6",
+                                @"apitype" : @"comm",
+                                @"salt" : @"1",
+                                @"tag" : @"getcomm",
+                                @"hash" : hashString,
+                                @"keyset" : @"user_id:topic_id:comment_id:",
+                                };
+    [manager POST:POST_URL parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+        
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSLog(@"获取下拉回复网络请求:%@", responseObject);
+        if([responseObject isKindOfClass:[NSArray class]])
+        {
+            for(NSInteger i = 0; i < [responseObject count]; i++)
+            {
+                NSDictionary* sourceDict = responseObject[i];
+                NSInteger sourceId = [[sourceDict valueForKey:@"commId"] integerValue];
+                BOOL state = NO;
+                for(int i = 0;i < [replyArr count]; i++)
+                {
+                    NSDictionary* dict = replyArr[i];
+                    NSInteger targetId = [[dict valueForKey:@"commId"] integerValue];
+                    if(targetId == sourceId)
+                        state = YES;
+
+                }
+                
+                if(state)
+                {
+                    continue;
+                }
+                    
+                NSString* remarkName = [sourceDict valueForKey:@"remarkName"];
+                NSString* contentType = [sourceDict valueForKey:@"contentType"];
+
+                if([remarkName isEqualToString:@"null"])
+                {
+                    [_cellOtherHeight insertObject:[NSNumber numberWithFloat:[self heightOfOtherRow:[sourceDict valueForKey:@"content"] Remark:NO Type:contentType]] atIndex:0];
+                }
+                else
+                {
+                    [_cellOtherHeight insertObject:[NSNumber numberWithFloat:[self heightOfOtherRow:[sourceDict valueForKey:@"content"] Remark:YES Type:contentType]] atIndex:0];
+                }
+                [replyArr insertObject:sourceDict atIndex:0];
+            }
+            [self getTotalReplyCountNet];
+        }
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"请求失败:%@", error.description);
+        return;
+    }];
+    
+}
+
+// 获取上拉回复网络请求
+- (void) getUpReplyNet
+{
+    if([replyArr count] < 6)
+    {
+        [self.tableView.mj_footer endRefreshing];
+        return;
+    }
+    NSDictionary* dict = [replyArr lastObject];
+    NSInteger topicId = [self.neighborData.topicId integerValue];
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSString* userId = [defaults stringForKey:@"userId"];
+    NSString* commentId = [dict valueForKey:@"commId"];
+    AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
+    manager.securityPolicy.allowInvalidCertificates = YES;
+    [manager.securityPolicy setValidatesDomainName:NO];
+    
+    NSString* MD5String = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"user_id%@topic_id%ldcomment_id%@",userId,topicId,commentId]];
+    NSString* hashString = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"%@1", MD5String]];
+    
+    NSDictionary* parameter = @{@"user_id" : userId,
+                                @"topic_id" : [NSNumber numberWithInteger:topicId],
+                                @"comment_id" : commentId,
+                                @"type" : @"3",
+                                @"count" : @"6",
+                                @"apitype" : @"comm",
+                                @"salt" : @"1",
+                                @"tag" : @"getcomm",
+                                @"hash" : hashString,
+                                @"keyset" : @"user_id:topic_id:comment_id:",
+                                };
+    [manager POST:POST_URL parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+        
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSLog(@"获取上拉回复网络请求:%@", responseObject);
+        if([responseObject isKindOfClass:[NSArray class]])
+        {
+            for(NSInteger i = 0; i < [responseObject count]; i++)
+            {
+                
+                NSDictionary* sourceDict = responseObject[i];
+                NSString* remarkName = [sourceDict valueForKey:@"remarkName"];
+                NSString* contentType = [sourceDict valueForKey:@"contentType"];
+                if([remarkName isEqualToString:@"null"])
+                {
+                     [_cellOtherHeight addObject:[NSNumber numberWithFloat:[self heightOfOtherRow:[sourceDict valueForKey:@"content"] Remark:NO Type:contentType]]];
+                }
+                else
+                {
+                    [_cellOtherHeight addObject:[NSNumber numberWithFloat:[self heightOfOtherRow:[sourceDict valueForKey:@"content"] Remark:YES Type:contentType]]];
+                  
+                }
+                [replyArr addObject:sourceDict];
+            }
+            [self.tableView reloadData];
+        }
+        [self.tableView.mj_footer endRefreshing];
+//        self.tableView.bounces = NO;
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"请求失败:%@", error.description);
+        return;
+    }];
+    
+}
+
+// 获取回复总数网络请求
+- (void) getTotalReplyCountNet
+{
+    
+    NSInteger topicId = [self.neighborData.topicId integerValue];
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSString* userId = [defaults stringForKey:@"userId"];
+    AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
+    manager.securityPolicy.allowInvalidCertificates = YES;
+    [manager.securityPolicy setValidatesDomainName:NO];
+    
+    NSString* MD5String = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"user_id%@topic_id%ld",userId,topicId]];
+    NSString* hashString = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"%@1", MD5String]];
+    
+    NSDictionary* parameter = @{@"user_id" : userId,
+                                @"topic_id" : [NSNumber numberWithInteger:topicId],
+                                @"apitype" : @"comm",
+                                @"salt" : @"1",
+                                @"tag" : @"getcommentcount",
+                                @"hash" : hashString,
+                                @"keyset" : @"user_id:topic_id:",
+                                };
+    [manager POST:POST_URL parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+        
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSLog(@"获取回复总数网络请求:%@", responseObject);
+        NSString* flag = [responseObject valueForKey:@"flag"];
+        if([flag isEqualToString:@"ok"])
+        {
+            self.neighborData.replyCount = [responseObject valueForKey:@"count"];
+        }
+        EaseChatToolbar *chatToolbar = (EaseChatToolbar*)self.chatToolbar;
+        [chatToolbar.inputTextView becomeFirstResponder];
+        chatToolbar.inputTextView.text = @"";
+        [self.tableView reloadData];
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"请求失败:%@", error.description);
+        return;
+    }];
+    
+}
+
+
+// 删除回复网络请求
+// commentId 回复id
+- (void) deleteReplyNet:(NSInteger)rowNum
+{
+    NSDictionary* dict = replyArr[rowNum - 3];
+    NSString* commentId = [dict valueForKey:@"commId"];
+    NSInteger topicId = [self.neighborData.topicId integerValue];
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSString* userId = [defaults stringForKey:@"userId"];
+    
+    AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
+    manager.securityPolicy.allowInvalidCertificates = YES;
+    [manager.securityPolicy setValidatesDomainName:NO];
+    
+    
+    NSString* MD5String = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"user_id%@topic_id%ldcomment_id%@",userId,topicId,commentId]];
+    NSString* hashString = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"%@1", MD5String]];
+    
+    NSDictionary* parameter = @{@"user_id" : userId,
+                                @"topic_id" : [NSNumber numberWithInteger:topicId],
+                                @"comment_id" : commentId,
+                                @"type" : @"0",
+                                @"count" : @"6",
+                                @"apitype" : @"comm",
+                                @"salt" : @"1",
+                                @"tag" : @"delcomm",
+                                @"hash" : hashString,
+                                @"keyset" : @"user_id:topic_id:comment_id:",
+                                };
+    [manager POST:POST_URL parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+        
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSLog(@"删除回复网络请求:%@", responseObject);
+        NSString* flag = [responseObject valueForKey:@"flag"];
+        if([flag isEqualToString:@"ok"])
+        {
+            [replyArr removeObjectAtIndex:rowNum - 3];
+            [_cellOtherHeight removeObjectAtIndex:rowNum - 3];
+            [self.tableView reloadData];
+        }
+        
+        
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"请求失败:%@", error.description);
+        return;
+    }];
+
+}
+
+// 取消收藏网络请求
+- (void)delCollectTopicNet
+{
+    NSInteger topicId = [self.neighborData.topicId integerValue];
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSString* userId = [defaults stringForKey:@"userId"];
+    NSString* communityId = [defaults stringForKey:@"communityId"];
+    
+    AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
+    manager.securityPolicy.allowInvalidCertificates = YES;
+    [manager.securityPolicy setValidatesDomainName:NO];
+    
+    
+    NSString* MD5String = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"user_id%@topic_id%ldcommunity_id%@",userId,topicId,communityId]];
+    NSString* hashString = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"%@1", MD5String]];
+    
+    NSDictionary* parameter = @{@"user_id" : userId,
+                                @"topic_id" : [NSNumber numberWithInteger:topicId],
+                                @"community_id" : communityId,
+                                @"apitype" : @"comm",
+                                @"salt" : @"1",
+                                @"tag" : @"delcol",
+                                @"hash" : hashString,
+                                @"keyset" : @"user_id:topic_id:community_id:",
+                                };
+    [manager POST:POST_URL parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSLog(@"取消收藏网络请求:%@", responseObject);
+        self.neighborData.collectStatus = @"0";
+        [listView setCollectStatus:NO];
+        [MBProgressHUBTool textToast:self.parentViewController.view Tip:@"取消收藏成功"];
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"请求失败:%@", error.description);
+        return;
+    }];
+    
+
+}
+
+// 收藏网络请求
+- (void)collectTopicNet
+{
+    NSInteger topicId = [self.neighborData.topicId integerValue];
+    NSInteger senderId = [self.neighborData.senderId integerValue];
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSString* userId = [defaults stringForKey:@"userId"];
+    NSString* communityId = [defaults stringForKey:@"communityId"];
+    
+    AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
+    manager.securityPolicy.allowInvalidCertificates = YES;
+    [manager.securityPolicy setValidatesDomainName:NO];
+    
+    
+    NSString* MD5String = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"user_id%@topic_id%ldcommunity_id%@",userId,topicId,communityId]];
+    NSString* hashString = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"%@1", MD5String]];
+    
+    NSDictionary* parameter = @{@"user_id" : userId,
+                                @"sender_id" : [NSNumber numberWithInteger:senderId],
+                                @"topic_id" : [NSNumber numberWithInteger:topicId],
+                                @"community_id" : communityId,
+                                @"apitype" : @"comm",
+                                @"salt" : @"1",
+                                @"tag" : @"addcol",
+                                @"hash" : hashString,
+                                @"keyset" : @"user_id:topic_id:community_id:",
+                                };
+    NSLog(@"parameter = %@",parameter);
+    [manager POST:POST_URL parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSLog(@"收藏网络请求:%@", responseObject);
+        NSString* flag = [responseObject valueForKey:@"flag"];
+        if([flag isEqualToString:@"ok"])
+        {
+            self.neighborData.collectStatus = @"3";
+            [listView setCollectStatus:YES];
+            [MBProgressHUBTool textToast:self.parentViewController.view Tip:@"收藏成功"];
+        }
+        else{
+            
+        }
+    
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"请求失败:%@", error.description);
+        return;
+    }];
+    
+    
+}
+
+
+#pragma mark - selector
+
+- (void) handlePan:(UIPanGestureRecognizer*)gesture
+{
+    CGPoint translation = [gesture translationInView:self.tableView];
+    if(gesture.state == UIGestureRecognizerStateBegan)
+    {
+        if(translation.y > 0)
+        {
+            self.tableView.bounces = NO;
+        }
+        // 底部上拉
+        else if(translation.y < 0)
+        {
+            self.tableView.bounces = YES;
+        }
+    }
+    else if(gesture.state == UIGestureRecognizerStateChanged)
+    {
+    }
+    else if(gesture.state == UIGestureRecognizerStateEnded)
+    {
+        CGFloat h = self.tableView.contentSize.height;
+        CGFloat H = CGRectGetHeight(self.view.frame);
+        if(h <= H)
+        {
+            self.tableView.contentSize = CGSizeMake(CGRectGetWidth(self.tableView.frame), H + 5);
+        }
+    }
+}
+
+- (void)rightAction:(id)sender
+{
+    [self.parentViewController.view addSubview:bgView];
+    [self.parentViewController.view addSubview:listView];
+}
+
+
+- (void)upRefreshData
+{
+    [self getUpReplyNet];
+}
+
+#pragma mark - EMChatToolbarDelegate
+
+// 获取键盘输入文本
+- (void)didSendText:(NSString *)text
+{
+    if (text && text.length > 0) {
+        [self addTextReplyNet:text];
+    }
+}
+
+
+// 按下录音按钮开始录音
+- (void)didStartRecordingVoiceAction:(UIView *)recordView
+{
+    if ([self.recordView isKindOfClass:[EaseRecordView class]]) {
+        [(EaseRecordView *)self.recordView recordButtonTouchDown];
+    }
+    if ([self _canRecord]) {
+        EaseRecordView *tmpView = (EaseRecordView *)recordView;
+        tmpView.center = self.view.center;
+        [self.view addSubview:tmpView];
+        [self.view bringSubviewToFront:recordView];
+        int x = arc4random() % 100000;
+        NSTimeInterval time = [[NSDate date] timeIntervalSince1970];
+        NSString *fileName = [NSString stringWithFormat:@"%d%d",(int)time,x];
+        
+        [[EMCDDeviceManager sharedInstance] asyncStartRecordingWithFileName:fileName completion:^(NSError *error)
+         {
+             if (error) {
+                 NSLog(@"%@",NSEaseLocalizedString(@"message.startRecordFail", @"failure to start recording"));
+             }
+         }];
+    }
+
+}
+
+/**
+ *  手指向上滑动取消录音
+ */
+- (void)didCancelRecordingVoiceAction:(UIView *)recordView
+{
+    [[EMCDDeviceManager sharedInstance] cancelCurrentRecording];
+    if ([self.recordView isKindOfClass:[EaseRecordView class]])
+    {
+        [(EaseRecordView *)self.recordView recordButtonTouchUpOutside];
+    }
+    [self.recordView removeFromSuperview];
+}
+
+/**
+ *  松开手指完成录音
+ */
+- (void)didFinishRecoingVoiceAction:(UIView *)recordView
+{
+    if ([self.recordView isKindOfClass:[EaseRecordView class]])
+    {
+        [(EaseRecordView *)self.recordView recordButtonTouchUpInside];
+    }
+    [self.recordView removeFromSuperview];
+    [[EMCDDeviceManager sharedInstance] asyncStopRecordingWithCompletion:^(NSString *recordPath, NSInteger aDuration, NSError *error) {
+        if(error)
+        {
+            [MBProgressHUBTool textToast:self.parentViewController.view Tip:@"录音时间太短了"];
+        }
+        else
+        {
+            NSLog(@"duration = %ld",aDuration);
+            NSLog(@"recordPath = %@",recordPath);
+            [self addVedioReplyNet:recordPath Length:aDuration];
+
+        }
+    }];
+}
+
+
+#pragma mark - EaseChatBarMoreViewDelegate
+- (void)moreViewPhotoAction:(EaseChatBarMoreView *)moreView
+{
+    // 隐藏键盘
+    [self.chatToolbar endEditing:YES];
+    
+    // 弹出照片选择
+    self.imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+    self.imagePicker.mediaTypes = @[(NSString *)kUTTypeImage];
+    [self presentViewController:self.imagePicker animated:YES completion:NULL];
+//    [[EaseSDKHelper shareHelper] setIsShowingimagePicker:YES];
+}
+
+- (void)moreViewTakePicAction:(EaseChatBarMoreView *)moreView
+{
+    // 隐藏键盘
+    [self.chatToolbar endEditing:YES];
+    
+#if TARGET_IPHONE_SIMULATOR
+    [self showHint:NSEaseLocalizedString(@"message.simulatorNotSupportCamera", @"simulator does not support taking picture")];
+#elif TARGET_OS_IPHONE
+    self.imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
+    self.imagePicker.mediaTypes = @[(NSString *)kUTTypeImage,(NSString *)kUTTypeMovie];
+    [self presentViewController:self.imagePicker animated:YES completion:NULL];
+    
+#endif
+}
+
+- (void)moreViewLocationAction:(EaseChatBarMoreView *)moreView
+{
+    // 隐藏键盘
+    [self.chatToolbar endEditing:YES];
+    
+    EaseLocationViewController *locationController = [[EaseLocationViewController alloc] init];
+    locationController.delegate = self;
+    [self.navigationController pushViewController:locationController animated:YES];
+}
+
+
+#pragma mark - UIImagePickerControllerDelegate
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    NSString *mediaType = info[UIImagePickerControllerMediaType];
+    UIImage* theImage = nil;
+    if([mediaType isEqualToString:(NSString*)kUTTypeImage])
+    {
+        if([picker allowsEditing])
+        {
+            theImage = [info objectForKey:UIImagePickerControllerEditedImage];
+        }
+        else
+        {
+            theImage = [info objectForKey: UIImagePickerControllerOriginalImage];
+        }
+        NSLog(@"theImage = %@",theImage);
+    }
+    if(theImage)
+    {
+        [self addImageReplyNet:theImage];
+    }
+    [picker dismissViewControllerAnimated:YES completion:nil];
+//    [[EaseSDKHelper shareHelper] setIsShowingimagePicker:NO];
+}
+
+#pragma mark - EMLocationViewDelegate
+
+-(void)sendLocationLatitude:(double)latitude
+                  longitude:(double)longitude
+                 andAddress:(NSString *)address
+{
+    NSLog(@"latitude = %g,longitude = %g,address = %@",latitude,longitude,address);
+}
+
+#pragma mark - Private
+- (BOOL)_canRecord
+{
+    __block BOOL bCanRecord = YES;
+    if ([[[UIDevice currentDevice] systemVersion] compare:@"7.0"] != NSOrderedAscending)
+    {
+        AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+        if ([audioSession respondsToSelector:@selector(requestRecordPermission:)]) {
+            [audioSession performSelector:@selector(requestRecordPermission:) withObject:^(BOOL granted) {
+                bCanRecord = granted;
+            }];
+        }
+    }
+    
+    return bCanRecord;
+}
+
 
 @end
 

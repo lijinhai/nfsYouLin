@@ -17,7 +17,7 @@
 #import "ApplyDetailView.h"
 
 
-@interface NDetailTableViewCell : UITableViewCell
+@interface NDetailTableViewCell : UITableViewCell<AVAudioPlayerDelegate>
 
 @property (nonatomic, assign) NSInteger rowNum;
 @property (nonatomic, strong) NeighborData* neighborData;
@@ -60,11 +60,16 @@
 @property(strong, nonatomic) UILabel* praiseLabel;
 @property(strong, nonatomic) UIImageView* praiseImageView;
 
+
 // 其他表格行控件
 // 回复人头像
 @property (strong, nonatomic) UIImageView* personView;
 // 回复人信息
 @property (strong, nonatomic) UILabel* personLable;
+
+// 回复人名字
+@property (strong, nonatomic) UILabel* nameLable;
+
 // 回复时间
 @property (strong, nonatomic) UILabel* replyTimeLabel;
 // 回复内容
@@ -75,8 +80,19 @@
 @property (nonatomic, assign) NSString* replyString;
 // 回复或删除按钮
 @property (strong, nonatomic) UIButton* otherButton;
+// 回复图片
+@property (strong, nonatomic) UIImageView* replyIV;
+
+// 回复语音
+@property (strong, nonatomic) UIButton* replyVedioIB;
+
+// 回复语音时间
+@property (strong, nonatomic) UILabel* replyVedioTimeL;
 
 // 报名详情
 @property (strong, nonatomic)ApplyDetailView* applyView;
+
+
+- (void) setOtherCellData:(NSDictionary *)dict;
 
 @end

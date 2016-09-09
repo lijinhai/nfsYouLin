@@ -40,12 +40,12 @@
     NSLog(@"手机序列号: %@",identifierNumber);
     
     
-    NSString* MD5String = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"imei%@addr_cache0",identifierNumber]];
+    NSString* MD5String = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"imei%@addr_cache-1",identifierNumber]];
     NSString* hashString = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"%@1", MD5String]];
     NSDictionary* parameter = @{@"imei" : identifierNumber,
                                 @"apitype" : @"users",
                                 @"tag" : @"token",
-                                @"addr_cache" : @"0",
+                                @"addr_cache" : @"-1",
                                 @"salt" : @"1",
                                 @"hash" : hashString,
                                 @"keyset" : @"imei:addr_cache:",
@@ -54,10 +54,14 @@
     [manager POST:POST_URL parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        NSLog(@"请求成功:%@", responseObject);
+        NSLog(@"验证账户可用性 网络请求请求成功:%@", responseObject);
         NSString* flag = [responseObject valueForKey:@"flag"];
         if([flag isEqualToString:@"ok"])
         {
+             NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+            [defaults setObject:[responseObject valueForKey:@"user_nick"] forKey:@"nick"];
+            [defaults setObject:[responseObject valueForKey:@"user_id"] forKey:@"userId"];
+            [defaults synchronize];
             [self presentViewController:_firstTBC animated:YES completion:nil];
         }
         else if([flag isEqualToString:@"no"])

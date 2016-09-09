@@ -16,9 +16,11 @@
 // 帖子标题
 @property (strong, nonatomic) NSString* titleName;
 
-// 账户昵称
+// 账户名称
 @property (strong, nonatomic) NSString* accountName;
 
+// 昵称
+@property (strong, nonatomic) NSString* senderName;
 // 帖子发表时间
 @property (strong, nonatomic) NSString* topicTime;
 
@@ -65,6 +67,20 @@
 // 浏览次数
 @property (strong, nonatomic) NSString* viewCount;
 
+// 收藏状态
+@property(strong, nonatomic) NSString* collectStatus;
+
+// 帖子类型
+@property(strong, nonatomic) NSString* objectType;
+// 发布范围
+@property(strong, nonatomic) NSString* forumName;
+
+
+@property(strong, nonatomic) NSString* topicCategoryType;
+
+@property(strong, nonatomic)NSArray* objectData;
 
 - (id) initWithDict: (NSDictionary*) dict;
+- (id) setWithDict:(NSDictionary*) dict;
+
 @end

@@ -1243,6 +1243,7 @@
     }
     __weak typeof(self) weakSelf = self;
     [[EMCDDeviceManager sharedInstance] asyncStopRecordingWithCompletion:^(NSString *recordPath, NSInteger aDuration, NSError *error) {
+        NSLog(@"recordPath = %@",recordPath);
         if (!error) {
             [weakSelf sendVoiceMessageWithLocalPath:recordPath duration:aDuration];
         }
@@ -1685,6 +1686,7 @@
 - (void)sendVoiceMessageWithLocalPath:(NSString *)localPath
                              duration:(NSInteger)duration
 {
+    NSLog(@"localPath = %@",localPath);
     id progress = nil;
     if (_dataSource && [_dataSource respondsToSelector:@selector(messageViewController:progressDelegateForMessageBodyType:)]) {
         progress = [_dataSource messageViewController:self progressDelegateForMessageBodyType:EMMessageBodyTypeVoice];

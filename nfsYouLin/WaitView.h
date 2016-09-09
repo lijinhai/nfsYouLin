@@ -13,4 +13,6 @@
 
 
 - (id) initWithFrame:(CGRect)frame Title:(NSString *)title;
+- (id) initWithRect:(NSString* )title;
+
 @end

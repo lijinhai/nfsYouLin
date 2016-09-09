@@ -24,7 +24,6 @@
 // 职业
 @property(nonatomic,strong)NSString* profession;
 
-
 // userId
 @property(nonatomic,assign)NSInteger userId;
 

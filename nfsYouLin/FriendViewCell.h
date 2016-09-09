@@ -9,7 +9,18 @@
 #import <UIKit/UIKit.h>
 #import "Friends.h"
 
+@protocol FriendViewDelegate <NSObject>
+
+-(void) longPressGesture:(NSInteger)blackId row:(NSInteger)row section:(NSInteger)section;
+
+@end
+
 @interface FriendViewCell : UITableViewCell
+
+@property(strong, nonatomic) id<FriendViewDelegate> delegate;
+
+@property(assign, nonatomic) NSInteger row;
+@property(assign, nonatomic) NSInteger section;
 
 // 头像
 @property(strong, nonatomic) UIImageView* iconIV;

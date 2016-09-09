@@ -28,6 +28,12 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if(self)
     {
+        // 添加长按手势
+        UILongPressGestureRecognizer* longGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(addBlacklist:)];
+        longGesture.minimumPressDuration = 0.7;
+        longGesture.numberOfTouchesRequired = 1;
+        [self addGestureRecognizer:longGesture];
+        
         // 头像
         UIImageView* iconView = [[UIImageView alloc] initWithFrame:CGRectMake(10, 15, 50, 50)];
         iconView.layer.masksToBounds = YES;
@@ -122,10 +128,24 @@
 
         default:
         {
+            self.addressL.text = _friendsData.houseAddr;
+            self.professionL.text = friendsData.profession;
+            profrssionSize = [StringMD5 sizeWithString:friendsData.profession font:[UIFont systemFontOfSize:12] maxSize:CGSizeMake(80,50)];
+            self.professionL.frame = CGRectMake(CGRectGetWidth([UIScreen mainScreen].bounds) - profrssionSize.width -10, 30, profrssionSize.width, profrssionSize.height);
             break;
         }
     }
 
+}
+
+#pragma mark -长按黑名单
+- (void)addBlacklist:(UILongPressGestureRecognizer*)gesture
+{
+    if (gesture.state == UIGestureRecognizerStateBegan)
+    {
+        [_delegate longPressGesture:_friendsData.userId row:_row section:_section];
+    }
+    
 }
 
 

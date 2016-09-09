@@ -21,4 +21,12 @@
     return self;
 }
 
+- (id) setWithDict:(NSDictionary*) dict
+{
+    if(self)
+    {
+        [self setValuesForKeysWithDictionary:dict];
+    }
+    return self;
+}
 @end

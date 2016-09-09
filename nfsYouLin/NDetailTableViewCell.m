@@ -11,10 +11,12 @@
 #import "UIImageView+WebCache.h"
 #import "MBProgressHUBTool.h"
 #import "AFHTTPSessionManager.h"
+#import "EMVoiceConverter.h"
 
 @implementation NDetailTableViewCell
 {
-
+    BOOL isPlay;
+    AVAudioPlayer* audioPlayer;
 }
 
 
@@ -158,16 +160,22 @@
             UILabel* personLable = [[UILabel alloc] init];
             personLable.textAlignment = NSTextAlignmentLeft;
             personLable.font = [UIFont systemFontOfSize:15];
-            //            accountInfoLabel.font = [UIFont fontWithName:@"AppleGothic" size:15];
             [self.contentView addSubview:personLable];
             self.personLable = personLable;
             
+            
+            // 回复人名字
+            UILabel* nameLabel = [[UILabel alloc] init];
+            nameLabel.textAlignment = NSTextAlignmentLeft;
+            nameLabel.font = [UIFont systemFontOfSize:15];
+            nameLabel.textColor = [UIColor orangeColor];
+            [self.contentView addSubview:nameLabel];
+            self.nameLable = nameLabel;
             
             // 回复时间
             UILabel* replyTimeLabel = [[UILabel alloc] init];
             replyTimeLabel.textAlignment = NSTextAlignmentLeft;
             replyTimeLabel.font = [UIFont systemFontOfSize:12];
-            //            accountInfoLabel.font = [UIFont fontWithName:@"AppleGothic" size:15];
             replyTimeLabel.enabled = NO;
             [self.contentView addSubview:replyTimeLabel];
             self.replyTimeLabel = replyTimeLabel;
@@ -175,11 +183,28 @@
             // 回复文本
             UILabel* repleyText = [[UILabel alloc] init];
             repleyText.font = [UIFont fontWithName:@"AppleGothic" size:16];
-
             repleyText.lineBreakMode = NSLineBreakByWordWrapping;     //去掉省略号
             repleyText.numberOfLines = 0;
-            [self.contentView addSubview:repleyText];
             self.repleyText = repleyText;
+            
+            // 回复图片
+            UIImageView* replyIV = [[UIImageView alloc] init];
+            UITapGestureRecognizer* replyIVTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(replyIVGesture:)];
+            replyIV.userInteractionEnabled = YES;
+            [replyIV addGestureRecognizer:replyIVTap];
+            self.replyIV = replyIV;
+            
+            // 回复语音按钮
+            UIButton* replyVedioB = [[UIButton alloc] init];
+            [replyVedioB setImage:[UIImage imageNamed:@"yuyin.png"] forState:UIControlStateNormal];
+            isPlay = NO;
+//            [replyVedioB addTarget:self action:@selector(vedioBtn:) forControlEvents:UIControlEventTouchUpInside];
+            self.replyVedioIB = replyVedioB;
+            // 回复语音时间
+            UILabel* replyVedioL = [[UILabel alloc] init];
+            replyVedioL.textAlignment = NSTextAlignmentLeft;
+            self.replyVedioTimeL = replyVedioL;
+            
 
             // 回复或删除按钮
             UIButton* otherButton = [[UIButton alloc] init];
@@ -215,7 +240,7 @@
             [self setSecondCellData];
             break;
         default:
-            [self setOtherCellData];
+//            [self setOtherCellData];
             break;
     }
 }
@@ -362,17 +387,15 @@
         {
             [self.applyView addTarget:self action:@selector(wantApplyAction:) forControlEvents:UIControlEventTouchUpInside];
         }
-        
-        if([self.applyView.applyLabel.text isEqualToString:@"取消报名"])
+        else if([self.applyView.applyLabel.text isEqualToString:@"取消报名"])
         {
             [self.applyView addTarget:self action:@selector(cancelApplyAction:) forControlEvents:UIControlEventTouchUpInside];
         }
-        
+        else if([self.applyView.applyLabel.text isEqualToString:@"报名详情"])
+        {
+            [self.applyView addTarget:self action:@selector(lookDetail:) forControlEvents:UIControlEventTouchUpInside];
+        }
 
-        
-       
-
-        
         [self.applyView initApplyView:point];
         [self.contentView addSubview:self.applyView];
     }
@@ -419,34 +442,155 @@
 
 }
 
-- (void) setOtherCellData
+- (void) setOtherCellData:(NSDictionary *)dict
 {
-    self.personView.image = [UIImage imageNamed:self.neighborData.iconName ];
-    
+    NSURL* url = [NSURL URLWithString:[dict valueForKey:@"senderAvatar"]];
+    [self.personView sd_setImageWithURL:url placeholderImage:[UIImage imageNamed:@"bg_error.png"] options:SDWebImageAllowInvalidSSLCertificates];    
+    NSString* displayName = [dict valueForKey:@"displayName"];
     CGRect personLableFrame;
-    CGSize personLableLabelSize = [StringMD5 sizeWithString:[NSString stringWithFormat:@"%@",self.neighborData.accountName] font:[UIFont systemFontOfSize:15] maxSize:CGSizeMake(MAXFLOAT, MAXFLOAT)];
+    CGSize personLableLabelSize = [StringMD5 sizeWithString:displayName font:[UIFont systemFontOfSize:15] maxSize:CGSizeMake(MAXFLOAT, MAXFLOAT)];
     CGFloat personLabelW = personLableLabelSize.width;
     CGFloat personLabelH = personLableLabelSize.height;
     personLableFrame = CGRectMake(CGRectGetMaxX(self.personView.frame) +  PADDING, PADDING, personLabelW, personLabelH);
     self.personLable.frame = personLableFrame;
-    self.personLable.text = [NSString stringWithFormat:@"%@",self.neighborData.accountName];
+    self.personLable.text = displayName;
     
+    NSString* name = [dict valueForKey:@"remarkName"];
+    NSString* remarkName = [NSString stringWithFormat:@"@%@:",name];
+    CGRect remarkRect;
+    CGSize remakeSize = [StringMD5 sizeWithString:remarkName font:[UIFont systemFontOfSize:15] maxSize:CGSizeMake(MAXFLOAT, MAXFLOAT)];;
+    remarkRect = CGRectMake(CGRectGetMinX(self.personLable.frame), CGRectGetMaxY(self.personLable.frame) + PADDING / 2, remakeSize.width, remakeSize.height);
+
+    if([name isEqualToString:@"null"])
+    {
+        self.nameLable.frame = CGRectMake(CGRectGetMinX(self.personLable.frame), CGRectGetMaxY(self.personLable.frame) + PADDING / 2, 0, 0);
+        self.nameLable.text = @"";
+    }
+    else
+    {
+        self.nameLable.frame = remarkRect;
+        self.nameLable.text = remarkName;
+    }
     
+    NSString* timeInterval = [StringMD5 calculateTimeInternal:[[dict valueForKey:@"systemTime"] floatValue] / 1000 old:[[dict valueForKey:@"sendTime"] floatValue] / 1000];
     CGRect replyTimeFrame;
-    CGSize replyTimeSize = [StringMD5 sizeWithString:@"刚刚" font:[UIFont systemFontOfSize:12] maxSize:CGSizeMake(MAXFLOAT, MAXFLOAT)];
+    CGSize replyTimeSize = [StringMD5 sizeWithString:timeInterval font:[UIFont systemFontOfSize:12] maxSize:CGSizeMake(MAXFLOAT, MAXFLOAT)];
     replyTimeFrame = CGRectMake(screenWidth - PADDING - replyTimeSize.width, PADDING, replyTimeSize.width, replyTimeSize.height);
-    self.replyTimeLabel.text = @"刚刚";
+    self.replyTimeLabel.text = timeInterval;
     self.replyTimeLabel.frame = replyTimeFrame;
 
+    NSString* contentType = [dict valueForKey:@"contentType"];
+    NSString* content = [dict valueForKey:@"content"];
+    NSArray* mediaFiles = [dict valueForKey:@"mediaFiles"];
+    CGRect frame = self.nameLable.frame;
     
-    self.repleyText.frame = CGRectMake(CGRectGetMinX(self.personLable.frame), CGRectGetMaxY(self.personLable.frame) + PADDING, self.replySize.width, self.replySize.height);
-    self.repleyText.text = self.replyString;
+    [self.repleyText removeFromSuperview];
+    [self.replyIV removeFromSuperview];
+    [self.replyVedioIB removeFromSuperview];
+    [self.replyVedioTimeL removeFromSuperview];
     
+    if([contentType isKindOfClass:[NSNumber class]])
+    {
+        if([contentType integerValue] == 0)
+        {
+            if(![content isEqual:[NSNull null]])
+            {
+                CGSize contentSize = [StringMD5 sizeWithString:content font:[UIFont fontWithName:@"AppleGothic" size:16] maxSize:CGSizeMake(screenWidth - 6 * PADDING, MAXFLOAT)];
+                self.repleyText.frame = CGRectMake(CGRectGetMinX(self.nameLable.frame), CGRectGetMaxY(self.nameLable.frame) + PADDING, contentSize.width, contentSize.height);
+                self.repleyText.text = content;
+                [self.contentView addSubview:self.repleyText];
+                frame = self.repleyText.frame;
+            }
+
+        }
+    }
+    else
+    {
+        if([contentType isEqualToString:@"image"])
+        {
+            if(![mediaFiles isEqual:[NSNull null]])
+            {
+                NSDictionary* imageDict = [mediaFiles firstObject];
+                self.replyIV.frame = CGRectMake(CGRectGetMinX(self.nameLable.frame), CGRectGetMaxY(self.nameLable.frame) + PADDING, 100, 100);
+                NSURL* url = [NSURL URLWithString:[imageDict valueForKey:@"resPath"]];
+                [self.replyIV sd_setImageWithURL:url placeholderImage:[UIImage imageNamed:@"bg_error.png"] options:SDWebImageAllowInvalidSSLCertificates];
+                frame = self.replyIV.frame;
+                [self.contentView addSubview:self.replyIV];
+            }
+        }
+        else if([contentType isEqualToString:@"video"])
+        {
+            NSDictionary* imageDict = [mediaFiles firstObject];
+            self.replyVedioIB.frame = CGRectMake(CGRectGetMinX(self.nameLable.frame), CGRectGetMaxY(self.nameLable.frame) + PADDING, 70, 30);
+            frame = self.replyVedioIB.frame;
+            self.replyVedioTimeL.frame =  CGRectMake(CGRectGetMaxX(self.replyVedioIB.frame) + 5, CGRectGetMaxY(self.nameLable.frame) + PADDING + 5, 100, 20);
+            self.replyVedioTimeL.text = [NSString stringWithFormat:@"%@\"", [imageDict valueForKey:@"videoLength"]];
+            [self.contentView addSubview:self.replyVedioIB];
+            [self.contentView addSubview:self.replyVedioTimeL];
+            
+            NSString* urlStr = [imageDict valueForKey:@"voicePath"];
+            NSURL* url = [NSURL URLWithString:urlStr];
+            NSData * audioData = [NSData dataWithContentsOfURL:url];
+            //将数据保存到本地指定位置
+            NSFileManager *fileManager = [NSFileManager defaultManager];
+            NSString *pathDocuments = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+             NSString *fileDir = [NSString stringWithFormat:@"%@/Files", pathDocuments];
+            // 判断文件夹是否存在，如果不存在，则创建
+            BOOL isDir = FALSE;
+            BOOL isDirExist = [fileManager fileExistsAtPath:fileDir isDirectory:&isDir];
+            if(!(isDirExist && isDir))
+            {
+                [fileManager createDirectoryAtPath:fileDir withIntermediateDirectories:YES attributes:nil error:nil];
+
+            }
+            else
+            {
+                NSLog(@"音频文件夹已存在");
+            }
+            
+            NSArray* strArray = [urlStr componentsSeparatedByString:@"/"];
+            NSString *filePath = [NSString stringWithFormat:@"%@/%@", fileDir ,[strArray lastObject]];
+            NSString *wavFilePath = [[filePath stringByDeletingPathExtension] stringByAppendingPathExtension:@"wav"];
+            //如果转换后的wav文件不存在, 则去转换一下
+            if (![fileManager fileExistsAtPath:wavFilePath])
+            {
+                [audioData writeToFile:filePath atomically:YES];
+                BOOL covertRet = [self convertAMR:filePath toWAV:wavFilePath];
+                NSLog(@"amr file covert wav = %d",covertRet);
+
+            }
+            else
+            {
+                NSLog(@"wav 文件已存在");
+            }
+            
+            NSURL *vedioUrl = [NSURL fileURLWithPath:wavFilePath];
+            audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:vedioUrl error:nil];
+            NSLog(@"vedioUrl = %@",vedioUrl);
+            audioPlayer.delegate = self;
+            [self.replyVedioIB addTarget:self action:@selector(vedioBtn:) forControlEvents:UIControlEventTouchUpInside];
+        }
+
+    }
+    
+    NSString* buttonText;
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSInteger userId = [[defaults stringForKey:@"userId"] integerValue];
+    NSInteger senderId = [[dict valueForKey:@"senderId"] integerValue];
+
+    if(userId == senderId)
+    {
+        buttonText = @"删除";
+    }
+    else
+    {
+        buttonText = @"回复";
+    }
     
     CGRect otherButtonFrame;
-    CGSize otherButtonSize = [StringMD5 sizeWithString:@"回复" font:[UIFont systemFontOfSize:20] maxSize:CGSizeMake(MAXFLOAT, MAXFLOAT)];
-    otherButtonFrame = CGRectMake(screenWidth - PADDING - otherButtonSize.width,CGRectGetMaxY(self.repleyText.frame) + 2 * PADDING, otherButtonSize.width, otherButtonSize.height);
-    [self.otherButton setTitle:@"回复" forState:UIControlStateNormal];
+    CGSize otherButtonSize = [StringMD5 sizeWithString:buttonText font:[UIFont systemFontOfSize:20] maxSize:CGSizeMake(MAXFLOAT, MAXFLOAT)];
+    otherButtonFrame = CGRectMake(screenWidth - PADDING - otherButtonSize.width,CGRectGetMaxY(frame) + 2 * PADDING, otherButtonSize.width, otherButtonSize.height);
+    [self.otherButton setTitle:buttonText forState:UIControlStateNormal];
     self.otherButton.frame = otherButtonFrame;
     
 
@@ -517,7 +661,9 @@
 
 - (void) otherBtn:(UIButton*) button
 {
-    NSLog(@"other button");
+    NSInteger rowNum = self.rowNum;
+    NSString* btnText = button.titleLabel.text;
+    [_delegate replyEvent:rowNum btnText:btnText];
 }
 
 
@@ -531,6 +677,12 @@
 - (void) headImageView: (UITapGestureRecognizer*) recognizer
 {
     [_delegate showCircularImageViewWithImage:self.iconView.image];
+}
+
+// 回复图片点击放大
+- (void) replyIVGesture: (UITapGestureRecognizer*) recognizer
+{
+    [_delegate showRectImageViewWithImage:self.replyIV.image];
 }
 
 - (void)tapImageView: (UITapGestureRecognizer*) recognizer
@@ -553,6 +705,15 @@
     NSInteger topicId = [self.neighborData.topicId integerValue];
     [_delegate deleteTopic:topicId];
 }
+
+// 查看报名详情
+- (void)lookDetail:(id) sender
+{
+    NSDictionary* activityDict = self.neighborData.infoArray[0];
+    NSInteger activiId = [[activityDict valueForKey:@"activityId"] integerValue];
+    [_delegate lookApplyDetail:activiId];
+}
+
 
 // 点击我要报名
 - (void)wantApplyAction:(id) sender
@@ -629,5 +790,72 @@
     
 }
 
+- (void) vedioBtn:(id)sender
+{
+    NSLog(@"------%d",audioPlayer.playing);
+    if(audioPlayer.playing)
+    {
+        [audioPlayer stop];
+        [self.replyVedioIB setImage:[UIImage imageNamed:@"yuyin.png"] forState:UIControlStateNormal];
+    }
+    else
+    {
+        [audioPlayer play];
+        [self.replyVedioIB setImage:[UIImage imageNamed:@"zanting.png"] forState:UIControlStateNormal];
+
+    }
+    isPlay = !isPlay;
+}
+
+#pragma mark - AVAudioPlayerDelegate
+- (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag
+{
+    NSLog(@"play finish");
+    if(player == audioPlayer && flag)
+    {
+        [self.replyVedioIB setImage:[UIImage imageNamed:@"yuyin.png"] forState:UIControlStateNormal];
+    }
+}
+
+#pragma mark - Convert
+
+- (BOOL)convertAMR:(NSString *)amrFilePath
+             toWAV:(NSString *)wavFilePath
+{
+    BOOL ret = NO;
+    BOOL isFileExists = [[NSFileManager defaultManager] fileExistsAtPath:amrFilePath];
+    if (isFileExists) {
+        [EMVoiceConverter amrToWav:amrFilePath wavSavePath:wavFilePath];
+        isFileExists = [[NSFileManager defaultManager] fileExistsAtPath:wavFilePath];
+        if (isFileExists) {
+            ret = YES;
+        }
+    }
+    
+    return ret;
+}
+
+- (void) removewAllView
+{
+    [self.personView removeFromSuperview];
+    [self.personLable removeFromSuperview];
+    [self.nameLable removeFromSuperview];
+    [self.replyTimeLabel removeFromSuperview];
+    [self.repleyText removeFromSuperview];
+    [self.otherButton removeFromSuperview];
+    [self.replyIV removeFromSuperview];
+    [self.replyVedioIB removeFromSuperview];
+    [self.replyVedioTimeL removeFromSuperview];
+
+}
+
+- (void) addAllView
+{
+    [self.contentView addSubview:self.personView];
+    [self.contentView addSubview:self.personLable];
+    [self.contentView addSubview:self.nameLable];
+    [self.contentView addSubview:self.replyTimeLabel];
+    [self.contentView addSubview:self.otherButton];
+}
 
 @end

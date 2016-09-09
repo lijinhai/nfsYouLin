@@ -519,17 +519,25 @@
         
         if([self.applyView.applyLabel.text isEqualToString:@"我要报名"])
         {
-             [self.applyView removeTarget:self action:@selector(cancelApplyAction:) forControlEvents:UIControlEventTouchUpInside];
+            [self.applyView removeTarget:self action:@selector(lookDetail:) forControlEvents:UIControlEventTouchUpInside];
+            [self.applyView removeTarget:self action:@selector(cancelApplyAction:) forControlEvents:UIControlEventTouchUpInside];
+
             [self.applyView addTarget:self action:@selector(wantApplyAction:) forControlEvents:UIControlEventTouchUpInside];
         }
-        
-        if([self.applyView.applyLabel.text isEqualToString:@"取消报名"])
+        else if([self.applyView.applyLabel.text isEqualToString:@"取消报名"])
         {
+            [self.applyView removeTarget:self action:@selector(lookDetail:) forControlEvents:UIControlEventTouchUpInside];
             [self.applyView removeTarget:self action:@selector(wantApplyAction:) forControlEvents:UIControlEventTouchUpInside];
             [self.applyView addTarget:self action:@selector(cancelApplyAction:) forControlEvents:UIControlEventTouchUpInside];
         }
+        else if([self.applyView.applyLabel.text isEqualToString:@"报名详情"])
+        {
+            [self.applyView removeTarget:self action:@selector(wantApplyAction:) forControlEvents:UIControlEventTouchUpInside];
+            [self.applyView removeTarget:self action:@selector(cancelApplyAction:) forControlEvents:UIControlEventTouchUpInside];
 
-        
+            [self.applyView addTarget:self action:@selector(lookDetail:) forControlEvents:UIControlEventTouchUpInside];
+        }
+
         CGPoint point = self.neighborDataFrame.applyPoint;
         [self.applyView initApplyView:point];
         [self.contentView addSubview:self.applyView];
@@ -542,9 +550,6 @@
 
     }
    
-    
-
-    
     if([self.neighborDataFrame.neighborData.senderId integerValue] == [userId integerValue])
     {
         // 添加删除按钮
@@ -556,9 +561,7 @@
 
     }
 
-    
     self.deleteButton.frame = self.neighborDataFrame.deleteFrame;
-    
     if(self.neighborDataFrame.textCount >= 4)
     {
         self.readButton.frame = self.neighborDataFrame.readFrame;
@@ -567,7 +570,7 @@
     
 
     // 根据senderId 添加打招呼按钮
-    
+    // senderId =1 打招呼
     if([self.neighborDataFrame.neighborData.senderId integerValue] == 1)
     {
         if([self.neighborDataFrame.neighborData.cacheKey integerValue] != [userId integerValue])
@@ -680,7 +683,16 @@
 
 - (void) headImageView: (UITapGestureRecognizer*) recognizer
 {
-    [_delegate showCircularImageViewWithImage:self.iconView.image];
+    NSInteger userId = [self.neighborDataFrame.neighborData.senderId integerValue];
+    if(userId == 1)
+    {
+        [_delegate showCircularImageViewWithImage:self.iconView.image];
+    }
+    else
+    {
+        [_delegate peopleInfoViewController:userId];
+    }
+    
 }
 
 - (void)tapImageView: (UITapGestureRecognizer*) recognizer
@@ -719,6 +731,7 @@
     }
 }
 
+
 // 取消报名
 - (void)cancelApplyAction:(id) sender
 {
@@ -735,9 +748,15 @@
         [MBProgressHUBTool textToast:self Tip:@"此活动已过期"];
         
     }
-    
 }
 
+// 查看报名详情
+- (void)lookDetail:(id) sender
+{
+    NSDictionary* activityDict = self.neighborDataFrame.neighborData.infoArray[0];
+    NSInteger activiId = [[activityDict valueForKey:@"activityId"] integerValue];
+    [_delegate lookApplyDetail:activiId];
+}
 
 // 点击删除
 - (void) deleteBtn

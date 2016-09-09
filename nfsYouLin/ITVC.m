@@ -694,9 +694,7 @@
             user.userBirthday = birthdayVal;
             user.userGender=sexVal;
             user.vocation=vocationStr;
-            user.publicStatus=status;
-            NSLog(@"user.userPortrait is %@",user.userPortrait);
-            
+            user.publicStatus=status;            
         }
         [db close];
         

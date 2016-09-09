@@ -12,6 +12,8 @@
 #import "StringMD5.h"
 #import "MBProgressHUBTool.h"
 #import "DialogView.h"
+#import "ApplyDetailTVC.h"
+#import "PeopleInfoVC.h"
 
 @interface NeighborTVC ()
 
@@ -116,6 +118,8 @@
         [self.tableView reloadData];
         
     }
+    
+    [self.tableView reloadData];
 }
 
 - (void)viewDidLoad
@@ -215,8 +219,7 @@
     upFlag = YES;
     topicFlag = YES;
     
-    self.refresh = NO;
-    
+    self.refresh = NO;    
     Tag = @"gettopic";
     category = 1;
     sectionCount = 1;
@@ -321,8 +324,6 @@
     cell.delegate = self;
     cell.sectionNum = indexPath.section;
     cell.rowNum = indexPath.row;
-    
-    
     return cell;
 }
 
@@ -693,7 +694,6 @@ static BOOL upState = YES;
 // 报名
 - (void) applyDetail:(NSInteger)activityId
 {
-    NSLog(@"报名详情");
     DialogView* applyView = [[DialogView alloc] initWithFrame:backgroundView.frame  View:backgroundView Flag:@"apply"];
     backgroundView.alpha = 0.0f;
     applyView.alpha = 0.0f;
@@ -731,6 +731,12 @@ static BOOL upState = YES;
     [cancelBtn addTarget:self action:@selector(cancelNoApplyAction:) forControlEvents:UIControlEventTouchUpInside];
 }
 
+// 查看报名详情回调
+- (void)lookApplyDetail:(NSInteger)activityId
+{
+    NSLog(@"lookApplyDetail 回调");
+    [self lookApplyNet:activityId];
+}
 
 // 查看全文回调事件
 - (void)readTotalInformation:(NSInteger)sectionNum
@@ -738,6 +744,7 @@ static BOOL upState = YES;
     NeighborDataFrame* neighborDataFrame = self.neighborDataArray[sectionNum - 1];
     NeighborData* neighborData = neighborDataFrame.neighborData;
     NSInteger topicId = [[neighborData valueForKey:@"topicId"] integerValue];
+    NSInteger senderId = [[neighborData valueForKey:@"senderId"] integerValue];
     NSInteger num = [neighborData.viewCount integerValue] + 1;
     neighborData.viewCount = [NSString stringWithFormat:@"%ld",num];
     
@@ -1380,6 +1387,59 @@ static BOOL upState = YES;
     
 }
 
+
+// 查看报名详情网络请求
+- (void) lookApplyNet: (NSInteger)activityId
+{
+    AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
+    manager.securityPolicy.allowInvalidCertificates = YES;
+    [manager.securityPolicy setValidatesDomainName:NO];
+    
+    NSString* MD5String = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"activityId%ld",activityId]];
+    NSString* hashString = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"%@1", MD5String]];
+    
+    NSDictionary* parameter = @{@"activityId" : [NSNumber numberWithInteger:activityId],
+                                @"apitype" : @"comm",
+                                @"salt" : @"1",
+                                @"tag" : @"detenroll",
+                                @"hash" : hashString,
+                                @"keyset" : @"activityId:",
+                                };
+    
+    [manager POST:POST_URL parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject){
+        NSLog(@"查看报名详情网络请求:%@", responseObject);
+        
+        ApplyDetailTVC* applyDetailVC = [[ApplyDetailTVC alloc] initWithStyle:UITableViewStyleGrouped];
+        UIBarButtonItem* detailItem = [[UIBarButtonItem alloc] initWithTitle:@"报名详情" style:UIBarButtonItemStylePlain target:nil action:nil];
+        [self.parentViewController.navigationItem setBackBarButtonItem:detailItem];
+        
+        applyDetailVC.totalNum = [[responseObject valueForKey:@"enrollTotal"] integerValue];
+        applyDetailVC.peopleA = [responseObject valueForKey:@"enrollData"];
+        NSInteger activityId = [[responseObject valueForKey:@"activityId"] integerValue];
+        
+        for(int i = 0; i < [self.neighborDataArray count] ;i++)
+        {
+            NeighborDataFrame* neighborDataFrame = self.neighborDataArray[i];
+            NeighborData* neighborData = neighborDataFrame.neighborData;
+            NSDictionary* dict = neighborData.infoArray[0];
+            NSMutableDictionary* dataDict = [NSMutableDictionary dictionaryWithDictionary:dict];
+            if ([[dict valueForKey:@"activityId"] integerValue] == activityId) {
+                [dataDict setObject:[responseObject valueForKey:@"enrollTotal"] forKey:@"enrollTotal"];
+                NSArray* array = [NSArray arrayWithObject:dataDict];
+                neighborDataFrame.neighborData.infoArray = [array mutableCopy];
+                [self.neighborDataArray replaceObjectAtIndex:i withObject:neighborDataFrame];
+            }
+        }
+        [self.navigationController pushViewController:applyDetailVC animated:YES];
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"请求失败:%@", error.description);
+        return;
+    }];
+    
+}
+
 // 报名网络请求
 // activityId 活动Id adultNum 成人人数 childNum 小孩人数
 - (void) applyNet:(NSInteger) activityId Adult:(NSInteger)adultNum Child:(NSInteger)childNum
@@ -1618,5 +1678,14 @@ static BOOL upState = YES;
     
 }
 
+#pragma mark -查看个人信息代理 cellDelegate
+- (void) peopleInfoViewController:(NSInteger)peopleId
+{
+    PeopleInfoVC* peopleInfoVC = [[PeopleInfoVC alloc] init];
+    peopleInfoVC.peopleId = peopleId;
+    UIBarButtonItem* infoItem = [[UIBarButtonItem alloc] initWithTitle:@"邻居信息" style:UIBarButtonItemStylePlain target:nil action:nil];
+    [self.parentViewController.navigationItem setBackBarButtonItem:infoItem];
+    [self.navigationController pushViewController:peopleInfoVC animated:YES];
+}
 
 @end

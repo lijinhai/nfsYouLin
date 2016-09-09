@@ -12,7 +12,7 @@
 #import <AssetsLibrary/AssetsLibrary.h>
 #import <Photos/Photos.h>
 #import "TZImageManager.h"
-#import "PublishLimitTVC.h"
+#import "CreateTVC.h"
 #import "AppDelegate.h"
 #import "HeaderFile.h"
 #import "AFHTTPSessionManager.h"
@@ -21,6 +21,7 @@
 #import "WaitView.h"
 #import "PublishLimitVC.h"
 #import "DialogView.h"
+#import "NeighborData.h"
 
 @interface CreateTopicVC ()
 
@@ -111,7 +112,6 @@
     [super viewDidLoad];
     
     self.automaticallyAdjustsScrollViewInsets = NO;
-    
     UIBarButtonItem* rightItem = [[UIBarButtonItem alloc] initWithTitle:@"发送" style:UIBarButtonItemStylePlain target:self action:@selector(sendResult:)];
     self.navigationItem.rightBarButtonItem = rightItem;
     UIColor* lineColor = [UIColor colorWithRed:217.0 / 255.0 green:216.0 / 255.0 blue:213.0 / 255.0 alpha:1];
@@ -120,19 +120,19 @@
     self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 80, CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame) - 80)];
     self.scrollView.backgroundColor = [UIColor colorWithRed:243.0/255.0 green:243.0/255.0 blue:240.0/255.0 alpha:1];
     self.scrollView.bounces = NO;
-    self.scrollView.contentSize = CGSizeMake(CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame));
     self.scrollView.delegate = self;
     self.bgView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.frame), 300)];
     self.bgView.bounces = NO;
     self.bgView.backgroundColor = [UIColor whiteColor];
-    
+    self.scrollView.contentSize = CGSizeMake(CGRectGetWidth(self.view.frame), CGRectGetHeight(self.bgView.frame));
+
     line1 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.bgView.frame), 1)];
     line1.backgroundColor = lineColor;
     
     line2 = [[UIView alloc] initWithFrame:CGRectMake(40, 40, CGRectGetWidth(self.bgView.frame) - 80, 1)];
     line2.backgroundColor = lineColor;
     
-    line3 = [[UIView alloc] initWithFrame:CGRectMake(0, CGRectGetHeight(self.bgView.frame) - 60, CGRectGetWidth(self.bgView.frame), 1)];
+    line3 = [[UIView alloc] initWithFrame:CGRectMake(0, CGRectGetHeight(self.bgView.frame) - 51, CGRectGetWidth(self.bgView.frame), 1)];
     line3.backgroundColor = lineColor;
     
     line4 = [[UIView alloc] initWithFrame:CGRectMake(0, CGRectGetHeight(self.bgView.frame)-1, CGRectGetWidth(self.bgView.frame), 1)];
@@ -162,10 +162,8 @@
     emptyIV.layer.cornerRadius = 10;
     emptyIV.hidden = YES;
     [self.bgView addSubview:emptyIV];
-    
-    
+
     self.contentTV = [[UITextView alloc] initWithFrame:CGRectMake(20, CGRectGetMaxY(line2.frame), CGRectGetWidth(self.bgView.frame) - 40, 38)];
-    
     self.contentTV.backgroundColor = [UIColor whiteColor];
     self.contentTV.scrollEnabled = NO;
     self.contentTV.font = [UIFont systemFontOfSize:14];
@@ -208,7 +206,7 @@
     [_imagesCView registerClass:[PickerCVC class] forCellWithReuseIdentifier:@"PickerCVC"];
     [self.bgView addSubview:_imagesCView];
     
-    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(line3.frame), CGRectGetWidth(self.bgView.frame), 58) style:UITableViewStylePlain];
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(line3.frame), CGRectGetWidth(self.bgView.frame), 50) style:UITableViewStylePlain];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.backgroundColor = [UIColor orangeColor];
@@ -243,7 +241,36 @@
     backgroundView.backgroundColor = [UIColor grayColor];
     backgroundView.alpha = 0.8;
     dialogView = nil;
+    [self initTopicData];
 }
+
+- (void) initTopicData
+{
+    if([[self.topicInfo valueForKey:@"option"] isEqualToString:@"update"])
+    {
+        self.titleTV.text = [self.topicInfo valueForKey:@"title"];
+        [self textViewDidChange:self.titleTV];
+        self.contentTV.text = [self.topicInfo valueForKey:@"content"];
+        [self textViewDidChange:self.contentTV];
+        NSString* forum = [self.topicInfo valueForKey:@"forumName"];
+        if([forum isEqualToString:@"本小区"])
+        {
+            limitVC.which = 0;
+        }
+        else if([forum isEqualToString:@"周边"])
+        {
+            limitVC.which = 1;
+        }
+        else if([forum isEqualToString:@"同城"])
+        {
+            limitVC.which = 2;
+        }
+        [self.tableView reloadData];
+        self.navigationItem.rightBarButtonItem.title = @"完成";
+    }
+
+}
+
 
 - (void)viewWillAppear:(BOOL)animated
 {
@@ -252,8 +279,13 @@
     [self.tableView reloadData];
 }
 
+#pragma mark -setter
+- (void)setTopicInfo:(NSMutableDictionary *)topicInfo
+{
+    _topicInfo = topicInfo;
+}
 
-#pragma mark UICollectionView
+#pragma mark -UICollectionView
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
     return selectedPhotos.count + 1;
@@ -447,11 +479,11 @@
 
 - (UITableViewCell*) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSString* cellId = @"cellId";
-    PublishLimitTVC* cell = [tableView dequeueReusableCellWithIdentifier:cellId];
+    NSString* cellId = @"limit";
+    CreateTVC* cell = [tableView dequeueReusableCellWithIdentifier:cellId];
     if(cell == nil)
     {
-        cell = [[PublishLimitTVC alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
+        cell = [[CreateTVC alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
     }
     cell.textLabel.text = @"发布范围";
     cell.where = limitVC.which;
@@ -463,7 +495,7 @@
 
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 58;
+    return 50;
 }
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -767,7 +799,6 @@
 - (IBAction)sendResult:(id)sender
 {
     NSLog(@"发送");
-    
     NSString* title = self.titleTV.text;
     NSString* content = self.contentTV.text;
     
@@ -876,6 +907,12 @@
         
     }
     
+    if([[self.topicInfo valueForKey:@"option"] isEqualToString:@"update"])
+    {
+        parameter[@"tag"] = @"updatetopic";
+        parameter[@"topic_id"] = [self.topicInfo valueForKey:@"topicId"];
+    }
+
     
     [manager POST:POST_URL parameters:parameter constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
         if([selectedPhotos count] != 0)
@@ -897,8 +934,15 @@
         if([flag isEqualToString:@"ok"])
         {
             NSLog(@"发布新话题网络请求成功");
-            [ChatDemoHelper shareHelper].neighborVC.refresh = YES;
-            [self.navigationController popViewControllerAnimated:YES];
+            if([[self.topicInfo valueForKey:@"option"] isEqualToString:@"update"])
+            {
+                [self getSingleTopicNet];
+            }
+            else
+            {
+                [ChatDemoHelper shareHelper].neighborVC.refresh = YES;
+                [self.navigationController popViewControllerAnimated:YES];
+            }
             
         }
         else if([flag isEqualToString:@"full"])
@@ -917,6 +961,81 @@
     }];
     
 }
+
+#pragma mark -Network
+// 获取单条帖子
+- (void) getSingleTopicNet
+{
+    AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
+    manager.securityPolicy.allowInvalidCertificates = YES;
+    [manager.securityPolicy setValidatesDomainName:NO];
+    NSString* topicId = [self.topicInfo valueForKey:@"topicId"];
+    
+    NSString* MD5String = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"user_id%@community_id%ldtopic_id%@",userId,communityId,topicId]];
+    NSString* hashString = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"%@1", MD5String]];
+    
+    NSDictionary* parameter = @{@"user_id" : userId,
+                                @"community_id" : [NSNumber numberWithInteger:communityId],
+                                @"topic_id" : topicId,
+                                @"count" : @"1",
+                                @"apitype" : @"comm",
+                                @"tag" : @"gettopic",
+                                @"salt" : @"1",
+                                @"hash" : hashString,
+                                @"keyset" : @"user_id:community_id:topic_id:",
+                                };
+    
+    [manager POST:POST_URL parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSLog(@"获取单条帖子网络请求:%@", responseObject);
+        if([responseObject isKindOfClass:[NSArray class]])
+        {
+            NSDictionary* dict = [self getResponseDictionary:responseObject[0]];
+            NeighborDataFrame* dateFrame = [self.topicInfo valueForKey:@"dataFrame"];
+            dateFrame.neighborData = [dateFrame.neighborData setWithDict:dict];
+        }
+        NSInteger index = [[self.navigationController viewControllers]indexOfObject:self];
+        [self.navigationController popToViewController:[self.navigationController.viewControllers objectAtIndex:index - 2]animated:YES];
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"请求失败:%@", error.description);
+        return;
+    }];
+    
+}
+
+
+
+- (NSDictionary*) getResponseDictionary: (NSDictionary *) responseDict
+{
+    NSDictionary* dict;
+    dict = @{
+             @"iconName" : responseDict[@"senderPortrait"],
+             @"titleName" : responseDict[@"topicTitle"],
+             @"accountName" : responseDict[@"displayName"],
+             @"senderName" : responseDict[@"senderName"],
+             @"publishText" : responseDict[@"topicContent"],
+             @"picturesArray" : responseDict[@"mediaFile"],
+             @"topicTime" : responseDict[@"topicTime"],
+             @"systemTime" : responseDict[@"systemTime"],
+             @"senderId" : responseDict[@"senderId"],
+             @"cacheKey" : responseDict[@"cacheKey"],
+             @"topicCategory" : responseDict[@"objectType"],
+             @"infoArray" : responseDict[@"objectData"],
+             @"praiseType" : responseDict[@"praiseType"],
+             @"viewCount" : responseDict[@"viewNum"],
+             @"praiseCount" : responseDict[@"likeNum"],
+             @"replyCount" : responseDict[@"commentNum"],
+             @"topicId" : responseDict[@"topicId"],
+             @"collectStatus" : responseDict[@"collectStatus"],
+             @"forumName" : responseDict[@"forumName"],
+             @"objectType" : responseDict[@"objectType"],
+             @"objectData" : responseDict[@"objectData"],
+             };
+    return dict;
+}
+
 
 // 数据库取数据
 - (void) searchSql

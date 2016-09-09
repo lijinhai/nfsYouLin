@@ -46,6 +46,37 @@
     return self;
 }
 
+- (id) initWithFrame:(CGRect)frame rectImage:(UIImage*) image
+{
+    self = [super initWithFrame:frame];
+    if(self)
+    {
+        
+        self.selfFrame = frame;
+        _scrollView = [[UIScrollView alloc] initWithFrame:frame];
+        _scrollView.backgroundColor = [UIColor whiteColor];
+        _scrollView.maximumZoomScale = 4;
+        _scrollView.minimumZoomScale = 1;
+        _scrollView.delegate = self;
+        _scrollView.tag = 1100;
+        [self addSubview:_scrollView];
+        UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, (self.bounds.size.height - self.bounds.size.width) / 2, self.bounds.size.width, self.bounds.size.width)];
+        imageView.image = image;
+//        imageView.contentMode = UIViewContentModeScaleAspectFit;
+        imageView.tag = 2000;
+        [_scrollView addSubview:imageView];
+        self.backgroundColor = [UIColor blackColor];
+        self.alpha = 0.0f;
+        UITapGestureRecognizer *tapGser = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(disappear)];
+        tapGser.numberOfTouchesRequired = 1;
+        tapGser.numberOfTapsRequired = 1;
+        [self addGestureRecognizer:tapGser];
+        
+    }
+    return self;
+}
+
+
 - (id) initWithFrame:(CGRect)frame byClickTag:(NSInteger)clickTag appendArray:(NSArray*)appendArray
 {
     self = [super initWithFrame:frame];
