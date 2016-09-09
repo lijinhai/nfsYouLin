@@ -10,7 +10,7 @@
 #import "LewPopupViewController.h"
 #import "quitView.h"
 #import "LxxPlaySound.h"
-#import "BlackListViewController.h"
+//#import "BlackListViewController.h"
 #import "AFHTTPSessionManager.h"
 #import "MBProgressHUBTool.h"
 #import "StringMD5.h"
@@ -35,7 +35,7 @@
     NSString *shockflag;
     NSString *noticeflag;
     UILabel *cacheCountLable;
-    BlackListViewController *BlackListController;
+    //BlackListViewController *BlackListController;
     LoginNC* loginNC;
     UIView* backgroundView;
     
@@ -92,7 +92,7 @@
     
     UIStoryboard* storyBoard = [UIStoryboard storyboardWithName:@"Me" bundle:nil];
    
-    BlackListController=[storyBoard instantiateViewControllerWithIdentifier:@"blacklistcontroller"];
+    //BlackListController=[storyBoard instantiateViewControllerWithIdentifier:@"blacklistcontroller"];
 
     UIStoryboard* MainSB = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     loginNC = [MainSB instantiateViewControllerWithIdentifier:@"loginNCID"];
@@ -178,58 +178,58 @@
     [fileManager removeItemAtPath:cacheFilePath error:nil];
     
 }
-//获取黑名单
--(void)getBlackListInfo{
-
-    BlackListController.blackListAry=nil;
-    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-    NSString* userId = [defaults stringForKey:@"userId"];
-
-    AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
-    manager.securityPolicy.allowInvalidCertificates = YES;
-    [manager.securityPolicy setValidatesDomainName:NO];
-    
-    NSString* MD5String = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"user_id%@",userId]];
-    NSString* hashString = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"%@1", MD5String]];
-    
-    NSDictionary* parameter = @{@"user_id" : userId,
-                                @"deviceType": @"ios",
-                                @"apitype" : @"users",
-                                @"salt" : @"1",
-                                @"tag" : @"getblacklist",
-                                @"hash" : hashString,
-                                @"keyset" : @"user_id:",
-                                };
-    
-    [manager POST:POST_URL parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
-        
-        
-        
-    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        NSLog(@"黑名单信息:%@", responseObject);
-        
-        UIBarButtonItem *backItemTitle = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
-        [self.navigationItem setBackBarButtonItem:backItemTitle];
-        if([[responseObject valueForKey:@"flag"] isEqualToString:@"ok"])
-        {
-            NSLog(@"成功");
-            BlackListController.blackListAry=[[responseObject objectForKey:@"black_users_id"] mutableCopy];
-            NSLog(@"BlackListController.blackListAry is %@",BlackListController.blackListAry);
-            
-        }
-        else
-        {
-            BlackListController.blackListAry=nil;
-            NSLog(@"无黑名单");
-        }
-        [self.navigationController pushViewController:BlackListController animated:YES];
-       
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        NSLog(@"请求失败:%@", error.description);
-        return;
-    }];
-    
-}
+////获取黑名单
+//-(void)getBlackListInfo{
+//
+//    BlackListController.blackListAry=nil;
+//    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+//    NSString* userId = [defaults stringForKey:@"userId"];
+//
+//    AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
+//    manager.securityPolicy.allowInvalidCertificates = YES;
+//    [manager.securityPolicy setValidatesDomainName:NO];
+//    
+//    NSString* MD5String = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"user_id%@",userId]];
+//    NSString* hashString = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"%@1", MD5String]];
+//    
+//    NSDictionary* parameter = @{@"user_id" : userId,
+//                                @"deviceType": @"ios",
+//                                @"apitype" : @"users",
+//                                @"salt" : @"1",
+//                                @"tag" : @"getblacklist",
+//                                @"hash" : hashString,
+//                                @"keyset" : @"user_id:",
+//                                };
+//    
+//    [manager POST:POST_URL parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
+//        
+//        
+//        
+//    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+//        NSLog(@"黑名单信息:%@", responseObject);
+//        
+//        UIBarButtonItem *backItemTitle = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
+//        [self.navigationItem setBackBarButtonItem:backItemTitle];
+//        if([[responseObject valueForKey:@"flag"] isEqualToString:@"ok"])
+//        {
+//            NSLog(@"成功");
+//            BlackListController.blackListAry=[[responseObject objectForKey:@"black_users_id"] mutableCopy];
+//            NSLog(@"BlackListController.blackListAry is %@",BlackListController.blackListAry);
+//            
+//        }
+//        else
+//        {
+//            BlackListController.blackListAry=nil;
+//            NSLog(@"无黑名单");
+//        }
+//        [self.navigationController pushViewController:BlackListController animated:YES];
+//       
+//    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+//        NSLog(@"请求失败:%@", error.description);
+//        return;
+//    }];
+//    
+//}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -392,7 +392,7 @@
                 case 0:
                 {
                     // 黑名单
-//                    [self getBlackListInfo];
+                    //[self getBlackListInfo];
                     BlackListVC* blackListVC = [[BlackListVC alloc] initWithStyle:UITableViewStyleGrouped];
                     [self.navigationController pushViewController:blackListVC animated:YES];
                     break;

@@ -464,8 +464,6 @@
 		8FFBDF8E1D767EF700FFF334 /* BackgroundV.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FFBDF8D1D767EF700FFF334 /* BackgroundV.m */; };
 		AF0E0FF01D4068B2009FB44D /* DialogView.m in Sources */ = {isa = PBXBuildFile; fileRef = AF0E0FEF1D4068B2009FB44D /* DialogView.m */; };
 		AF0E0FF21D40716C009FB44D /* SMS_SDK in Resources */ = {isa = PBXBuildFile; fileRef = AF0E0FF11D40716C009FB44D /* SMS_SDK */; };
-		AF197E3E1D6AC8EC0070AAC4 /* blackerInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = AF197E3D1D6AC8EC0070AAC4 /* blackerInfo.m */; };
-		AF197E441D6AC9F70070AAC4 /* blackerTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = AF197E431D6AC9F70070AAC4 /* blackerTableViewCell.m */; };
 		AF197E471D6C2A4B0070AAC4 /* RectWaitView.m in Sources */ = {isa = PBXBuildFile; fileRef = AF197E461D6C2A4B0070AAC4 /* RectWaitView.m */; };
 		AF197E4B1D6D8C860070AAC4 /* IPostVC.m in Sources */ = {isa = PBXBuildFile; fileRef = AF197E4A1D6D8C860070AAC4 /* IPostVC.m */; };
 		AF197E541D6D91930070AAC4 /* ICollectVC.m in Sources */ = {isa = PBXBuildFile; fileRef = AF197E531D6D91930070AAC4 /* ICollectVC.m */; };
@@ -492,7 +490,6 @@
 		AF4B30391D2F952B00CBF257 /* Me.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AF4B30381D2F952B00CBF257 /* Me.storyboard */; };
 		AF4B30421D33275500CBF257 /* ISettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AF4B30411D33275500CBF257 /* ISettingViewController.m */; };
 		AF4B30451D33279D00CBF257 /* PersonalInformationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AF4B30441D33279D00CBF257 /* PersonalInformationViewController.m */; };
-		AF4B30481D3327DA00CBF257 /* BlackListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AF4B30471D3327DA00CBF257 /* BlackListViewController.m */; };
 		AF4B304B1D3327F800CBF257 /* ChooseSexTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AF4B304A1D3327F800CBF257 /* ChooseSexTypeViewController.m */; };
 		AF4B304E1D33282800CBF257 /* FeedbackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AF4B304D1D33282800CBF257 /* FeedbackViewController.m */; };
 		AF4B30511D33286600CBF257 /* PlaceholderTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = AF4B30501D33286600CBF257 /* PlaceholderTextView.m */; };
@@ -1336,10 +1333,6 @@
 		AF0E0FEE1D4068B2009FB44D /* DialogView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DialogView.h; sourceTree = "<group>"; };
 		AF0E0FEF1D4068B2009FB44D /* DialogView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DialogView.m; sourceTree = "<group>"; };
 		AF0E0FF11D40716C009FB44D /* SMS_SDK */ = {isa = PBXFileReference; lastKnownFileType = folder; path = SMS_SDK; sourceTree = "<group>"; };
-		AF197E3C1D6AC8EC0070AAC4 /* blackerInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = blackerInfo.h; sourceTree = "<group>"; };
-		AF197E3D1D6AC8EC0070AAC4 /* blackerInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = blackerInfo.m; sourceTree = "<group>"; };
-		AF197E421D6AC9F70070AAC4 /* blackerTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = blackerTableViewCell.h; sourceTree = "<group>"; };
-		AF197E431D6AC9F70070AAC4 /* blackerTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = blackerTableViewCell.m; sourceTree = "<group>"; };
 		AF197E451D6C2A4B0070AAC4 /* RectWaitView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RectWaitView.h; sourceTree = "<group>"; };
 		AF197E461D6C2A4B0070AAC4 /* RectWaitView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RectWaitView.m; sourceTree = "<group>"; };
 		AF197E491D6D8C860070AAC4 /* IPostVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IPostVC.h; sourceTree = "<group>"; };
@@ -1391,8 +1384,6 @@
 		AF4B30411D33275500CBF257 /* ISettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISettingViewController.m; sourceTree = "<group>"; };
 		AF4B30431D33279D00CBF257 /* PersonalInformationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonalInformationViewController.h; sourceTree = "<group>"; };
 		AF4B30441D33279D00CBF257 /* PersonalInformationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersonalInformationViewController.m; sourceTree = "<group>"; };
-		AF4B30461D3327DA00CBF257 /* BlackListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BlackListViewController.h; sourceTree = "<group>"; };
-		AF4B30471D3327DA00CBF257 /* BlackListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BlackListViewController.m; sourceTree = "<group>"; };
 		AF4B30491D3327F800CBF257 /* ChooseSexTypeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChooseSexTypeViewController.h; sourceTree = "<group>"; };
 		AF4B304A1D3327F800CBF257 /* ChooseSexTypeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChooseSexTypeViewController.m; sourceTree = "<group>"; };
 		AF4B304C1D33282800CBF257 /* FeedbackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeedbackViewController.h; sourceTree = "<group>"; };
@@ -3204,43 +3195,6 @@
 			name = AddList;
 			sourceTree = "<group>";
 		};
-		AF197E381D6AC8520070AAC4 /* blackList */ = {
-			isa = PBXGroup;
-			children = (
-				AF197E3B1D6AC8910070AAC4 /* controller */,
-				AF197E3A1D6AC87D0070AAC4 /* model */,
-				AF197E391D6AC86B0070AAC4 /* view */,
-			);
-			name = blackList;
-			sourceTree = "<group>";
-		};
-		AF197E391D6AC86B0070AAC4 /* view */ = {
-			isa = PBXGroup;
-			children = (
-				AF197E421D6AC9F70070AAC4 /* blackerTableViewCell.h */,
-				AF197E431D6AC9F70070AAC4 /* blackerTableViewCell.m */,
-			);
-			name = view;
-			sourceTree = "<group>";
-		};
-		AF197E3A1D6AC87D0070AAC4 /* model */ = {
-			isa = PBXGroup;
-			children = (
-				AF197E3C1D6AC8EC0070AAC4 /* blackerInfo.h */,
-				AF197E3D1D6AC8EC0070AAC4 /* blackerInfo.m */,
-			);
-			name = model;
-			sourceTree = "<group>";
-		};
-		AF197E3B1D6AC8910070AAC4 /* controller */ = {
-			isa = PBXGroup;
-			children = (
-				AF4B30461D3327DA00CBF257 /* BlackListViewController.h */,
-				AF4B30471D3327DA00CBF257 /* BlackListViewController.m */,
-			);
-			name = controller;
-			sourceTree = "<group>";
-		};
 		AF197E481D6D8C5B0070AAC4 /* IPost */ = {
 			isa = PBXGroup;
 			children = (
@@ -3296,7 +3250,6 @@
 			children = (
 				AF4B30401D33275500CBF257 /* ISettingViewController.h */,
 				AF4B30411D33275500CBF257 /* ISettingViewController.m */,
-				AF197E381D6AC8520070AAC4 /* blackList */,
 			);
 			name = setting;
 			sourceTree = "<group>";
@@ -3995,10 +3948,8 @@
 				AF4B30421D33275500CBF257 /* ISettingViewController.m in Sources */,
 				8F1FB6F41D6BD2CA00676743 /* CreateActivityVC.m in Sources */,
 				8F648D311D00547A00E3B155 /* UIViewController+DismissKeyboard.m in Sources */,
-				AF197E441D6AC9F70070AAC4 /* blackerTableViewCell.m in Sources */,
 				8F5304491CDB7A8B0078FD64 /* homeViewController.m in Sources */,
 				AF4B30281D2F909B00CBF257 /* NickNameViewController.m in Sources */,
-				AF197E3E1D6AC8EC0070AAC4 /* blackerInfo.m in Sources */,
 				AF7FF1801D3CBDD90068F8D9 /* FDCalendarItem.m in Sources */,
 				8F73C8D21D2B53E6009C83C2 /* AFSecurityPolicy.m in Sources */,
 				AFCE1F991CDAD1B20085F10F /* AppDelegate.mm in Sources */,
@@ -4032,7 +3983,6 @@
 				8F1FB5C81D5C025800676743 /* TZImageManager.m in Sources */,
 				8F1FB6D81D6444A200676743 /* MASViewConstraint.m in Sources */,
 				AFE5693D1CFE649200C0F745 /* ITVC.m in Sources */,
-				AF4B30481D3327DA00CBF257 /* BlackListViewController.m in Sources */,
 				8F73C8D51D2B53E6009C83C2 /* AFURLSessionManager.m in Sources */,
 				8F51E2821D338FBF0094A4E5 /* SDWebImageManager.m in Sources */,
 				AF5293DD1D12985400503975 /* BackgroundView.m in Sources */,

@@ -55,7 +55,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    self.navigationItem.title = @"黑名单";
+     self.navigationItem.title = @"黑名单";
 }
 
 - (void)didReceiveMemoryWarning {
