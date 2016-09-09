@@ -645,15 +645,26 @@
     NSString* cityId=@"1";
     NSString* city=@"哈尔滨";
     NSString* commId=NULL;
-    if([_floorAndplateDic objectForKey:@"pk"]==NULL)
+    if([communityLabelView.text isEqualToString:@"保利清华颐园"])
     {
+        commId=[NSString stringWithFormat:@"%d",1];
+    }else if([communityLabelView.text isEqualToString:@"保利颐和家园"]){
     
-        NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-        commId = [defaults stringForKey:@"keycommid"];
-    }else{
-    
-        [_floorAndplateDic objectForKey:@"pk"];
+        commId=[NSString stringWithFormat:@"%d",2];
+    }else if([communityLabelView.text isEqualToString:@"欧洲新城"])
+    {
+      
+        commId=[NSString stringWithFormat:@"%d",5];
     }
+//    if([_floorAndplateDic objectForKey:@"pk"]==NULL)
+//    {
+//    
+//        NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+//        commId = [defaults stringForKey:@"keycommid"];
+//    }else{
+//    
+//        [_floorAndplateDic objectForKey:@"pk"];
+//    }
     NSString* commStr=communityLabelView.text;
     NSString* blockId=@"0";
     NSString* blockStr=@"0";
