@@ -111,7 +111,7 @@
         [cell.contentView addSubview:_rightView];
         if (self.returnSexTextBlock != nil) {
              self.returnSexTextBlock(cell.textLabel.text);
-            newSetSexVal=cell.textLabel.text;
+             newSetSexVal=cell.textLabel.text;
              NSLog(@"cell.textLabel.text is %@",cell.textLabel.text);
              timer=[NSTimer scheduledTimerWithTimeInterval:0.8
                                                    target:self

@@ -18,6 +18,7 @@
 @property (nonatomic, strong)IBOutlet UIView *innerView;
 @property (nonatomic, weak)UIViewController *parentVC;
 @property(nonatomic,retain) NSDictionary *floororPlateDic;
-@property(nonatomic,retain) NSArray *floorOrPlateNumAry;
-+ (instancetype)defaultPopupView:(NSInteger) tagValue;
+@property(nonatomic,retain) NSMutableArray *floorOrPlateNumAry;
+@property(nonatomic,retain) NSMutableArray *buildNumIdAry;
++ (instancetype)defaultPopupView:(NSInteger) tagValue floorOrPlateAry:(NSMutableArray*) floorPlateAry;
 @end

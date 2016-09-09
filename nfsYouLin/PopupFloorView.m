@@ -10,11 +10,18 @@
 #import "UIViewController+LewPopupViewController.h"
 #import "LewPopupViewAnimationDrop.h"
 #import "familyAddressViewController.h"
+#import "AFHTTPSessionManager.h"
+#import "StringMD5.h"
+#import "HeaderFile.h"
+#import "SqliteOperation.h"
+#import "SqlDictionary.h"
+
 #define UIColorFromRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 @implementation PopupView{
 
     familyAddressViewController *familyAddressController;
     NSString *sectionTitle;
+    NSString *blockIdS;
 }
 
 
@@ -26,39 +33,38 @@
 }
 */
 
-- (id)initWithFrame:(CGRect)frame textFieldTag:(NSInteger) tagValue
+- (id)initWithFrame:(CGRect)frame textFieldTag:(NSInteger) tagValue floorOrPlateAry:(NSMutableArray*) floorOrPlate
 {
-    NSString *path=nil;
     self = [super initWithFrame:frame];
     floorOrPlateDataTable = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, 250, 320)];
-    if(tagValue==1001)
-    {
-        path = [[NSBundle mainBundle] pathForResource:@"floor" ofType:@"plist"];
-        self.floororPlateDic = [[NSDictionary alloc]initWithContentsOfFile:path];
-        self.floorOrPlateNumAry= [[self.floororPlateDic allKeys] sortedArrayUsingSelector:@selector(compare:)];
-        sectionTitle=@"请选择下列楼栋号";
-    }else{
-    
-        path = [[NSBundle mainBundle] pathForResource:@"doorplate" ofType:@"plist"];
-        self.floororPlateDic = [[NSDictionary alloc]initWithContentsOfFile:path];
-        self.floorOrPlateNumAry= [[self.floororPlateDic allKeys] sortedArrayUsingSelector:@selector(compare:)];
-        sectionTitle=@"请选择下列门牌号";
-    
-    }
     floorOrPlateDataTable.delegate=self;
     floorOrPlateDataTable.dataSource=self;
     [floorOrPlateDataTable.layer setCornerRadius:5];
-    floorOrPlateDataTable.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+     floorOrPlateDataTable.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
     [floorOrPlateDataTable setSeparatorInset:UIEdgeInsetsMake(0,15, 0, 15)];
     [floorOrPlateDataTable setLayoutMargins:UIEdgeInsetsMake(0,15, 0, 15)];
     [self addSubview:floorOrPlateDataTable];
+    
+    if(tagValue==1001)
+    {
+        
+        self.floorOrPlateNumAry=floorOrPlate;
+        sectionTitle=@"请选择下列楼栋号";
+    }else{
+    
+        self.floorOrPlateNumAry=floorOrPlate;
+        sectionTitle=@"请选择下列门牌号";
+    
+    }
+    
     
     return self;
 }
 
 
-+ (instancetype)defaultPopupView:(NSInteger) tagValue{
-    return [[PopupView alloc]initWithFrame:CGRectMake(0, 0, 250, 320)textFieldTag:tagValue];
+
++ (instancetype)defaultPopupView:(NSInteger) tagValue floorOrPlateAry:(NSMutableArray*) floorPlateAry{
+    return [[PopupView alloc]initWithFrame:CGRectMake(0, 0, 250, 320)textFieldTag:tagValue floorOrPlateAry:floorPlateAry];
 }
 
 -(void) dismissMyTable{
@@ -96,7 +102,7 @@
     [sectionView setBackgroundColor:[UIColor whiteColor]];
     [sectionView addSubview:label];
     [sectionView addSubview:imageView];
-    return sectionView;
+     return sectionView;
 }
 
 //指定有多少个分区(Section)，默认为1
@@ -130,9 +136,8 @@
                                        reuseIdentifier: SimpleTableIdentifier] ;
         
     }
-    //NSLog(@"%ld",[indexPath section]);
     NSString *floorNum = [self.floorOrPlateNumAry objectAtIndex:[indexPath row]];
-    cell.textLabel.text =[_floororPlateDic objectForKey:floorNum];
+    cell.textLabel.text = floorNum;
     cell.textLabel.textColor=[UIColor lightGrayColor];
     cell.textLabel.font=[UIFont systemFontOfSize:14];
     return cell;

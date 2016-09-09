@@ -12,6 +12,8 @@
 }
 @property (strong, nonatomic) NSDictionary *names;
 @property (strong, nonatomic) NSMutableArray *changeAddressArry;
+@property (strong, nonatomic) NSMutableArray *floorAndplateAry;
+@property (strong, nonatomic) NSMutableDictionary *floorAndplateDic;
 @property (strong, nonatomic) NSArray *listtitle;
 @property(nonatomic,retain) NSString *communityNameValue;
 @property(nonatomic,retain) NSString *floorNumValue;

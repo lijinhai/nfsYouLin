@@ -39,16 +39,16 @@
     
     NSTimer* _downTimer; // 下拉定时器
     NSTimer* _upTimer; // 上拉定时器
-
+    
     
     UIActivityIndicatorView *_indicatorView;
     UIColor* _color;
-
+    
     // 等待动画变量
     NSTimer* _changeTimer;
     int _sectionNum;
     NSInteger _imageCount;
-
+    
     UIImageView* _waitImageView;
     
     // topic Id
@@ -98,7 +98,7 @@
     
     [[UIBarButtonItem appearance] setBackButtonBackgroundImage:backButtonImage forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
     [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
-
+    
     
     if(self.refresh)
     {
@@ -114,7 +114,7 @@
             }
         }
         [self.tableView reloadData];
-
+        
     }
 }
 
@@ -122,7 +122,7 @@
 {
     [super viewDidLoad];
     _color = [UIColor colorWithRed:255/255.0 green:222/255.0 blue:31/255.0 alpha:1];
-
+    
     UIWindow *window = [UIApplication sharedApplication].keyWindow;
     rootVC = window.rootViewController.navigationController;
     backgroundView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
@@ -135,16 +135,16 @@
     UIView * tmpView = [[UIView alloc]initWithFrame:CGRectMake(0, -20, self.view.frame.size.width, 20)];
     tmpView.backgroundColor = [UIColor blackColor];
     [self.navigationController.navigationBar addSubview:tmpView];
-    self.tableView.bounces = NO;
-    self.neighborDataArray = [[NSMutableArray alloc] init];
+     self.tableView.bounces = NO;
+     self.neighborDataArray = [[NSMutableArray alloc] init];
     
     _downView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.navigationController.navigationBar.frame.size.width, self.navigationController.navigationBar.frame.size.height)];
     _downView.backgroundColor = _color;
     _downLabel = [[UILabel alloc] init];
     _downLabel.frame = _downView.frame;
     _downLabel.text = @"下拉刷新";
-//    _downLabel.textColor = _color;
-
+    //    _downLabel.textColor = _color;
+    
     _downLabel.textColor = [UIColor whiteColor];
     _downLabel.textAlignment = NSTextAlignmentCenter;
     [_downView addSubview:_downLabel];
@@ -283,7 +283,7 @@
         }
         
     }
-
+    
     else
     {
         // 帖子
@@ -293,7 +293,7 @@
             if(cell == nil)
             {
                 cell = [[NeighborTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellOther];
-            
+                
             }
             if([self.neighborDataArray count] != 0)
             {
@@ -314,8 +314,8 @@
                 cell.replyData = dataFrame.neighborData;
             }
         }
-
-}
+        
+    }
     
     
     cell.delegate = self;
@@ -359,9 +359,9 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
     if (section == 0) {
-            return 0.f;
-        }else
-    return 8.0f;
+        return 0.f;
+    }else
+        return 8.0f;
 }
 
 
@@ -405,18 +405,18 @@ static BOOL upState = YES;
 {
     CGPoint translation = [gesture translationInView:self.tableView];
     
-//    NSLog(@"水平速度:%g 垂直速度为:%g 水平位移:%g 垂直位移:%g",velocity.x ,velocity.y, translation.x ,translation.y);
- 
+    //    NSLog(@"水平速度:%g 垂直速度为:%g 水平位移:%g 垂直位移:%g",velocity.x ,velocity.y, translation.x ,translation.y);
+    
     
     if(gesture.state == UIGestureRecognizerStateBegan)
     {
-//        NSLog(@"began contentOffsetY = %f",contentOffsetY);
+        //        NSLog(@"began contentOffsetY = %f",contentOffsetY);
         // 顶部下拉条件
         if(translation.y > 0 && self.tableView.contentOffset.y == contentOffsetY && downState)
         {
-//            NSLog(@"began 下拉");
+            //            NSLog(@"began 下拉");
             downState = NO;
-//            [self.navigationController.navigationBar setBarTintColor:[UIColor whiteColor]];
+            //            [self.navigationController.navigationBar setBarTintColor:[UIColor whiteColor]];
             [self.navigationController.navigationBar addSubview:_downView];
         }
         // 底部上拉条件
@@ -462,7 +462,7 @@ static BOOL upState = YES;
         // 上拉拖拽
         if(!upState)
         {
-
+            
             [_indicatorView startAnimating];
             [self.tableView.tableFooterView setHidden:NO];
             if(fabs(translation.y) >= 50)
@@ -482,11 +482,11 @@ static BOOL upState = YES;
     }
     else if(gesture.state == UIGestureRecognizerStateEnded)
     {
-//        NSLog(@"end");
+        //        NSLog(@"end");
         // 下拉拖拽结束
         if(!downState)
         {
-//            [self.navigationController.navigationBar setBarTintColor:_color];
+            //            [self.navigationController.navigationBar setBarTintColor:_color];
             [self.tableView.tableHeaderView setHidden:YES];
             [_downView removeFromSuperview];
         }
@@ -502,7 +502,7 @@ static BOOL upState = YES;
         downState = YES;
         upState = YES;
     }
-
+    
     
 }
 
@@ -526,12 +526,12 @@ static BOOL upState = YES;
     _panGesture.enabled = YES;
     upState = YES;
     [_finishLabel removeFromSuperview];
-//    [self.tableView.tableFooterView setHidden:YES];
+    //    [self.tableView.tableFooterView setHidden:YES];
     _footerView.frame = CGRectMake(0, 0, CGRectGetWidth(self.tableView.frame), 44);
     self.tableView.tableFooterView = _footerView;
     upFlag = YES;
     [self.tableView reloadData];
-
+    
 }
 
 // 下拉刷新数据
@@ -544,7 +544,7 @@ static BOOL upState = YES;
         _viewXCount = 0;
     }
     
-     _downView0.frame = CGRectMake(_viewXCount , 0, 5, CGRectGetHeight(_headView.frame));
+    _downView0.frame = CGRectMake(_viewXCount , 0, 5, CGRectGetHeight(_headView.frame));
     _downView1.frame = CGRectMake(_viewX + _viewXCount , 0, 5, CGRectGetHeight(_headView.frame));
     _downView2.frame = CGRectMake(_viewX  * 2 + _viewXCount, 0, 5, CGRectGetHeight(_headView.frame));
     _downView3.frame = CGRectMake(_viewX * 3 + _viewXCount, 0, 5, CGRectGetHeight(_headView.frame));
@@ -566,7 +566,7 @@ static BOOL upState = YES;
         [self.tableView.tableHeaderView setHidden:YES];
         [_downView removeFromSuperview];
         _panGesture.enabled = YES;
-//        [self.tableView reloadData];
+        //        [self.tableView reloadData];
     }
 }
 
@@ -605,7 +605,7 @@ static BOOL upState = YES;
     maskview.backgroundColor = [UIColor blackColor];
     [rootVC.view addSubview:maskview];
     
-//    [self.view addSubview:maskview];
+    //    [self.view addSubview:maskview];
     ShowImageView* showImage = [[ShowImageView alloc] initWithFrame:self.parentViewController.view.bounds byClickTag:clickTag appendArray:imageViews];
     [showImage show:maskview didFinish:^(){
         [UIView animateWithDuration:0.5f animations:^{
@@ -631,35 +631,35 @@ static BOOL upState = YES;
     
     _changeTimer = [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(topicChange) userInfo:nil repeats:YES];
     [self.view addSubview:_waitImageView];
-
+    
     
     if([text isEqualToString:@"全部"])
     {
         Tag = @"gettopic";
         category = 0;
         [self getTopicNet];
-
+        
     }
     else if([text isEqualToString:@"话题"])
     {
         category = 1;
         Tag = @"singletopic";
         [self getTopicNet];
-
+        
     }
     else if([text isEqualToString:@"活动"])
     {
         category = 2;
         Tag = @"singleactivity";
         [self getTopicNet];
-
+        
     }
     else if([text isEqualToString:@"公告"])
     {
         category = 3;
         Tag = @"getnotice";
         [self getNoticeAndAdviceNet:@"3"];
-
+        
     }
     else if([text isEqualToString:@"建议"])
     {
@@ -671,11 +671,11 @@ static BOOL upState = YES;
     {
         Tag = @"singlebarter";
         [self getTopicNet];
-
+        
     }
-
     
-
+    
+    
 }
 
 
@@ -733,16 +733,16 @@ static BOOL upState = YES;
 
 
 // 查看全文回调事件
-- (void)readTotalInformation:(NSInteger)sectionNum 
+- (void)readTotalInformation:(NSInteger)sectionNum
 {
     NeighborDataFrame* neighborDataFrame = self.neighborDataArray[sectionNum - 1];
     NeighborData* neighborData = neighborDataFrame.neighborData;
     NSInteger topicId = [[neighborData valueForKey:@"topicId"] integerValue];
     NSInteger num = [neighborData.viewCount integerValue] + 1;
-     neighborData.viewCount = [NSString stringWithFormat:@"%ld",num];
+    neighborData.viewCount = [NSString stringWithFormat:@"%ld",num];
     
     [self viewTopicNet:topicId];
-
+    
     neighborDetailVC = [[NeighborDetailTVC alloc] init];
     UIBarButtonItem* detailItem = [[UIBarButtonItem alloc] initWithTitle:@"详情" style:UIBarButtonItemStylePlain target:nil action:nil];
     [self.parentViewController.navigationItem setBackBarButtonItem:detailItem];
@@ -787,7 +787,7 @@ static BOOL upState = YES;
     
     UIButton* noBtn = deleteView.NOBtn;
     [noBtn addTarget:self action:@selector(deleteNoAction:) forControlEvents:UIControlEventTouchUpInside];
-
+    
 }
 
 // 发起获取帖子网络请求 全部 话题 活动
@@ -820,7 +820,7 @@ static BOOL upState = YES;
         
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-//        NSLog(@"获取所有帖子网络请求:%@", responseObject);
+        //        NSLog(@"获取所有帖子网络请求:%@", responseObject);
         for (int i = 0; i < [responseObject count]; i++,sectionCount++)
         {
             NSDictionary* responseDict = responseObject[i];
@@ -839,7 +839,7 @@ static BOOL upState = YES;
             NeighborDataFrame *neighborDataFrame = [[NeighborDataFrame alloc]init];
             neighborDataFrame.neighborData = neighborData;
             [self.neighborDataArray addObject:neighborDataFrame];
-
+            
         }
         [_waitImageView removeFromSuperview];
         topicFlag = NO;
@@ -956,7 +956,7 @@ static BOOL upState = YES;
         
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-//        NSLog(@"获取下拉所有帖子网络请求:%@", responseObject);
+        //        NSLog(@"获取下拉所有帖子网络请求:%@", responseObject);
         if([responseObject isKindOfClass:[NSArray class]])
         {
             for (NSInteger i = [responseObject count] - 1; i >=0 ; i--,sectionCount++)
@@ -967,7 +967,7 @@ static BOOL upState = YES;
                 if(i == [responseObject count] - 1)
                 {
                     newTopicId = responseDict[@"topicId"];
-
+                    
                 }
                 NeighborData *neighborData = [[NeighborData alloc] initWithDict:dict];
                 
@@ -989,7 +989,7 @@ static BOOL upState = YES;
         downFlag = NO;
         return;
     }];
-
+    
 }
 
 // 下拉刷新网络请求 公告 建议
@@ -1123,14 +1123,14 @@ static BOOL upState = YES;
         upFlag = NO;
         return;
     }];
-
+    
 }
 
 
 // 上拉刷新网络请求 公告 建议
 - (void) upRefreshNoticeAndAdviceNet:(NSString*) type
 {
-
+    
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     NSString* communityId = [defaults stringForKey:@"communityId"];
     NSString* userId = [defaults stringForKey:@"userId"];
@@ -1200,24 +1200,24 @@ static BOOL upState = YES;
 {
     NSDictionary* dict;
     dict = @{
-        @"iconName" : responseDict[@"senderPortrait"],
-        @"titleName" : responseDict[@"topicTitle"],
-        @"accountName" : responseDict[@"displayName"],
-        @"publishText" : responseDict[@"topicContent"],
-        @"picturesArray" : responseDict[@"mediaFile"],
-        @"topicTime" : responseDict[@"topicTime"],
-        @"systemTime" : responseDict[@"systemTime"],
-        @"senderId" : responseDict[@"senderId"],
-        @"cacheKey" : responseDict[@"cacheKey"],
-        @"topicCategory" : responseDict[@"objectType"],
-        @"infoArray" : responseDict[@"objectData"],
-        @"praiseType" : responseDict[@"praiseType"],
-        @"viewCount" : responseDict[@"viewNum"],
-        @"praiseCount" : responseDict[@"likeNum"],
-        @"replyCount" : responseDict[@"commentNum"],
-        @"topicId" : responseDict[@"topicId"],
-
-        };
+             @"iconName" : responseDict[@"senderPortrait"],
+             @"titleName" : responseDict[@"topicTitle"],
+             @"accountName" : responseDict[@"displayName"],
+             @"publishText" : responseDict[@"topicContent"],
+             @"picturesArray" : responseDict[@"mediaFile"],
+             @"topicTime" : responseDict[@"topicTime"],
+             @"systemTime" : responseDict[@"systemTime"],
+             @"senderId" : responseDict[@"senderId"],
+             @"cacheKey" : responseDict[@"cacheKey"],
+             @"topicCategory" : responseDict[@"objectType"],
+             @"infoArray" : responseDict[@"objectData"],
+             @"praiseType" : responseDict[@"praiseType"],
+             @"viewCount" : responseDict[@"viewNum"],
+             @"praiseCount" : responseDict[@"likeNum"],
+             @"replyCount" : responseDict[@"commentNum"],
+             @"topicId" : responseDict[@"topicId"],
+             
+             };
     return dict;
 }
 
@@ -1231,7 +1231,7 @@ static BOOL upState = YES;
     NSInteger activityId = button.tag;
     
     [self applyNet:activityId Adult:[dialogView.adultTF.text integerValue] Child:[dialogView.childTF.text integerValue]];
-
+    
     [backgroundView removeFromSuperview];
     if(dialogView)
     {
@@ -1436,7 +1436,7 @@ static BOOL upState = YES;
         NSLog(@"请求失败:%@", error.description);
         return;
     }];
-
+    
 }
 
 // 删除帖子网络请求
@@ -1446,7 +1446,7 @@ static BOOL upState = YES;
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     NSString* userId = [defaults stringForKey:@"userId"];
     NSString* communityId = [defaults stringForKey:@"communityId"];
-
+    
     AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
     manager.securityPolicy.allowInvalidCertificates = YES;
     [manager.securityPolicy setValidatesDomainName:NO];
@@ -1599,9 +1599,9 @@ static BOOL upState = YES;
                     [self.neighborDataArray replaceObjectAtIndex:i withObject:neighborDataFrame];
                     break;
                 }
-
+                
             }
-
+            
         }
         if([[responseObject valueForKey:@"flag"] isEqualToString:@"black"])
         {
@@ -1610,7 +1610,7 @@ static BOOL upState = YES;
         {
         }
         [self.tableView reloadData];
-
+        
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         NSLog(@"请求失败:%@", error.description);
         return;

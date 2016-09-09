@@ -369,17 +369,6 @@ static NSString *kConversationChatter = @"ConversationChatter";
     return 15;
 }
 
-//-(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
-//{
-//    if ([cell respondsToSelector:@selector(setSeparatorInset:)]) {
-//        [cell setSeparatorInset:UIEdgeInsetsZero];
-//    }
-//    
-//    if ([cell respondsToSelector:@selector(setLayoutMargins:)]) {
-//        [cell setLayoutMargins:UIEdgeInsetsZero];
-//    }
-//}
-
 // 下拉刷下
 - (void)loadNewData
 {
@@ -389,11 +378,8 @@ static NSString *kConversationChatter = @"ConversationChatter";
 
 - (void) handlePan:(UIPanGestureRecognizer*)gesture
 {
-//    CGPoint velocity = [gesture velocityInView:self.tableView];
+
     CGPoint translation = [gesture translationInView:self.tableView];
-    
-//    NSLog(@"水平速度:%g 垂直速度为:%g 水平位移:%g 垂直位移:%g",velocity.x ,velocity.y, translation.x ,translation.y);
-    
     
     if(gesture.state == UIGestureRecognizerStateBegan)
     {

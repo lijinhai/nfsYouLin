@@ -132,7 +132,6 @@
     /*获取返回后收藏数*/
     
     /*获取返回后我发的数*/
-    
     [self initUser];
     [self.tableView reloadData];
     

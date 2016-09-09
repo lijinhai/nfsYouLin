@@ -8,7 +8,9 @@
 
 #import "chooseCityViewController.h"
 #import "myCommunityViewController.h"
+#import "MBProgressHUBTool.h"
 #import "StringMD5.h"
+#import "familyAddressViewController.h"
 
 @interface chooseCityViewController ()
 
@@ -17,20 +19,24 @@
 @implementation chooseCityViewController{
 
     myCommunityViewController *myCommunityController;
+    familyAddressViewController *jumpFamilyAddressController;
     UINavigationController *loginNC;
     
     UIImageView* _backIV;
     UILabel* _backLabel;
+    NSString* chooseCity;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    _jumpCityFlag=NULL;
     _cityName.userInteractionEnabled=YES;
     UITapGestureRecognizer *labelTapGestureRecognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(cityNameTouchUpInside:)];
     [_cityName addGestureRecognizer:labelTapGestureRecognizer];
     
     UIStoryboard* storyBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     loginNC = [storyBoard instantiateViewControllerWithIdentifier:@"viewID"];
+    jumpFamilyAddressController=[storyBoard instantiateViewControllerWithIdentifier:@"familyAddressController"];
     // Do any additional setup after loading the view.
 }
 
@@ -46,7 +52,11 @@
     UIBarButtonItem *barrightBtn=[[UIBarButtonItem alloc]initWithTitle:@"下一步" style:UIBarButtonItemStylePlain target:self action:@selector(selectNextAction)];
     self.navigationItem.rightBarButtonItem = barrightBtn;
     self.navigationItem.title=@"";
-    
+    [jumpFamilyAddressController returnText:^(NSString *showText) {
+        NSLog(@"showText is %@",showText);
+    }];
+
+    //NSLog(@"_jumpCityFlag1 is %@",_jumpCityFlag);
     [self createBackItemBtn];
     
     
@@ -57,6 +67,12 @@
 -(void) selectNextAction{
     /*添加相关逻辑判断*/
     UIBarButtonItem* neighborItem = [[UIBarButtonItem alloc] initWithTitle:@"我的小区" style:UIBarButtonItemStylePlain target:nil action:nil];
+    if(chooseCity==NULL)
+    {
+        [MBProgressHUBTool textToast:self.view Tip:@"请选择城市"];
+        return;
+    }
+    myCommunityController.cityName=chooseCity;
     [self.navigationItem setBackBarButtonItem:neighborItem];
     [self.navigationController pushViewController:myCommunityController animated:YES];
 
@@ -64,6 +80,7 @@
 -(void) cityNameTouchUpInside:(UITapGestureRecognizer *)recognizer{
     
     UILabel *label=(UILabel*)recognizer.view;
+    chooseCity=label.text;
     label.backgroundColor=[UIColor lightGrayColor];
     label.alpha=0.3;
 }
@@ -95,8 +112,9 @@
 
 - (void) loginAction
 {
-    NSLog(@"login Action");
-    [self presentViewController:loginNC animated:YES completion:nil];
+   
+    
+   [self presentViewController:loginNC animated:YES completion:nil];
     _backLabel.alpha = 1.0;
     _backIV.alpha = 1.0;
 
@@ -107,5 +125,6 @@
     _backLabel.alpha = 0.2;
     _backIV.alpha = 0.2;
 }
+
 
 @end

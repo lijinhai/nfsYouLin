@@ -8,6 +8,11 @@
 
 #import "myCommunityViewController.h"
 #import "familyAddressViewController.h"
+#import "AFHTTPSessionManager.h"
+#import "StringMD5.h"
+#import "HeaderFile.h"
+#import "SqliteOperation.h"
+#import "SqlDictionary.h"
 
 @interface myCommunityViewController ()<UITableViewDataSource, UITableViewDelegate>
 @end
@@ -21,8 +26,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    NSArray *list = [NSArray arrayWithObjects:@"保利清华颐园",@"保利颐和家园",nil];
-    self.listname = list;
+    //NSArray *list = [NSArray arrayWithObjects:@"保利清华颐园",@"保利颐和家园",nil];
+    //self.listname = list;
     _communityTable.sectionFooterHeight = 800.0f;
     UIView *footView = [UIView new];
     _communityTable.tableFooterView=footView;
@@ -53,8 +58,52 @@
     /*跳转至填写家庭住址界面*/
     UIStoryboard* storyBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     familyAddressController = [storyBoard instantiateViewControllerWithIdentifier:@"familyAddressController"];
-    
+    _commMutableAry=[[NSMutableArray alloc] init];
+    [self CommInfoAct];
 }
+/*获取小区信息*/
+-(void)CommInfoAct{
+    
+    AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
+    manager.securityPolicy.allowInvalidCertificates = YES;
+    manager.responseSerializer.stringEncoding=NSUTF8StringEncoding;
+    [manager.securityPolicy setValidatesDomainName:NO];
+    if(_cityName==NULL){
+    
+      _cityName=@"哈尔滨";
+    }
+    NSString* hashString =[StringMD5 stringAddMD5:[NSString stringWithFormat:@"city_name%@",_cityName]];
+    NSString* hashMD5 = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"%@1024",hashString]];
+    NSDictionary* parameter = @{@"city_name" : _cityName,
+                                @"deviceType":@"ios",
+                                @"apitype" : @"users",
+                                @"tag" : @"addr",
+                                @"salt" : @"1024",
+                                @"hash" : hashMD5,
+                                @"keyset" : @"city_name:",
+                                };
+    
+    [manager POST:POST_URL parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSLog(@"responseObject is %@",responseObject);
+        for(int i=1;i<[[responseObject objectForKey:@"info"] count];i++)
+        {
+            [_commMutableAry addObject:[[responseObject objectForKey:@"info"] objectAtIndex:i]];
+        
+        }
+        [_communityTable reloadData];
+        
+      
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"请求失败:%@", error.description);
+        
+        return;
+    }];
+
+
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -68,10 +117,8 @@
 
 - (NSInteger)tableView:(UITableView *)tableView
  numberOfRowsInSection:(NSInteger)section {
-    //NSString *key = [_keys objectAtIndex:section];
-    //NSArray *nameSection = [_names objectForKey:key];
-    NSLog(@"count is %ld",[self.listname count]);
-    return [self.listname count];
+    
+    return [_commMutableAry count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView
@@ -86,10 +133,9 @@
                 reuseIdentifier:TableSampleIdentifier];
     }
     cell.textLabel.font=[UIFont fontWithName:@"Verdana" size:16];
-    //NSLog(@"what is it?");
     
     NSUInteger rowNumber=[indexPath row];
-    cell.textLabel.text=[_listname objectAtIndex:rowNumber]; //设置每一行要显示的值
+    cell.textLabel.text=[[_commMutableAry objectAtIndex:rowNumber] objectForKey:@"community_name"]; //设置每一行要显示的值
     cell.selectionStyle = UITableViewCellSelectionStyleGray;
     return cell;
     }
@@ -100,22 +146,23 @@
     familyAddressController.communityNameValue=cell.textLabel.text;
     [self.navigationItem setBackBarButtonItem:writeFamliyItem];
     NSInteger rowInSection = indexPath.row;
-    NSLog(@"row %ld",rowInSection);
     NSLog(@"communityNameValue %@",familyAddressController.communityNameValue);
-    switch (rowInSection) {
-        case 0:
-            NSLog(@"点击1");
-            [self.navigationController pushViewController:familyAddressController animated:YES];
-            //[self findLocation:self];
-            break;
-        case 1:
-            //[self createACard:self];
-            NSLog(@"点击2");
-            [self.navigationController pushViewController:familyAddressController animated:YES];
-            break;
-        default:
-            break;
-    }
+    familyAddressController.floorAndplateDic=[_commMutableAry objectAtIndex:indexPath.row];
+    [self.navigationController pushViewController:familyAddressController animated:YES];
+//    switch (rowInSection) {
+//        case 0:
+//            NSLog(@"点击1");
+//            [self.navigationController pushViewController:familyAddressController animated:YES];
+//            //[self findLocation:self];
+//            break;
+//        case 1:
+//            //[self createACard:self];
+//            NSLog(@"点击2");
+//            [self.navigationController pushViewController:familyAddressController animated:YES];
+//            break;
+//        default:
+//            break;
+//    }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 -(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
