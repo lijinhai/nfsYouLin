@@ -759,6 +759,85 @@ static BOOL upState = YES;
     neighborDetailVC.neighborDA = self.neighborDataArray;
     [self.navigationController pushViewController:neighborDetailVC animated:YES];
     
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSString* communityId = [defaults stringForKey:@"communityId"];
+    NSString* userId = [defaults stringForKey:@"userId"];
+    
+    // 获取帖子状态网络请求
+    AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
+    manager.securityPolicy.allowInvalidCertificates = YES;
+    [manager.securityPolicy setValidatesDomainName:NO];
+    NSString* MD5String = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"user_id%@community_id%@topic_id%ldsender_id%ld",userId,communityId,topicId,senderId]];
+    NSString* hashString = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"%@1", MD5String]];
+    
+    NSDictionary* parameter = @{@"user_id" : userId,
+                                @"community_id" : communityId,
+                                @"topic_id" : [NSNumber numberWithInteger:topicId],
+                                @"sender_id" : [NSNumber numberWithInteger:senderId],
+                                @"apitype" : @"comm",
+                                @"tag" : @"delstatus",
+                                @"salt" : @"1",
+                                @"hash" : hashString,
+                                @"keyset" : @"user_id:community_id:topic_id:sender_id:",
+                                };
+    
+    [manager POST:POST_URL parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+        
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    NSLog(@"获取帖子状态网络请求:%@", responseObject);
+        NSString* flag = [responseObject valueForKey:@"flag"];
+        if([flag isEqualToString:@"ok"])
+        {
+            neighborDetailVC = [[NeighborDetailTVC alloc] init];
+            UIBarButtonItem* detailItem = [[UIBarButtonItem alloc] initWithTitle:@"详情" style:UIBarButtonItemStylePlain target:nil action:nil];
+            [self.parentViewController.navigationItem setBackBarButtonItem:detailItem];
+            neighborDetailVC.sectionNum = sectionNum - 1;
+            neighborDetailVC.neighborData = neighborData;
+            neighborDetailVC.neighborDF = neighborDataFrame;
+            neighborDetailVC.neighborDA = self.neighborDataArray;
+            [neighborDetailVC getReplyNet];
+            [self.navigationController pushViewController:neighborDetailVC animated:YES];
+        }
+        else
+        {
+            for(int i = 0; i < [self.neighborDataArray count] ;i++)
+            {
+                NeighborDataFrame* neighborDataFrame = self.neighborDataArray[i];
+                NeighborData* neighborData = neighborDataFrame.neighborData;
+                
+                if([neighborData.topicId integerValue] == topicId)
+                {
+                    [self.neighborDataArray removeObject:neighborDataFrame];
+                    sectionCount = sectionCount - 1;
+                    break;
+                }
+            }
+            [self.tableView reloadData];
+            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"帖子信息" message:@"此贴已不可见" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:nil, nil];
+            [alert show];
+            return;
+
+        }
+    
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"请求失败:%@", error.description);
+        return;
+    }];
+
+    
+    
+    
+//    neighborDetailVC = [[NeighborDetailTVC alloc] init];
+//    UIBarButtonItem* detailItem = [[UIBarButtonItem alloc] initWithTitle:@"详情" style:UIBarButtonItemStylePlain target:nil action:nil];
+//    [self.parentViewController.navigationItem setBackBarButtonItem:detailItem];
+//    neighborDetailVC.sectionNum = sectionNum - 1;
+//    neighborDetailVC.neighborData = neighborData;
+//    neighborDetailVC.neighborDF = neighborDataFrame;
+//    neighborDetailVC.neighborDA = self.neighborDataArray;
+//    [self.navigationController pushViewController:neighborDetailVC animated:YES];
+    
 }
 
 // 打招呼回调

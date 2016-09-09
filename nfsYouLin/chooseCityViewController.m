@@ -52,9 +52,6 @@
     UIBarButtonItem *barrightBtn=[[UIBarButtonItem alloc]initWithTitle:@"下一步" style:UIBarButtonItemStylePlain target:self action:@selector(selectNextAction)];
     self.navigationItem.rightBarButtonItem = barrightBtn;
     self.navigationItem.title=@"";
-    [jumpFamilyAddressController returnText:^(NSString *showText) {
-        NSLog(@"showText is %@",showText);
-    }];
 
     //NSLog(@"_jumpCityFlag1 is %@",_jumpCityFlag);
     [self createBackItemBtn];
