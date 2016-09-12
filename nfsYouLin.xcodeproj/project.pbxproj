@@ -429,6 +429,8 @@
 		8FA53D571D80FAFF00841B1D /* ShareSDK.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 8FA53D411D80FAFD00841B1D /* ShareSDK.bundle */; };
 		8FA53D581D80FAFF00841B1D /* ShareSDKConnector.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FA53D421D80FAFD00841B1D /* ShareSDKConnector.framework */; };
 		8FAF9D4E1D823E1A0005B08C /* PeopleInfoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FAF9D4D1D823E1A0005B08C /* PeopleInfoCell.m */; };
+		8FAF9D901D863F780005B08C /* NewsVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FAF9D8F1D863F780005B08C /* NewsVC.m */; };
+		8FAF9D931D8648010005B08C /* NewsSettingVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FAF9D921D8648010005B08C /* NewsSettingVC.m */; };
 		8FB6F9A71D3F53E100E6C71A /* WaitView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FB6F9A61D3F53E100E6C71A /* WaitView.m */; };
 		8FB6F9AB1D3F67AD00E6C71A /* MOBFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FB6F9A91D3F67AD00E6C71A /* MOBFoundation.framework */; };
 		8FB6F9AC1D3F67AD00E6C71A /* SMS_SDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FB6F9AA1D3F67AD00E6C71A /* SMS_SDK.framework */; };
@@ -1273,6 +1275,10 @@
 		8FA53D421D80FAFD00841B1D /* ShareSDKConnector.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ShareSDKConnector.framework; sourceTree = "<group>"; };
 		8FAF9D4C1D823E1A0005B08C /* PeopleInfoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PeopleInfoCell.h; sourceTree = "<group>"; };
 		8FAF9D4D1D823E1A0005B08C /* PeopleInfoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PeopleInfoCell.m; sourceTree = "<group>"; };
+		8FAF9D8E1D863F780005B08C /* NewsVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewsVC.h; sourceTree = "<group>"; };
+		8FAF9D8F1D863F780005B08C /* NewsVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewsVC.m; sourceTree = "<group>"; };
+		8FAF9D911D8648010005B08C /* NewsSettingVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewsSettingVC.h; sourceTree = "<group>"; };
+		8FAF9D921D8648010005B08C /* NewsSettingVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewsSettingVC.m; sourceTree = "<group>"; };
 		8FB6F9A51D3F53E100E6C71A /* WaitView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WaitView.h; sourceTree = "<group>"; };
 		8FB6F9A61D3F53E100E6C71A /* WaitView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WaitView.m; sourceTree = "<group>"; };
 		8FB6F9A91D3F67AD00E6C71A /* MOBFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = MOBFoundation.framework; sourceTree = "<group>"; };
@@ -3072,6 +3078,10 @@
 				8FB6FA491D41B4EF00E6C71A /* FriendsVC.m */,
 				8FBCF9641D81497E0005F50A /* BlackListVC.h */,
 				8FBCF9651D81497E0005F50A /* BlackListVC.m */,
+				8FAF9D8E1D863F780005B08C /* NewsVC.h */,
+				8FAF9D8F1D863F780005B08C /* NewsVC.m */,
+				8FAF9D911D8648010005B08C /* NewsSettingVC.h */,
+				8FAF9D921D8648010005B08C /* NewsSettingVC.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -4021,6 +4031,7 @@
 				8F648D1B1D00547A00E3B155 /* UIView+EMWebCacheOperation.m in Sources */,
 				8F73C8D41D2B53E6009C83C2 /* AFURLResponseSerialization.m in Sources */,
 				8FB6F9A71D3F53E100E6C71A /* WaitView.m in Sources */,
+				8FAF9D931D8648010005B08C /* NewsSettingVC.m in Sources */,
 				8F51E1E71D2E945B0094A4E5 /* SqlDictionary.m in Sources */,
 				AF5293D31D1297DC00503975 /* FirstTabBarController.m in Sources */,
 				8FFBDF821D76611F00FFF334 /* InviteVC.m in Sources */,
@@ -4164,6 +4175,7 @@
 				8FBCF9661D81497E0005F50A /* BlackListVC.m in Sources */,
 				8FB6FA4D1D41B56A00E6C71A /* SegmentView.m in Sources */,
 				8F648D431D00547A00E3B155 /* EaseCustomMessageCell.m in Sources */,
+				8FAF9D901D863F780005B08C /* NewsVC.m in Sources */,
 				8F648CF71D00547A00E3B155 /* MJRefreshAutoStateFooter.m in Sources */,
 				8FB6FA6B1D48379400E6C71A /* PersonModel.m in Sources */,
 				AFE569141CF4442500C0F745 /* LewPopupViewAnimationDrop.m in Sources */,

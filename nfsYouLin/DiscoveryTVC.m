@@ -10,6 +10,8 @@
 #import "FriendsVC.h"
 #import "ChatDemoHelper.h"
 #import "DiscoveryViewCell.h"
+#import "NewsVC.h"
+
 @interface DiscoveryTVC ()
 
 @end
@@ -238,6 +240,12 @@
                 case 1:
                 {
                     // 新闻
+                    NewsVC* newsVC = [[NewsVC alloc] init];
+                    UIBarButtonItem* newsItem = [[UIBarButtonItem alloc] initWithTitle:@"新闻" style:UIBarButtonItemStylePlain target:nil action:nil];
+                    [newsItem setTintColor:[UIColor whiteColor]];
+                    [self.parentViewController.navigationItem setBackBarButtonItem:newsItem];
+                    [self.navigationController pushViewController:newsVC animated:YES];
+                    
                     break;
                 }
                 case 2:

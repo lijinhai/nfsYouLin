@@ -106,8 +106,6 @@ static NSString *kConversationChatter = @"ConversationChatter";
         friendNum = 0;
         [self.view addSubview:self.tableView];
         [self getNeighborsListNet];
-        
-
     }
     return self;
 }

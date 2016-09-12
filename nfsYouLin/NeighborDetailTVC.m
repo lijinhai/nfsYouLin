@@ -79,8 +79,6 @@
     [rightBtn setBackgroundImage:[UIImage imageNamed:@"circle_more.png"] forState:UIControlStateNormal];
     [rightBtn addTarget:self action:@selector(rightAction:) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem* rightItem = [[UIBarButtonItem alloc] initWithCustomView:rightBtn];
-//    [rightBtn addTarget:self action:@selector(handlePan:) forControlEvents:UIControlEventTouchUpInside];
-
     self.navigationItem.rightBarButtonItem = rightItem;
     
     
