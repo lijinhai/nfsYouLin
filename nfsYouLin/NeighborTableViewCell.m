@@ -684,13 +684,19 @@
 - (void) headImageView: (UITapGestureRecognizer*) recognizer
 {
     NSInteger userId = [self.neighborDataFrame.neighborData.senderId integerValue];
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSInteger myId = [[defaults valueForKey:@"userId"] integerValue];
+    
     if(userId == 1)
     {
         [_delegate showCircularImageViewWithImage:self.iconView.image];
     }
+    else if(userId == myId)
+    {
+    }
     else
     {
-        [_delegate peopleInfoViewController:userId];
+        [_delegate peopleInfoViewController:userId icon:self.neighborDataFrame.neighborData.iconName name:self.neighborDataFrame.neighborData.accountName];
     }
     
 }

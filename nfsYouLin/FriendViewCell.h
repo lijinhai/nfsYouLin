@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "Friends.h"
+#import "NCellDelegate.h"
 
 @protocol FriendViewDelegate <NSObject>
 
@@ -15,9 +16,10 @@
 
 @end
 
-@interface FriendViewCell : UITableViewCell
+@interface FriendViewCell : UITableViewCell<cellDelegate>
 
 @property(strong, nonatomic) id<FriendViewDelegate> delegate;
+@property(strong, nonatomic) id<cellDelegate> celldelegate;
 
 @property(assign, nonatomic) NSInteger row;
 @property(assign, nonatomic) NSInteger section;

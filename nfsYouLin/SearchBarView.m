@@ -45,7 +45,7 @@
     [self addSubview:self.textField];
     
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(SearchBarDidChange:) name:UITextFieldTextDidChangeNotification object:nil];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(SearchBarDidChange:) name:UITextFieldTextDidChangeNotification object:nil];
     
     [self setupDefaultLeftView];
     [self setupDefaultBackGroundView];

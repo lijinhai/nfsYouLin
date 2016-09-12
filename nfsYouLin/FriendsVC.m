@@ -22,6 +22,8 @@
 #import "HeaderFile.h"
 #import "ShowImageView.h"
 #import "BlackListVC.h"
+#import "PeopleInfoVC.h"
+
 
 //两次提示的默认间隔
 static const CGFloat kDefaultPlaySoundInterval = 1.0;
@@ -272,6 +274,7 @@ static NSString *kConversationChatter = @"ConversationChatter";
         }
         
         cell.delegate = self;
+        cell.celldelegate = self;
         cell.row = indexPath.row;
         cell.section = indexPath.section;
         return cell;
@@ -297,28 +300,16 @@ static NSString *kConversationChatter = @"ConversationChatter";
     }
 }
 
-#pragma mark - 圆形头像点击事件回调
-- (void)showCircularImageViewWithImage:(UIImage*) image
+#pragma mark -查看个人信息代理 cellDelegate
+- (void) peopleInfoViewController:(NSInteger)peopleId icon:(NSString*)icon name:(NSString*)name
 {
-    NSLog(@"圆形头像点击事件回调");
-    UIView* addView = [[UIView alloc] initWithFrame:self.parentViewController.view.bounds];
-    addView.alpha = 1.0;
-    addView.backgroundColor = [UIColor whiteColor];
-    [self.parentViewController.view addSubview:addView];
-    ShowImageView* showImage = [[ShowImageView alloc] initWithFrame:self.view.frame circularImage:image];
-    [showImage show:addView didFinish:^()
-     {
-         [UIView animateWithDuration:0.5f animations:^{
-             showImage.alpha = 0.0f;
-             addView.alpha = 0.0f;
-             
-         } completion:^(BOOL finished) {
-             [showImage removeFromSuperview];
-             [addView removeFromSuperview];
-         }];
-         
-     }];
-    
+    PeopleInfoVC* peopleInfoVC = [[PeopleInfoVC alloc] init];
+    peopleInfoVC.peopleId = peopleId;
+    peopleInfoVC.icon = icon;
+    peopleInfoVC.displayName = name;
+    UIBarButtonItem* infoItem = [[UIBarButtonItem alloc] initWithTitle:@"邻居信息" style:UIBarButtonItemStylePlain target:nil action:nil];
+    [self.parentViewController.navigationItem setBackBarButtonItem:infoItem];
+    [self.navigationController pushViewController:peopleInfoVC animated:YES];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

@@ -36,10 +36,14 @@
         
         // 头像
         UIImageView* iconView = [[UIImageView alloc] initWithFrame:CGRectMake(10, 15, 50, 50)];
+        iconView.userInteractionEnabled = YES;
         iconView.layer.masksToBounds = YES;
         iconView.layer.cornerRadius = 25;
+        UITapGestureRecognizer* tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(headImageView:)];
+        [iconView addGestureRecognizer:tapGesture];
         self.iconIV = iconView;
         [self.contentView addSubview:iconView];
+        
         
         // 昵称
         CGSize nickSize = [StringMD5 sizeWithString:@"哈哈哈哈哈哈哈哈" font:[UIFont systemFontOfSize:15] maxSize:CGSizeMake(CGRectGetWidth(self.contentView.frame)  / 2,40)];
@@ -136,6 +140,15 @@
         }
     }
 
+}
+
+
+- (void) headImageView: (UITapGestureRecognizer*) recognizer
+{
+    NSInteger userId = self.friendsData.userId;
+    NSString* name = [NSString stringWithFormat:@"%@@",self.friendsData.nick];
+    [_celldelegate peopleInfoViewController:userId icon:self.friendsData.iconAddr  name:name];
+    
 }
 
 #pragma mark -长按黑名单

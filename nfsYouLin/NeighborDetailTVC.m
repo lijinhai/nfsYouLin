@@ -19,6 +19,8 @@
 #import "CreateActivityVC.h"
 #import "ChatViewController.h"
 #import "ReportVC.h"
+#import "PeopleInfoVC.h"
+
 
 @interface NeighborDetailTVC ()
 
@@ -565,6 +567,19 @@
      }];
 
 }
+
+#pragma mark -查看个人信息代理 cellDelegate
+- (void) peopleInfoViewController:(NSInteger)peopleId icon:(NSString*)icon name:(NSString*)name
+{
+    PeopleInfoVC* peopleInfoVC = [[PeopleInfoVC alloc] init];
+    peopleInfoVC.peopleId = peopleId;
+    peopleInfoVC.icon = icon;
+    peopleInfoVC.displayName = name;
+    UIBarButtonItem* infoItem = [[UIBarButtonItem alloc] initWithTitle:@"邻居信息" style:UIBarButtonItemStylePlain target:nil action:nil];
+    [self.parentViewController.navigationItem setBackBarButtonItem:infoItem];
+    [self.navigationController pushViewController:peopleInfoVC animated:YES];
+}
+
 
 // 	圆形头像点击事件回调
 - (void)showCircularImageViewWithImage:(UIImage*) image

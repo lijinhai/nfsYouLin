@@ -42,7 +42,7 @@
 - (void) replyEvent:(NSInteger) sctionNum btnText:(NSString*) btnText;
 
 // 获取个人详细信息
-- (void) peopleInfoViewController:(NSInteger) peopleId;
+- (void) peopleInfoViewController:(NSInteger)peopleId icon:(NSString*)icon name:(NSString*)name;
 @end
 
 

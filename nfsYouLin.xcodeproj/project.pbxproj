@@ -428,6 +428,7 @@
 		8FA53D561D80FAFF00841B1D /* MOBFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FA53D401D80FAFD00841B1D /* MOBFoundation.framework */; };
 		8FA53D571D80FAFF00841B1D /* ShareSDK.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 8FA53D411D80FAFD00841B1D /* ShareSDK.bundle */; };
 		8FA53D581D80FAFF00841B1D /* ShareSDKConnector.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FA53D421D80FAFD00841B1D /* ShareSDKConnector.framework */; };
+		8FAF9D4E1D823E1A0005B08C /* PeopleInfoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FAF9D4D1D823E1A0005B08C /* PeopleInfoCell.m */; };
 		8FB6F9A71D3F53E100E6C71A /* WaitView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FB6F9A61D3F53E100E6C71A /* WaitView.m */; };
 		8FB6F9AB1D3F67AD00E6C71A /* MOBFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FB6F9A91D3F67AD00E6C71A /* MOBFoundation.framework */; };
 		8FB6F9AC1D3F67AD00E6C71A /* SMS_SDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FB6F9AA1D3F67AD00E6C71A /* SMS_SDK.framework */; };
@@ -1270,6 +1271,8 @@
 		8FA53D401D80FAFD00841B1D /* MOBFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = MOBFoundation.framework; sourceTree = "<group>"; };
 		8FA53D411D80FAFD00841B1D /* ShareSDK.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = ShareSDK.bundle; sourceTree = "<group>"; };
 		8FA53D421D80FAFD00841B1D /* ShareSDKConnector.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ShareSDKConnector.framework; sourceTree = "<group>"; };
+		8FAF9D4C1D823E1A0005B08C /* PeopleInfoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PeopleInfoCell.h; sourceTree = "<group>"; };
+		8FAF9D4D1D823E1A0005B08C /* PeopleInfoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PeopleInfoCell.m; sourceTree = "<group>"; };
 		8FB6F9A51D3F53E100E6C71A /* WaitView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WaitView.h; sourceTree = "<group>"; };
 		8FB6F9A61D3F53E100E6C71A /* WaitView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WaitView.m; sourceTree = "<group>"; };
 		8FB6F9A91D3F67AD00E6C71A /* MOBFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = MOBFoundation.framework; sourceTree = "<group>"; };
@@ -3101,6 +3104,8 @@
 				8FE39CD71D7960B800BA4332 /* DetailListCell.m */,
 				8FA53CE71D7E85A800841B1D /* ReportCell.h */,
 				8FA53CE81D7E85A800841B1D /* ReportCell.m */,
+				8FAF9D4C1D823E1A0005B08C /* PeopleInfoCell.h */,
+				8FAF9D4D1D823E1A0005B08C /* PeopleInfoCell.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -4053,6 +4058,7 @@
 				8FFBDF851D766E4200FFF334 /* GoodsLevelV.m in Sources */,
 				AFE5691D1CF445C100C0F745 /* PopupFloorView.m in Sources */,
 				8F648D221D00547A00E3B155 /* PSTCollectionViewItemKey.m in Sources */,
+				8FAF9D4E1D823E1A0005B08C /* PeopleInfoCell.m in Sources */,
 				8F1FB6D51D6444A200676743 /* MASConstraintMaker.m in Sources */,
 				8F648CF01D00547A00E3B155 /* MJRefreshAutoFooter.m in Sources */,
 				8F648CFA1D00547A00E3B155 /* MJRefreshBackStateFooter.m in Sources */,

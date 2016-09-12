@@ -676,7 +676,22 @@
 // 个人头像点击放大
 - (void) headImageView: (UITapGestureRecognizer*) recognizer
 {
-    [_delegate showCircularImageViewWithImage:self.iconView.image];
+    
+    NSInteger userId = [self.neighborData.senderId integerValue];
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSInteger myId = [[defaults valueForKey:@"userId"] integerValue];
+    
+    if(userId == 1)
+    {
+        [_delegate showCircularImageViewWithImage:self.iconView.image];
+    }
+    else if(userId == myId)
+    {
+    }
+    else
+    {
+        [_delegate peopleInfoViewController:userId icon:self.neighborData.iconName name:self.neighborData.accountName];
+    }
 }
 
 // 回复图片点击放大

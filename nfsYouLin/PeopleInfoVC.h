@@ -8,7 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
-@interface PeopleInfoVC : UIViewController<UITableViewDelegate, UITableViewDataSource>
+@interface PeopleInfoVC : UIViewController<UITableViewDelegate, UITableViewDataSource,UITextFieldDelegate>
 
 @property(assign, nonatomic)NSInteger peopleId;
+
+@property(strong, nonatomic)NSString* icon;
+
+@property(strong, nonatomic)NSString* displayName;
+
 @end

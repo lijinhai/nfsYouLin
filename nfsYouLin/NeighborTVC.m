@@ -865,7 +865,7 @@ static BOOL upState = YES;
 
 }
 
-// 发起获取帖子网络请求 全部 话题 活动
+#pragma mark -获取帖子网络请求 全部 话题 活动
 - (void) getTopicNet
 {
     NSLog(@"getTopicNet");
@@ -895,7 +895,7 @@ static BOOL upState = YES;
         
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-//        NSLog(@"获取所有帖子网络请求:%@", responseObject);
+        NSLog(@"获取所有帖子网络请求:%@", responseObject);
         for (int i = 0; i < [responseObject count]; i++,sectionCount++)
         {
             NSDictionary* responseDict = responseObject[i];
@@ -1753,10 +1753,12 @@ static BOOL upState = YES;
 }
 
 #pragma mark -查看个人信息代理 cellDelegate
-- (void) peopleInfoViewController:(NSInteger)peopleId
+- (void) peopleInfoViewController:(NSInteger)peopleId icon:(NSString*)icon name:(NSString*)name
 {
     PeopleInfoVC* peopleInfoVC = [[PeopleInfoVC alloc] init];
     peopleInfoVC.peopleId = peopleId;
+    peopleInfoVC.icon = icon;
+    peopleInfoVC.displayName = name;
     UIBarButtonItem* infoItem = [[UIBarButtonItem alloc] initWithTitle:@"邻居信息" style:UIBarButtonItemStylePlain target:nil action:nil];
     [self.parentViewController.navigationItem setBackBarButtonItem:infoItem];
     [self.navigationController pushViewController:peopleInfoVC animated:YES];
