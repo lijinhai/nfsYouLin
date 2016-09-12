@@ -396,12 +396,15 @@
         NSInteger entityTypeFlag=[ resultSet intForColumn: @"entity_type"];
         NSInteger  commId= [ resultSet intForColumn: @"family_community_id"];
         NSInteger  buildNumId= [ resultSet intForColumn: @"family_building_id"];
+        long  familyId=[ resultSet  longLongIntForColumn:@"family_id"];
+        NSInteger  neStatus=[ resultSet intForColumn: @"ne_status"];
         //family_building_id
-        NSLog(@"addressname is %@",addressname);
+        NSLog(@"familyId is %ld",familyId);
         NSLog(@"entity_type is %ld",entityTypeFlag);
         NSLog(@"addressCommunity is %@",addressCommunity);
         NSLog(@"addressPortrait is %@",addressPortrait);
         NSLog(@"addressAptNum is %@",addressAptNum);
+        NSLog(@"neStatus is %ld",neStatus);
         if(entityTypeFlag==1){
         
             [self textToast:@"审核通过的地址不能修改" ];
@@ -415,10 +418,14 @@
         [dic setValue:addressAptNum forKey:@"keyaptnum"];
         [dic setValue:[NSString stringWithFormat:@"%ld",commId] forKey:@"keycommid"];
         [dic setValue:[NSString stringWithFormat:@"%ld",buildNumId] forKey:@"keyBuildId"];
-        
+        [dic setValue:[NSString stringWithFormat:@"%ld",familyId] forKey:@"keyFamilyId"];
+        [dic setValue:[NSString stringWithFormat:@"%ld",neStatus] forKey:@"keyNeStatus"];
         NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
         [defaults setInteger:[[dic valueForKey:@"keycommid"] integerValue] forKey:@"keycommid"];
         [defaults setInteger:[[dic valueForKey:@"keyBuildId"] integerValue] forKey:@"keyBuildId"];
+        [defaults setInteger:[[dic valueForKey:@"keyaptnum"] integerValue] forKey:@"keyaptnum"];
+         [defaults setInteger:[[dic valueForKey:@"keyFamilyId"] integerValue] forKey:@"keyFamilyId"];
+        [defaults setInteger:[[dic valueForKey:@"keyNeStatus"] integerValue] forKey:@"keyNeStatus"];
         [defaults synchronize];
         
         [array addObject:dic];

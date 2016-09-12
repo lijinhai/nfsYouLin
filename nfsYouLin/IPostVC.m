@@ -630,8 +630,9 @@ static BOOL upState = YES;
 /*获得我发的帖子*/
 -(void)getMyPosts{
     
-    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-    NSString* userId = [defaults stringForKey:@"userId"];
+    //NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    //NSString* userId = [defaults stringForKey:@"userId"];
+    NSString* userId=_userIdStr;
     NSString* communityId = [NSString stringWithFormat:@"%ld", [SqliteOperation getNowCommunityId]];
      AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
      manager.securityPolicy.allowInvalidCertificates = YES;

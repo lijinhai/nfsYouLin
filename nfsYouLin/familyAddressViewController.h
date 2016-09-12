@@ -17,6 +17,7 @@
 @property (strong, nonatomic) NSArray *listtitle;
 @property(nonatomic,retain) NSString *communityNameValue;
 @property(nonatomic,retain) NSString *floorNumValue;
+@property(nonatomic,retain) NSString *jumpflag;
 @property(nonatomic,retain) UITextField *floorNumView;
 @property (weak, nonatomic) IBOutlet UITableView *myfamilyAddressTableView;
 

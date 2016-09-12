@@ -239,6 +239,7 @@
             }else if ([view.addressFlag isEqualToString:@"jumpAddressInfo"]){
                 
                 NSLog(@"进入跳转页面");
+                jumpFamilyAddressController.jumpflag=@"changeAddress";
                 jumpFamilyAddressController.changeAddressArry=view.changeAddressArray;
                 [jumpFamilyAddressController.myfamilyAddressTableView reloadData];
                 UIBarButtonItem* neighborItem = [[UIBarButtonItem alloc] initWithTitle:@"填写家庭住址" style:UIBarButtonItemStylePlain target:nil action:nil];
@@ -281,6 +282,7 @@
                     
                     NSLog(@"进入跳转页面");
                     jumpFamilyAddressController.changeAddressArry=view.changeAddressArray;
+                    jumpFamilyAddressController.jumpflag=@"changeAddress";
                     [jumpFamilyAddressController.myfamilyAddressTableView reloadData];
                     UIBarButtonItem* neighborItem = [[UIBarButtonItem alloc] initWithTitle:@"填写家庭住址" style:UIBarButtonItemStylePlain target:nil action:nil];
                     [self.navigationItem setBackBarButtonItem:neighborItem];
@@ -349,7 +351,8 @@
 
         }
         
-    }else if([[[_addressAndStatuArray objectAtIndex:rowInSection]objectForKey:@"keyaudit"] isEqualToString:@"2"]){//审核失败
+    }else if([[[_addressAndStatuArray objectAtIndex:rowInSection]objectForKey:@"keyaudit"] isEqualToString:@"2"]){
+        //审核失败
         if([[[_addressAndStatuArray objectAtIndex:rowInSection]objectForKey:@"keyprimary"] isEqualToString:@"1"]){
             tHeight=200;
             PopupAddressSettingView *view = [PopupAddressSettingView defaultPopupView:5 tFrame:CGRectMake(0, 0, 320, tHeight)];
@@ -367,6 +370,7 @@
                 }else if ([view.addressFlag isEqualToString:@"jumpAddressInfo"]){
                 
                     NSLog(@"进入跳转页面");
+                    jumpFamilyAddressController.jumpflag=@"changeAddress";
                      jumpFamilyAddressController.changeAddressArry=view.changeAddressArray;
                     [jumpFamilyAddressController.myfamilyAddressTableView reloadData];
                     UIBarButtonItem* neighborItem = [[UIBarButtonItem alloc] initWithTitle:@"填写家庭住址" style:UIBarButtonItemStylePlain target:nil action:nil];
@@ -406,7 +410,8 @@
                         else if ([view.addressFlag isEqualToString:@"jumpAddressInfo"]){
                                 
                                 NSLog(@"进入跳转页面");
-                                 jumpFamilyAddressController.changeAddressArry=view.changeAddressArray;
+                            jumpFamilyAddressController.jumpflag=@"changeAddress";
+                                jumpFamilyAddressController.changeAddressArry=view.changeAddressArray;
                                 [jumpFamilyAddressController.myfamilyAddressTableView reloadData];
                                  UIBarButtonItem* neighborItem = [[UIBarButtonItem alloc] initWithTitle:@"填写家庭住址" style:UIBarButtonItemStylePlain target:nil action:nil];
                                 [self.navigationItem setBackBarButtonItem:neighborItem];

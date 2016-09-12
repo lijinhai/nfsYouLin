@@ -15,6 +15,7 @@
 
 
 @property (nonatomic,strong)NSMutableArray *postsDataArray;
+@property (nonatomic,strong)NSString *userIdStr;//用户ID或者查询用户ID
 @property (assign, nonatomic)BOOL refresh;
 
 @end
