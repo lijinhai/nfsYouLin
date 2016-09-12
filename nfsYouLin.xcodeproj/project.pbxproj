@@ -3011,11 +3011,12 @@
 				AF4B306B1D33780600CBF257 /* SignIntegralViewController.m */,
 				AFB4E3731D86790A004A148A /* PersonTopicTVC.h */,
 				AFB4E3741D86790A004A148A /* PersonTopicTVC.m */,
+				AF197E521D6D91930070AAC4 /* ICollectVC.h */,
+				AF197E531D6D91930070AAC4 /* ICollectVC.m */,
 				AF197E501D6D90A30070AAC4 /* IntegralMall */,
 				AF197E4F1D6D90460070AAC4 /* setting */,
 				AF197E4E1D6D8FE70070AAC4 /* aboutYouLin */,
 				AF197E4D1D6D8F010070AAC4 /* personalInfo */,
-				AF197E511D6D914A0070AAC4 /* ICollect */,
 			);
 			name = youLinITabModule;
 			sourceTree = "<group>";
@@ -3237,15 +3238,6 @@
 				AFEB365F1D506E900081A5E6 /* goodsExchange */,
 			);
 			name = IntegralMall;
-			sourceTree = "<group>";
-		};
-		AF197E511D6D914A0070AAC4 /* ICollect */ = {
-			isa = PBXGroup;
-			children = (
-				AF197E521D6D91930070AAC4 /* ICollectVC.h */,
-				AF197E531D6D91930070AAC4 /* ICollectVC.m */,
-			);
-			name = ICollect;
 			sourceTree = "<group>";
 		};
 		AF4B306D1D34C0C100CBF257 /* SignedCalendar */ = {

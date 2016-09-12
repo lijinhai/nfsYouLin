@@ -92,7 +92,7 @@
         IntegralMallController=[iStoryBoard instantiateViewControllerWithIdentifier:@"integralmallcontroller"];
         
         //postVC=[iStoryBoard instantiateViewControllerWithIdentifier:@"ipostid"];
-        collectVC=[iStoryBoard instantiateViewControllerWithIdentifier:@"icollectid"];
+        //collectVC=[iStoryBoard instantiateViewControllerWithIdentifier:@"icollectid"];
         
     }
     
@@ -336,9 +336,12 @@
     
     UIControl *favoriteView=(UIControl *)[self.view viewWithTag:[sender tag]];
     favoriteView.backgroundColor=[UIColor colorWithRed:227/255.0 green:227/255.0 blue:227/255.0 alpha:1.0];
+    ICollectVC *ictvc=[[ICollectVC alloc] initWithStyle:UITableViewStyleGrouped];
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    ictvc.userIdStr=[defaults stringForKey:@"userId"];
     backItemTitle = [[UIBarButtonItem alloc] initWithTitle:@"我的收藏" style:UIBarButtonItemStylePlain target:nil action:nil];
     [self.parentViewController.navigationItem setBackBarButtonItem:backItemTitle];
-    [self.parentViewController.navigationController pushViewController:collectVC animated:YES];
+    [self.parentViewController.navigationController pushViewController:ictvc animated:YES];
 }
 
 - (void) touchDownPublish:(id) sender{

@@ -634,7 +634,7 @@
             }
         if([self.neighborDataArray count] == 0)
         {
-            [MBProgressHUBTool textToast:self.parentViewController.view Tip:@"没有搜到"];
+            [MBProgressHUBTool textToast:self.parentViewController.view Tip:@"没有帖子"];
         }
         [waitBgV removeFromSuperview];
         [self.tableView reloadData];
