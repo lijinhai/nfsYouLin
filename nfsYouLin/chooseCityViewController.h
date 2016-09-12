@@ -10,5 +10,5 @@
 
 @interface chooseCityViewController : UIViewController
 @property (weak, nonatomic) IBOutlet UILabel *cityName;
-
+@property (strong, nonatomic) NSString *jumpCityFlag;
 @end

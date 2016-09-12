@@ -48,6 +48,7 @@
     NSInteger addressStatusInt;
     UIImage *headPhoto;
     NSTimer *timer;
+    NSMutableDictionary *userInfo;
     //NSString *statusValue;
 }
 
@@ -60,8 +61,14 @@
 
 -(void)viewWillAppear:(BOOL)animated{
   
-    NSLog(@"viewWillAppear");
-    
+    userInfo=[[NSMutableDictionary alloc]init];
+    /*昵称*/
+    _nicknameLabel=[[UILabel alloc] init];
+    _professionLabel=[[UILabel alloc] init];
+    _sexLabel=[[UILabel alloc] init];
+    _birthdayLabel=[[UILabel alloc] init];
+    _professionLabel=[[UILabel alloc] init];
+    [self userDetailInfoInit];
     /*个人信息表格初始化*/
     _personalInfoTable.delegate=self;
     _personalInfoTable.dataSource=self;
@@ -71,18 +78,17 @@
     _switchFamliyAddressButton = [[UISwitch alloc] initWithFrame:CGRectMake(_personalInfoTable.frame.size.width-70, 10, 40, 5)];
     [_switchFamliyAddressButton addTarget:self action:@selector(showFamliyAddressAction:) forControlEvents:UIControlEventValueChanged];
     
-    /*初始化地址发布状态*/
-    //[self obtainPublicStateInit];
-    NSLog(@"family_statusValue is %@",_statusValue);
-    addressStatusInt=[_statusValue intValue];
-    if([_statusValue isEqualToString:@"2"]||[_statusValue isEqualToString:@"4"])
-    {
-         NSLog(@"abc");
-        [_switchFamliyAddressButton setOn:YES];
-    }else{
-         NSLog(@"def");
-        [_switchFamliyAddressButton setOn:NO];
-    }
+//    /*初始化地址发布状态*/
+//    NSLog(@"family_statusValue is %@",_statusValue);
+//    addressStatusInt=[_statusValue intValue];
+//    if([_statusValue isEqualToString:@"2"]||[_statusValue isEqualToString:@"4"])
+//    {
+//         NSLog(@"abc");
+//        [_switchFamliyAddressButton setOn:YES];
+//    }else{
+//         NSLog(@"def");
+//        [_switchFamliyAddressButton setOn:NO];
+//    }
        /*tableViewCell 下划线 长度设置为屏幕的宽*/
     if ([self.personalInfoTable respondsToSelector:@selector(setSeparatorInset:)]) {
         [self.personalInfoTable setSeparatorInset:UIEdgeInsetsZero];
@@ -98,10 +104,11 @@
     [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
      self.navigationItem.title=@"";
 
-    /*图片设置*/
-    _imageView.frame = CGRectMake(_personalInfoTable.frame.size.width-100, 10, 60, 60);
-    _imageView.userInteractionEnabled = YES;
     
+    /*图片设置*/
+     _imageView=[[UIImageView alloc] init];
+     _imageView.frame = CGRectMake(_personalInfoTable.frame.size.width-100, 10, 60, 60);
+     _imageView.userInteractionEnabled = YES;
     UITapGestureRecognizer* tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(headTapAction:)];
     [_imageView addGestureRecognizer:tapGesture];
     /*页面跳转*/
@@ -349,9 +356,6 @@
     
 }
 
-
-
-
 - (void) headTapAction: (UITapGestureRecognizer*) recognizer
 {
     [self showCircularImageViewWithImage:_imageView.image];
@@ -432,8 +436,10 @@
     _birthdayLabel.tag=1988;
     
     /*昵称*/
+    //_nicknameLabel=[[UILabel alloc] init];
     UIFont *fnt = [UIFont fontWithName:@"HelveticaNeue" size:15.0f];
     _nicknameLabel.font = fnt;
+        //[userInfo objectForKey:@"current_nick"];
     CGSize size = [_nicknameLabel.text sizeWithAttributes:[NSDictionary dictionaryWithObjectsAndKeys:fnt,NSFontAttributeName, nil]];
     _nicknameLabel.frame=CGRectMake(_personalInfoTable.frame.size.width-size.width-40, 15, size.width, 20);
     _nicknameLabel.tag=2016;
@@ -1060,8 +1066,101 @@
     
     
 }
+/*获取个人信息*/
+-(void)userDetailInfoInit{
 
-- (void)submitUpdatePhotoInfo:(NSData*)headImgData
+    AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
+    manager.securityPolicy.allowInvalidCertificates = YES;
+    manager.responseSerializer.stringEncoding=NSUTF8StringEncoding;
+    [manager.securityPolicy setValidatesDomainName:NO];
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSString* userId = [defaults stringForKey:@"userId"];
+    
+    NSString* hashString =[StringMD5 stringAddMD5:[NSString stringWithFormat:@"my_user_id%@user_id%@",userId,userId]];
+    NSString* hashMD5 = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"%@810",hashString]];
+    NSDictionary* parameter = @{@"my_user_id" : userId,
+                                @"user_id" : userId,
+                                @"deviceType":@"ios",
+                                @"apitype" : @"users",
+                                @"tag" : @"userdetailinfo",
+                                @"salt" : @"810",
+                                @"hash" : hashMD5,
+                                @"keyset" : @"my_user_id:user_id:",
+                                };
+    
+    [manager POST:POST_URL parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        //NSLog(@"PersonInforesponseObject is %@",responseObject);
+        [userInfo setValue:[responseObject objectForKey:@"user_nick"] forKey:@"user_nick"];
+        [userInfo setValue:[responseObject objectForKey:@"current_nick"] forKey:@"current_nick"];
+        [userInfo setValue:[responseObject objectForKey:@"user_birthday"] forKey:@"user_birthday"];
+        [userInfo setValue:[responseObject objectForKey:@"user_gender"] forKey:@"user_gender"];
+        [userInfo setValue:[responseObject objectForKey:@"user_portrait"] forKey:@"user_portrait"];
+        [userInfo setValue:[responseObject objectForKey:@"user_profession"] forKey:@"user_profession"];
+        [userInfo setValue:[responseObject objectForKey:@"user_public_status"] forKey:@"user_public_status"];
+        /*图片设置*/
+        [_imageView sd_setImageWithURL:[NSURL URLWithString:[userInfo objectForKey:@"user_portrait"]] placeholderImage:[UIImage imageNamed:@"bg_error.png"] options:SDWebImageAllowInvalidSSLCertificates];
+        /*初始化地址发布状态*/
+        NSLog(@"family_statusValue is %@",[userInfo objectForKey:@"user_public_status"]);
+        NSString* publicStatus=[NSString stringWithFormat:@"%@",[userInfo objectForKey:@"user_public_status"]];
+        addressStatusInt=[publicStatus intValue];
+        if([publicStatus isEqualToString:@"2"]||[publicStatus isEqualToString:@"4"])
+        {
+            NSLog(@"abc");
+            [_switchFamliyAddressButton setOn:YES];
+        }else{
+            NSLog(@"def");
+            [_switchFamliyAddressButton setOn:NO];
+        }
+        /*昵称初始化*/
+        _nicknameLabel.text=[userInfo objectForKey:@"current_nick"];
+        NSInteger sexId=[[NSString stringWithFormat:@"%@",[userInfo objectForKey:@"user_gender"]] intValue];
+        switch (sexId) {
+            
+                                case 1:
+                                    _sexLabel.text=@"男";
+                                    break;
+                                case 2:
+                                    _sexLabel.text=@"女";
+                                    break;
+                                case 3:
+                                    _sexLabel.text=@"保密";
+                                    break;
+                                default:
+                                    break;
+        }
+        long birthdayId=[[NSString stringWithFormat:@"%@",[userInfo objectForKey:@"user_birthday"]] longLongValue];
+        if(birthdayId==0)
+        {
+            
+        _birthdayLabel.text=@"1970年01月01日";
+        
+        }else{
+            
+        _birthdayLabel.text=[self getShowDateWithTime:[NSString stringWithFormat:@"%ld",birthdayId]];
+        }
+        _professionLabel.text=[userInfo objectForKey:@"user_profession"];
+        [_personalInfoTable reloadData];
+        
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        
+        NSLog(@"%@", [error localizedDescription]);
+    }];
+    
+}
+
+/*计算毫秒数对应的生日*/
+-(NSString *)getShowDateWithTime:(NSString *)time{
+    NSDate *timeDate = [[NSDate alloc]initWithTimeIntervalSince1970:[time longLongValue]/1000.0];
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    dateFormatter.dateFormat = @"yyyy年MM月dd日";
+    NSString *timeStr = [dateFormatter stringFromDate:timeDate];
+    return timeStr;
+}
+/*提交更新头像信息*/
+-(void)submitUpdatePhotoInfo:(NSData*)headImgData
 {
     dispatch_queue_t queue = dispatch_queue_create("**.test.youlin", DISPATCH_QUEUE_CONCURRENT);
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];

@@ -1,22 +1,24 @@
 //
-//  blackerInfo.m
+//  MyPostsData.m
 //  nfsYouLin
 //
-//  Created by jinhai on 16/8/22.
+//  Created by jinhai on 16/8/26.
 //  Copyright © 2016年 jinhai. All rights reserved.
 //
 
-#import "blackerInfo.h"
+#import "MyPostsData.h"
 
-@implementation blackerInfo
+@implementation MyPostsData
 
-- (id) initWithDict:(NSDictionary*)dict
+- (id) initWithDict: (NSDictionary*) dict
 {
     self = [super init];
     if(self)
     {
         [self setValuesForKeysWithDictionary:dict];
     }
+    
     return self;
 }
+
 @end

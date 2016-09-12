@@ -203,6 +203,7 @@
             NSDictionary* personDic = [usersDict valueForKey:@"fields"];
             
             NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+            [defaults setInteger:[[personDic valueForKey:@"addr_handle_cache"] integerValue] forKey:@"addrCache"];
             [defaults setInteger:[[personDic valueForKey:@"user_community_id"] integerValue] forKey:@"communityId"];
             [defaults setObject:[personDic valueForKey:@"user_family_id"] forKey:@"familyId"];
 
@@ -266,7 +267,7 @@
                 personInfoDic[@"family_id"] = familyDict[@"family_id"];
                 personInfoDic[@"family_member_count"] = familyDict[@"family_member_count"];
                 personInfoDic[@"family_name"] = familyDict[@"family_name"];
-                //                personInfoDic[@"family_name"] = familyDict[@"fr_id"];
+                personInfoDic[@"family_address_id"] = familyDict[@"fr_id"];
                 personInfoDic[@"is_family_member"] = familyDict[@"is_family_member"];
                 personInfoDic[@"ne_status"] = familyDict[@"ne_status"];
                 personInfoDic[@"primary_flag"] = familyDict[@"primary_flag"];

@@ -12,7 +12,9 @@
  NSIndexPath *_selectedIndexPath;
 }
 @property (strong, nonatomic) NSDictionary *names;
-@property (strong, nonatomic) NSArray *listname;
+@property (strong, nonatomic) NSMutableArray *listname;
+@property (strong, nonatomic) NSMutableArray *commMutableAry;
+@property (strong, nonatomic) NSString *cityName;
 
 @property (strong, nonatomic) IBOutlet UITableView *communityTable;
 @end

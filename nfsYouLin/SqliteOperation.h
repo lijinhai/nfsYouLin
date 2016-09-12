@@ -32,5 +32,10 @@
 // 更新用户昵称
 +(void)updateUserNickInfo:(long)userId nickName:(NSString*)name;
 
++(void)showMyTopicInfo;
+// 插入新用户信息
++(BOOL)insertNewFamilyInfoSqlite: (NSMutableDictionary *) dict;
 
+// 查找building_num_id
++(NSInteger)selectBuildingNumIdSqlite:(long)addressId;
 @end

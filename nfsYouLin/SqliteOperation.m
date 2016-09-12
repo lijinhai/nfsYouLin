@@ -98,7 +98,8 @@
     else
     {
         NSLog(@"数据库打开失败");
-        [MBProgressHUBTool textToast:view Tip:@"数据库打开失败"];        [db close];
+        [MBProgressHUBTool textToast:view Tip:@"数据库打开失败"];
+        [db close];
         return NO;
     }
     [db close];
@@ -106,6 +107,89 @@
     return YES;
 }
 
++(BOOL)insertNewFamilyInfoSqlite: (NSMutableDictionary *) dict{
+
+    AppDelegate* app = [[UIApplication sharedApplication] delegate];
+    FMDatabase* db = app.db;
+    if ([db open])
+    {
+         NSLog(@"address is %@",dict[@"keyaddress"]);
+         NSLog(@"audit is %@",dict[@"keyaudit"]);
+         NSLog(@"primary is %@",dict[@"keyprimary"]);
+         NSLog(@"entityType is %@",dict[@"keyEntityType"]);
+         NSLog(@"neStatus is %@",dict[@"keyNeStatus"]);
+         NSLog(@"recordId is %@",dict[@"keyRecordId"]);
+         NSLog(@"keyFamliyId is %@",dict[@"keyFamliyId"]);
+         [db executeUpdate:INSERT_ALL_FAMILY_TABLE,
+          [NSNumber numberWithLongLong:[dict[@"keyFamliyId"] longLongValue]],
+          @"",
+          @"",
+          dict[@"keyaddress"],
+          dict[@"keyRecordId"],
+          @"",
+          @"",
+          @"",
+          @"",
+          @"",
+          @"",
+          @"",
+          @"",
+          @"",
+          @"",
+          @"",
+          @"",
+          @"",
+          @"",
+          @"",
+          @"",
+          @"",
+          @"",
+          dict[@"keyEntityType"],
+          dict[@"keyNeStatus"],
+          @"",
+          dict[@"keyprimary"],
+          @"",
+          @"",
+          @"",
+          @"",
+          @""];
+        NSLog(@"error");
+    }
+    else
+    {
+        NSLog(@"数据库打开失败");
+        [db close];
+        return NO;
+    }
+    [db close];
+    
+    return YES;
+
+}
++(NSInteger)selectBuildingNumIdSqlite:(long)addressId{
+
+
+    AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+    FMDatabase *db = delegate.db;
+    
+    if ( ![ db open ] )
+    {
+        NSLog(@"打开数据库失败");
+    }
+    // 查找表
+    NSInteger buildNumId=0;
+    NSString *query =[NSString stringWithFormat:@"select family_building_id from table_all_family where family_id= '%ld'", addressId];
+
+    FMResultSet* resultSet = [ db executeQuery:query];
+    // 逐行读取数据
+    while ( [ resultSet next ] )
+    {
+        // 对应字段来取数据
+        buildNumId=[resultSet intForColumn: @"family_community_id" ];
+    }
+    [ db close ];
+    return buildNumId;
+}
 + (NSInteger) getNowCommunityId{
     
     AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
@@ -171,6 +255,7 @@
     }
 }
 
+
 +(void)updateUserPhotoInfo:(long)userId photoUrl:(NSString*)url
 {
 
@@ -189,6 +274,7 @@
     }
 
 }
+
 +(void)updateUserNickInfo:(long)userId nickName:(NSString*)name
 {
     
@@ -210,4 +296,31 @@
     }
     
 }
+
++(void)showMyTopicInfo{
+
+    NSLog(@"showMyTopicInfo");
+    AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+    FMDatabase *db = delegate.db;
+    
+    if ( ![ db open ] )
+    {
+        NSLog(@"打开数据库失败");
+    }
+    // 查找表
+    NSString* comid=0;
+    NSString* query = @"select * from table_forum_topic";
+    FMResultSet* resultSet = [ db executeQuery:query];
+    
+    // 逐行读取数据
+    while ( [ resultSet next ] )
+    {
+        // 对应字段来取数据
+        comid=[ resultSet stringForColumn: @"topic_title" ];
+        NSLog(@"comidStr is %@",comid);
+    }
+    [ db close ];
+
+}
+
 @end

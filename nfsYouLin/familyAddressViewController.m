@@ -13,6 +13,12 @@
 #import "PopupFloorView.h"
 #import "addressInfomationViewController.h"
 #import "MBProgressHUD.h"
+#import "AFHTTPSessionManager.h"
+#import "StringMD5.h"
+#import "HeaderFile.h"
+#import "SqliteOperation.h"
+#import "SqlDictionary.h"
+
 
 #define UIColorFromRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 @interface familyAddressViewController ()<UITableViewDataSource, UITableViewDelegate,UITextFieldDelegate>
@@ -34,6 +40,12 @@
     NSString *successFlag;
     UIView *rightVeiw;
     UIView *rightVeiw2;
+    NSMutableArray *floorAry;
+    NSMutableArray *buildAry;
+    NSMutableArray *plateAry;
+    NSMutableArray *platePkAry;
+    NSString *blockIdStr;
+    NSString    *plateId;
 }
 
 - (void)viewDidLoad {
@@ -59,6 +71,11 @@
     {
      [self getFieldFocus];
     }
+    /*跳转至相关界面*/
+    UIStoryboard* storyBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    jumpChooseCityController = [storyBoard instantiateViewControllerWithIdentifier:@"cityController"];
+    jumpCommunityController = [storyBoard instantiateViewControllerWithIdentifier:@"myCommunityController"];
+    jumpAddressInfomationController=[storyBoard instantiateViewControllerWithIdentifier:@"addressInfomationController"];
 
 }
 
@@ -74,14 +91,10 @@
     UIBarButtonItem *barrightBtn=[[UIBarButtonItem alloc]initWithTitle:@"完成" style:UIBarButtonItemStylePlain target:self action:@selector(selectCompleteAction)];
     self.navigationItem.rightBarButtonItem=barrightBtn;
     self.navigationItem.title=@"";
-    /*跳转至相关界面*/
-    UIStoryboard* storyBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-    jumpChooseCityController = [storyBoard instantiateViewControllerWithIdentifier:@"cityController"];
-    jumpCommunityController = [storyBoard instantiateViewControllerWithIdentifier:@"myCommunityController"];
-    jumpAddressInfomationController=[storyBoard instantiateViewControllerWithIdentifier:@"addressInfomationController"];
-
-
+   
+    
 }
+
 - (void)textToast:(NSString *)tips {
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.parentViewController.view    animated:YES];
     
@@ -130,7 +143,26 @@
         [self textToast:@"请设置门牌号"];
         return;
     }
-    [self.navigationController pushViewController:jumpAddressInfomationController animated:YES];
+    for(int i=0;i<[platePkAry count];i++)
+    {
+        if([[[[platePkAry objectAtIndex:i] objectForKey:@"fields"] objectForKey:@"apt_name"]  isEqualToString:doorPlateText.text]){
+        
+            plateId=[[platePkAry objectAtIndex:i] objectForKey:@"pk"];
+        
+        }
+    }
+    //NSLog(@"jumpflag= %@",_jumpflag);
+    if([_jumpflag isEqualToString:@"changeAddress"])
+    {
+         NSLog(@"jumpflag= %@",_jumpflag);
+        [self submitChangeAddress];
+        
+    }else{
+    
+    [self submitAddNewAddress];
+    }
+    
+    //[self.navigationController pushViewController:jumpAddressInfomationController animated:YES];
 
 }
 - (void)didReceiveMemoryWarning {
@@ -236,28 +268,28 @@
         NSUInteger rowNumber=[indexPath row];
         switch (rowNumber) {
             case 0:
-                NSLog(@"rowNumber 1");
+                //NSLog(@"rowNumber 1");
                 [cell.contentView addSubview:cityRowView];
                 break;
             case 1:
-                NSLog(@"rowNumber 2");
+                //NSLog(@"rowNumber 2");
                 [cell.contentView addSubview:communityLabelView];
                 break;
             case 2:
-                NSLog(@"啊飒飒的  %@",self.floorNumValue);
+                NSLog(@"self.floorNumValue equal  %@",self.floorNumValue);
                 cell.selectionStyle = UITableViewCellSelectionStyleNone;
                 
                 [_floorNumView addSubview:floorLabelView];
                 [cell.contentView addSubview:_floorNumView];
                 break;
             case 3:
-                NSLog(@"rowNumber 4");
+                //NSLog(@"rowNumber 4");
                 cell.selectionStyle = UITableViewCellSelectionStyleNone;
                 [cell.contentView addSubview:doorPlateNumView];
                 
                 break;
             case 4:
-                NSLog(@"rowNumber 5");
+                //NSLog(@"rowNumber 5");
                 cell.selectionStyle = UITableViewCellSelectionStyleNone;
                 [cell.contentView addSubview:label];
                 [cell.contentView addSubview:tipsView];
@@ -276,12 +308,11 @@
         self.floorNumValue = [defaults valueForKey:@"floorKey"];
         if(self.floorNumValue!=NULL&&rowNumber==2&&[flag1 isEqualToString:@"tag1001"])
         {
-                NSLog(@"floorlabel is %@",floorLabelView.text);
+        
                 UILabel *floorLabel = (UILabel *)[cell viewWithTag:30001];
                 [floorLabel removeFromSuperview];
                 UITextField *floorTextField = (UITextField *)[cell viewWithTag:1001];
                 [floorTextField removeFromSuperview];
-                NSLog(@"floorNumValue是：  %@",self.floorNumValue);
                 _floorNumView.text=self.floorNumValue;
                 _floorNumView.textColor=[UIColor blackColor];
                 _floorNumView.font=[UIFont systemFontOfSize:15];
@@ -297,13 +328,11 @@
             
                 if(floorLabel==NULL&&[floorText.text isEqualToString:@""])
                 {
-                  NSLog(@" what is %@",floorText.text);
                  [_floorNumView addSubview:floorLabelView];
                  [cell.contentView addSubview:_floorNumView];
                 }
                 if([successFlag isEqualToString:@"floorView"])
                 {
-                    NSLog(@"floorView");
                     UIView *viewTanHao = (UIView *)[cell viewWithTag:119];
                     if(viewTanHao==NULL)
                     {
@@ -322,7 +351,6 @@
     UITextField *doorPlateText = (UITextField *)[cell viewWithTag:1002];
     if(self.floorNumValue!=NULL&&rowNumber==3&&[flag1 isEqualToString:@"tag1002"])
     {
-        NSLog(@"new begin1");
         UITextField *doorPlateText = (UITextField *)[cell viewWithTag:1002];
         [doorPlateText removeFromSuperview];
         doorPlateNumView.text=self.floorNumValue;
@@ -334,7 +362,6 @@
         [defaults removeObjectForKey:@"floorKey"];
         
     }else if(self.floorNumValue==NULL&&rowNumber==3&&[doorPlateText.text length] == 0){
-        NSLog(@"new begin2");
         if([successFlag isEqualToString:@"doorView"])
         {
             NSLog(@"doorView");
@@ -383,7 +410,9 @@
     switch (rowInSection) {
         case 0:
             NSLog(@"点击1");
+            
             [self.navigationItem setBackBarButtonItem:neighborCityItem];
+            //presentViewController:second
             [self.navigationController pushViewController:jumpChooseCityController animated:YES];
             break;
         case 1:
@@ -440,16 +469,7 @@
         {
             [imageTanHao removeFromSuperview];
         }
-        NSLog(@"textFieldShouldBeginEditing1");
-        PopupView *view = [PopupView defaultPopupView:1001];
-        view.parentVC = self;
-        [self lew_presentPopupView:view animation:[LewPopupViewAnimationDrop new] dismissed:^{
-            [textField resignFirstResponder];
-            NSLog(@"刷新数据");
-            flag1=@"tag1001";
-            [self.myfamilyAddressTableView reloadData];
-            NSLog(@"动画结束");
-        }];
+        [self floorInfoAct];
         [[[UIApplication sharedApplication] keyWindow] endEditing:YES];
         return NO;
     }
@@ -460,15 +480,7 @@
             
             [imageTanHao2 removeFromSuperview];
         }
-        PopupView *view = [PopupView defaultPopupView:1002];
-        view.parentVC = self;
-        [self lew_presentPopupView:view animation:[LewPopupViewAnimationDrop new] dismissed:^{
-            [textField resignFirstResponder];
-            NSLog(@"刷新数据");
-            flag1=@"tag1002";
-            [self.myfamilyAddressTableView reloadData];
-            NSLog(@"动画结束");
-        }];
+        [self plateInfoAct];
         [[[UIApplication sharedApplication] keyWindow] endEditing:YES];
         return NO;
     }
@@ -484,17 +496,382 @@
 
 -(void)getFieldFocus{
     
-    NSLog(@"getFieldFocus");
     [self.view endEditing:YES];
-    PopupView *view = [PopupView defaultPopupView:1001];
-    view.parentVC = self;
-    [self lew_presentPopupView:view animation:[LewPopupViewAnimationDrop new] dismissed:^{
-        [[[UIApplication sharedApplication] keyWindow] endEditing:YES];
-        flag1=@"tag1001";
-        [self.myfamilyAddressTableView reloadData];
-        NSLog(@"动画结束");
+    [self floorInfoAct];
+
+}
+/*判断小区ID*/
+-(NSInteger)checkCommunityId{
+    NSInteger communityId=0;
+    if([communityLabelView.text isEqualToString:@"保利清华颐园"]){
+    
+        communityId=1;
+    }else if([communityLabelView.text isEqualToString:@"保利颐和家园"]){
+    
+    
+        communityId=2;
+    }else if([communityLabelView.text isEqualToString:@"欧洲新城"]){
+    
+        communityId=5;
+    }
+    return communityId;
+}
+
+/*获取楼层信息*/
+-(void)floorInfoAct{
+    floorAry=[[NSMutableArray alloc] init];
+    buildAry=[[NSMutableArray alloc] init];
+    NSString* commId=NULL;
+    AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
+    manager.securityPolicy.allowInvalidCertificates = YES;
+    manager.responseSerializer.stringEncoding=NSUTF8StringEncoding;
+    [manager.securityPolicy setValidatesDomainName:NO];
+    if([_floorAndplateDic objectForKey:@"pk"]!=NULL)
+    {
+      
+        commId=[_floorAndplateDic objectForKey:@"pk"];
+    }else{
+    
+        //commId=[NSString stringWithFormat:@"%ld",[self checkCommunityId]];
+         //NSLog(@"commid is %@",commId);
+         NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+         commId = [defaults stringForKey:@"keycommid"];
+    }
+    
+    NSString* hashString =[StringMD5 stringAddMD5:[NSString stringWithFormat:@"community_id%@",commId]];
+    NSString* hashMD5 = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"%@1024",hashString]];
+    NSDictionary* parameter = @{@"community_id" : commId,
+                                @"deviceType":@"ios",
+                                @"apitype" : @"users",
+                                @"tag" : @"addr",
+                                @"salt" : @"1024",
+                                @"hash" : hashMD5,
+                                @"keyset" : @"community_id:",
+                                };
+    
+    [manager POST:POST_URL parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSLog(@"responseObject is %@",responseObject);
+        for(int i=0;i<[[responseObject objectForKey:@"info"] count];i++){
+            
+            NSString* floorStr = [[[[responseObject objectForKey:@"info"] objectAtIndex:i] objectForKey:@"fields"] objectForKey:@"building_name"];
+            NSDictionary* fieldsPk=[[responseObject objectForKey:@"info"] objectAtIndex:i];
+            [floorAry addObject:floorStr];
+            [buildAry addObject:fieldsPk];
+            
+        }
+        PopupView *view = [PopupView defaultPopupView:1001 floorOrPlateAry:floorAry];
+        view.parentVC = self;
+        [self lew_presentPopupView:view animation:[LewPopupViewAnimationDrop new] dismissed:^{
+            [_floorNumView resignFirstResponder];
+            NSLog(@"刷新数据");
+            flag1=@"tag1001";
+            [self.myfamilyAddressTableView reloadData];
+            NSLog(@"动画结束");
+        }];
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"请求失败:%@", error.description);
+        
+        return;
+    }];
+}
+
+/*获取门牌信息:(NSString*)blackIdStr*/
+-(void)plateInfoAct{
+    if(buildAry !=NULL)
+    {
+    
+        for(int i=0;i<[buildAry count];i++)
+        {
+            if([[[[buildAry objectAtIndex:i] objectForKey:@"fields"] objectForKey:@"building_name"] isEqualToString:_floorNumView.text])
+            {
+                
+                blockIdStr=[[buildAry objectAtIndex:i] objectForKey:@"pk"];
+                NSLog(@"blockIdStr is %@",blockIdStr);
+                break;
+            }
+            
+        }
+        
+    }else{
+    
+        NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+        blockIdStr = [defaults stringForKey:@"keyBuildId"];
+    
+    }
+    
+    plateAry = [[NSMutableArray alloc] init];
+    platePkAry = [[NSMutableArray alloc] init];
+    AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
+    manager.securityPolicy.allowInvalidCertificates = YES;
+    manager.responseSerializer.stringEncoding=NSUTF8StringEncoding;
+    [manager.securityPolicy setValidatesDomainName:NO];
+    NSString* hashString =[StringMD5 stringAddMD5:[NSString stringWithFormat:@"buildnum_id%@",blockIdStr]];
+    NSString* hashMD5 = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"%@1024",hashString]];
+    NSDictionary* parameter = @{@"buildnum_id" : blockIdStr,
+                                @"deviceType":@"ios",
+                                @"apitype" : @"users",
+                                @"tag" : @"addr",
+                                @"salt" : @"1024",
+                                @"hash" : hashMD5,
+                                @"keyset" : @"buildnum_id:",
+                                };
+    
+    [manager POST:POST_URL parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSLog(@"plateresponseObject is %@",responseObject);
+        for(int i=0;i<[[responseObject objectForKey:@"info"] count];i++)
+        {
+        
+         [plateAry addObject:[[[[responseObject objectForKey:@"info"] objectAtIndex:i] objectForKey:@"fields"] objectForKey:@"apt_name"]];
+         [platePkAry addObject:[[responseObject objectForKey:@"info"] objectAtIndex:i]];
+        }
+        PopupView *view = [PopupView defaultPopupView:1002 floorOrPlateAry:plateAry];
+        view.parentVC = self;
+        [self lew_presentPopupView:view animation:[LewPopupViewAnimationDrop new] dismissed:^{
+            [doorPlateNumView resignFirstResponder];
+             NSLog(@"刷新数据");
+             flag1=@"tag1002";
+            [self.myfamilyAddressTableView reloadData];
+             NSLog(@"动画结束");
+        }];
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"请求失败:%@", error.description);
+        
+        return;
+    }];
+    
+}
+
+-(void)submitAddNewAddress{
+
+    AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
+    manager.securityPolicy.allowInvalidCertificates = YES;
+    manager.responseSerializer.stringEncoding=NSUTF8StringEncoding;
+    [manager.securityPolicy setValidatesDomainName:NO];
+    NSString* cityCode=@"0048";
+    NSString* cityId=@"1";
+    NSString* city=@"哈尔滨";
+    NSString* commId=NULL;
+    if([communityLabelView.text isEqualToString:@"保利清华颐园"])
+    {
+        
+        commId=[NSString stringWithFormat:@"%d",1];
+    }else if([communityLabelView.text isEqualToString:@"保利颐和家园"]){
+    
+        commId=[NSString stringWithFormat:@"%d",2];
+    }else if([communityLabelView.text isEqualToString:@"欧洲新城"])
+    {
+      
+        commId=[NSString stringWithFormat:@"%d",5];
+    }
+    NSString* commStr=communityLabelView.text;
+    NSString* blockId=@"0";
+    NSString* blockStr=@"0";
+    if(blockIdStr==NULL)
+    {
+        NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+        blockIdStr = [defaults stringForKey:@"keyBuildId"];
+    
+    }
+    NSString* buildNumId=blockIdStr;
+    NSString* buildnumStr=_floorNumView.text;
+    if(plateId==NULL)
+    {
+        NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+        plateId = [defaults stringForKey:@"keyaptnum"];
+        
+    }
+    NSString* aptNumId=plateId;
+    NSString* aptNumStr=doorPlateNumView.text;
+    
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSString* userId = [defaults stringForKey:@"userId"];
+    NSString* addrHandelCache=[defaults stringForKey:@"addrCache"];
+    NSString* primaryFlag=@"0";
+    NSString* testStr=[NSString stringWithFormat:@"city_code=%@\ncity_id=%@\ncity=%@\ncommunity_id=%@\ncommunity=%@\nblock_id=%@\nblock=%@\nbuildnum_id=%@\nbuildnum=%@\naptnum_id=%@\naptnum=%@\nuser_id=%@\naddrHandelCache=%@\nprimary_flag=%@",cityCode,cityId,city,commId,commStr,blockId,blockStr,buildNumId,buildnumStr,aptNumId,aptNumStr,userId,addrHandelCache,primaryFlag];
+    NSLog(@"testStr is %@",testStr);
+    NSString* hashString =[StringMD5 stringAddMD5:[NSString stringWithFormat:@"city_code%@city_id%@city%@community_id%@community%@block_id%@block_name%@buildnum_id%@buildnum%@aptnum_id%@aptnum%@user_id%@addr_cache%@primary_flag%@",cityCode,cityId,city,commId,commStr,blockId,blockStr,buildNumId,buildnumStr,aptNumId,aptNumStr,userId,addrHandelCache,primaryFlag]];
+    NSString* hashMD5 = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"%@1024",hashString]];
+    NSDictionary* parameter = @{@"city_code":cityCode,//当前选择城市码
+                                @"city_id":cityId,// 当前选择城市Id
+                                @"city":city,// 当前选择城市名称
+                                @"community_id":commId,//当前选择小区Id
+                                @"community":commStr,//当前选择小区名称
+                                @"block_id":blockId,//当前选择区块Id，没有时传0
+                                @"block_name":blockStr,//当前选择区块名称
+                                @"buildnum_id":buildNumId,//当前选择楼栋Id
+                                @"buildnum":buildnumStr,//当前选择楼栋名称
+                                @"aptnum_id":aptNumId,//当前选择门牌Id
+                                @"aptnum":aptNumStr,//当前选择门牌名称
+                                @"user_id":userId,//当前用户UserId
+                                @"addr_cache":addrHandelCache,//地址操作次数
+                                @"primary_flag":primaryFlag,//是否为当前地址1表示当前地址，0表示非当前地址
+                                @"deviceType":@"ios",//常量值ios
+                                @"apitype":@"users",//常量值users
+                                @"tag":@"addfamily",//常量值addfamily,
+                                @"salt" : @"1024",
+                                @"hash" :hashMD5,
+                            @"keyset" :@"city_code:city_id:city:community_id:community:block_id:block_name:buildnum_id:buildnum:aptnum_id:aptnum:user_id:addr_cache:primary_flag:",
+                                };
+    
+    [manager POST:POST_URL parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSLog(@"AddressResponseObject is %@",responseObject);
+        if([[responseObject objectForKey:@"flag"] isEqualToString: @"no"]||[[responseObject objectForKey:@"flag"] isEqualToString: @"full"])
+        {
+           
+            [self textToast:[responseObject objectForKey:@"yl_msg"]];
+        }else{
+        
+             NSMutableDictionary *dic=[[NSMutableDictionary alloc]init];
+             NSString* addressInfo=[NSString stringWithFormat:@"%@%@%@%@",@"哈尔滨市",communityLabelView.text,_floorNumView.text,doorPlateNumView.text];
+             NSInteger auditStatus=1;
+             NSInteger primaryFlag=0;
+             NSInteger famliyRecordId=[[responseObject objectForKey:@"frecord_id"] intValue];
+             NSString* famliyId=[responseObject objectForKey:@"family_id"];
+             NSInteger entityType=[[responseObject objectForKey:@"entity_type"] intValue];
+             NSInteger neStatus=[[responseObject objectForKey:@"ne_status"] intValue];
+             
+            [dic setValue:addressInfo forKey:@"keyaddress"];
+            [dic setValue:[NSString stringWithFormat:@"%ld",auditStatus] forKey:@"keyaudit"];
+            [dic setValue:[NSString stringWithFormat:@"%ld",primaryFlag] forKey:@"keyprimary"];
+            [dic setValue:[NSString stringWithFormat:@"%ld",famliyRecordId] forKey:@"keyRecordId"];
+            [dic setValue:famliyId forKey:@"keyFamliyId"];
+            [dic setValue:[NSString stringWithFormat:@"%ld",entityType] forKey:@"keyEntityType"];
+            [dic setValue:[NSString stringWithFormat:@"%ld",neStatus] forKey:@"keyNeStatus"];
+            [SqliteOperation insertNewFamilyInfoSqlite:dic];
+            [self.navigationController pushViewController:jumpAddressInfomationController animated:YES];
+        }
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"请求失败:%@", error.description);
+        
+        return;
     }];
 
 }
 
+-(void)submitChangeAddress{
+    
+    AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
+    manager.securityPolicy.allowInvalidCertificates = YES;
+    manager.responseSerializer.stringEncoding=NSUTF8StringEncoding;
+    [manager.securityPolicy setValidatesDomainName:NO];
+    NSString* cityCode=@"0048";
+    NSString* cityId=@"1";
+    NSString* city=@"哈尔滨";
+    NSString* commId=NULL;
+    if([communityLabelView.text isEqualToString:@"保利清华颐园"])
+    {
+        
+        commId=[NSString stringWithFormat:@"%d",1];
+    }else if([communityLabelView.text isEqualToString:@"保利颐和家园"]){
+        
+        commId=[NSString stringWithFormat:@"%d",2];
+    }else if([communityLabelView.text isEqualToString:@"欧洲新城"])
+    {
+        
+        commId=[NSString stringWithFormat:@"%d",5];
+    }
+    if(blockIdStr==NULL)
+    {
+        NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+        blockIdStr = [defaults stringForKey:@"keyBuildId"];
+        
+    }
+    if(plateId==NULL)
+    {
+        NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+        plateId = [defaults stringForKey:@"keyaptnum"];
+        
+    }
+
+    NSString* commStr=communityLabelView.text;
+    NSString* blockId=@"0";
+    NSString* blockStr=@"0";
+    NSString* buildNumId=blockIdStr;
+    NSString* buildnumStr=_floorNumView.text;
+    NSString* aptNumId=plateId;
+    NSString* aptNumStr=doorPlateNumView.text;
+    
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSString* userId = [defaults stringForKey:@"userId"];
+    NSString* famliyId=[defaults stringForKey:@"keyFamilyId"];
+    NSString* neStatus=[defaults stringForKey:@"keyNeStatus"];
+    NSString* addrHandelCache=[defaults stringForKey:@"addrCache"];
+    NSString* primaryFlag=@"0";
+    NSString* testStr=[NSString stringWithFormat:@"city_code=%@\ncity_id=%@\ncity=%@\ncommunity_id=%@\ncommunity=%@\nblock_id=%@\nblock=%@\nbuildnum_id=%@\nbuildnum=%@\naptnum_id=%@\naptnum=%@\nuser_id=%@\nfamliyId=%@\nneStatus=%@\naddrHandelCache=%@\nprimary_flag=%@",cityCode,cityId,city,commId,commStr,blockId,blockStr,buildNumId,buildnumStr,aptNumId,aptNumStr,userId,famliyId,neStatus,addrHandelCache,primaryFlag];
+    NSLog(@"testStr is %@",testStr);
+    NSString* hashString =[StringMD5 stringAddMD5:[NSString stringWithFormat:@"city_code%@city_id%@city%@community_id%@community%@block_id%@block%@buildnum_id%@buildnum%@aptnum_id%@aptnum%@user_id%@famliy_id%@ne_status%@addr_cache%@",cityCode,cityId,city,commId,commStr,blockId,blockStr,buildNumId,buildnumStr,aptNumId,aptNumStr,userId,famliyId,neStatus,addrHandelCache]];
+        //primary_flag%@,primaryFlag
+    NSString* hashMD5 = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"%@1024",hashString]];
+    NSDictionary* parameter = @{@"city_code":cityCode,//当前选择城市码
+                                @"city_id":cityId,// 当前选择城市Id
+                                @"city":city,// 当前选择城市名称
+                                @"community_id":commId,//当前选择小区Id
+                                @"community":commStr,//当前选择小区名称
+                                @"block_id":blockId,//当前选择区块Id，没有时传0
+                                @"block":blockStr,//当前选择区块名称
+                                @"buildnum_id":buildNumId,//当前选择楼栋Id
+                                @"buildnum":buildnumStr,//当前选择楼栋名称
+                                @"aptnum_id":aptNumId,//当前选择门牌Id
+                                @"aptnum":aptNumStr,//当前选择门牌名称
+                                @"user_id":userId,//当前用户UserId
+                                @"family_id": famliyId,
+                                @"ne_status": neStatus,
+                                @"addr_cache":addrHandelCache,//地址操作次数
+                                @"deviceType":@"ios",//常量值ios
+                                @"apitype":@"users",//常量值users
+                                @"tag":@"changefamily",//常量值addfamily,
+                                @"salt" : @"1024",
+                                @"hash" :hashMD5,
+                            @"keyset" :@"city_code:city_id:city:community_id:community:block_id:block:buildnum_id:buildnum:aptnum_id:aptnum:user_id:family_id:ne_status:addr_cache:",
+                                };
+     //@"city_code%@city_id%@city%@community_id%@community%@block_id%@buildnum_id%@buildnum%@aptnum_id%@aptnum%@user_id%@famliy_id%@ne_status%@addr_cache%@
+     //@"primary_flag":primaryFlag,//是否为当前地址1表示当前地址，0表示非当前地址
+     //primary_flag:
+    [manager POST:POST_URL parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSLog(@"ChangeAddressResponseObject is %@",responseObject);
+        if([[responseObject objectForKey:@"flag"] isEqualToString: @"no"]||[[responseObject objectForKey:@"flag"] isEqualToString: @"full"])
+        {
+            
+            [self textToast:[responseObject objectForKey:@"yl_msg"]];
+        }else{
+//            
+//            NSMutableDictionary *dic=[[NSMutableDictionary alloc]init];
+//            NSString* addressInfo=[NSString stringWithFormat:@"%@%@%@%@",@"哈尔滨市",communityLabelView.text,_floorNumView.text,doorPlateNumView.text];
+//            NSInteger auditStatus=1;
+//            NSInteger primaryFlag=0;
+//            NSInteger famliyRecordId=[[responseObject objectForKey:@"frecord_id"] intValue];
+//            NSString* famliyId=[responseObject objectForKey:@"family_id"];
+//            NSInteger entityType=[[responseObject objectForKey:@"entity_type"] intValue];
+//            NSInteger neStatus=[[responseObject objectForKey:@"ne_status"] intValue];
+//            
+//            [dic setValue:addressInfo forKey:@"keyaddress"];
+//            [dic setValue:[NSString stringWithFormat:@"%ld",auditStatus] forKey:@"keyaudit"];
+//            [dic setValue:[NSString stringWithFormat:@"%ld",primaryFlag] forKey:@"keyprimary"];
+//            [dic setValue:[NSString stringWithFormat:@"%ld",famliyRecordId] forKey:@"keyRecordId"];
+//            [dic setValue:famliyId forKey:@"keyFamliyId"];
+//            [dic setValue:[NSString stringWithFormat:@"%ld",entityType] forKey:@"keyEntityType"];
+//            [dic setValue:[NSString stringWithFormat:@"%ld",neStatus] forKey:@"keyNeStatus"];
+//            [SqliteOperation insertNewFamilyInfoSqlite:dic];
+            [self.navigationController pushViewController:jumpAddressInfomationController animated:YES];
+        }
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"请求失败:%@", error.description);
+        
+        return;
+    }];
+
+    
+}
 @end
