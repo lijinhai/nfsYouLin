@@ -58,8 +58,6 @@
     
     self.tableView.bounces = NO;
     self.tableView.mj_footer = [MJRefreshBackNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(upRefreshData)];
-    //[self createSearchBar];
-    //[self setListView];
     self.neighborDataArray = [[NSMutableArray alloc] init];
     UIWindow *window = [UIApplication sharedApplication].keyWindow;
     rootVC = window.rootViewController.navigationController;
@@ -699,65 +697,6 @@
         return;
     }];
 }
-
-// 上拉搜索帖子
-//- (void) upSearchResultNet
-//{
-//    //NSString* searchText = _searchBar.textField.text;
-//    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-//    NSString* userId = [defaults stringForKey:@"userId"];
-//    NSString* communityId = [defaults stringForKey:@"communityId"];
-//    AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
-//    manager.securityPolicy.allowInvalidCertificates = YES;
-//    [manager.securityPolicy setValidatesDomainName:NO];
-//    
-//    
-//    NSString* MD5String = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"user_id%@community_id%@topic_id%ld",userId,communityId,topicId]];
-//    NSString* hashString = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"%@1", MD5String]];
-//    
-//    NSDictionary* parameter = @{@"user_id" : userId,
-//                                @"community_id" : communityId,
-//                                @"topic_id" : [NSNumber numberWithInteger:topicId],
-//                                @"count" : @"6",
-//                                @"key_word" : searchText,
-//                                @"apitype" : @"comm",
-//                                @"category_type" : [NSNumber numberWithInteger:category],
-//                                @"tag" : @"findtopic",
-//                                @"salt" : @"1",
-//                                @"hash" : hashString,
-//                                @"keyset" : @"user_id:community_id:topic_id:",
-//                                };
-//    
-//    [manager POST:POST_URL parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
-//        
-//        
-//        
-//    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-//        NSLog(@"上拉搜索帖子网络请求:%@", responseObject);
-//        if([responseObject isKindOfClass:[NSArray class]])
-//        {
-//            for (int i = 0; i < [responseObject count]; i++)
-//            {
-//                NSDictionary* dict = [self getResponseDictionary:responseObject[i]];
-//                NeighborData *neighborData = [[NeighborData alloc] initWithDict:dict];
-//                NeighborDataFrame *neighborDataFrame = [[NeighborDataFrame alloc]init];
-//                neighborDataFrame.neighborData = neighborData;
-//                [self.neighborDataArray addObject:neighborDataFrame];
-//                
-//                if(i == ([responseObject count] - 1))
-//                {
-//                    topicId = [[dict valueForKey:@"topicId"] integerValue];
-//                }
-//            }
-//            
-//        }
-//        [self.tableView.mj_footer endRefreshing];
-//        [self.tableView reloadData];
-//    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-//        NSLog(@"请求失败:%@", error.description);
-//        return;
-//    }];
-//}
 
 
 // 报名网络请求
