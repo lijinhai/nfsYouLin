@@ -418,7 +418,7 @@
         <!--我的收藏-->
         <scene sceneID="JHz-Jq-Dgr">
             <objects>
-                <viewController storyboardIdentifier="icollectid" title="我的收藏" useStoryboardIdentifierAsRestorationIdentifier="YES" id="427-aN-Fd9" customClass="ICollectVC" sceneMemberID="viewController">
+                <viewController title="我的收藏" id="427-aN-Fd9" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="UPB-5Y-eiy"/>
                         <viewControllerLayoutGuide type="bottom" id="aTm-Db-ONH"/>

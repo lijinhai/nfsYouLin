@@ -1,12 +1,12 @@
 //
-//  ICollectVC.m
+//  PersonTopicTVC.m
 //  nfsYouLin
 //
-//  Created by jinhai on 16/8/24.
+//  Created by jinhai on 16/9/12.
 //  Copyright © 2016年 jinhai. All rights reserved.
 //
 
-#import "ICollectVC.h"
+#import "PersonTopicTVC.h"
 #import "ListTableView.h"
 #import "BackgroundView.h"
 #import "NeighborTableViewCell.h"
@@ -22,11 +22,11 @@
 #import "MJRefresh.h"
 #import "BackgroundView.h"
 
-@interface ICollectVC ()
+@interface PersonTopicTVC ()
 
 @end
 
-@implementation ICollectVC
+@implementation PersonTopicTVC
 {
     ListTableView* _listTableView;
     BackgroundView* _backGroundView;
@@ -606,7 +606,7 @@
                                 @"count" : @"6",
                                 @"deviceType":@"ios",
                                 @"apitype" : @"comm",
-                                @"tag" : @"getcol",
+                                @"tag" : @"mytopic",
                                 @"salt" : @"1",
                                 @"hash" : hashString,
                                 @"keyset" : @"user_id:community_id:",
@@ -617,21 +617,21 @@
         
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        NSLog(@"获取收藏帖子网络请求:%@", responseObject);
+        NSLog(@"获取帖子网络请求:%@", responseObject);
         NSMutableArray *infoArray = [responseObject valueForKey:@"info"];
-        for (int i = 0; i < [infoArray count]; i++)
-        {
-            NSDictionary* dict = [self getResponseDictionary:infoArray[i]];
-            NeighborData *neighborData = [[NeighborData alloc] initWithDict:dict];
-            NeighborDataFrame *neighborDataFrame = [[NeighborDataFrame alloc]init];
-            neighborDataFrame.neighborData = neighborData;
-            [self.neighborDataArray addObject:neighborDataFrame];
-            if(i == ([responseObject count] - 1))
+            for (int i = 0; i < [infoArray count]; i++)
             {
-                topicId = [[dict valueForKey:@"topicId"] integerValue];
-                NSLog(@"oldTopicId = %ld",topicId);
+                NSDictionary* dict = [self getResponseDictionary:infoArray[i]];
+                NeighborData *neighborData = [[NeighborData alloc] initWithDict:dict];
+                NeighborDataFrame *neighborDataFrame = [[NeighborDataFrame alloc]init];
+                neighborDataFrame.neighborData = neighborData;
+                [self.neighborDataArray addObject:neighborDataFrame];
+                if(i == ([responseObject count] - 1))
+                {
+                   topicId = [[dict valueForKey:@"topicId"] integerValue];
+                    NSLog(@"oldTopicId = %ld",topicId);
+                }
             }
-        }
         if([self.neighborDataArray count] == 0)
         {
             [MBProgressHUBTool textToast:self.parentViewController.view Tip:@"没有帖子"];
@@ -663,7 +663,7 @@
                                 @"count" : @"6",
                                 @"deviceType":@"ios",
                                 @"apitype" : @"comm",
-                                @"tag" : @"getcol",
+                                @"tag" : @"mytopic",
                                 @"salt" : @"2016",
                                 @"hash" : hashMD5,
                                 @"keyset" : @"user_id:community_id:topic_id:",
@@ -686,7 +686,7 @@
             NeighborData *neighborData = [[NeighborData alloc] initWithDict:dict];
             NeighborDataFrame *neighborDataFrame = [[NeighborDataFrame alloc]init];
             neighborDataFrame.neighborData = neighborData;
-            [self.neighborDataArray addObject:neighborDataFrame];
+           [self.neighborDataArray addObject:neighborDataFrame];
         }
         [self.tableView.mj_footer endRefreshing];
         [self.tableView reloadData];
@@ -879,7 +879,7 @@
 {
     //NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     //NSString* userId = [defaults stringForKey:@"userId"];
-    NSString* userId = _userIdStr;
+     NSString* userId = _userIdStr;
     AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
     manager.securityPolicy.allowInvalidCertificates = YES;
     [manager.securityPolicy setValidatesDomainName:NO];
@@ -1030,4 +1030,3 @@
 }
 
 @end
-

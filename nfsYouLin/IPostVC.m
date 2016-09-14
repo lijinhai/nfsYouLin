@@ -737,8 +737,9 @@ static BOOL upState = YES;
 /*上拉刷新，获取帖子数据*/
 -(void) upRefreshPosts{
 
-    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-    NSString* userId = [defaults stringForKey:@"userId"];
+    //NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSString* userId = _userIdStr;
+    //[defaults stringForKey:@"userId"];
     NSString* communityId = [NSString stringWithFormat:@"%ld", [SqliteOperation getNowCommunityId]];
     AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
     manager.securityPolicy.allowInvalidCertificates = YES;

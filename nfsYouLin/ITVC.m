@@ -23,7 +23,8 @@
 #import "SqlDictionary.h"
 #import "MBProgressHUBTool.h"
 #import "UIImageView+WebCache.h"
-#import "IPostVC.h"
+//#import "IPostVC.h"
+#import "PersonTopicTVC.h"
 #import "ICollectVC.h"
 
 @interface ITVC ()
@@ -47,7 +48,8 @@
     multiTableViewCell *multiTableCell;
     SignIntegralViewController *SignIntegralController;
     IntegralMallViewController *IntegralMallController;
-    IPostVC *postVC;
+    //IPostVC *postVC;
+    
     ICollectVC *collectVC;
     UIBarButtonItem* backItemTitle;
     UIButton *signButton;
@@ -88,8 +90,9 @@
         PersonalInformationController=[iStoryBoard instantiateViewControllerWithIdentifier:@"personalinformationcontroller"];
         SignIntegralController=[iStoryBoard instantiateViewControllerWithIdentifier:@"signintegralcontroller"];
         IntegralMallController=[iStoryBoard instantiateViewControllerWithIdentifier:@"integralmallcontroller"];
-        postVC=[iStoryBoard instantiateViewControllerWithIdentifier:@"ipostid"];
-        collectVC=[iStoryBoard instantiateViewControllerWithIdentifier:@"icollectid"];
+        
+        //postVC=[iStoryBoard instantiateViewControllerWithIdentifier:@"ipostid"];
+        //collectVC=[iStoryBoard instantiateViewControllerWithIdentifier:@"icollectid"];
         
     }
     
@@ -333,20 +336,24 @@
     
     UIControl *favoriteView=(UIControl *)[self.view viewWithTag:[sender tag]];
     favoriteView.backgroundColor=[UIColor colorWithRed:227/255.0 green:227/255.0 blue:227/255.0 alpha:1.0];
+    ICollectVC *ictvc=[[ICollectVC alloc] initWithStyle:UITableViewStyleGrouped];
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    ictvc.userIdStr=[defaults stringForKey:@"userId"];
     backItemTitle = [[UIBarButtonItem alloc] initWithTitle:@"我的收藏" style:UIBarButtonItemStylePlain target:nil action:nil];
     [self.parentViewController.navigationItem setBackBarButtonItem:backItemTitle];
-    [self.parentViewController.navigationController pushViewController:collectVC animated:YES];
+    [self.parentViewController.navigationController pushViewController:ictvc animated:YES];
 }
 
 - (void) touchDownPublish:(id) sender{
     
     UIControl *publishView=(UIControl *)[self.view viewWithTag:[sender tag]];
     publishView.backgroundColor=[UIColor colorWithRed:227/255.0 green:227/255.0 blue:227/255.0 alpha:1.0];
+    PersonTopicTVC *ptvc = [[PersonTopicTVC alloc] initWithStyle:UITableViewStyleGrouped];
     backItemTitle = [[UIBarButtonItem alloc] initWithTitle:@"我发的" style:UIBarButtonItemStylePlain target:nil action:nil];
     [self.parentViewController.navigationItem setBackBarButtonItem:backItemTitle];
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-    postVC.userIdStr=[defaults stringForKey:@"userId"];
-    [self.parentViewController.navigationController pushViewController:postVC animated:YES];
+    ptvc.userIdStr=[defaults stringForKey:@"userId"];
+    [self.parentViewController.navigationController pushViewController:ptvc animated:YES];
 }
 
 -(void)signGetIntegralAction{
