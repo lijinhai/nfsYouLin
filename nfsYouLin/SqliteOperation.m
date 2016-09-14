@@ -50,6 +50,42 @@
     return YES;
 }
 
++ (BOOL) insertNewsSqlite: (NSMutableDictionary *) dict View:(UIView*) view
+{
+    if(!dict)
+        return NO;
+    AppDelegate* app = [[UIApplication sharedApplication] delegate];
+    FMDatabase* db = app.db;
+    if ([db open])
+    {
+        FMResultSet *result = [db executeQuery:@"SELECT * FROM table_news_receive where news_id = ?",[dict valueForKey:@"news_id"]];
+        if(![result next])
+        {
+            [db executeUpdate:INSERT_NEWS_TABLE,
+             dict[@"news_first"] ,
+             dict[@"news_title"] ,
+             dict[@"news_pic"] ,
+             dict[@"news_url"],
+             dict[@"news_belongs"] ,
+             dict[@"news_id"],
+             dict[@"news_send_time"] ,
+             dict[@"news_push_time"] ,
+             dict[@"news_others"],
+             dict[@"table_version"] ];
+        }
+    }
+    else
+    {
+        NSLog(@"数据库打开失败");
+        [MBProgressHUBTool textToast:view Tip:@"数据库打开失败"];        [db close];
+        return NO;
+    }
+    [db close];
+    return YES;
+}
+
+
+
 + (BOOL) insertFamilyInfoSqlite: (NSMutableDictionary *) dict View:(UIView*) view
 {
     if(!dict)

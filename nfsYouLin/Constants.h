@@ -96,6 +96,11 @@ static NSString * const TABLE_NEWS_RECEIVE         = @"table_news_receive";
 // 用户表插入
 #define INSERT_USERS_TABLE [NSString stringWithFormat:@"INSERT INTO %@ (user_public_status, user_vocation, user_level, user_id, user_name, user_portrait, user_gender, user_phone_number, user_family_id, user_family_address, user_birthday, user_email, user_type, user_time, user_json, login_account, table_version) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",TABLE_NAME_USERS]
 
+
+// 新闻表插入
+#define INSERT_NEWS_TABLE [NSString stringWithFormat:@"INSERT INTO %@ (news_first, news_title, news_pic, news_url, news_belongs, news_id, news_send_time, news_push_time, news_others, table_version) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",TABLE_NEWS_RECEIVE]
+
+
 // 家庭信息表插入
 #define INSERT_ALL_FAMILY_TABLE [NSString stringWithFormat:@"INSERT INTO %@ (family_id, family_name, family_display_name, family_address, family_address_id, family_desc, family_portrait, family_background_color, family_city, family_city_id, family_city_code, family_block, family_block_id, family_community_id, family_community, family_community_nickname, family_building_num, family_building_id, family_apt_num, family_apt_id, is_family_member, is_attention, family_member_count, entity_type, ne_status, nem_status, primary_flag, belong_family_id, user_alias, user_avatar, login_account, table_version) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",TABLE_ALL_FAMILY]
 

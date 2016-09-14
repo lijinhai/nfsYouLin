@@ -1091,7 +1091,7 @@
     [manager POST:POST_URL parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        //NSLog(@"PersonInforesponseObject is %@",responseObject);
+        NSLog(@"PersonInforesponseObject is %@",responseObject);
         [userInfo setValue:[responseObject objectForKey:@"user_nick"] forKey:@"user_nick"];
         [userInfo setValue:[responseObject objectForKey:@"current_nick"] forKey:@"current_nick"];
         [userInfo setValue:[responseObject objectForKey:@"user_birthday"] forKey:@"user_birthday"];

@@ -72,6 +72,7 @@
 		8F51E2A11D34D3CD0094A4E5 /* SqliteOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F51E2A01D34D3CD0094A4E5 /* SqliteOperation.m */; };
 		8F5303851CDB45B50078FD64 /* DiscoveryTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F5303841CDB45B50078FD64 /* DiscoveryTVC.m */; };
 		8F5304491CDB7A8B0078FD64 /* homeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F5304481CDB7A8B0078FD64 /* homeViewController.m */; };
+		8F5B73501D88D20800E23248 /* HistoryNewsVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F5B734F1D88D20800E23248 /* HistoryNewsVC.m */; };
 		8F648B771D0052ED00E3B155 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F648B761D0052ED00E3B155 /* CoreMedia.framework */; };
 		8F648B791D0052FB00E3B155 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F648B781D0052FB00E3B155 /* AudioToolbox.framework */; };
 		8F648B7B1D00530700E3B155 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F648B7A1D00530700E3B155 /* AVFoundation.framework */; };
@@ -399,6 +400,7 @@
 		8F823D721D2A3B3D00178B01 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F823D711D2A3B3D00178B01 /* AddressBook.framework */; };
 		8F823D741D2A3B4800178B01 /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F823D731D2A3B4800178B01 /* AddressBookUI.framework */; };
 		8F9220181D38C6AC00A72F90 /* ApplyDetailView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F9220171D38C6AC00A72F90 /* ApplyDetailView.m */; };
+		8F94818B1D88F3780039C415 /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F94818A1D88F3780039C415 /* JSONKit.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		8FA53CE61D7E4FFC00841B1D /* ReportVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FA53CE51D7E4FFC00841B1D /* ReportVC.m */; };
 		8FA53CE91D7E85A800841B1D /* ReportCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FA53CE81D7E85A800841B1D /* ReportCell.m */; };
 		8FA53CEB1D7F9C5C00841B1D /* ContactsUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FA53CEA1D7F9C5C00841B1D /* ContactsUI.framework */; };
@@ -431,6 +433,8 @@
 		8FAF9D4E1D823E1A0005B08C /* PeopleInfoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FAF9D4D1D823E1A0005B08C /* PeopleInfoCell.m */; };
 		8FAF9D901D863F780005B08C /* NewsVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FAF9D8F1D863F780005B08C /* NewsVC.m */; };
 		8FAF9D931D8648010005B08C /* NewsSettingVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FAF9D921D8648010005B08C /* NewsSettingVC.m */; };
+		8FAF9D961D868BEC0005B08C /* NewsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FAF9D951D868BEC0005B08C /* NewsCell.m */; };
+		8FAF9D9C1D879A210005B08C /* NewsDetailVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FAF9D9B1D879A210005B08C /* NewsDetailVC.m */; };
 		8FB6F9A71D3F53E100E6C71A /* WaitView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FB6F9A61D3F53E100E6C71A /* WaitView.m */; };
 		8FB6F9AB1D3F67AD00E6C71A /* MOBFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FB6F9A91D3F67AD00E6C71A /* MOBFoundation.framework */; };
 		8FB6F9AC1D3F67AD00E6C71A /* SMS_SDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FB6F9AA1D3F67AD00E6C71A /* SMS_SDK.framework */; };
@@ -704,6 +708,8 @@
 		8F5303841CDB45B50078FD64 /* DiscoveryTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiscoveryTVC.m; sourceTree = "<group>"; };
 		8F5304471CDB7A8B0078FD64 /* homeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = homeViewController.h; sourceTree = "<group>"; };
 		8F5304481CDB7A8B0078FD64 /* homeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = homeViewController.m; sourceTree = "<group>"; };
+		8F5B734E1D88D20800E23248 /* HistoryNewsVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HistoryNewsVC.h; sourceTree = "<group>"; };
+		8F5B734F1D88D20800E23248 /* HistoryNewsVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HistoryNewsVC.m; sourceTree = "<group>"; };
 		8F648B761D0052ED00E3B155 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		8F648B781D0052FB00E3B155 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		8F648B7A1D00530700E3B155 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
@@ -1223,6 +1229,8 @@
 		8F823D731D2A3B4800178B01 /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
 		8F9220161D38C6AC00A72F90 /* ApplyDetailView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApplyDetailView.h; sourceTree = "<group>"; };
 		8F9220171D38C6AC00A72F90 /* ApplyDetailView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApplyDetailView.m; sourceTree = "<group>"; };
+		8F9481891D88F3780039C415 /* JSONKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSONKit.h; sourceTree = "<group>"; };
+		8F94818A1D88F3780039C415 /* JSONKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSONKit.m; sourceTree = "<group>"; };
 		8FA53CE41D7E4FFC00841B1D /* ReportVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReportVC.h; sourceTree = "<group>"; };
 		8FA53CE51D7E4FFC00841B1D /* ReportVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReportVC.m; sourceTree = "<group>"; };
 		8FA53CE71D7E85A800841B1D /* ReportCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReportCell.h; sourceTree = "<group>"; };
@@ -1282,6 +1290,10 @@
 		8FAF9D8F1D863F780005B08C /* NewsVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewsVC.m; sourceTree = "<group>"; };
 		8FAF9D911D8648010005B08C /* NewsSettingVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewsSettingVC.h; sourceTree = "<group>"; };
 		8FAF9D921D8648010005B08C /* NewsSettingVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewsSettingVC.m; sourceTree = "<group>"; };
+		8FAF9D941D868BEC0005B08C /* NewsCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewsCell.h; sourceTree = "<group>"; };
+		8FAF9D951D868BEC0005B08C /* NewsCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewsCell.m; sourceTree = "<group>"; };
+		8FAF9D9A1D879A210005B08C /* NewsDetailVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewsDetailVC.h; sourceTree = "<group>"; };
+		8FAF9D9B1D879A210005B08C /* NewsDetailVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewsDetailVC.m; sourceTree = "<group>"; };
 		8FB6F9A51D3F53E100E6C71A /* WaitView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WaitView.h; sourceTree = "<group>"; };
 		8FB6F9A61D3F53E100E6C71A /* WaitView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WaitView.m; sourceTree = "<group>"; };
 		8FB6F9A91D3F67AD00E6C71A /* MOBFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = MOBFoundation.framework; sourceTree = "<group>"; };
@@ -2882,6 +2894,15 @@
 			name = Call;
 			sourceTree = "<group>";
 		};
+		8F9481881D88F3660039C415 /* JSONKit */ = {
+			isa = PBXGroup;
+			children = (
+				8F9481891D88F3780039C415 /* JSONKit.h */,
+				8F94818A1D88F3780039C415 /* JSONKit.m */,
+			);
+			name = JSONKit;
+			sourceTree = "<group>";
+		};
 		8FA53D0E1D80FAFD00841B1D /* ShareSDK */ = {
 			isa = PBXGroup;
 			children = (
@@ -3025,6 +3046,39 @@
 			path = Required;
 			sourceTree = "<group>";
 		};
+		8FAF9D971D868C090005B08C /* 新闻 */ = {
+			isa = PBXGroup;
+			children = (
+				8FAF9D991D868C9C0005B08C /* Controllers */,
+				8FAF9D981D868C8D0005B08C /* View */,
+			);
+			name = "新闻";
+			sourceTree = "<group>";
+		};
+		8FAF9D981D868C8D0005B08C /* View */ = {
+			isa = PBXGroup;
+			children = (
+				8FAF9D941D868BEC0005B08C /* NewsCell.h */,
+				8FAF9D951D868BEC0005B08C /* NewsCell.m */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
+		8FAF9D991D868C9C0005B08C /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				8FAF9D8E1D863F780005B08C /* NewsVC.h */,
+				8FAF9D8F1D863F780005B08C /* NewsVC.m */,
+				8FAF9D911D8648010005B08C /* NewsSettingVC.h */,
+				8FAF9D921D8648010005B08C /* NewsSettingVC.m */,
+				8FAF9D9A1D879A210005B08C /* NewsDetailVC.h */,
+				8FAF9D9B1D879A210005B08C /* NewsDetailVC.m */,
+				8F5B734E1D88D20800E23248 /* HistoryNewsVC.h */,
+				8F5B734F1D88D20800E23248 /* HistoryNewsVC.m */,
+			);
+			name = Controllers;
+			sourceTree = "<group>";
+		};
 		8FAFCD2D1CDAD99E008F4B48 /* youLinITabModule */ = {
 			isa = PBXGroup;
 			children = (
@@ -3080,16 +3134,13 @@
 		8FB6FA461D41B48B00E6C71A /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				8FAF9D971D868C090005B08C /* 新闻 */,
 				8F5303831CDB45B50078FD64 /* DiscoveryTVC.h */,
 				8F5303841CDB45B50078FD64 /* DiscoveryTVC.m */,
 				8FB6FA481D41B4EF00E6C71A /* FriendsVC.h */,
 				8FB6FA491D41B4EF00E6C71A /* FriendsVC.m */,
 				8FBCF9641D81497E0005F50A /* BlackListVC.h */,
 				8FBCF9651D81497E0005F50A /* BlackListVC.m */,
-				8FAF9D8E1D863F780005B08C /* NewsVC.h */,
-				8FAF9D8F1D863F780005B08C /* NewsVC.m */,
-				8FAF9D911D8648010005B08C /* NewsSettingVC.h */,
-				8FAF9D921D8648010005B08C /* NewsSettingVC.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -3389,6 +3440,7 @@
 		AFCE1F881CDAD1B20085F10F = {
 			isa = PBXGroup;
 			children = (
+				8F9481881D88F3660039C415 /* JSONKit */,
 				8FA53D0E1D80FAFD00841B1D /* ShareSDK */,
 				8FD121401D7467150066C8E3 /* BaiduMapAPI */,
 				8F1FB6DD1D6583DF00676743 /* 极光 */,
@@ -3962,6 +4014,7 @@
 				8F0F1B4E1D191F7E00404C46 /* SearchTableViewController.m in Sources */,
 				AF4B30421D33275500CBF257 /* ISettingViewController.m in Sources */,
 				8F1FB6F41D6BD2CA00676743 /* CreateActivityVC.m in Sources */,
+				8F5B73501D88D20800E23248 /* HistoryNewsVC.m in Sources */,
 				8F648D311D00547A00E3B155 /* UIViewController+DismissKeyboard.m in Sources */,
 				8F5304491CDB7A8B0078FD64 /* homeViewController.m in Sources */,
 				AF4B30281D2F909B00CBF257 /* NickNameViewController.m in Sources */,
@@ -3998,6 +4051,7 @@
 				8F1FB5C81D5C025800676743 /* TZImageManager.m in Sources */,
 				8F1FB6D81D6444A200676743 /* MASViewConstraint.m in Sources */,
 				AFE5693D1CFE649200C0F745 /* ITVC.m in Sources */,
+				8FAF9D9C1D879A210005B08C /* NewsDetailVC.m in Sources */,
 				8F73C8D51D2B53E6009C83C2 /* AFURLSessionManager.m in Sources */,
 				8F51E2821D338FBF0094A4E5 /* SDWebImageManager.m in Sources */,
 				AF5293DD1D12985400503975 /* BackgroundView.m in Sources */,
@@ -4180,9 +4234,11 @@
 				8FE39CD51D7942EA00BA4332 /* DetailListView.m in Sources */,
 				8F648D171D00547A00E3B155 /* UIImage+EMMultiFormat.m in Sources */,
 				8F648CEB1D00547900E3B155 /* EMVoiceConverter.mm in Sources */,
+				8FAF9D961D868BEC0005B08C /* NewsCell.m in Sources */,
 				AFEB365E1D503F050081A5E6 /* GoodsCollectionViewCell.m in Sources */,
 				8FBCF9661D81497E0005F50A /* BlackListVC.m in Sources */,
 				8FB6FA4D1D41B56A00E6C71A /* SegmentView.m in Sources */,
+				8F94818B1D88F3780039C415 /* JSONKit.m in Sources */,
 				8F648D431D00547A00E3B155 /* EaseCustomMessageCell.m in Sources */,
 				8FAF9D901D863F780005B08C /* NewsVC.m in Sources */,
 				8F648CF71D00547A00E3B155 /* MJRefreshAutoStateFooter.m in Sources */,

@@ -17,6 +17,10 @@
 // 家庭信息表插入
 + (BOOL) insertFamilyInfoSqlite: (NSMutableDictionary *) dict View:(UIView*) view;
 
+// 新闻表插入
++ (BOOL) insertNewsSqlite: (NSMutableDictionary *) dict View:(UIView*) view;
+
+
 // 查询用户所在社区的ID
 + (NSInteger) getNowCommunityId;
 

@@ -110,4 +110,37 @@
     return dict;
 }
 
+
+
+- (NSMutableDictionary *) getInitNewsDictionary
+{
+    
+    /**
+     dict[@"news_first"] ,
+     dict[@"news_title"] ,
+     dict[@"news_pic"] ,
+     dict[@"news_url"],
+     dict[@"news_belongs"] ,
+     dict[@"news_id"],
+     dict[@"news_send_time"] ,
+     dict[@"news_push_time"] ,
+     dict[@"news_others"],
+     dict[@"table_version"];
+     */
+    NSMutableDictionary* dic = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+                                [NSNumber numberWithInteger:0], @"news_first",
+                                @"", @"news_title",
+                                @"", @"news_pic",
+                                @"", @"news_url",
+                                [NSNumber numberWithInteger:0], @"news_belongs",
+                                [NSNumber numberWithInteger:0], @"news_id",
+                                [NSNumber numberWithInteger:0], @"news_send_time",
+                                [NSNumber numberWithInteger:0], @"news_push_time",
+                                @"", @"news_others",
+                                [NSNumber numberWithInteger:0], @"table_version", nil];
+    
+    return dic;
+}
+
+
 @end
