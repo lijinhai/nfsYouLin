@@ -76,6 +76,11 @@
 // 活动过期图片
 @property (strong, nonatomic)UIImageView *pastImageView;
 
+// 新闻
+@property (strong, nonatomic)UIControl* newsView;
+@property (strong, nonatomic)UIImageView* newsIV;
+@property (strong, nonatomic)UILabel* newsTitleL;
+
 @property (nonatomic,assign) id<cellDelegate> delegate;
 
 @end

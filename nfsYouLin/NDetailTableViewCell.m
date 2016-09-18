@@ -74,6 +74,25 @@
             [self.contentView addSubview:contentLabel];
             self.contentLabel = contentLabel;
 
+            // 创建新闻
+            UIControl* newsView = [[UIControl alloc] init];
+            [newsView addTarget:self action:@selector(newsClicked) forControlEvents:UIControlEventTouchUpInside];
+            newsView.backgroundColor = BackgroundColor;
+            
+            UIImageView* newsIV = [[UIImageView alloc] initWithFrame:CGRectMake(15, 5, 50, 50)];
+            newsIV.contentMode = UIViewContentModeScaleAspectFit;
+            newsIV.backgroundColor = [UIColor lightGrayColor];
+            [newsView addSubview:newsIV];
+            self.newsIV = newsIV;
+            
+            UILabel* newsTitleL = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(newsIV.frame) + 20, CGRectGetMinY(newsIV.frame), screenWidth - 80, 50)];
+            newsTitleL.textColor = [UIColor blackColor];
+            newsTitleL.font = [UIFont systemFontOfSize:14];
+            newsTitleL.numberOfLines = 0;
+            [newsView addSubview:newsTitleL];
+            self.newsTitleL = newsTitleL;
+            self.newsView = newsView;
+            
             // 创建删除
             UIButton* deleteButton = [[UIButton alloc] init];
             [deleteButton setTitle:@"删除" forState:UIControlStateNormal];
@@ -186,7 +205,7 @@
             repleyText.lineBreakMode = NSLineBreakByWordWrapping;     //去掉省略号
             repleyText.numberOfLines = 0;
             self.repleyText = repleyText;
-            
+        
             // 回复图片
             UIImageView* replyIV = [[UIImageView alloc] init];
             UITapGestureRecognizer* replyIVTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(replyIVGesture:)];
@@ -270,8 +289,10 @@
 
 }
 
+#pragma mark -设置内容数据
 - (void) setFirstCellData
 {
+    NSDictionary* objectData = self.neighborData.infoArray[0];
     CGFloat height;
     CGRect titleFrame;
     CGSize titleSize = [StringMD5 sizeWithString:[NSString stringWithFormat:@"标题:%@",self.neighborData.titleName] font:[UIFont boldSystemFontOfSize:18] maxSize:CGSizeMake(MAXFLOAT, MAXFLOAT)];
@@ -294,6 +315,28 @@
     self.contentLabel.attributedText = attrStr;
 
     height = CGRectGetMaxY(self.contentLabel.frame);
+    
+    // 创建新闻位置
+    CGFloat newsX = 0;
+    CGFloat newsY = CGRectGetMaxY(self.contentLabel.frame) + PADDING;
+    CGFloat newsW = screenWidth;
+    CGFloat newsH;
+    if([self.neighborData.topicCategory integerValue] == 3)
+    {
+        newsH = 60;
+        self.newsView.frame = CGRectMake(newsX, newsY, newsW, newsH);
+        [self.newsIV sd_setImageWithURL:[NSURL URLWithString:[objectData valueForKey:@"new_small_pic"]] placeholderImage:[UIImage imageNamed:@"error.png"] options:SDWebImageAllowInvalidSSLCertificates];
+        self.newsTitleL.text = [objectData valueForKey:@"new_title"];
+
+        [self.contentView addSubview:self.newsView];
+    }
+    else
+    {
+        newsH = 0;
+        [self.newsView removeFromSuperview];
+    }
+    
+    height = CGRectGetMaxY(self.newsView.frame) + PADDING;
     
     //创建配图
     CGFloat picturesViewW = (screenWidth - PADDING ) / 3 - (PADDING / 2);
@@ -344,12 +387,11 @@
     {
         CGPoint point = CGPointMake(PADDING, height);
         
-        NSDictionary* activityDict = self.neighborData.infoArray[0];
-        NSInteger endTime = [[activityDict valueForKey:@"endTime"] integerValue];
+        NSInteger endTime = [[objectData valueForKey:@"endTime"] integerValue];
         NSInteger systemTime = [self.neighborData.systemTime integerValue];
         
-        self.applyView.applyNum.text = [NSString stringWithFormat:@"%ld",[[activityDict valueForKey:@"enrollTotal"] integerValue]];
-        NSString *enrollFlag = [activityDict valueForKey:@"enrollFlag"];
+        self.applyView.applyNum.text = [NSString stringWithFormat:@"%ld",[[objectData valueForKey:@"enrollTotal"] integerValue]];
+        NSString *enrollFlag = [objectData valueForKey:@"enrollFlag"];
 
         // 创建报名详情
         if([self.neighborData.senderId integerValue] == [userId integerValue])
@@ -408,6 +450,7 @@
 
 }
 
+#pragma mark -设置状态栏数据
 - (void) setSecondCellData
 {
     // 点赞状态
@@ -442,6 +485,8 @@
 
 }
 
+
+#pragma mark - 设置消息数据
 - (void) setOtherCellData:(NSDictionary *)dict
 {
     NSURL* url = [NSURL URLWithString:[dict valueForKey:@"senderAvatar"]];
@@ -596,11 +641,6 @@
 
 }
 
-
-
-
-
-
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code
@@ -711,6 +751,13 @@
     }
     
     [_delegate showImageViewWithImageViews:imageArray byClickWhich:recognizer.view.tag];
+}
+
+#pragma mark -点击新闻
+- (void) newsClicked
+{
+    NSDictionary* objectData = self.neighborData.infoArray[0];
+    [_delegate readNewsDetail:objectData];
 }
 
 // 点击删除

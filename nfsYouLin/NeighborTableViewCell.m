@@ -97,14 +97,32 @@
             UIImageView* pastImageView = [[UIImageView alloc] init];
             pastImageView.image = [UIImage imageNamed:@"overline.png"];
             self.pastImageView = pastImageView;
-//            self.pastImageView.backgroundColor = [UIColor redColor];
-            
+
             // 创建帖子内容
             UILabel* contentLabel = [[UILabel alloc] init];
             contentLabel.lineBreakMode = NSLineBreakByWordWrapping;     //去掉省略号
             contentLabel.numberOfLines = 4;
             [self.contentView addSubview:contentLabel];
             self.contentLabel = contentLabel;
+
+            // 创建新闻
+            UIControl* newsView = [[UIControl alloc] init];
+            [newsView addTarget:self action:@selector(newsClicked) forControlEvents:UIControlEventTouchUpInside];
+            newsView.backgroundColor = BackgroundColor;
+            
+            UIImageView* newsIV = [[UIImageView alloc] initWithFrame:CGRectMake(15, 5, 50, 50)];
+            newsIV.contentMode = UIViewContentModeScaleAspectFit;
+            newsIV.backgroundColor = [UIColor lightGrayColor];
+            [newsView addSubview:newsIV];
+            self.newsIV = newsIV;
+            
+            UILabel* newsTitleL = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(newsIV.frame) + 20, CGRectGetMinY(newsIV.frame), screenWidth - 80, 50)];
+            newsTitleL.textColor = [UIColor blackColor];
+            newsTitleL.font = [UIFont systemFontOfSize:14];
+            newsTitleL.numberOfLines = 0;
+            [newsView addSubview:newsTitleL];
+            self.newsTitleL = newsTitleL;
+            self.newsView = newsView;
             
             // 创建查看全文按钮 不添加
             UIButton* readButton = [[UIButton alloc] init];
@@ -460,7 +478,7 @@
     
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     NSString* userId = [defaults stringForKey:@"userId"];
-    NSDictionary* activityDict = self.neighborDataFrame.neighborData.infoArray[0];
+    NSDictionary* objectData = self.neighborDataFrame.neighborData.infoArray[0];
 
     self.iconView.frame = self.neighborDataFrame.iconFrame;
     self.titleLabel.frame = self.neighborDataFrame.titleFrame;
@@ -476,8 +494,10 @@
     
     if([self.neighborDataFrame.neighborData.topicCategory integerValue] == 1)
     {
-        self.applyView.applyNum.text = [NSString stringWithFormat:@"%ld",[[activityDict valueForKey:@"enrollTotal"] integerValue]];
-        NSString *enrollFlag = [activityDict valueForKey:@"enrollFlag"];
+        [self.newsView removeFromSuperview];
+        
+        self.applyView.applyNum.text = [NSString stringWithFormat:@"%ld",[[objectData valueForKey:@"enrollTotal"] integerValue]];
+        NSString *enrollFlag = [objectData valueForKey:@"enrollFlag"];
         
         // 创建报名详情
         if([self.neighborDataFrame.neighborData.senderId integerValue] == [userId integerValue])
@@ -498,7 +518,7 @@
         }
 
         // 创建活动过期图片
-        NSInteger endTime = [[activityDict valueForKey:@"endTime"] integerValue];
+        NSInteger endTime = [[objectData valueForKey:@"endTime"] integerValue];
         NSInteger systemTime = [self.neighborDataFrame.neighborData.systemTime integerValue];
         if(systemTime > endTime)
         {
@@ -543,12 +563,24 @@
         [self.contentView addSubview:self.applyView];
         
     }
-    else
+    else if([self.neighborDataFrame.neighborData.topicCategory integerValue] == 3)
     {
         [self.applyView removeFromSuperview];
         [self.pastImageView removeFromSuperview];
 
+        [self.newsIV sd_setImageWithURL:[NSURL URLWithString:[objectData valueForKey:@"new_small_pic"]] placeholderImage:[UIImage imageNamed:@"error.png"] options:SDWebImageAllowInvalidSSLCertificates];
+        self.newsTitleL.text = [objectData valueForKey:@"new_title"];
+        self.newsView.frame = self.neighborDataFrame.newsFrame;
+        [self.contentView addSubview:self.newsView];
     }
+    else
+    {
+        [self.applyView removeFromSuperview];
+        [self.pastImageView removeFromSuperview];
+        [self.newsView removeFromSuperview];
+    }
+    
+    
    
     if([self.neighborDataFrame.neighborData.senderId integerValue] == [userId integerValue])
     {
@@ -575,7 +607,7 @@
     {
         if([self.neighborDataFrame.neighborData.cacheKey integerValue] != [userId integerValue])
         {
-            if([[activityDict valueForKey:@"sayHelloStatus"] integerValue] == 0)
+            if([[objectData valueForKey:@"sayHelloStatus"] integerValue] == 0)
             {
                 [self.contentView addSubview:self.hiBtn];
             }
@@ -709,6 +741,13 @@
         [imageArray addObject:[[_neighborDataFrame.neighborData.picturesArray objectAtIndex:i] valueForKey:@"resPath"]];
     }
     [_delegate showImageViewWithImageViews:imageArray byClickWhich:recognizer.view.tag];
+}
+
+#pragma mark -点击新闻
+- (void) newsClicked
+{
+    NSDictionary* objectData = self.neighborDataFrame.neighborData.infoArray[0];
+    [_delegate readNewsDetail:objectData];
 }
 
 // 点击全文按钮

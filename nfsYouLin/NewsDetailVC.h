@@ -13,7 +13,6 @@
 
 
 @property(strong ,nonatomic) NSString* newsUrl;
-
 @property(strong ,nonatomic) NSString* newsTitle;
 @property(strong, nonatomic) NSString* newsImage;
 @property(assign, nonatomic) NSInteger newsId;

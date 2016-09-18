@@ -20,7 +20,7 @@
 #import "ChatViewController.h"
 #import "ReportVC.h"
 #import "PeopleInfoVC.h"
-
+#import "NewsDetailVC.h"
 
 @interface NeighborDetailTVC ()
 
@@ -418,6 +418,11 @@
     {
         cellHeight += 30;
     }
+    else if([self.neighborData.topicCategory integerValue] == 3)
+    {
+        cellHeight += 60;
+    }
+        
     
     cellHeight += PADDING;
 
@@ -457,6 +462,16 @@
     
 }
 
+#pragma mark -cellDelegate 新闻查看
+- (void) readNewsDetail:(NSDictionary *)newsInfo
+{
+    NewsDetailVC *newsDetailVC = [[NewsDetailVC alloc] init];
+    newsDetailVC.newsUrl = [newsInfo valueForKey:@"new_url"];
+    newsDetailVC.newsTitle = [newsInfo valueForKey:@"new_title"];
+    newsDetailVC.newsImage = [newsInfo valueForKey:@"new_small_pic"];
+    newsDetailVC.newsId = [[newsInfo valueForKey:@"new_id"] integerValue];
+    [self.navigationController pushViewController:newsDetailVC animated:YES];
+}
 
 #pragma mark -DetailListViewDelegate
 -(void) seletedAction:(NSString *)action

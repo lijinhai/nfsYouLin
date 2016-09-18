@@ -21,6 +21,7 @@
 #import "WaitView.h"
 #import "MJRefresh.h"
 #import "BackgroundView.h"
+#import "NewsDetailVC.h"
 
 @interface ICollectVC ()
 
@@ -164,7 +165,7 @@
 // 处理单元格的选中
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [self readTotalInformation:indexPath.section];
+//    [self readTotalInformation:indexPath.section];
 }
 
 
@@ -464,6 +465,16 @@
     [self lookApplyNet:activityId];
 }
 
+#pragma mark -cellDelegate 新闻查看
+- (void) readNewsDetail:(NSDictionary *)newsInfo
+{
+    NewsDetailVC *newsDetailVC = [[NewsDetailVC alloc] init];
+    newsDetailVC.newsUrl = [newsInfo valueForKey:@"new_url"];
+    newsDetailVC.newsTitle = [newsInfo valueForKey:@"new_title"];
+    newsDetailVC.newsImage = [newsInfo valueForKey:@"new_small_pic"];
+    newsDetailVC.newsId = [[newsInfo valueForKey:@"new_id"] integerValue];
+    [self.navigationController pushViewController:newsDetailVC animated:YES];
+}
 // 查看全文回调事件
 - (void)readTotalInformation:(NSInteger)sectionNum
 {

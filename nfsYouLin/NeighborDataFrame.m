@@ -29,7 +29,7 @@
     CGFloat iconViewH = 60;
     self.iconFrame = CGRectMake(iconViewX, iconViewY, iconViewW, iconViewH);
     
-    
+//    self.cellHeight = CGRectGetMaxY(self.iconFrame) + PADDING;
     
     // 时间间隔位置大小
     
@@ -57,8 +57,6 @@
     // 用户信息位置大小
     CGFloat accountInfoLabelX = CGRectGetMaxX(self.iconFrame) + PADDING;
     CGFloat accountInfoLabelY = CGRectGetMaxY(self.titleFrame);
-//    CGSize accountInfoLabelSize = [StringMD5 sizeWithString:[NSString stringWithFormat:@"%@@%@",self.neighborData.accountName, self.neighborData.addressInfo] font:[UIFont systemFontOfSize:15] maxSize:CGSizeMake(MAXFLOAT, MAXFLOAT)];
-    
     CGSize accountInfoLabelSize = [StringMD5 sizeWithString:[NSString stringWithFormat:@"%@",self.neighborData.accountName] font:[UIFont systemFontOfSize:15] maxSize:CGSizeMake(MAXFLOAT, MAXFLOAT)];
     
     CGFloat accountInfoLabelW = accountInfoLabelSize.width;
@@ -85,7 +83,8 @@
          textLabelH = textLabelSize.height + 2 * font.lineHeight;
     }
     self.textFrame = CGRectMake(textLabelX, textLabelY, textLabelW, textLabelH);
-    
+//    self.cellHeight += textLabelH + PADDING;
+
     // 活动过期图片位置
     CGFloat pastIVX = screenWidth - internalSize.width - 2 *PADDING - textLabelY;
     CGFloat pastIVY = PADDING;
@@ -119,6 +118,33 @@
     
     self.readFrame = CGRectMake(readButtonX, readButtonY, readButtonW, readButtonH);
     
+    // 创建新闻位置
+    
+    CGFloat newsX = 0;
+    CGFloat newsY;
+    CGFloat newsW = screenWidth;
+    CGFloat newsH;
+
+    if([self.neighborData.topicCategory integerValue] == 3)
+    {
+        newsH = 60;
+    }
+    else
+    {
+        newsH = 0;
+    }
+
+    if(readButtonH == 0)
+    {
+        newsY = CGRectGetMaxY(self.textFrame) + PADDING;
+    }
+    else
+    {
+        newsY = CGRectGetMaxY(self.readFrame) + PADDING;
+    }
+
+    self.newsFrame = CGRectMake(newsX, newsY, newsW, newsH);
+    
     // 创建图片位置
     if ([self.neighborData.picturesArray count])
     {
@@ -136,9 +162,9 @@
     }
     else
     {
-        self.cellHeight = CGRectGetMaxY(self.textFrame) + readButtonH + PADDING;
+        self.cellHeight = CGRectGetMaxY(self.newsFrame) + readButtonH + PADDING;
     }
-
+    
     self.cellHeight += 2 * PADDING;
     
     

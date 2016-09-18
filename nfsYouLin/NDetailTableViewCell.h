@@ -78,6 +78,12 @@
 @property (nonatomic, assign) CGSize replySize;
 // 回复文本内容
 @property (nonatomic, assign) NSString* replyString;
+
+// 新闻
+@property (strong, nonatomic)UIControl* newsView;
+@property (strong, nonatomic)UIImageView* newsIV;
+@property (strong, nonatomic)UILabel* newsTitleL;
+
 // 回复或删除按钮
 @property (strong, nonatomic) UIButton* otherButton;
 // 回复图片

@@ -19,6 +19,9 @@
 // 查看全文
 - (void)readTotalInformation:(NSInteger)sectionNum;
 
+// 点击新闻
+- (void) readNewsDetail:(NSDictionary*)newsInfo;
+
 // 帖子类别切换
 - (void)reloadShowByTitle: (NSString* )text;
 

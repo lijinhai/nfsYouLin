@@ -45,6 +45,9 @@
 // 查看全文位置大小
 @property (nonatomic, assign) CGRect readFrame;
 
+// 新闻
+@property(nonatomic, assign) CGRect newsFrame;
+
 // 报名详情
 @property (nonatomic, assign) CGPoint applyPoint;
 
@@ -53,6 +56,7 @@
 
 // 图片位置大小集合
 @property (nonatomic, strong) NSMutableArray* picturesFrame;
+
 
 // 表格高度
 @property (nonatomic, assign) CGFloat cellHeight;

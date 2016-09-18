@@ -14,6 +14,7 @@
 #import "DialogView.h"
 #import "ApplyDetailTVC.h"
 #import "PeopleInfoVC.h"
+#import "NewsDetailVC.h"
 
 @interface NeighborTVC ()
 
@@ -396,7 +397,7 @@
     {
         return;
     }
-    [self readTotalInformation:indexPath.section];
+//    [self readTotalInformation:indexPath.section];
 }
 
 static BOOL downState = YES;
@@ -731,6 +732,17 @@ static BOOL upState = YES;
     [cancelBtn addTarget:self action:@selector(cancelNoApplyAction:) forControlEvents:UIControlEventTouchUpInside];
 }
 
+#pragma mark -cellDelegate 新闻查看
+- (void) readNewsDetail:(NSDictionary *)newsInfo
+{
+    NewsDetailVC *newsDetailVC = [[NewsDetailVC alloc] init];
+    newsDetailVC.newsUrl = [newsInfo valueForKey:@"new_url"];
+    newsDetailVC.newsTitle = [newsInfo valueForKey:@"new_title"];
+    newsDetailVC.newsImage = [newsInfo valueForKey:@"new_small_pic"];
+    newsDetailVC.newsId = [[newsInfo valueForKey:@"new_id"] integerValue];
+    [self.navigationController pushViewController:newsDetailVC animated:YES];
+}
+
 // 查看报名详情回调
 - (void)lookApplyDetail:(NSInteger)activityId
 {
@@ -741,6 +753,7 @@ static BOOL upState = YES;
 // 查看全文回调事件
 - (void)readTotalInformation:(NSInteger)sectionNum
 {
+    NSLog(@"查看全文--readTotalInformation");
     NeighborDataFrame* neighborDataFrame = self.neighborDataArray[sectionNum - 1];
     NeighborData* neighborData = neighborDataFrame.neighborData;
     NSInteger topicId = [[neighborData valueForKey:@"topicId"] integerValue];
@@ -749,15 +762,6 @@ static BOOL upState = YES;
     neighborData.viewCount = [NSString stringWithFormat:@"%ld",num];
     
     [self viewTopicNet:topicId];
-    
-    neighborDetailVC = [[NeighborDetailTVC alloc] init];
-    UIBarButtonItem* detailItem = [[UIBarButtonItem alloc] initWithTitle:@"详情" style:UIBarButtonItemStylePlain target:nil action:nil];
-    [self.parentViewController.navigationItem setBackBarButtonItem:detailItem];
-    neighborDetailVC.sectionNum = sectionNum - 1;
-    neighborDetailVC.neighborData = neighborData;
-    neighborDetailVC.neighborDF = neighborDataFrame;
-    neighborDetailVC.neighborDA = self.neighborDataArray;
-    [self.navigationController pushViewController:neighborDetailVC animated:YES];
     
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     NSString* communityId = [defaults stringForKey:@"communityId"];
@@ -824,20 +828,7 @@ static BOOL upState = YES;
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         NSLog(@"请求失败:%@", error.description);
         return;
-    }];
-
-    
-    
-    
-//    neighborDetailVC = [[NeighborDetailTVC alloc] init];
-//    UIBarButtonItem* detailItem = [[UIBarButtonItem alloc] initWithTitle:@"详情" style:UIBarButtonItemStylePlain target:nil action:nil];
-//    [self.parentViewController.navigationItem setBackBarButtonItem:detailItem];
-//    neighborDetailVC.sectionNum = sectionNum - 1;
-//    neighborDetailVC.neighborData = neighborData;
-//    neighborDetailVC.neighborDF = neighborDataFrame;
-//    neighborDetailVC.neighborDA = self.neighborDataArray;
-//    [self.navigationController pushViewController:neighborDetailVC animated:YES];
-    
+    }];    
 }
 
 // 打招呼回调
