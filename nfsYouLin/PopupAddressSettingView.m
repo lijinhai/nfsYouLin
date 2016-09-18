@@ -321,6 +321,15 @@
             // 查找表
             NSString *updateSQL1 = [[NSString alloc] initWithFormat:@"UPDATE table_all_family SET primary_flag = '%d' where _id = '%ld'", 1,_id];
             NSString *updateSQL2 = [[NSString alloc] initWithFormat:@"UPDATE table_all_family SET primary_flag = '%d' where _id != '%ld'", 0,_id];
+            NSString *selectSQL1=[[NSString alloc] initWithFormat:@"SELECT family_community_id FROM table_all_family where _id = '%ld'",_id];
+            // 查找表
+            FMResultSet* resultSet = [ database executeQuery: selectSQL1];
+            // 逐行读取数据
+            while ( [ resultSet next ] )
+            {
+                 NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+                [defaults setInteger:[resultSet intForColumn:@"family_community_id"] forKey:@"communityId"];
+            }
             [database executeUpdate:updateSQL2];
             BOOL res = [database executeUpdate:updateSQL1];
             // 逐行读取数据
@@ -393,6 +402,7 @@
         NSString* addressname = [ resultSet stringForColumn: @"family_address"];
         NSString* addressPortrait=[ resultSet stringForColumn: @"family_building_num"];
         NSString* addressAptNum=[ resultSet stringForColumn: @"family_apt_num"];
+        
         NSInteger entityTypeFlag=[ resultSet intForColumn: @"entity_type"];
         NSInteger  commId= [ resultSet intForColumn: @"family_community_id"];
         NSInteger  buildNumId= [ resultSet intForColumn: @"family_building_id"];
@@ -424,8 +434,9 @@
         [defaults setInteger:[[dic valueForKey:@"keycommid"] integerValue] forKey:@"keycommid"];
         [defaults setInteger:[[dic valueForKey:@"keyBuildId"] integerValue] forKey:@"keyBuildId"];
         [defaults setInteger:[[dic valueForKey:@"keyaptnum"] integerValue] forKey:@"keyaptnum"];
-         [defaults setInteger:[[dic valueForKey:@"keyFamilyId"] integerValue] forKey:@"keyFamilyId"];
+        [defaults setInteger:[[dic valueForKey:@"keyFamilyId"] integerValue] forKey:@"keyFamilyId"];
         [defaults setInteger:[[dic valueForKey:@"keyNeStatus"] integerValue] forKey:@"keyNeStatus"];
+        [defaults setValue:addressPortrait forKey:@"keyportrait"];
         [defaults synchronize];
         
         [array addObject:dic];

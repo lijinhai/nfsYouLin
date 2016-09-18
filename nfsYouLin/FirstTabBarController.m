@@ -21,6 +21,9 @@
 #import "CreateActivityVC.h"
 #import "ExchangeVC.h"
 #import "InviteVC.h"
+#import "SqliteOperation.h"
+#import "PopChangeAddress.h"
+#import "LewPopupViewController.h"
 
 @implementation FirstTabBarController
 {
@@ -29,13 +32,69 @@
     DiscoveryTVC* _discoveryVC;
     NeighborTVC* _neighborVC;
     ITVC* _iVC;
+    NSInteger flagV;
+    NSString* nowAddressStr;
 }
 
 - (void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+     
+      nowAddressStr=[SqliteOperation getUserNowAddressSqlite];
+    if([nowAddressStr isEqualToString:@""])
+    {
+      
+      [_nowAddressBtn setTitle:@"未设置" forState:UIControlStateNormal];
+      UIView * statusView = [[UIView alloc]initWithFrame:CGRectMake(0, 43, self.view.frame.size.width, 17)];
+      statusView.backgroundColor = [UIColor purpleColor];
+      statusView.alpha=0.5;
+        UILabel *tiplab=[[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 17)];
+        tiplab.text=@"您还没有设置地址";
+        tiplab.textColor=[UIColor whiteColor];
+        tiplab.textAlignment=NSTextAlignmentCenter;
+        tiplab.font=[UIFont systemFontOfSize:11.0];
+        [statusView addSubview:tiplab];
+        statusView.tag=1988;
+      [self.navigationController.navigationBar addSubview:statusView];
+        
+    }else{
+      
+        if((UIView *)[self.view viewWithTag:1988])
+        {
+            
+            [(UIView *)[self.view viewWithTag:1988] removeFromSuperview];
+        }
+      [_nowAddressBtn setTitle:nowAddressStr forState:UIControlStateNormal];
+    }
+    [_nowAddressBtn addTarget:self
+                action:@selector(popupAddressSettingTable:)
+      forControlEvents:UIControlEventTouchUpInside
+     ];
+    NSLog(@"nowAddressBtn text is %@",_nowAddressBtn.titleLabel.text);
 }
 
+-(void)popupAddressSettingTable:(id)sender{
+
+    PopChangeAddress *view = [PopChangeAddress defaultPopupView:nowAddressStr tFrame:CGRectMake(0, 0, 320, 250)];
+    view.parentVC = self;
+    [self lew_presentPopupView:view animation:[LewPopupViewAnimationRight new] dismissed:^{
+        
+        nowAddressStr=[SqliteOperation getUserNowAddressSqlite];
+        if([nowAddressStr isEqualToString:@""])
+        {
+            
+            [_nowAddressBtn setTitle:@"未设置" forState:UIControlStateNormal];
+        }else{
+            if((UIView *)[self.view viewWithTag:1988])
+            {
+                
+                [(UIView *)[self.view viewWithTag:1988] removeFromSuperview];
+            }
+            [_nowAddressBtn setTitle:nowAddressStr forState:UIControlStateNormal];
+        }
+         NSLog(@"动画结束");
+    }];
+}
 - (void) viewDidLoad
 {
 //    UIView * statusView = [[UIView alloc]initWithFrame:CGRectMake(0, -20, self.view.frame.size.width, 20)];

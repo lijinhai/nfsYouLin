@@ -20,4 +20,5 @@
 
 #define BackgroundColor [UIColor colorWithRed:243.0/255.0 green:243.0/255.0 blue:240.0/255.0 alpha:1]
 #define MainColor [UIColor colorWithRed:255/255.0 green:222/255.0 blue:31/255.0 alpha:1]
+#define UIColorFromRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 #endif /* HeaderFile_h */
