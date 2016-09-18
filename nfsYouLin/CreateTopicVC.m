@@ -816,7 +816,6 @@
     }
     
     WaitView* waitView = [[WaitView alloc] initWithFrame:self.parentViewController.view.frame Title:@"正在发布..."];
-//    UIView* backgroundView = [[UIView alloc] initWithFrame:self.parentViewController.view.frame];
     backgroundView.backgroundColor = [UIColor clearColor];
     [backgroundView addSubview:waitView];
     [self.parentViewController.view addSubview:backgroundView];

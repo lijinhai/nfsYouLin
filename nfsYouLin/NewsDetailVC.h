@@ -7,9 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "NewShareView.h"
 
-@interface NewsDetailVC : UIViewController<UIWebViewDelegate>
+@interface NewsDetailVC : UIViewController<UIWebViewDelegate,NewShareDelegate>
 
 
 @property(strong ,nonatomic) NSString* newsUrl;
+
+@property(strong ,nonatomic) NSString* newsTitle;
+@property(strong, nonatomic) NSString* newsImage;
+@property(assign, nonatomic) NSInteger newsId;
 @end

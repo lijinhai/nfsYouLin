@@ -7,6 +7,8 @@
 //
 
 #import "NewsDetailVC.h"
+#import "NewsFriendsVC.h"
+#import "NewsNeighborVC.h"
 
 @interface NewsDetailVC ()
 
@@ -16,6 +18,9 @@
 {
     UIWebView* _webView;
     UIView* _progressView;
+    NewShareView* _shareView;
+    
+    NewsFriendsVC* friendsVC;
 }
 
 - (void)viewDidLoad {
@@ -45,7 +50,9 @@
     NSURLRequest* request = [NSURLRequest requestWithURL:[NSURL URLWithString:self.newsUrl]];
     [_webView loadRequest:request];
     
-    
+    _shareView = [[NewShareView alloc] init];
+    _shareView.delegate = self;
+    friendsVC = [[NewsFriendsVC alloc] init];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -74,7 +81,30 @@
 #pragma mark -导航栏右侧按钮 分享等
 - (void) rightClicked
 {
-    
+    [_shareView showInView:self.view];
 }
+
+#pragma mark -NewShareDelegate
+// 分享给邻居
+- (void) shareToNeighbors
+{
+    NSLog(@"shareToNeighbors");
+    [_shareView disMissView];
+    NewsNeighborVC* neighborVC = [[NewsNeighborVC alloc] init];
+    neighborVC.newsTitle = self.newsTitle;
+    neighborVC.newsUrl = [NSURL URLWithString:self.newsImage];
+    neighborVC.newsId = self.newsId;
+    [self.navigationController pushViewController:neighborVC animated:YES];
+}
+
+// 分享给附近朋友
+- (void) shareToFriends
+{
+    NSLog(@"shareToFriends");
+    [_shareView disMissView];
+    friendsVC.newsId = self.newsId;
+    [self.navigationController pushViewController:friendsVC animated:YES];
+}
+
 
 @end

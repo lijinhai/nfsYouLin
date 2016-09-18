@@ -180,11 +180,17 @@
     if(row == 0)
     {
         newsDetailVC.newsUrl = [newsDict valueForKey:@"new_url"];
+        newsDetailVC.newsTitle = [newsDict valueForKey:@"new_title"];
+        newsDetailVC.newsImage = [newsDict valueForKey:@"new_small_pic"];
+        newsDetailVC.newsId = [[newsDict valueForKey:@"new_id"] integerValue];
     }
     else
     {
         NSDictionary* subDict = [newsArr objectAtIndex:row - 1];
         newsDetailVC.newsUrl = [subDict valueForKey:@"new_url"];
+        newsDetailVC.newsTitle = [subDict valueForKey:@"new_title"];
+        newsDetailVC.newsImage = [subDict valueForKey:@"new_small_pic"];
+        newsDetailVC.newsId = [[subDict valueForKey:@"new_id"] integerValue];
     }
     
     UIBarButtonItem* newsItem = [[UIBarButtonItem alloc] initWithTitle:itemStr style:UIBarButtonItemStylePlain target:nil action:nil];
