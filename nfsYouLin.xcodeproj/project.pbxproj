@@ -20,6 +20,10 @@
 		8F1498291D8F8B6E00ED707E /* CreateAdviceVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F1498261D8F8B6E00ED707E /* CreateAdviceVC.m */; };
 		8F14982A1D8F8B6E00ED707E /* RepairVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F1498281D8F8B6E00ED707E /* RepairVC.m */; };
 		8F14982D1D8F8B8600ED707E /* MyAdviceTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F14982C1D8F8B8600ED707E /* MyAdviceTVC.m */; };
+		8F1498341D8FA79900ED707E /* ServiceVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F1498331D8FA79900ED707E /* ServiceVC.m */; };
+		8F1498351D8FA7D000ED707E /* addressInfoTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = AFB4E37B1D88F53E004A148A /* addressInfoTVC.m */; };
+		8F1498381D8FAA5500ED707E /* ServiceView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F1498371D8FAA5500ED707E /* ServiceView.m */; };
+		8F14983C1D8FB63200ED707E /* ServiceCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F14983B1D8FB63200ED707E /* ServiceCell.m */; };
 		8F1FB5C51D5C025800676743 /* photo_delete@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8F1FB5B11D5C025800676743 /* photo_delete@2x.png */; };
 		8F1FB5C61D5C025800676743 /* TZAssetCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F1FB5B31D5C025800676743 /* TZAssetCell.m */; };
 		8F1FB5C71D5C025800676743 /* TZAssetModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F1FB5B51D5C025800676743 /* TZAssetModel.m */; };
@@ -529,14 +533,6 @@
 		AF81B32D1D42073900C48856 /* IntegralMallViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AF81B32C1D42073900C48856 /* IntegralMallViewController.m */; };
 		AFB4E3751D86790A004A148A /* PersonTopicTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = AFB4E3741D86790A004A148A /* PersonTopicTVC.m */; };
 		AFB4E3781D87F2A5004A148A /* PopChangeAddress.m in Sources */ = {isa = PBXBuildFile; fileRef = AFB4E3771D87F2A5004A148A /* PopChangeAddress.m */; };
-		AFB4E3801D8E3479004A148A /* PropertyVC.m in Sources */ = {isa = PBXBuildFile; fileRef = AFB4E37F1D8E3479004A148A /* PropertyVC.m */; };
-		AFB4E3831D8E7A4A004A148A /* MyAdviceTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = AFB4E3821D8E7A4A004A148A /* MyAdviceTVC.m */; };
-		AFB4E3861D8F74FF004A148A /* CreateAdviceVC.m in Sources */ = {isa = PBXBuildFile; fileRef = AFB4E3851D8F74FF004A148A /* CreateAdviceVC.m */; };
-		AFB4E3891D8F84D0004A148A /* RepairVC.m in Sources */ = {isa = PBXBuildFile; fileRef = AFB4E3881D8F84D0004A148A /* RepairVC.m */; };
-		AFB4E38C1D8F8981004A148A /* PropertyVC.m in Sources */ = {isa = PBXBuildFile; fileRef = AFB4E38B1D8F8981004A148A /* PropertyVC.m */; };
-		AFB4E3941D8F8A0E004A148A /* CreateAdviceVC.m in Sources */ = {isa = PBXBuildFile; fileRef = AFB4E38E1D8F8A0E004A148A /* CreateAdviceVC.m */; };
-		AFB4E3951D8F8A0E004A148A /* MyAdviceTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = AFB4E3901D8F8A0E004A148A /* MyAdviceTVC.m */; };
-		AFB4E3961D8F8A0E004A148A /* RepairVC.m in Sources */ = {isa = PBXBuildFile; fileRef = AFB4E3931D8F8A0E004A148A /* RepairVC.m */; };
 		AFCE1F961CDAD1B20085F10F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = AFCE1F951CDAD1B20085F10F /* main.m */; };
 		AFCE1F991CDAD1B20085F10F /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = AFCE1F981CDAD1B20085F10F /* AppDelegate.mm */; };
 		AFCE1F9C1CDAD1B20085F10F /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AFCE1F9B1CDAD1B20085F10F /* ViewController.m */; };
@@ -619,6 +615,12 @@
 		8F1498281D8F8B6E00ED707E /* RepairVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RepairVC.m; sourceTree = "<group>"; };
 		8F14982B1D8F8B8600ED707E /* MyAdviceTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyAdviceTVC.h; sourceTree = "<group>"; };
 		8F14982C1D8F8B8600ED707E /* MyAdviceTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyAdviceTVC.m; sourceTree = "<group>"; };
+		8F1498321D8FA79900ED707E /* ServiceVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServiceVC.h; sourceTree = "<group>"; };
+		8F1498331D8FA79900ED707E /* ServiceVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServiceVC.m; sourceTree = "<group>"; };
+		8F1498361D8FAA5500ED707E /* ServiceView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServiceView.h; sourceTree = "<group>"; };
+		8F1498371D8FAA5500ED707E /* ServiceView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServiceView.m; sourceTree = "<group>"; };
+		8F14983A1D8FB63200ED707E /* ServiceCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServiceCell.h; sourceTree = "<group>"; };
+		8F14983B1D8FB63200ED707E /* ServiceCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServiceCell.m; sourceTree = "<group>"; };
 		8F1FB5B11D5C025800676743 /* photo_delete@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "photo_delete@2x.png"; sourceTree = "<group>"; };
 		8F1FB5B21D5C025800676743 /* TZAssetCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TZAssetCell.h; sourceTree = "<group>"; };
 		8F1FB5B31D5C025800676743 /* TZAssetCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TZAssetCell.m; sourceTree = "<group>"; };
@@ -1481,14 +1483,6 @@
 		AFB4E3771D87F2A5004A148A /* PopChangeAddress.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PopChangeAddress.m; sourceTree = "<group>"; };
 		AFB4E37A1D88F53E004A148A /* addressInfoTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = addressInfoTVC.h; sourceTree = "<group>"; };
 		AFB4E37B1D88F53E004A148A /* addressInfoTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = addressInfoTVC.m; sourceTree = "<group>"; };
-		AFB4E37F1D8E3479004A148A /* PropertyVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PropertyVC.m; sourceTree = "<group>"; };
-		AFB4E3821D8E7A4A004A148A /* MyAdviceTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyAdviceTVC.m; sourceTree = "<group>"; };
-		AFB4E3851D8F74FF004A148A /* CreateAdviceVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CreateAdviceVC.m; sourceTree = "<group>"; };
-		AFB4E3881D8F84D0004A148A /* RepairVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RepairVC.m; sourceTree = "<group>"; };
-		AFB4E38B1D8F8981004A148A /* PropertyVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PropertyVC.m; sourceTree = "<group>"; };
-		AFB4E38E1D8F8A0E004A148A /* CreateAdviceVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CreateAdviceVC.m; sourceTree = "<group>"; };
-		AFB4E3901D8F8A0E004A148A /* MyAdviceTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyAdviceTVC.m; sourceTree = "<group>"; };
-		AFB4E3931D8F8A0E004A148A /* RepairVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RepairVC.m; sourceTree = "<group>"; };
 		AFCE1F911CDAD1B20085F10F /* nfsYouLin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = nfsYouLin.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AFCE1F951CDAD1B20085F10F /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		AFCE1F971CDAD1B20085F10F /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -1667,6 +1661,8 @@
 		8F14981F1D8F844D00ED707E /* 社区服务 */ = {
 			isa = PBXGroup;
 			children = (
+				8F1498391D8FAA5F00ED707E /* View */,
+				8F1498311D8FA6F300ED707E /* Controllers */,
 			);
 			name = "社区服务";
 			sourceTree = "<group>";
@@ -1684,6 +1680,26 @@
 				8F1498231D8F8B3000ED707E /* PropertyVC.m */,
 			);
 			name = "物业";
+			sourceTree = "<group>";
+		};
+		8F1498311D8FA6F300ED707E /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				8F1498321D8FA79900ED707E /* ServiceVC.h */,
+				8F1498331D8FA79900ED707E /* ServiceVC.m */,
+			);
+			name = Controllers;
+			sourceTree = "<group>";
+		};
+		8F1498391D8FAA5F00ED707E /* View */ = {
+			isa = PBXGroup;
+			children = (
+				8F1498361D8FAA5500ED707E /* ServiceView.h */,
+				8F1498371D8FAA5500ED707E /* ServiceView.m */,
+				8F14983A1D8FB63200ED707E /* ServiceCell.h */,
+				8F14983B1D8FB63200ED707E /* ServiceCell.m */,
+			);
+			name = View;
 			sourceTree = "<group>";
 		};
 		8F1FB5B01D5C025800676743 /* TZImagePickerController */ = {
@@ -3115,18 +3131,18 @@
 		8FAF9D991D868C9C0005B08C /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				8FAF9D8E1D863F780005B08C /* NewsVC.h */,
-				8FAF9D8F1D863F780005B08C /* NewsVC.m */,
-				8FAF9D911D8648010005B08C /* NewsSettingVC.h */,
-				8FAF9D921D8648010005B08C /* NewsSettingVC.m */,
-				8FAF9D9A1D879A210005B08C /* NewsDetailVC.h */,
-				8FAF9D9B1D879A210005B08C /* NewsDetailVC.m */,
 				8F5B734E1D88D20800E23248 /* HistoryNewsVC.h */,
 				8F5B734F1D88D20800E23248 /* HistoryNewsVC.m */,
+				8FAF9D9A1D879A210005B08C /* NewsDetailVC.h */,
+				8FAF9D9B1D879A210005B08C /* NewsDetailVC.m */,
 				8F1497991D8E23E800ED707E /* NewsFriendsVC.h */,
 				8F14979A1D8E23E800ED707E /* NewsFriendsVC.m */,
 				8F14979C1D8E2AAC00ED707E /* NewsNeighborVC.h */,
 				8F14979D1D8E2AAC00ED707E /* NewsNeighborVC.m */,
+				8FAF9D911D8648010005B08C /* NewsSettingVC.h */,
+				8FAF9D921D8648010005B08C /* NewsSettingVC.m */,
+				8FAF9D8E1D863F780005B08C /* NewsVC.h */,
+				8FAF9D8F1D863F780005B08C /* NewsVC.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -3157,8 +3173,8 @@
 		8FAFCD2E1CDADA74008F4B48 /* youLinDiscoveryModule */ = {
 			isa = PBXGroup;
 			children = (
-				8F1498211D8F8ADE00ED707E /* 物业 */,
 				8F14981F1D8F844D00ED707E /* 社区服务 */,
+				8F1498211D8F8ADE00ED707E /* 物业 */,
 				8FAF9D971D868C090005B08C /* 新闻 */,
 				8FB6FA461D41B48B00E6C71A /* Controllers */,
 				8FB6FA451D41B47C00E6C71A /* Models */,
@@ -3986,17 +4002,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8F1498351D8FA7D000ED707E /* addressInfoTVC.m in Sources */,
 				8F51E2851D338FBF0094A4E5 /* UIImage+GIF.m in Sources */,
 				8F648D351D00547A00E3B155 /* EaseMessageReadManager.m in Sources */,
 				8F648CFD1D00547A00E3B155 /* MJRefreshStateHeader.m in Sources */,
 				8F648CFC1D00547A00E3B155 /* MJRefreshNormalHeader.m in Sources */,
-				AFB4E3941D8F8A0E004A148A /* CreateAdviceVC.m in Sources */,
 				AF4B4F1D1D07ACF90039BE42 /* LewPopupViewAnimationRight.m in Sources */,
 				8F51E27C1D338FBF0094A4E5 /* NSData+ImageContentType.m in Sources */,
 				AF1DBD971CED80D400557E43 /* myCommunityViewController.m in Sources */,
 				8F648D401D00547A00E3B155 /* EaseViewController.m in Sources */,
 				8F648D491D00547A00E3B155 /* EaseBubbleView+Location.m in Sources */,
 				8F648CE31D00547900E3B155 /* EMAudioRecorderUtil.m in Sources */,
+				8F1498381D8FAA5500ED707E /* ServiceView.m in Sources */,
 				8F648D421D00547A00E3B155 /* EaseBaseMessageCell.m in Sources */,
 				8F14979B1D8E23E800ED707E /* NewsFriendsVC.m in Sources */,
 				8F51E2801D338FBF0094A4E5 /* SDWebImageDownloader.m in Sources */,
@@ -4036,7 +4053,6 @@
 				AF7FF1801D3CBDD90068F8D9 /* FDCalendarItem.m in Sources */,
 				8F73C8D21D2B53E6009C83C2 /* AFSecurityPolicy.m in Sources */,
 				AFCE1F991CDAD1B20085F10F /* AppDelegate.mm in Sources */,
-				AFB4E38C1D8F8981004A148A /* PropertyVC.m in Sources */,
 				8F648D511D00547A00E3B155 /* EaseTextView.m in Sources */,
 				8F648D3D1D00547A00E3B155 /* EaseMessageViewController.m in Sources */,
 				8F64912C1D05435100E3B155 /* NeighborDetailTVC.m in Sources */,
@@ -4053,9 +4069,9 @@
 				8F648D231D00547A00E3B155 /* PSTCollectionViewLayout.m in Sources */,
 				AF5293DC1D12985400503975 /* ListTableView.m in Sources */,
 				8F51E2901D33C0080094A4E5 /* StartVC.m in Sources */,
-				AFB4E3961D8F8A0E004A148A /* RepairVC.m in Sources */,
 				AF4B302B1D2F90AA00CBF257 /* ModifyPasswordViewController.m in Sources */,
 				8F73C8D01D2B53E6009C83C2 /* AFHTTPSessionManager.m in Sources */,
+				8F14983C1D8FB63200ED707E /* ServiceCell.m in Sources */,
 				8F648D4D1D00547A00E3B155 /* EaseBubbleView.m in Sources */,
 				8F648D021D00547A00E3B155 /* UIView+MJExtension.m in Sources */,
 				AFE569331CFE62F500C0F745 /* NeighborData.m in Sources */,
@@ -4074,6 +4090,7 @@
 				8F73C8D51D2B53E6009C83C2 /* AFURLSessionManager.m in Sources */,
 				8F51E2821D338FBF0094A4E5 /* SDWebImageManager.m in Sources */,
 				AF5293DD1D12985400503975 /* BackgroundView.m in Sources */,
+				8F1498341D8FA79900ED707E /* ServiceVC.m in Sources */,
 				8F648D241D00547A00E3B155 /* PSTCollectionViewUpdateItem.m in Sources */,
 				8F0F1B511D19247900404C46 /* SearchBarView.m in Sources */,
 				AF197E541D6D91930070AAC4 /* ICollectVC.m in Sources */,
@@ -4086,7 +4103,6 @@
 				8F648CF31D00547A00E3B155 /* MJRefreshFooter.m in Sources */,
 				8F648D051D00547A00E3B155 /* MWGridViewController.m in Sources */,
 				8F648D211D00547A00E3B155 /* PSTCollectionViewFlowLayout.m in Sources */,
-				AFB4E3951D8F8A0E004A148A /* MyAdviceTVC.m in Sources */,
 				8F648D1F1D00547A00E3B155 /* PSTCollectionViewController.m in Sources */,
 				8F648CE51D00547900E3B155 /* EMCDDeviceManager+Microphone.m in Sources */,
 				AF4B302E1D2F90D600CBF257 /* AboutYouLinViewController.m in Sources */,
@@ -4201,7 +4217,6 @@
 				AF4B30511D33286600CBF257 /* PlaceholderTextView.m in Sources */,
 				8F648D0C1D00547A00E3B155 /* EMSDImageCache.m in Sources */,
 				8F51E2831D338FBF0094A4E5 /* SDWebImagePrefetcher.m in Sources */,
-				AFB4E3891D8F84D0004A148A /* RepairVC.m in Sources */,
 				8F648D271D00547A00E3B155 /* PSTGridLayoutRow.m in Sources */,
 				8F14982D1D8F8B8600ED707E /* MyAdviceTVC.m in Sources */,
 				AF4B30601D332B9100CBF257 /* LxxPlaySound.m in Sources */,
@@ -4220,10 +4235,8 @@
 				AF4B30451D33279D00CBF257 /* PersonalInformationViewController.m in Sources */,
 				8F648CF51D00547A00E3B155 /* MJRefreshAutoGifFooter.m in Sources */,
 				AF1DBD941CED4D8500557E43 /* chooseCityViewController.m in Sources */,
-				AFB4E3831D8E7A4A004A148A /* MyAdviceTVC.m in Sources */,
 				AFE569381CFE643C00C0F745 /* ShowImageView.m in Sources */,
 				AF4B301F1D2F901E00CBF257 /* UILabeltouch.m in Sources */,
-				AFB4E3801D8E3479004A148A /* PropertyVC.m in Sources */,
 				8F1FB5CB1D5C025800676743 /* TZPhotoPickerController.m in Sources */,
 				AF4B30221D2F903600CBF257 /* UIViewLinkmanTouch.m in Sources */,
 				AFCE1F961CDAD1B20085F10F /* main.m in Sources */,
@@ -4233,7 +4246,6 @@
 				8F648D2C1D00547A00E3B155 /* EaseMessageModel.m in Sources */,
 				8FFBDF7F1D7660F700FFF334 /* ExchangeVC.m in Sources */,
 				8F51E28D1D33952F0094A4E5 /* LoginNC.m in Sources */,
-				AFB4E3861D8F74FF004A148A /* CreateAdviceVC.m in Sources */,
 				AF54103B1CE1BE850037673F /* MBProgressHUD.m in Sources */,
 				AF7850161CFFC5C8009F6982 /* FMDatabaseQueue.m in Sources */,
 				AFE569321CFE62F500C0F745 /* NeighborTableViewCell.m in Sources */,

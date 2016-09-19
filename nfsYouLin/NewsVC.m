@@ -11,7 +11,6 @@
 #import "HeaderFile.h"
 #import "MBProgressHUBTool.h"
 #import "AFHTTPSessionManager.h"
-#import "HeaderFile.h"
 #import "StringMD5.h"
 #import "NewsSettingVC.h"
 #import "NewsCell.h"
