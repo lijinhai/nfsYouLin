@@ -525,14 +525,11 @@
 		AF81B32D1D42073900C48856 /* IntegralMallViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AF81B32C1D42073900C48856 /* IntegralMallViewController.m */; };
 		AFB4E3751D86790A004A148A /* PersonTopicTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = AFB4E3741D86790A004A148A /* PersonTopicTVC.m */; };
 		AFB4E3781D87F2A5004A148A /* PopChangeAddress.m in Sources */ = {isa = PBXBuildFile; fileRef = AFB4E3771D87F2A5004A148A /* PopChangeAddress.m */; };
-		AFB4E3801D8E3479004A148A /* PropertyVC.m in Sources */ = {isa = PBXBuildFile; fileRef = AFB4E37F1D8E3479004A148A /* PropertyVC.m */; };
-		AFB4E3831D8E7A4A004A148A /* MyAdviceTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = AFB4E3821D8E7A4A004A148A /* MyAdviceTVC.m */; };
-		AFB4E3861D8F74FF004A148A /* CreateAdviceVC.m in Sources */ = {isa = PBXBuildFile; fileRef = AFB4E3851D8F74FF004A148A /* CreateAdviceVC.m */; };
-		AFB4E3891D8F84D0004A148A /* RepairVC.m in Sources */ = {isa = PBXBuildFile; fileRef = AFB4E3881D8F84D0004A148A /* RepairVC.m */; };
 		AFB4E38C1D8F8981004A148A /* PropertyVC.m in Sources */ = {isa = PBXBuildFile; fileRef = AFB4E38B1D8F8981004A148A /* PropertyVC.m */; };
 		AFB4E3941D8F8A0E004A148A /* CreateAdviceVC.m in Sources */ = {isa = PBXBuildFile; fileRef = AFB4E38E1D8F8A0E004A148A /* CreateAdviceVC.m */; };
 		AFB4E3951D8F8A0E004A148A /* MyAdviceTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = AFB4E3901D8F8A0E004A148A /* MyAdviceTVC.m */; };
-		AFB4E3961D8F8A0E004A148A /* RepairVC.m in Sources */ = {isa = PBXBuildFile; fileRef = AFB4E3931D8F8A0E004A148A /* RepairVC.m */; };
+		AFB4E3971D8F8DFF004A148A /* addressInfoTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = AFB4E37B1D88F53E004A148A /* addressInfoTVC.m */; };
+		AFB4E39A1D8F945F004A148A /* RepairVC.m in Sources */ = {isa = PBXBuildFile; fileRef = AFB4E3991D8F945F004A148A /* RepairVC.m */; };
 		AFCE1F961CDAD1B20085F10F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = AFCE1F951CDAD1B20085F10F /* main.m */; };
 		AFCE1F991CDAD1B20085F10F /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = AFCE1F981CDAD1B20085F10F /* AppDelegate.mm */; };
 		AFCE1F9C1CDAD1B20085F10F /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AFCE1F9B1CDAD1B20085F10F /* ViewController.m */; };
@@ -1469,18 +1466,14 @@
 		AFB4E3771D87F2A5004A148A /* PopChangeAddress.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PopChangeAddress.m; sourceTree = "<group>"; };
 		AFB4E37A1D88F53E004A148A /* addressInfoTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = addressInfoTVC.h; sourceTree = "<group>"; };
 		AFB4E37B1D88F53E004A148A /* addressInfoTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = addressInfoTVC.m; sourceTree = "<group>"; };
-		AFB4E37F1D8E3479004A148A /* PropertyVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PropertyVC.m; sourceTree = "<group>"; };
-		AFB4E3821D8E7A4A004A148A /* MyAdviceTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyAdviceTVC.m; sourceTree = "<group>"; };
-		AFB4E3851D8F74FF004A148A /* CreateAdviceVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CreateAdviceVC.m; sourceTree = "<group>"; };
-		AFB4E3881D8F84D0004A148A /* RepairVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RepairVC.m; sourceTree = "<group>"; };
 		AFB4E38B1D8F8981004A148A /* PropertyVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PropertyVC.m; sourceTree = "<group>"; };
 		AFB4E38D1D8F8A0E004A148A /* CreateAdviceVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CreateAdviceVC.h; sourceTree = "<group>"; };
 		AFB4E38E1D8F8A0E004A148A /* CreateAdviceVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CreateAdviceVC.m; sourceTree = "<group>"; };
 		AFB4E38F1D8F8A0E004A148A /* MyAdviceTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyAdviceTVC.h; sourceTree = "<group>"; };
 		AFB4E3901D8F8A0E004A148A /* MyAdviceTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyAdviceTVC.m; sourceTree = "<group>"; };
 		AFB4E3911D8F8A0E004A148A /* PropertyVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PropertyVC.h; sourceTree = "<group>"; };
-		AFB4E3921D8F8A0E004A148A /* RepairVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RepairVC.h; sourceTree = "<group>"; };
-		AFB4E3931D8F8A0E004A148A /* RepairVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RepairVC.m; sourceTree = "<group>"; };
+		AFB4E3981D8F945F004A148A /* RepairVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RepairVC.h; sourceTree = "<group>"; };
+		AFB4E3991D8F945F004A148A /* RepairVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RepairVC.m; sourceTree = "<group>"; };
 		AFCE1F911CDAD1B20085F10F /* nfsYouLin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = nfsYouLin.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AFCE1F951CDAD1B20085F10F /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		AFCE1F971CDAD1B20085F10F /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -3430,14 +3423,14 @@
 		AFB4E38A1D8F88E6004A148A /* 物业 */ = {
 			isa = PBXGroup;
 			children = (
+				AFB4E3981D8F945F004A148A /* RepairVC.h */,
+				AFB4E3991D8F945F004A148A /* RepairVC.m */,
 				AFB4E3911D8F8A0E004A148A /* PropertyVC.h */,
 				AFB4E38B1D8F8981004A148A /* PropertyVC.m */,
 				AFB4E38F1D8F8A0E004A148A /* MyAdviceTVC.h */,
 				AFB4E3901D8F8A0E004A148A /* MyAdviceTVC.m */,
 				AFB4E38D1D8F8A0E004A148A /* CreateAdviceVC.h */,
 				AFB4E38E1D8F8A0E004A148A /* CreateAdviceVC.m */,
-				AFB4E3921D8F8A0E004A148A /* RepairVC.h */,
-				AFB4E3931D8F8A0E004A148A /* RepairVC.m */,
 			);
 			name = "物业";
 			sourceTree = "<group>";
@@ -3978,6 +3971,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AFB4E3971D8F8DFF004A148A /* addressInfoTVC.m in Sources */,
 				8F51E2851D338FBF0094A4E5 /* UIImage+GIF.m in Sources */,
 				8F648D351D00547A00E3B155 /* EaseMessageReadManager.m in Sources */,
 				8F648CFD1D00547A00E3B155 /* MJRefreshStateHeader.m in Sources */,
@@ -4045,7 +4039,6 @@
 				8F648D231D00547A00E3B155 /* PSTCollectionViewLayout.m in Sources */,
 				AF5293DC1D12985400503975 /* ListTableView.m in Sources */,
 				8F51E2901D33C0080094A4E5 /* StartVC.m in Sources */,
-				AFB4E3961D8F8A0E004A148A /* RepairVC.m in Sources */,
 				AF4B302B1D2F90AA00CBF257 /* ModifyPasswordViewController.m in Sources */,
 				8F73C8D01D2B53E6009C83C2 /* AFHTTPSessionManager.m in Sources */,
 				8F648D4D1D00547A00E3B155 /* EaseBubbleView.m in Sources */,
@@ -4060,6 +4053,7 @@
 				8F1FB5C71D5C025800676743 /* TZAssetModel.m in Sources */,
 				8F1FB5C81D5C025800676743 /* TZImageManager.m in Sources */,
 				8F1FB6D81D6444A200676743 /* MASViewConstraint.m in Sources */,
+				AFB4E39A1D8F945F004A148A /* RepairVC.m in Sources */,
 				AFE5693D1CFE649200C0F745 /* ITVC.m in Sources */,
 				8FAF9D9C1D879A210005B08C /* NewsDetailVC.m in Sources */,
 				8F73C8D51D2B53E6009C83C2 /* AFURLSessionManager.m in Sources */,
@@ -4190,7 +4184,6 @@
 				AF4B30511D33286600CBF257 /* PlaceholderTextView.m in Sources */,
 				8F648D0C1D00547A00E3B155 /* EMSDImageCache.m in Sources */,
 				8F51E2831D338FBF0094A4E5 /* SDWebImagePrefetcher.m in Sources */,
-				AFB4E3891D8F84D0004A148A /* RepairVC.m in Sources */,
 				8F648D271D00547A00E3B155 /* PSTGridLayoutRow.m in Sources */,
 				AF4B30601D332B9100CBF257 /* LxxPlaySound.m in Sources */,
 				8F648CF21D00547A00E3B155 /* MJRefreshComponent.m in Sources */,
@@ -4208,10 +4201,8 @@
 				AF4B30451D33279D00CBF257 /* PersonalInformationViewController.m in Sources */,
 				8F648CF51D00547A00E3B155 /* MJRefreshAutoGifFooter.m in Sources */,
 				AF1DBD941CED4D8500557E43 /* chooseCityViewController.m in Sources */,
-				AFB4E3831D8E7A4A004A148A /* MyAdviceTVC.m in Sources */,
 				AFE569381CFE643C00C0F745 /* ShowImageView.m in Sources */,
 				AF4B301F1D2F901E00CBF257 /* UILabeltouch.m in Sources */,
-				AFB4E3801D8E3479004A148A /* PropertyVC.m in Sources */,
 				8F1FB5CB1D5C025800676743 /* TZPhotoPickerController.m in Sources */,
 				AF4B30221D2F903600CBF257 /* UIViewLinkmanTouch.m in Sources */,
 				AFCE1F961CDAD1B20085F10F /* main.m in Sources */,
@@ -4221,7 +4212,6 @@
 				8F648D2C1D00547A00E3B155 /* EaseMessageModel.m in Sources */,
 				8FFBDF7F1D7660F700FFF334 /* ExchangeVC.m in Sources */,
 				8F51E28D1D33952F0094A4E5 /* LoginNC.m in Sources */,
-				AFB4E3861D8F74FF004A148A /* CreateAdviceVC.m in Sources */,
 				AF54103B1CE1BE850037673F /* MBProgressHUD.m in Sources */,
 				AF7850161CFFC5C8009F6982 /* FMDatabaseQueue.m in Sources */,
 				AFE569321CFE62F500C0F745 /* NeighborTableViewCell.m in Sources */,
