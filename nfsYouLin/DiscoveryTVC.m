@@ -10,6 +10,7 @@
 #import "FriendsVC.h"
 #import "ChatDemoHelper.h"
 #import "DiscoveryViewCell.h"
+#import "PropertyVC.h"
 @interface DiscoveryTVC ()
 
 @end
@@ -261,6 +262,11 @@
                 case 1:
                 {
                     // 物业
+                    PropertyVC*  propertyVC=[[PropertyVC alloc] init];
+                    UIBarButtonItem* backitem=[[UIBarButtonItem alloc] initWithTitle:@"物业" style:UIBarButtonItemStylePlain target:nil action:nil];
+                     self.parentViewController.navigationItem.backBarButtonItem=backitem;
+                    [self.navigationController pushViewController:propertyVC animated:YES];
+                    
                     break;
                 }
                     

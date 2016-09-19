@@ -41,6 +41,9 @@
 // 查找building_num_id
 +(NSInteger)selectBuildingNumIdSqlite:(long)addressId;
 
+// 判断当前地址是否通过审核
++(BOOL)checkAudiAddressResult;
+
 // 获取用户当前地址
 +(NSString*)getUserNowAddressSqlite;
 @end

@@ -201,7 +201,6 @@
 }
 +(NSInteger)selectBuildingNumIdSqlite:(long)addressId{
 
-
     AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
     FMDatabase *db = delegate.db;
     
@@ -222,6 +221,34 @@
     }
     [ db close ];
     return buildNumId;
+}
+
++(BOOL)checkAudiAddressResult
+{
+
+    AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+    FMDatabase *db = delegate.db;
+    
+    if ( ![ db open ] )
+    {
+        NSLog(@"打开数据库失败");
+    }
+    // 查找表
+    NSInteger entityType=0;
+    NSString *query =[NSString stringWithFormat:@"select entity_type from table_all_family where primary_flag= '%d'", 1];
+    
+    FMResultSet* resultSet = [ db executeQuery:query];
+    // 逐行读取数据
+    while ( [ resultSet next ] )
+    {
+        // 对应字段来取数据
+        entityType=[resultSet intForColumn: @"entity_type" ];
+           }
+    [ db close ];
+    if(entityType==1)
+       return YES;
+    else
+        return NO;
 }
 + (NSInteger) getNowCommunityId{
     
