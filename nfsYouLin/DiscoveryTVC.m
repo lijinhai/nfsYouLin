@@ -13,6 +13,7 @@
 #import "NewsVC.h"
 #import "PropertyVC.h"
 #import "ServiceVC.h"
+#import "NoticeVC.h"
 
 @interface DiscoveryTVC ()
 
@@ -237,6 +238,11 @@
                 case 0:
                 {
                     // 公告
+                    NoticeVC* noticeVC = [[NoticeVC alloc] initWithStyle:UITableViewStyleGrouped];
+                    UIBarButtonItem* noticeItem = [[UIBarButtonItem alloc] initWithTitle:@"物业公告" style:UIBarButtonItemStylePlain target:nil action:nil];
+                    [noticeItem setTintColor:[UIColor whiteColor]];
+                    [self.parentViewController.navigationItem setBackBarButtonItem:noticeItem];
+                    [self.navigationController pushViewController:noticeVC animated:YES];
                     break;
                 }
                 case 1:
