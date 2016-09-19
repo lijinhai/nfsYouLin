@@ -201,11 +201,23 @@
             NSDictionary* usersDict = [responseObject firstObject];
             NSInteger userId = [[usersDict valueForKey:@"pk"] integerValue];
             NSDictionary* personDic = [usersDict valueForKey:@"fields"];
-            
+            NSLog(@"[user_community_id valueForKey: is %@",[personDic valueForKey:@"user_community_id"]);
             NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-            [defaults setInteger:[[personDic valueForKey:@"addr_handle_cache"] integerValue] forKey:@"addrCache"];
+            if(![[NSString stringWithFormat:@"%@",[personDic valueForKey:@"user_community_id"]] isEqualToString:@"<null>"]){
+            
+                NSLog(@"defaults is ********");
             [defaults setInteger:[[personDic valueForKey:@"user_community_id"] integerValue] forKey:@"communityId"];
-            [defaults setObject:[personDic valueForKey:@"user_family_id"] forKey:@"familyId"];
+                
+            }
+            
+            if(![[NSString stringWithFormat:@"%@",[personDic valueForKey:@"user_family_id"]]isEqualToString:@"<null>"]){
+                
+                [defaults setObject:[personDic valueForKey:@"user_family_id"] forKey:@"familyId"];
+            }
+            NSLog(@"defaults is @@@@@@@@@@@");
+            [defaults setInteger:[[personDic valueForKey:@"addr_handle_cache"] integerValue] forKey:@"addrCache"];
+            
+            //[defaults setObject:[personDic valueForKey:@"user_family_id"] forKey:@"familyId"];
 
             [defaults setObject:[personDic valueForKey:@"user_portrait"] forKey:@"portrait"];
             [defaults setObject:[personDic valueForKey:@"user_news_receive"] forKey:@"news_status"];
@@ -245,7 +257,7 @@
                 [personInfoDic removeAllObjects];
                 personInfoDic = [sqlDict getInitFamilyInfoDic];
                 NSDictionary* familyDict = responseObject[i];
-                if([personDic[@"user_family_id"] integerValue] ==
+                if(![[NSString stringWithFormat:@"%@", personDic[@"user_family_id"]] isEqualToString:@"<null>"]&&[personDic[@"user_family_id"] integerValue] ==
                    [familyDict[@"family_id"] integerValue])
                 {
                     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];

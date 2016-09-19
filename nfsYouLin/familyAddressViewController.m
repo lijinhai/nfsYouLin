@@ -380,17 +380,17 @@
     if([_changeAddressArry count]!=0)
     {
         /*设置小区*/
-        [communityLabelView setText:[[_changeAddressArry objectAtIndex:0]objectForKey:@"keycommunity"]];
+        [communityLabelView setText:[[_changeAddressArry objectAtIndex:0] objectForKey:@"keycommunity"]];
         /*初始化楼栋号*/
         if((UILabel *)[cell viewWithTag:30001])
         {
           [(UILabel *)[cell viewWithTag:30001] removeFromSuperview];
           _floorNumView.font=[UIFont systemFontOfSize:15];
-          _floorNumView.text=[[_changeAddressArry objectAtIndex:0]objectForKey:@"keyportrait"];
+          _floorNumView.text=[[_changeAddressArry objectAtIndex:0] objectForKey:@"keyportrait"];
         }
         /*初始化门牌号*/
         [doorPlateNumView setText:@""];
-         doorPlateNumView.text=[[_changeAddressArry objectAtIndex:0]objectForKey:@"keyaptnum"];
+         doorPlateNumView.text=[[_changeAddressArry objectAtIndex:0] objectForKey:@"keyaptnum"];
 
     }
     return cell;
@@ -796,7 +796,18 @@
     NSString* blockId=@"0";
     NSString* blockStr=@"0";
     NSString* buildNumId=blockIdStr;
-    NSString* buildnumStr=_floorNumView.text;
+    NSString* buildnumStr=@"";
+    if([_floorNumView.text isEqualToString:@""])
+    {
+         NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+         buildnumStr=[defaults stringForKey:@"keyportrait"];
+    }else{
+    
+         buildnumStr=_floorNumView.text;
+    }
+    //NSString* buildnumStr=_floorNumView.text;
+    //_floorNumView.text;
+    NSLog(@"buildnumStr is %@",buildnumStr);
     NSString* aptNumId=plateId;
     NSString* aptNumStr=doorPlateNumView.text;
     
@@ -808,8 +819,8 @@
     NSString* primaryFlag=@"0";
     NSString* testStr=[NSString stringWithFormat:@"city_code=%@\ncity_id=%@\ncity=%@\ncommunity_id=%@\ncommunity=%@\nblock_id=%@\nblock=%@\nbuildnum_id=%@\nbuildnum=%@\naptnum_id=%@\naptnum=%@\nuser_id=%@\nfamliyId=%@\nneStatus=%@\naddrHandelCache=%@\nprimary_flag=%@",cityCode,cityId,city,commId,commStr,blockId,blockStr,buildNumId,buildnumStr,aptNumId,aptNumStr,userId,famliyId,neStatus,addrHandelCache,primaryFlag];
     NSLog(@"testStr is %@",testStr);
-    NSString* hashString =[StringMD5 stringAddMD5:[NSString stringWithFormat:@"city_code%@city_id%@city%@community_id%@community%@block_id%@block%@buildnum_id%@buildnum%@aptnum_id%@aptnum%@user_id%@famliy_id%@ne_status%@addr_cache%@",cityCode,cityId,city,commId,commStr,blockId,blockStr,buildNumId,buildnumStr,aptNumId,aptNumStr,userId,famliyId,neStatus,addrHandelCache]];
-        //primary_flag%@,primaryFlag
+
+    NSString* hashString =[StringMD5 stringAddMD5:[NSString stringWithFormat:@"city_code%@city_id%@city%@community_id%@community%@block_id%@block%@buildnum_id%@buildnum%@aptnum_id%@aptnum%@user_id%@famliy_id%@ne_status%@addr_cache%@",cityCode,cityId,city,commId,commStr,blockId,blockStr,buildNumId,buildnumStr,aptNumId,aptNumStr,userId,[NSString stringWithFormat:@"%@",famliyId],neStatus,addrHandelCache]];
     NSString* hashMD5 = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"%@1024",hashString]];
     NSDictionary* parameter = @{@"city_code":cityCode,//当前选择城市码
                                 @"city_id":cityId,// 当前选择城市Id
@@ -823,46 +834,42 @@
                                 @"aptnum_id":aptNumId,//当前选择门牌Id
                                 @"aptnum":aptNumStr,//当前选择门牌名称
                                 @"user_id":userId,//当前用户UserId
-                                @"family_id": famliyId,
+                                @"family_id": [NSString stringWithFormat:@"%@",famliyId],
                                 @"ne_status": neStatus,
                                 @"addr_cache":addrHandelCache,//地址操作次数
                                 @"deviceType":@"ios",//常量值ios
                                 @"apitype":@"users",//常量值users
-                                @"tag":@"changefamily",//常量值addfamily,
+                                @"tag":@"changefamily",//常量值changefamily
                                 @"salt" : @"1024",
                                 @"hash" :hashMD5,
-                            @"keyset" :@"city_code:city_id:city:community_id:community:block_id:block:buildnum_id:buildnum:aptnum_id:aptnum:user_id:family_id:ne_status:addr_cache:",
+                                @"access":@"9527",
+                                @"keyset" :@"city_code:city_id:city:community_id:community:block_id:block:buildnum_id:buildnum:aptnum_id:aptnum:user_id:family_id:ne_status:addr_cache:",
                                 };
-     //@"city_code%@city_id%@city%@community_id%@community%@block_id%@buildnum_id%@buildnum%@aptnum_id%@aptnum%@user_id%@famliy_id%@ne_status%@addr_cache%@
-     //@"primary_flag":primaryFlag,//是否为当前地址1表示当前地址，0表示非当前地址
-     //primary_flag:
     [manager POST:POST_URL parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSLog(@"ChangeAddressResponseObject is %@",responseObject);
-        if([[responseObject objectForKey:@"flag"] isEqualToString: @"no"]||[[responseObject objectForKey:@"flag"] isEqualToString: @"full"])
+        if([[responseObject objectForKey:@"flag"] isEqualToString: @"no"])
         {
             
             [self textToast:[responseObject objectForKey:@"yl_msg"]];
         }else{
-//            
-//            NSMutableDictionary *dic=[[NSMutableDictionary alloc]init];
-//            NSString* addressInfo=[NSString stringWithFormat:@"%@%@%@%@",@"哈尔滨市",communityLabelView.text,_floorNumView.text,doorPlateNumView.text];
-//            NSInteger auditStatus=1;
-//            NSInteger primaryFlag=0;
-//            NSInteger famliyRecordId=[[responseObject objectForKey:@"frecord_id"] intValue];
-//            NSString* famliyId=[responseObject objectForKey:@"family_id"];
-//            NSInteger entityType=[[responseObject objectForKey:@"entity_type"] intValue];
-//            NSInteger neStatus=[[responseObject objectForKey:@"ne_status"] intValue];
-//            
-//            [dic setValue:addressInfo forKey:@"keyaddress"];
-//            [dic setValue:[NSString stringWithFormat:@"%ld",auditStatus] forKey:@"keyaudit"];
-//            [dic setValue:[NSString stringWithFormat:@"%ld",primaryFlag] forKey:@"keyprimary"];
-//            [dic setValue:[NSString stringWithFormat:@"%ld",famliyRecordId] forKey:@"keyRecordId"];
-//            [dic setValue:famliyId forKey:@"keyFamliyId"];
-//            [dic setValue:[NSString stringWithFormat:@"%ld",entityType] forKey:@"keyEntityType"];
-//            [dic setValue:[NSString stringWithFormat:@"%ld",neStatus] forKey:@"keyNeStatus"];
-//            [SqliteOperation insertNewFamilyInfoSqlite:dic];
+            [self textToast:@"修改地址成功"];
+            NSMutableDictionary *dic=[[NSMutableDictionary alloc]init];
+            
+            NSString* addressInfo=[NSString stringWithFormat:@"%@%@%@%@",@"哈尔滨市",communityLabelView.text,buildnumStr,doorPlateNumView.text];
+            NSLog(@"addressInfo is %@",addressInfo);
+            NSInteger famliyRecordId=[[responseObject objectForKey:@"frecord_id"] intValue];
+            NSString* famliyId=[responseObject objectForKey:@"family_id"];
+            NSInteger entityType=[[responseObject objectForKey:@"entity_type"] intValue];
+            NSInteger neStatus=[[responseObject objectForKey:@"ne_status"] intValue];
+            
+            [dic setValue:addressInfo forKey:@"keyaddress"];
+            [dic setValue:[NSString stringWithFormat:@"%ld",famliyRecordId] forKey:@"keyRecordId"];
+            [dic setValue:famliyId forKey:@"keyFamliyId"];
+            [dic setValue:[NSString stringWithFormat:@"%ld",entityType] forKey:@"keyEntityType"];
+            [dic setValue:[NSString stringWithFormat:@"%ld",neStatus] forKey:@"keyNeStatus"];
+            [SqliteOperation updateChangeFamilyInfoSqlite:dic famliyId:[NSString stringWithFormat:@"%@",famliyId]];
             [self.navigationController pushViewController:jumpAddressInfomationController animated:YES];
         }
         

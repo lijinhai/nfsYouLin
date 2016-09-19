@@ -202,8 +202,40 @@
     return YES;
 
 }
-+(NSInteger)selectBuildingNumIdSqlite:(long)addressId{
++(BOOL)updateChangeFamilyInfoSqlite:(NSMutableDictionary *) dict famliyId:(NSString*) fid{
 
+
+    AppDelegate* app = [[UIApplication sharedApplication] delegate];
+    FMDatabase* db = app.db;
+    if ([db open])
+    {
+        NSLog(@"address is %@",dict[@"keyaddress"]);
+        NSLog(@"entityType is %@",dict[@"keyEntityType"]);
+        NSLog(@"neStatus is %@",dict[@"keyNeStatus"]);
+        NSLog(@"recordId is %@",dict[@"keyRecordId"]);
+        NSLog(@"keyFamliyId is %@",dict[@"keyFamliyId"]);
+        NSString *updateSql=[NSString stringWithFormat:@"UPDATE %@ SET family_id=?,family_address=?, family_address_id=?,entity_type=?, ne_status=? WHERE family_id=?",TABLE_ALL_FAMILY];
+        [db executeUpdate:updateSql,
+         [NSNumber numberWithLongLong:[dict[@"keyFamliyId"] longLongValue]],
+         dict[@"keyaddress"],
+         dict[@"keyRecordId"],
+         dict[@"keyEntityType"],
+         dict[@"keyNeStatus"],
+         [NSNumber numberWithLongLong:[fid longLongValue]]];
+        NSLog(@"error");
+    }
+    else
+    {
+        NSLog(@"数据库打开失败");
+        [db close];
+        return NO;
+    }
+    [db close];
+    
+    return YES;
+
+}
++(NSInteger)selectBuildingNumIdSqlite:(long)addressId{
 
     AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
     FMDatabase *db = delegate.db;
@@ -221,10 +253,38 @@
     while ( [ resultSet next ] )
     {
         // 对应字段来取数据
-        buildNumId=[resultSet intForColumn: @"family_community_id" ];
+        buildNumId=[resultSet intForColumn: @"family_building_id" ];
     }
     [ db close ];
     return buildNumId;
+}
+
++(BOOL)checkAudiAddressResult
+{
+
+    AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+    FMDatabase *db = delegate.db;
+    
+    if ( ![ db open ] )
+    {
+        NSLog(@"打开数据库失败");
+    }
+    // 查找表
+    NSInteger entityType=0;
+    NSString *query =[NSString stringWithFormat:@"select entity_type from table_all_family where primary_flag= '%d'", 1];
+    
+    FMResultSet* resultSet = [ db executeQuery:query];
+    // 逐行读取数据
+    while ( [ resultSet next ] )
+    {
+        // 对应字段来取数据
+        entityType=[resultSet intForColumn: @"entity_type" ];
+           }
+    [ db close ];
+    if(entityType==1)
+       return YES;
+    else
+        return NO;
 }
 + (NSInteger) getNowCommunityId{
     
@@ -356,6 +416,32 @@
         NSLog(@"comidStr is %@",comid);
     }
     [ db close ];
+
+}
++(NSString*)getUserNowAddressSqlite
+{
+
+    AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+    FMDatabase *db = delegate.db;
+    
+    if ( ![ db open ] )
+    {
+        NSLog(@"打开数据库失败");
+    }
+    // 查找表
+    NSString *addrssStr=@"";
+    NSString *query =[NSString stringWithFormat:@"select * from table_all_family where primary_flag= '%d'", 1];
+    
+    FMResultSet* resultSet = [ db executeQuery:query];
+    // 逐行读取数据
+    while ( [ resultSet next ] )
+    {
+        // 对应字段来取数据
+        addrssStr=[resultSet stringForColumn: @"family_community_nickname" ];
+        NSLog(@"addrssStr is %@",addrssStr);
+    }
+    [ db close ];
+    return addrssStr;
 
 }
 

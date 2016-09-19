@@ -6,11 +6,11 @@
     },
     {
       "idiom" : "iphone",
-      "filename" : "btn_weixuanzhong_b.png",
       "scale" : "2x"
     },
     {
       "idiom" : "iphone",
+      "filename" : "btn_weixuanzhong_b.png",
       "scale" : "3x"
     }
   ],

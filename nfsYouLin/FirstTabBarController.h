@@ -15,6 +15,7 @@
 
 - (IBAction)addBar:(id)sender;
 
+@property (weak, nonatomic) IBOutlet UIButton *nowAddressBtn;
 
 - (void) setTableViewHidden;
 
