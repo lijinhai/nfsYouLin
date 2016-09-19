@@ -1661,8 +1661,8 @@
 		8F14981F1D8F844D00ED707E /* 社区服务 */ = {
 			isa = PBXGroup;
 			children = (
-				8F1498391D8FAA5F00ED707E /* View */,
 				8F1498311D8FA6F300ED707E /* Controllers */,
+				8F1498391D8FAA5F00ED707E /* View */,
 			);
 			name = "社区服务";
 			sourceTree = "<group>";
@@ -1694,12 +1694,19 @@
 		8F1498391D8FAA5F00ED707E /* View */ = {
 			isa = PBXGroup;
 			children = (
-				8F1498361D8FAA5500ED707E /* ServiceView.h */,
-				8F1498371D8FAA5500ED707E /* ServiceView.m */,
 				8F14983A1D8FB63200ED707E /* ServiceCell.h */,
 				8F14983B1D8FB63200ED707E /* ServiceCell.m */,
+				8F1498361D8FAA5500ED707E /* ServiceView.h */,
+				8F1498371D8FAA5500ED707E /* ServiceView.m */,
 			);
 			name = View;
+			sourceTree = "<group>";
+		};
+		8F14983D1D901C9D00ED707E /* 公告 */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = "公告";
 			sourceTree = "<group>";
 		};
 		8F1FB5B01D5C025800676743 /* TZImagePickerController */ = {
@@ -3173,6 +3180,7 @@
 		8FAFCD2E1CDADA74008F4B48 /* youLinDiscoveryModule */ = {
 			isa = PBXGroup;
 			children = (
+				8F14983D1D901C9D00ED707E /* 公告 */,
 				8F14981F1D8F844D00ED707E /* 社区服务 */,
 				8F1498211D8F8ADE00ED707E /* 物业 */,
 				8FAF9D971D868C090005B08C /* 新闻 */,

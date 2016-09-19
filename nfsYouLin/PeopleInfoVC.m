@@ -15,6 +15,7 @@
 #import "UIImageView+WebCache.h"
 #import "ChatViewController.h"
 #import "ShowImageView.h"
+#import "PersonTopicTVC.h"
 
 @interface PeopleInfoVC ()
 
@@ -311,14 +312,19 @@
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
+    if(indexPath.row == 3)
+    {
+        PersonTopicTVC *ptVC = [[PersonTopicTVC alloc] initWithStyle:UITableViewStyleGrouped];
+        UIBarButtonItem* backItem = [[UIBarButtonItem alloc] initWithTitle:@"他发的" style:UIBarButtonItemStylePlain target:nil action:nil];
+        ptVC.userIdStr = [NSString stringWithFormat:@"%ld",self.peopleId];
+        [self.parentViewController.navigationItem setBackBarButtonItem:backItem];
+        [self.navigationController pushViewController:ptVC animated:YES];
+    }
 }
 
 #pragma mark -获取个人信息网络请求
 - (void) getPeopleInfoNet
 {
-
-    
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     NSString* userId = [defaults stringForKey:@"userId"];
     

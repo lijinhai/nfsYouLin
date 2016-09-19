@@ -15,6 +15,7 @@
 #import "ApplyDetailTVC.h"
 #import "PeopleInfoVC.h"
 #import "NewsDetailVC.h"
+#import "PersonalInformationViewController.h"
 
 @interface NeighborTVC ()
 
@@ -750,6 +751,7 @@ static BOOL upState = YES;
     [self lookApplyNet:activityId];
 }
 
+#pragma mark -查看全文 cellDelegate回调
 // 查看全文回调事件
 - (void)readTotalInformation:(NSInteger)sectionNum
 {
@@ -1746,6 +1748,16 @@ static BOOL upState = YES;
         return;
     }];
     
+}
+
+#pragma mark -查看自己信息代理 cellDelegate
+- (void) ownInfoViewController
+{
+    UIStoryboard* iStoryBoard = [UIStoryboard storyboardWithName:@"Me" bundle:nil];
+    UIBarButtonItem* backItem = [[UIBarButtonItem alloc] initWithTitle:@"个人信息" style:UIBarButtonItemStylePlain target:nil action:nil];
+    [self.parentViewController.navigationItem setBackBarButtonItem:backItem];
+    PersonalInformationViewController* personInfoVC = [iStoryBoard instantiateViewControllerWithIdentifier:@"personalinformationcontroller"];
+    [self.parentViewController.navigationController pushViewController:personInfoVC animated:YES];
 }
 
 #pragma mark -查看个人信息代理 cellDelegate

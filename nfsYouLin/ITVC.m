@@ -555,51 +555,7 @@
             NSLog(@"SECTION 0");
             //个人信息
             backItemTitle = [[UIBarButtonItem alloc] initWithTitle:@"个人信息" style:UIBarButtonItemStylePlain target:nil action:nil];
-            //初始化头像
-//            UIImageView *headPhotoView=[[UIImageView alloc] init];
-//            [headPhotoView sd_setImageWithURL:[NSURL URLWithString:user.userPortrait] placeholderImage:[UIImage imageNamed:@"bg_error.png"] options:SDWebImageAllowInvalidSSLCertificates];
-//            PersonalInformationController.imageView=headPhotoView;
-            //初始化昵称
-//            UILabel* nicklabel=[[UILabel alloc] init];
-//            nicklabel.text=user.userName;
-//            PersonalInformationController.nicknameLabel=nicklabel;
-            //初始化性别
-//            UILabel* sexlab=[[UILabel alloc] init];
-//            switch (user.userGender) {
-//                case 1:
-//                    sexlab.text=@"男";
-//                    break;
-//                case 2:
-//                    sexlab.text=@"女";
-//                    break;
-//                case 3:
-//                    sexlab.text=@"保密";
-//                    break;
-//                default:
-//                    break;
-//            }
-            //PersonalInformationController.sexLabel=sexlab;
-            //初始化生日
-//            UILabel* birthdaylab=[[UILabel alloc] init];
-//            if(user.userBirthday==0)
-//            {
-//            
-//                birthdaylab.text=@"1970年01月01日";
-//            }else{
-//             
-//                birthdaylab.text=[self getShowDateWithTime:[NSString stringWithFormat:@"%ld",user.userBirthday]];
-//            }
-//            PersonalInformationController.birthdayLabel=birthdaylab;
-            //初始化职业
-//            UILabel* vocationlab=[[UILabel alloc] init];
-//            vocationlab.text=user.vocation;
-//            PersonalInformationController.professionLabel=vocationlab;
-            //初始化工作相关信息
-            //PersonalInformationController.statusValue=[NSString stringWithFormat:@"%ld",user.publicStatus];
-            
-            
             [self.parentViewController.navigationItem setBackBarButtonItem:backItemTitle];
-
             [self.parentViewController.navigationController pushViewController:PersonalInformationController animated:YES];
             break;
         }

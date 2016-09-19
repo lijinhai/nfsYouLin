@@ -713,6 +713,7 @@
     
 }
 
+#pragma mark -头像点击事件
 - (void) headImageView: (UITapGestureRecognizer*) recognizer
 {
     NSInteger userId = [self.neighborDataFrame.neighborData.senderId integerValue];
@@ -725,6 +726,8 @@
     }
     else if(userId == myId)
     {
+        NSLog(@"111111 -->");
+        [_delegate ownInfoViewController];
     }
     else
     {

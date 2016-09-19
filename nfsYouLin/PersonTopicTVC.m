@@ -22,6 +22,8 @@
 #import "MJRefresh.h"
 #import "BackgroundView.h"
 #import "NewsDetailVC.h"
+#import "PersonalInformationViewController.h"
+#import "PeopleInfoVC.h"
 
 @interface PersonTopicTVC ()
 
@@ -474,6 +476,28 @@
     newsDetailVC.newsImage = [newsInfo valueForKey:@"new_small_pic"];
     newsDetailVC.newsId = [[newsInfo valueForKey:@"new_id"] integerValue];
     [self.navigationController pushViewController:newsDetailVC animated:YES];
+}
+
+#pragma mark -查看自己信息代理 cellDelegate
+- (void) ownInfoViewController
+{
+    UIStoryboard* iStoryBoard = [UIStoryboard storyboardWithName:@"Me" bundle:nil];
+    UIBarButtonItem* backItem = [[UIBarButtonItem alloc] initWithTitle:@"个人信息" style:UIBarButtonItemStylePlain target:nil action:nil];
+    [self.parentViewController.navigationItem setBackBarButtonItem:backItem];
+    PersonalInformationViewController* personInfoVC = [iStoryBoard instantiateViewControllerWithIdentifier:@"personalinformationcontroller"];
+    [self.navigationController pushViewController:personInfoVC animated:YES];
+}
+
+#pragma mark -查看个人信息代理 cellDelegate
+- (void) peopleInfoViewController:(NSInteger)peopleId icon:(NSString*)icon name:(NSString*)name
+{
+    PeopleInfoVC* peopleInfoVC = [[PeopleInfoVC alloc] init];
+    peopleInfoVC.peopleId = peopleId;
+    peopleInfoVC.icon = icon;
+    peopleInfoVC.displayName = name;
+    UIBarButtonItem* infoItem = [[UIBarButtonItem alloc] initWithTitle:@"邻居信息" style:UIBarButtonItemStylePlain target:nil action:nil];
+    [self.parentViewController.navigationItem setBackBarButtonItem:infoItem];
+    [self.navigationController pushViewController:peopleInfoVC animated:YES];
 }
 
 // 查看全文回调事件
