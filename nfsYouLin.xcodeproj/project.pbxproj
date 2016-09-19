@@ -525,7 +525,6 @@
 		AF81B32D1D42073900C48856 /* IntegralMallViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AF81B32C1D42073900C48856 /* IntegralMallViewController.m */; };
 		AFB4E3751D86790A004A148A /* PersonTopicTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = AFB4E3741D86790A004A148A /* PersonTopicTVC.m */; };
 		AFB4E3781D87F2A5004A148A /* PopChangeAddress.m in Sources */ = {isa = PBXBuildFile; fileRef = AFB4E3771D87F2A5004A148A /* PopChangeAddress.m */; };
-		AFB4E37C1D88F53E004A148A /* addressInfoTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = AFB4E37B1D88F53E004A148A /* addressInfoTVC.m */; };
 		AFB4E3801D8E3479004A148A /* PropertyVC.m in Sources */ = {isa = PBXBuildFile; fileRef = AFB4E37F1D8E3479004A148A /* PropertyVC.m */; };
 		AFB4E3831D8E7A4A004A148A /* MyAdviceTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = AFB4E3821D8E7A4A004A148A /* MyAdviceTVC.m */; };
 		AFB4E3861D8F74FF004A148A /* CreateAdviceVC.m in Sources */ = {isa = PBXBuildFile; fileRef = AFB4E3851D8F74FF004A148A /* CreateAdviceVC.m */; };
@@ -1466,13 +1465,9 @@
 		AFB4E3771D87F2A5004A148A /* PopChangeAddress.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PopChangeAddress.m; sourceTree = "<group>"; };
 		AFB4E37A1D88F53E004A148A /* addressInfoTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = addressInfoTVC.h; sourceTree = "<group>"; };
 		AFB4E37B1D88F53E004A148A /* addressInfoTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = addressInfoTVC.m; sourceTree = "<group>"; };
-		AFB4E37E1D8E3479004A148A /* PropertyVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PropertyVC.h; sourceTree = "<group>"; };
 		AFB4E37F1D8E3479004A148A /* PropertyVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PropertyVC.m; sourceTree = "<group>"; };
-		AFB4E3811D8E7A4A004A148A /* MyAdviceTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyAdviceTVC.h; sourceTree = "<group>"; };
 		AFB4E3821D8E7A4A004A148A /* MyAdviceTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyAdviceTVC.m; sourceTree = "<group>"; };
-		AFB4E3841D8F74FF004A148A /* CreateAdviceVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CreateAdviceVC.h; sourceTree = "<group>"; };
 		AFB4E3851D8F74FF004A148A /* CreateAdviceVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CreateAdviceVC.m; sourceTree = "<group>"; };
-		AFB4E3871D8F84D0004A148A /* RepairVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RepairVC.h; sourceTree = "<group>"; };
 		AFB4E3881D8F84D0004A148A /* RepairVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RepairVC.m; sourceTree = "<group>"; };
 		AFCE1F911CDAD1B20085F10F /* nfsYouLin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = nfsYouLin.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AFCE1F951CDAD1B20085F10F /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -3127,11 +3122,11 @@
 		8FAFCD2E1CDADA74008F4B48 /* youLinDiscoveryModule */ = {
 			isa = PBXGroup;
 			children = (
-				8FAF9D971D868C090005B08C /* 新闻 */,
 				8F14981F1D8F844D00ED707E /* 社区服务 */,
+				8FAF9D971D868C090005B08C /* 新闻 */,
+				8FB6FA461D41B48B00E6C71A /* Controllers */,
 				8FB6FA451D41B47C00E6C71A /* Models */,
 				8FB6FA471D41B49800E6C71A /* View */,
-				8FB6FA461D41B48B00E6C71A /* Controllers */,
 			);
 			name = youLinDiscoveryModule;
 			sourceTree = "<group>";
@@ -3417,21 +3412,6 @@
 				AFB4E37B1D88F53E004A148A /* addressInfoTVC.m */,
 			);
 			name = AddressChange;
-			sourceTree = "<group>";
-		};
-		AFB4E37D1D8E3423004A148A /* propertycpy */ = {
-			isa = PBXGroup;
-			children = (
-				AFB4E37E1D8E3479004A148A /* PropertyVC.h */,
-				AFB4E37F1D8E3479004A148A /* PropertyVC.m */,
-				AFB4E3811D8E7A4A004A148A /* MyAdviceTVC.h */,
-				AFB4E3821D8E7A4A004A148A /* MyAdviceTVC.m */,
-				AFB4E3841D8F74FF004A148A /* CreateAdviceVC.h */,
-				AFB4E3851D8F74FF004A148A /* CreateAdviceVC.m */,
-				AFB4E3871D8F84D0004A148A /* RepairVC.h */,
-				AFB4E3881D8F84D0004A148A /* RepairVC.m */,
-			);
-			name = propertycpy;
 			sourceTree = "<group>";
 		};
 		AFCE1F881CDAD1B20085F10F = {
