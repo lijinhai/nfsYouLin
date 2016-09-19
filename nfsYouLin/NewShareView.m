@@ -113,7 +113,6 @@
                          [self removeFromSuperview];
                          [_contentView removeFromSuperview];
                      }];
-    
 }
 
 - (void)cancelClicked

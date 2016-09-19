@@ -215,7 +215,6 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return [replyArr count] + 3;
-//    return [_replyText count] + 3;
 }
 
 

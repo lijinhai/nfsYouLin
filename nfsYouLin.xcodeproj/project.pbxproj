@@ -1631,6 +1631,13 @@
 			name = Search;
 			sourceTree = "<group>";
 		};
+		8F14981F1D8F844D00ED707E /* 社区服务 */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = "社区服务";
+			sourceTree = "<group>";
+		};
 		8F1FB5B01D5C025800676743 /* TZImagePickerController */ = {
 			isa = PBXGroup;
 			children = (
@@ -3102,9 +3109,11 @@
 		8FAFCD2E1CDADA74008F4B48 /* youLinDiscoveryModule */ = {
 			isa = PBXGroup;
 			children = (
+				8FAF9D971D868C090005B08C /* 新闻 */,
+				8F14981F1D8F844D00ED707E /* 社区服务 */,
+				8FB6FA451D41B47C00E6C71A /* Models */,
 				8FB6FA471D41B49800E6C71A /* View */,
 				8FB6FA461D41B48B00E6C71A /* Controllers */,
-				8FB6FA451D41B47C00E6C71A /* Models */,
 			);
 			name = youLinDiscoveryModule;
 			sourceTree = "<group>";
@@ -3133,7 +3142,6 @@
 		8FB6FA461D41B48B00E6C71A /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				8FAF9D971D868C090005B08C /* 新闻 */,
 				8F5303831CDB45B50078FD64 /* DiscoveryTVC.h */,
 				8F5303841CDB45B50078FD64 /* DiscoveryTVC.m */,
 				8FB6FA481D41B4EF00E6C71A /* FriendsVC.h */,
