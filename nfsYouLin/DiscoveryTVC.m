@@ -12,6 +12,7 @@
 #import "DiscoveryViewCell.h"
 #import "NewsVC.h"
 
+#import "PropertyVC.h"
 @interface DiscoveryTVC ()
 
 @end
