@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface FirstTabBarController : UITabBarController 
+@interface FirstTabBarController : UITabBarController<UIScrollViewDelegate,UITableViewDelegate,UITableViewDataSource>
 
 
 - (IBAction)noticeBar:(id)sender;

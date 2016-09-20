@@ -24,6 +24,7 @@
 #import "SqliteOperation.h"
 #import "PopChangeAddress.h"
 #import "LewPopupViewController.h"
+#import "NoticeMessageView.h"
 
 @implementation FirstTabBarController
 {
@@ -34,13 +35,21 @@
     ITVC* _iVC;
     NSInteger flagV;
     NSString* nowAddressStr;
+    
+    UITableView* noticeTView;
+    NoticeMessageView* noticeView;
+    UIPageControl* noticePControl;
+    UIView* noticeBgV;
+    
+    NSMutableArray *dataArray;
+
 }
 
 - (void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
      
-      nowAddressStr=[SqliteOperation getUserNowAddressSqlite];
+    nowAddressStr=[SqliteOperation getUserNowAddressSqlite];
     if([nowAddressStr isEqualToString:@""])
     {
       
@@ -97,12 +106,10 @@
 }
 - (void) viewDidLoad
 {
-//    UIView * statusView = [[UIView alloc]initWithFrame:CGRectMake(0, -20, self.view.frame.size.width, 20)];
-//    statusView.backgroundColor = [UIColor blackColor];
-//    [self.navigationController.navigationBar addSubview:statusView];
-    
     UIWindow *window = [UIApplication sharedApplication].keyWindow;
     window.rootViewController = self;
+    
+    [self initNoticeView];
     
     // 环信登录
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
@@ -204,17 +211,100 @@
     
 }
 
+#pragma mark -初始化消息视图
+- (void) initNoticeView
+{
+    //状态栏高度
+    CGRect statusRect = [[UIApplication sharedApplication] statusBarFrame];
+    CGFloat statusH = statusRect.size.height;
+    
+    dataArray = [[NSMutableArray alloc] initWithObjects:@"哈哈哈-1",@"哈哈哈-2",@"哈哈哈-3",@"哈哈哈-4",@"哈哈哈-5",
+                                                        @"哈哈哈-6",@"哈哈哈-7",@"哈哈哈-8",@"哈哈哈-9",@"哈哈哈-10",
+                                                        @"哈哈哈-11",@"哈哈哈-12",@"哈哈哈-13",@"哈哈哈-14",@"哈哈哈-15",
+                                                        @"哈哈哈-16",@"哈哈哈-17",@"哈哈哈-18",@"哈哈哈-19",@"哈哈哈-20",nil];
+    
+    noticeView = [[NoticeMessageView alloc ] initWithFrame:self.view.bounds];
+    noticeView.backgroundColor = [UIColor blackColor];
+    noticeView.alpha = 0;
+    noticeView.directionalLockEnabled = YES;
+    noticeView.bounces = NO;
+    noticeView.pagingEnabled = YES;
+    noticeView.showsVerticalScrollIndicator = NO;
+    noticeView.showsHorizontalScrollIndicator = NO;
+    noticeView.delegate = self;
+    noticeView.contentSize = CGSizeMake(self.view.frame.size.width * 2 - 100,  self.view.frame.size.height);
+    
+    noticeBgV = [[UIView alloc] init];
+    noticeBgV.backgroundColor = [UIColor whiteColor];
+    
+    noticeView.bgView = noticeBgV;
+    
+    noticeTView = [[UITableView alloc] initWithFrame:
+                   CGRectMake(CGRectGetMaxX(self.view.frame) * 2 - 100, 20, 0,
+                              CGRectGetHeight(self.view.frame) - 10) style:UITableViewStyleGrouped];
+    noticeTView.backgroundColor = [UIColor whiteColor];
+    noticeTView.alpha = 1.0;
+    noticeTView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.frame) - 100, 0.5)];
+    noticeTView.bounces = NO;
+    noticeTView.delegate = self;
+    noticeTView.dataSource = self;
+    if ([noticeTView respondsToSelector:@selector(setSeparatorInset:)])
+    {
+        [noticeTView setSeparatorInset:UIEdgeInsetsZero];
+    }
+    
+    if ([noticeTView respondsToSelector:@selector(setLayoutMargins:)])
+    {
+        [noticeTView setLayoutMargins:UIEdgeInsetsZero];
+    }
 
+    
+    [noticeView addSubview:noticeTView];
+    
+    noticePControl = [[UIPageControl alloc] initWithFrame:CGRectMake(0.0, 401, self.view.frame.size.width, 80)];
+    noticePControl.hidesForSinglePage = YES;
+    noticePControl.userInteractionEnabled = NO;
+    noticePControl.backgroundColor = [UIColor blackColor];
+    [self.view addSubview:noticePControl];
+}
 
+#pragma mark -加号点击视图
 - (IBAction)addBar:(id)sender {
     NSLog(@"addBar");
     [self.parentViewController.view addSubview:_backGroundView];
     [self.parentViewController.view addSubview:_listTableView];
 }
 
-
+#pragma mark -加载消息视图
 - (IBAction)noticeBar:(id)sender {
-    NSLog(@"notice");
+    [noticeView scrollRectToVisible:CGRectMake(CGRectGetWidth(self.view.frame) , 0,
+                                               CGRectGetWidth(self.view.frame),
+                                               CGRectGetHeight(self.view.frame)) animated:NO];
+    noticeBgV.frame  = CGRectMake(CGRectGetWidth(self.view.frame), 20,0,CGRectGetHeight(self.view.frame));
+    [self.parentViewController.view addSubview:noticeBgV];
+    [self.parentViewController.view addSubview:noticeView];
+    noticeView.alpha = 0.0;
+    [UIView transitionWithView:noticeView duration:0.4 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+        noticeView.alpha = 0.5;
+    } completion:^(BOOL finished) {
+        
+    }];
+    
+    noticeTView.frame = CGRectMake(CGRectGetMaxX(self.view.frame) * 2 - 100, 20, 0, CGRectGetHeight(self.view.frame) - 10);
+    [UIView transitionWithView:noticeTView duration:0.3	 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+        noticeView.alpha = 0.5;
+        noticeTView.frame = CGRectMake(CGRectGetMaxX(self.view.frame), 20, CGRectGetWidth(self.view.frame) - 100, CGRectGetHeight(self.view.frame) - 10);
+        noticeBgV.frame = CGRectMake(100, 20, CGRectGetWidth(self.view.frame) - 100,
+                                     CGRectGetHeight(self.view.frame));
+    } completion:^(BOOL finished) {
+        
+    }];
+    
+    [UIView transitionWithView:noticeBgV duration:0.3 options:UIViewAnimationOptionCurveEaseInOut
+                    animations:^{
+                        noticeBgV.frame = CGRectMake(100, 20, CGRectGetWidth(self.view.frame) - 100,
+                                                     CGRectGetHeight(self.view.frame));
+                    } completion:nil];
 
 }
 
@@ -325,6 +415,106 @@
                                                format:NULL
                                      errorDescription:NULL];
     return str;
+}
+
+#pragma mark -noticeTView UITableViewDelegate,UITableViewDataSource
+
+- (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return [dataArray count];
+}
+
+- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 1;
+}
+
+- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 70;
+}
+
+- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+
+}
+
+- (void) tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if ([cell respondsToSelector:@selector(setSeparatorInset:)])
+    {
+        [cell setSeparatorInset:UIEdgeInsetsZero];
+    }
+    
+    if ([cell respondsToSelector:@selector(setLayoutMargins:)])
+    {
+        [cell setLayoutMargins:UIEdgeInsetsZero];
+    }
+}
+
+- (UITableViewCell *)tableView :(UITableView *)tableView cellForRowAtIndexPath :( NSIndexPath*)indexPath
+{
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"identifier"];
+    if (cell == nil)
+    {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
+                                      reuseIdentifier:@"identifier"];
+    }
+    
+    cell.textLabel.text = [dataArray objectAtIndex:indexPath.row];
+    return cell;
+}
+
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+    return YES;
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        [dataArray removeObjectAtIndex:indexPath.row];
+        [noticeTView deleteRowsAtIndexPaths:
+                [NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        
+    }
+    else if (editingStyle == UITableViewCellEditingStyleInsert)
+    {
+    
+    }
+}
+
+#pragma mark -noticeView UIScrollViewDelegate
+
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+{
+    if ([scrollView isKindOfClass:[UITableView class]]) {
+        return;
+    }
+
+    noticeTView.scrollEnabled = YES;
+    int index = fabs(scrollView.contentOffset.x) / (scrollView.frame.size.width - 100);
+    if(index == 0)
+    {
+        [noticeView removeFromSuperview];
+        [noticeBgV removeFromSuperview];
+    }
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    
+    if ([scrollView isKindOfClass:[UITableView class]]) {
+        return;
+    }
+    
+    noticeTView.scrollEnabled = NO;
+    CGRect rect = noticeBgV.frame;
+    CGFloat X = CGRectGetWidth(self.view.frame) -  scrollView.contentOffset.x;
+    CGFloat Y = rect.origin.y;
+    CGFloat W = rect.size.width;
+    CGFloat H = rect.size.height;
+    
+    noticeBgV.frame = CGRectMake(X, Y, W, H);
 }
 
 @end
