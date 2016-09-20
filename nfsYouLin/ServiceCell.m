@@ -22,7 +22,6 @@
     if(self)
     {
         _serviceView = [[ServiceView alloc] initWithFrame:CGRectMake(20, 20, screenWidth - 40, 250)];
-        _serviceView.delegate = self;
         [self.contentView addSubview:_serviceView];
     }
     
@@ -39,36 +38,5 @@
     [super setHighlighted:highlighted animated:animated];
     _serviceView.backgroundColor = [UIColor whiteColor];;
 }
-
-#pragma mark -
-
-#pragma mark - ServiceCellDelegate
-
-- (void) selectedLongServiceAddress:(NSString *)text
-{
-    [_s_delegate selectedLongAddressCell:text];
-}
-
-- (void) selectedServiceAddress:(NSString *)text
-{
-    [_s_delegate selectedAddressCell:text];
-}
-
-- (void) selectedServiceTime:(NSString *)text
-{
-    [_s_delegate selectedTimeCell:text];
-}
-
-- (void) selectedLongServiceTime:(NSString *)text
-{
-    [_s_delegate selectecLongTimeCell:text];
-}
-
-- (void) selectedServicePhone:(NSString *)text
-{
-    [_s_delegate selectedPhoneCell:text];
-}
-
-
 
 @end

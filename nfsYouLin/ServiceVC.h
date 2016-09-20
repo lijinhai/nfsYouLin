@@ -7,8 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "ServiceCell.h"
+#import "ServiceView.h"
 
-@interface ServiceVC : UITableViewController<ServiceCellDelegate>
+@interface ServiceVC : UITableViewController<ServiceDelegate>
 
 @end

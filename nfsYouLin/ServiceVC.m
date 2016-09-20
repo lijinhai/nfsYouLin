@@ -12,7 +12,7 @@
 #import "MBProgressHUBTool.h"
 #import "AFHTTPSessionManager.h"
 #import "StringMD5.h"
-
+#import "ServiceCell.h"
 
 @interface ServiceVC ()
 
@@ -72,7 +72,8 @@
     cell.selectedBackgroundView = [[UIView alloc] initWithFrame:cell.frame];
     cell.selectedBackgroundView.backgroundColor = BackgroundColor;
     cell.serviceView.serviceInfo = [serviceArr objectAtIndex:row];
-    cell.s_delegate = self;
+    cell.serviceView.delegate = self;
+//    cell.s_delegate = self;
     return cell;
 }
 
@@ -86,30 +87,29 @@
     [_barL performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:time];
 }
 
-#pragma mark -ServiceCellDelegate
+#pragma mark -ServiceDelegate
 
-- (void) selectedAddressCell:(NSString *)text
+- (void) selectedServiceAddress:(NSString*) text
 {
     [self barShow:text showTime:1];
 }
 
-- (void) selectedLongAddressCell:(NSString *)text
+- (void) selectedLongServiceAddress:(NSString*) text
 {
     [self barShow:text showTime:3];
 }
 
-- (void) selectedTimeCell:(NSString *)text
+- (void) selectedServiceTime:(NSString*) text
 {
     [self barShow:text showTime:1];
 }
 
-- (void) selectecLongTimeCell:(NSString *)text
+- (void) selectedLongServiceTime:(NSString*) text
 {
     [self barShow:text showTime:3];
 }
 
-#pragma mark -拨打电话
-- (void) selectedPhoneCell:(NSString *)text;
+- (void) selectedServicePhone:(NSString*)text
 {
     NSMutableString *phoneNum = [[NSMutableString alloc] initWithFormat:@"tel:%@",text];
     UIWebView * callWebview = [[UIWebView alloc] init];

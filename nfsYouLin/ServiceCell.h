@@ -9,21 +9,11 @@
 #import <UIKit/UIKit.h>
 #import "ServiceView.h"
 
-@protocol ServiceCellDelegate <ServiceDelegate>
-
-- (void) selectedAddressCell:(NSString *) text;
-- (void) selectedLongAddressCell:(NSString*) text;
-
-- (void) selectedTimeCell: (NSString*) text;
-- (void) selectecLongTimeCell: (NSString*) text;
-
-- (void) selectedPhoneCell : (NSString*) text;
+@protocol ServiceCellDelegate <NSObject, ServiceDelegate>
 
 @end
 
-@interface ServiceCell : UITableViewCell <ServiceDelegate>
-
-@property(strong, nonatomic)id <ServiceCellDelegate> s_delegate;
+@interface ServiceCell : UITableViewCell
 
 @property(strong, nonatomic)ServiceView* serviceView;
 

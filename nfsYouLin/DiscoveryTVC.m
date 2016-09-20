@@ -274,7 +274,7 @@
                     // 社区服务
                     ServiceVC* serviceVC = [[ServiceVC alloc] init];
                     UIBarButtonItem* serviceItem = [[UIBarButtonItem alloc] initWithTitle:@"社区服务" style:UIBarButtonItemStylePlain target:nil action:nil];
-                    [self.navigationItem setBackBarButtonItem:serviceItem];
+                    [self.parentViewController.navigationItem setBackBarButtonItem:serviceItem];
                     [self.navigationController pushViewController:serviceVC animated:YES];
                     break;
                 }
