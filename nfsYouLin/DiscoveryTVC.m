@@ -14,6 +14,7 @@
 #import "PropertyVC.h"
 #import "ServiceVC.h"
 #import "NoticeVC.h"
+#import "WeatherVC.h"
 
 @interface DiscoveryTVC ()
 
@@ -259,6 +260,11 @@
                 case 2:
                 {
                     // 天气
+                    WeatherVC* weatherVC = [[WeatherVC alloc] init];
+                    UIBarButtonItem* weatherItem = [[UIBarButtonItem alloc] initWithTitle:@"天气" style:UIBarButtonItemStylePlain target:nil action:nil];
+                    [weatherItem setTintColor:[UIColor whiteColor]];
+                    [self.parentViewController.navigationItem setBackBarButtonItem:weatherItem];
+                    [self.navigationController pushViewController:weatherVC animated:YES];
                     break;
                 }
                 default:

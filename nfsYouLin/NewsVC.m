@@ -40,6 +40,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    self.automaticallyAdjustsScrollViewInsets = NO;
     
     UIButton* rightBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
     [rightBtn setBackgroundImage:[UIImage imageNamed:@"newsuser.png"] forState:UIControlStateNormal];

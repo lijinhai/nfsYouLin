@@ -96,6 +96,7 @@
             // 创建活动过期图片
             UIImageView* pastImageView = [[UIImageView alloc] init];
             pastImageView.image = [UIImage imageNamed:@"overline.png"];
+            pastImageView.contentMode = UIViewContentModeScaleAspectFit;
             self.pastImageView = pastImageView;
 
             // 创建帖子内容
