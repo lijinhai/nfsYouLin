@@ -13,6 +13,10 @@
 #import "NewsVC.h"
 #import "SellerMPVC.h"
 #import "PropertyVC.h"
+#import "ServiceVC.h"
+#import "NoticeVC.h"
+#import "WeatherVC.h"
+
 @interface DiscoveryTVC ()
 
 @end
@@ -241,6 +245,11 @@
                 case 0:
                 {
                     // 公告
+                    NoticeVC* noticeVC = [[NoticeVC alloc] initWithStyle:UITableViewStyleGrouped];
+                    UIBarButtonItem* noticeItem = [[UIBarButtonItem alloc] initWithTitle:@"物业公告" style:UIBarButtonItemStylePlain target:nil action:nil];
+                    [noticeItem setTintColor:[UIColor whiteColor]];
+                    [self.parentViewController.navigationItem setBackBarButtonItem:noticeItem];
+                    [self.navigationController pushViewController:noticeVC animated:YES];
                     break;
                 }
                 case 1:
@@ -257,6 +266,11 @@
                 case 2:
                 {
                     // 天气
+                    WeatherVC* weatherVC = [[WeatherVC alloc] init];
+                    UIBarButtonItem* weatherItem = [[UIBarButtonItem alloc] initWithTitle:@"天气" style:UIBarButtonItemStylePlain target:nil action:nil];
+                    [weatherItem setTintColor:[UIColor whiteColor]];
+                    [self.parentViewController.navigationItem setBackBarButtonItem:weatherItem];
+                    [self.navigationController pushViewController:weatherVC animated:YES];
                     break;
                 }
                 default:
@@ -270,6 +284,10 @@
                 case 0:
                 {
                     // 社区服务
+                    ServiceVC* serviceVC = [[ServiceVC alloc] init];
+                    UIBarButtonItem* serviceItem = [[UIBarButtonItem alloc] initWithTitle:@"社区服务" style:UIBarButtonItemStylePlain target:nil action:nil];
+                    [self.parentViewController.navigationItem setBackBarButtonItem:serviceItem];
+                    [self.navigationController pushViewController:serviceVC animated:YES];
                     break;
                 }
                 case 1:

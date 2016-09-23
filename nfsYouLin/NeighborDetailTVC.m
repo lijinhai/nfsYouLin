@@ -21,6 +21,8 @@
 #import "ReportVC.h"
 #import "PeopleInfoVC.h"
 #import "NewsDetailVC.h"
+#import "PersonalInformationViewController.h"
+
 
 @interface NeighborDetailTVC ()
 
@@ -578,6 +580,16 @@
          
      }];
 
+}
+
+#pragma mark -查看自己信息代理 cellDelegate
+- (void) ownInfoViewController
+{
+    UIStoryboard* iStoryBoard = [UIStoryboard storyboardWithName:@"Me" bundle:nil];
+    UIBarButtonItem* backItem = [[UIBarButtonItem alloc] initWithTitle:@"个人信息" style:UIBarButtonItemStylePlain target:nil action:nil];
+    [self.parentViewController.navigationItem setBackBarButtonItem:backItem];
+    PersonalInformationViewController* personInfoVC = [iStoryBoard instantiateViewControllerWithIdentifier:@"personalinformationcontroller"];
+    [self.navigationController pushViewController:personInfoVC animated:YES];
 }
 
 #pragma mark -查看个人信息代理 cellDelegate

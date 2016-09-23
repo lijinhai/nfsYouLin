@@ -1,12 +1,12 @@
 //
-//  SearchTableViewController.m
+//  NoticeVC.m
 //  nfsYouLin
 //
-//  Created by Macx on 16/6/21.
+//  Created by Macx on 16/9/19.
 //  Copyright © 2016年 jinhai. All rights reserved.
 //
 
-#import "SearchTableViewController.h"
+#import "NoticeVC.h"
 #import "ListTableView.h"
 #import "BackgroundView.h"
 #import "NeighborTableViewCell.h"
@@ -20,30 +20,29 @@
 #import "ChatDemoHelper.h"
 #import "WaitView.h"
 #import "MJRefresh.h"
+#import "BackgroundView.h"
 #import "NewsDetailVC.h"
 #import "PersonalInformationViewController.h"
 #import "PeopleInfoVC.h"
 
-
-@interface SearchTableViewController ()
+@interface NoticeVC ()
 
 @end
 
-@implementation SearchTableViewController
+@implementation NoticeVC
 {
     ListTableView* _listTableView;
     BackgroundView* _backGroundView;
-    SearchBarView* _searchBar;
     UIButton* _leftButton;
-    
-    NSInteger category;
     
     NeighborDetailTVC* neighborDetailVC;
     UIView* backgroundView;
     UIView* waitBgV;
     DialogView* dialogView;
     UIViewController* rootVC;
-    NSInteger topicId;
+    NSInteger _topicId;
+    NSString* newTopicId;
+    NSString* oldTopicId;
     UIPanGestureRecognizer* _panGesture;
 }
 
@@ -59,11 +58,9 @@
         [self.tableView setLayoutMargins:UIEdgeInsetsZero];
     }
     self.tableView.tableHeaderView = [[UIView alloc]initWithFrame:CGRectMake(0,0,0,0.01)];
-
+    
     self.tableView.bounces = NO;
     self.tableView.mj_footer = [MJRefreshBackNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(upRefreshData)];
-    [self createSearchBar];
-    [self setListView];
     self.neighborDataArray = [[NSMutableArray alloc] init];
     UIWindow *window = [UIApplication sharedApplication].keyWindow;
     rootVC = window.rootViewController.navigationController;
@@ -72,14 +69,15 @@
     backgroundView.alpha = 0.8;
     dialogView = nil;
     [ChatDemoHelper shareHelper].neighborVC.refresh = YES;
-    topicId = 0;
-    WaitView* waitView = [[WaitView alloc] initWithRect:@"正在提交搜索请求，请稍后..."];
+    _topicId = 0;
+    WaitView* waitView = [[WaitView alloc] initWithRect:@"正在加载，请稍后..."];
     waitBgV = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
     waitBgV.backgroundColor = [UIColor clearColor];
     [waitBgV addSubview:waitView];
     _panGesture = self.tableView.panGestureRecognizer;
     [_panGesture addTarget:self action:@selector(handlePan:)];
     
+    [self noticeNet];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -105,7 +103,7 @@
 {
     static NSString* cellOther = @"cellOther";
     static NSString* cellAnother = @"cellAnother";
-     NeighborTableViewCell* cell;
+    NeighborTableViewCell* cell;
     if(indexPath.row == 0)
     {
         cell = [tableView dequeueReusableCellWithIdentifier:cellOther];
@@ -114,7 +112,7 @@
             cell = [[NeighborTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellOther];
         }
         cell.neighborDataFrame = self.neighborDataArray[indexPath.section];
-
+        
     }
     else if(indexPath.row == 1)
     {
@@ -169,82 +167,9 @@
 // 处理单元格的选中
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [_searchBar resignFirstResponder];
-//    [self readTotalInformation:indexPath.section];
+    //    [self readTotalInformation:indexPath.section];
 }
 
-
-#pragma mark -Private
-- (void) createSearchBar
-{
-    _searchBar = [[SearchBarView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width - 120, self.navigationController.navigationBar.frame.size.height * 0.7)];
-    
-    _searchBar.placeholder = @"请输入关键字";
-    _searchBar.backgroundColor = [UIColor whiteColor];
-    _searchBar.font = [UIFont systemFontOfSize:14];
-    _searchBar.delegate = self;
-    UIBarButtonItem* searchItem = [[UIBarButtonItem alloc] initWithCustomView:_searchBar];
-    
-    
-    UIBarButtonItem* rightItem = [[UIBarButtonItem alloc] initWithTitle:@"搜索" style:UIBarButtonItemStylePlain target:self action:@selector(searchItem:)];
-    self.navigationItem.hidesBackButton = YES;
-    self.navigationItem.rightBarButtonItem = rightItem;
-    UIBarButtonItem* leftItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"mm_title_back"] style:UIBarButtonItemStylePlain target:self action:@selector(backItem:)];
-    //    self.navigationItem.leftBarButtonItem = leftItem;
-    self.navigationItem.leftBarButtonItems = @[leftItem, searchItem];
-    
-    
-    _leftButton = _searchBar.leftButton;
-    [_leftButton setTitle:@"搜全部" forState:UIControlStateNormal];
-
-    [_leftButton addTarget:self action:@selector(leftButton:) forControlEvents:UIControlEventTouchUpInside];
-
-
-}
-
-- (void) setListView
-{
-//     UINavigationController* navigationController = self.navigationController;
-    category = 0;
-    _listTableView = [[ListTableView alloc] initWithFrame:CGRectMake(60 + 5, CGRectGetMaxY(self.navigationController.navigationBar.frame), 150, 250)];
-    
-    _backGroundView = [[BackgroundView alloc] initWithFrame:self.parentViewController.view.frame view:_listTableView];
-    BackgroundView* backGroundView = _backGroundView;
-    NSArray* nameArray = @[@"搜索全部", @"搜索话题", @"搜索活动", @"搜索公告", @"搜索建议"];
-    NSArray* imageArray = @[@"quanbusou", @"huatisou", @"huodongsou", @"gonggaosou", @"jianyisou"];
-    UIButton* leftButton = _leftButton;
-    [_listTableView setListTableView:nameArray image:imageArray block:^(NSString* string){
-        
-        if([string isEqualToString:@"搜索全部"])
-        {
-            category = 0;
-        }
-        else if([string isEqualToString:@"搜索话题"])
-        {
-            category = 1;
-        }
-        else if([string isEqualToString:@"搜索活动"])
-        {
-            category = 2;
-        }
-        else if([string isEqualToString:@"搜索公告"])
-        {
-            category = 3;
-        }
-        else if([string isEqualToString:@"搜索建议"])
-        {
-            category = 5;
-        }
-        else
-        {
-            
-        }
-
-        NSString* newString = [string stringByReplacingOccurrencesOfString:@"索" withString:@""];
-        [leftButton setTitle:newString forState:UIControlStateNormal];
-        [backGroundView removeFromSuperview];
-    }];
-}
 
 
 - (NSDictionary*) getResponseDictionary: (NSDictionary *) responseDict
@@ -274,7 +199,8 @@
 
 - (void)upRefreshData
 {
-    [self upSearchResultNet];
+    
+    [self upRefreshPosts];
 }
 
 
@@ -310,19 +236,6 @@
 }
 
 
-
-
-- (IBAction)backItem:(id)sender
-{
-    [self.navigationController popViewControllerAnimated:YES];
-}
-	
-- (IBAction)searchItem:(id)sender
-{
-    [_searchBar.textField resignFirstResponder];
-    [self searchResultNet];
-}
-
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -330,7 +243,7 @@
 
 - (IBAction)leftButton:(UIButton *)leftButton
 {
-
+    
     [self.parentViewController.view addSubview:_backGroundView];
     [self.parentViewController.view addSubview:_listTableView];
 }
@@ -450,12 +363,6 @@
 }
 
 
-#pragma mark -SearchBarViewDelegate
-- (void)SearchBarViewSearchButtonClicked:(SearchBarView *)searchBar
-{
-    [_searchBar.textField resignFirstResponder];
-    [self searchResultNet];
-}
 
 #pragma mark -cellDelegate
 
@@ -589,8 +496,7 @@
     [self.navigationController pushViewController:peopleInfoVC animated:YES];
 }
 
-
-#pragma mark -查看全文回调事件 cellDelegate
+// 查看全文回调事件
 - (void)readTotalInformation:(NSInteger)sectionNum
 {
     NeighborDataFrame* neighborDataFrame = self.neighborDataArray[sectionNum];
@@ -709,40 +615,33 @@
 
 
 
-#pragma mark -Network
-// 搜索帖子
-- (void) searchResultNet
+#pragma mark -获取物业公告网络请求
+
+- (void) noticeNet
 {
-    NSString* searchText = _searchBar.textField.text;
-    if(searchText.length == 0)
-    {
-        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"提醒" message:@"请输入搜索关键字" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-        [alert show];
-        return;
-    }
     [rootVC.view addSubview:waitBgV];
     [self.neighborDataArray removeAllObjects];
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-    NSString* userId = [defaults stringForKey:@"userId"];
     NSString* communityId = [defaults stringForKey:@"communityId"];
+    NSString* userId = [defaults valueForKey:@"userId"];
     AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
     manager.securityPolicy.allowInvalidCertificates = YES;
     [manager.securityPolicy setValidatesDomainName:NO];
     
     
-    NSString* MD5String = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"user_id%@community_id%@topic_id0",userId,communityId]];
+    NSString* MD5String = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"user_id%@community_id%@",userId,communityId]];
     NSString* hashString = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"%@1", MD5String]];
     
     NSDictionary* parameter = @{@"user_id" : userId,
                                 @"community_id" : communityId,
                                 @"topic_id" : @"0",
-                                @"key_word" : searchText,
+                                @"apitype" : @"apiproperty",
                                 @"apitype" : @"comm",
-                                @"category_type" : [NSNumber numberWithInteger:category],
-                                @"tag" : @"findtopic",
+                                @"category_type" : @"3",
+                                @"tag" : @"getnotice",
                                 @"salt" : @"1",
                                 @"hash" : hashString,
-                                @"keyset" : @"user_id:community_id:topic_id:",
+                                @"keyset" : @"user_id:community_id:",
                                 };
     
     [manager POST:POST_URL parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
@@ -750,70 +649,7 @@
         
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-            NSLog(@"搜索帖子网络请求:%@", responseObject);
-            if([responseObject isKindOfClass:[NSArray class]])
-            {
-                for (int i = 0; i < [responseObject count]; i++)
-                {
-                    NSDictionary* dict = [self getResponseDictionary:responseObject[i]];
-                    NeighborData *neighborData = [[NeighborData alloc] initWithDict:dict];
-                    NeighborDataFrame *neighborDataFrame = [[NeighborDataFrame alloc]init];
-                    neighborDataFrame.neighborData = neighborData;
-                    [self.neighborDataArray addObject:neighborDataFrame];
-                    if(i == ([responseObject count] - 1))
-                    {
-                        topicId = [[dict valueForKey:@"topicId"] integerValue];
-                        NSLog(@"topicId = %ld",topicId);
-                    }
-                }
-            }        
-            if([self.neighborDataArray count] == 0)
-            {
-                [MBProgressHUBTool textToast:self.parentViewController.view Tip:@"没有搜到"];
-            }
-            [waitBgV removeFromSuperview];
-            [self.tableView reloadData];
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        NSLog(@"请求失败:%@", error.description);
-        return;
-    }];
-}
-
-
-// 上拉搜索帖子
-- (void) upSearchResultNet
-{
-    NSString* searchText = _searchBar.textField.text;
-    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-    NSString* userId = [defaults stringForKey:@"userId"];
-    NSString* communityId = [defaults stringForKey:@"communityId"];
-    AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
-    manager.securityPolicy.allowInvalidCertificates = YES;
-    [manager.securityPolicy setValidatesDomainName:NO];
-    
-    
-    NSString* MD5String = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"user_id%@community_id%@topic_id%ld",userId,communityId,topicId]];
-    NSString* hashString = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"%@1", MD5String]];
-    
-    NSDictionary* parameter = @{@"user_id" : userId,
-                                @"community_id" : communityId,
-                                @"topic_id" : [NSNumber numberWithInteger:topicId],
-                                @"count" : @"6",
-                                @"key_word" : searchText,
-                                @"apitype" : @"comm",
-                                @"category_type" : [NSNumber numberWithInteger:category],
-                                @"tag" : @"findtopic",
-                                @"salt" : @"1",
-                                @"hash" : hashString,
-                                @"keyset" : @"user_id:community_id:topic_id:",
-                                };
-    
-    [manager POST:POST_URL parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
-        
-        
-        
-    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        NSLog(@"上拉搜索帖子网络请求:%@", responseObject);
+        NSLog(@"获取物业公告帖子网络请求:%@", responseObject);
         if([responseObject isKindOfClass:[NSArray class]])
         {
             for (int i = 0; i < [responseObject count]; i++)
@@ -823,18 +659,79 @@
                 NeighborDataFrame *neighborDataFrame = [[NeighborDataFrame alloc]init];
                 neighborDataFrame.neighborData = neighborData;
                 [self.neighborDataArray addObject:neighborDataFrame];
-                
                 if(i == ([responseObject count] - 1))
                 {
-                    topicId = [[dict valueForKey:@"topicId"] integerValue];
+                    _topicId = [[dict valueForKey:@"topicId"] integerValue];
                 }
             }
-            
         }
-        [self.tableView.mj_footer endRefreshing];
+        
+        if([self.neighborDataArray count] == 0)
+        {
+            [MBProgressHUBTool textToast:self.parentViewController.view Tip:@"没有帖子"];
+        }
+        [waitBgV removeFromSuperview];
         [self.tableView reloadData];
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         NSLog(@"请求失败:%@", error.description);
+        return;
+    }];
+}
+
+/*上拉刷新，获取帖子数据*/
+-(void) upRefreshPosts{
+    
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSString* userId = [defaults valueForKey:@"userId"];
+    NSString* communityId = [defaults stringForKey:@"communityId"];
+    AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
+    manager.securityPolicy.allowInvalidCertificates = YES;
+    manager.responseSerializer.stringEncoding=NSUTF8StringEncoding;
+    [manager.securityPolicy setValidatesDomainName:NO];
+    NSString* oldTpid=[NSString stringWithFormat:@"%ld",_topicId];
+    NSString* hashString =[StringMD5 stringAddMD5:[NSString stringWithFormat:@"user_id%@community_id%@topic_id%@",userId,communityId,oldTpid]];
+    NSString* hashMD5 = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"%@1",hashString]];
+    NSDictionary* parameter = @{@"user_id" : userId,
+                                @"community_id" : communityId,
+                                @"topic_id" : oldTpid,
+                                @"count" : @"6",
+                                @"deviceType":@"ios",
+                                @"apitype" : @"comm",
+                                @"tag" :  @"intotopic",
+                                @"category_type" : @"3",
+                                @"salt" : @"1",
+                                @"hash" : hashMD5,
+                                @"keyset" : @"user_id:community_id:topic_id:",
+                                };
+    
+    [manager POST:POST_URL parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSLog(@"上拉获取物业公告网络请求 %@",responseObject);
+        if([responseObject isKindOfClass:[NSArray class]])
+        {
+            for (int i = 0; i < [responseObject count]; i++)
+            {
+                NSDictionary* responseDict = [responseObject objectAtIndex:i];
+                if(i == ([[responseObject objectForKey:@"info"] count]-1))
+                {
+                    _topicId = [responseDict[@"topicId"] integerValue];
+                }
+                
+                NSDictionary* dict = [self getResponseDictionary:[[responseObject objectForKey:@"info"] objectAtIndex:i]];
+                NeighborData *neighborData = [[NeighborData alloc] initWithDict:dict];
+                NeighborDataFrame *neighborDataFrame = [[NeighborDataFrame alloc]init];
+                neighborDataFrame.neighborData = neighborData;
+                [self.neighborDataArray addObject:neighborDataFrame];
+            }
+
+        }
+        [self.tableView.mj_footer endRefreshing];
+        [self.tableView reloadData];
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"请求失败:%@", error.description);
+        
         return;
     }];
 }
@@ -845,7 +742,7 @@
 - (void) applyNet:(NSInteger) activityId Adult:(NSInteger)adultNum Child:(NSInteger)childNum
 {
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-    NSString* userId = [defaults stringForKey:@"userId"];
+    NSString* userId = [defaults valueForKey:@"userId"];
     
     AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
     manager.securityPolicy.allowInvalidCertificates = YES;
@@ -904,7 +801,7 @@
 - (void) cancelApplyNet:(NSInteger) activityId
 {
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-    NSString* userId = [defaults stringForKey:@"userId"];
+    NSString* userId = [defaults valueForKey:@"userId"];
     
     AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
     manager.securityPolicy.allowInvalidCertificates = YES;
@@ -1133,13 +1030,13 @@
 - (void) viewTopicNet: (NSInteger)topicId
 {
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-    NSString* userId = [defaults stringForKey:@"userId"];
+    NSString* userId = [defaults valueForKey:@"userId"];
     NSString* communityId = [defaults stringForKey:@"communityId"];
     
     AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
     manager.securityPolicy.allowInvalidCertificates = YES;
     [manager.securityPolicy setValidatesDomainName:NO];
-
+    
     NSString* MD5String = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"user_id%@topic_id%ldcommunity_id%@",userId,topicId,communityId]];
     NSString* hashString = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"%@1", MD5String]];
     
@@ -1166,5 +1063,6 @@
     }];
     
 }
+
 
 @end

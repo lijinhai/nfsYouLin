@@ -96,6 +96,7 @@
             // 创建活动过期图片
             UIImageView* pastImageView = [[UIImageView alloc] init];
             pastImageView.image = [UIImage imageNamed:@"overline.png"];
+            pastImageView.contentMode = UIViewContentModeScaleAspectFit;
             self.pastImageView = pastImageView;
 
             // 创建帖子内容
@@ -778,6 +779,7 @@
     
 }
 
+#pragma mark -头像点击事件
 - (void) headImageView: (UITapGestureRecognizer*) recognizer
 {
     NSInteger userId = [self.neighborDataFrame.neighborData.senderId integerValue];
@@ -790,6 +792,8 @@
     }
     else if(userId == myId)
     {
+        NSLog(@"111111 -->");
+        [_delegate ownInfoViewController];
     }
     else
     {

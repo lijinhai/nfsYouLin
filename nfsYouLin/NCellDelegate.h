@@ -44,8 +44,13 @@
 // 添加回复、删除回复
 - (void) replyEvent:(NSInteger) sctionNum btnText:(NSString*) btnText;
 
-// 获取个人详细信息
+// 获取他人详细信息
 - (void) peopleInfoViewController:(NSInteger)peopleId icon:(NSString*)icon name:(NSString*)name;
+
+// 获取自己详细信息
+- (void) ownInfoViewController;
+
+
 @end
 
 

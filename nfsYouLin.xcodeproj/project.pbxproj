@@ -20,6 +20,14 @@
 		8F1498291D8F8B6E00ED707E /* CreateAdviceVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F1498261D8F8B6E00ED707E /* CreateAdviceVC.m */; };
 		8F14982A1D8F8B6E00ED707E /* RepairVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F1498281D8F8B6E00ED707E /* RepairVC.m */; };
 		8F14982D1D8F8B8600ED707E /* MyAdviceTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F14982C1D8F8B8600ED707E /* MyAdviceTVC.m */; };
+		8F1498341D8FA79900ED707E /* ServiceVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F1498331D8FA79900ED707E /* ServiceVC.m */; };
+		8F1498351D8FA7D000ED707E /* addressInfoTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = AFB4E37B1D88F53E004A148A /* addressInfoTVC.m */; };
+		8F1498381D8FAA5500ED707E /* ServiceView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F1498371D8FAA5500ED707E /* ServiceView.m */; };
+		8F14983C1D8FB63200ED707E /* ServiceCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F14983B1D8FB63200ED707E /* ServiceCell.m */; };
+		8F1498401D902BD600ED707E /* NoticeVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F14983F1D902BD600ED707E /* NoticeVC.m */; };
+		8F1499041D91139B00ED707E /* NoticeMessageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F1499031D91139B00ED707E /* NoticeMessageView.m */; };
+		8F1499471D9213CE00ED707E /* WeatherVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F1499461D9213CE00ED707E /* WeatherVC.m */; };
+		8F14994C1D925E8400ED707E /* WeatherView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F14994B1D925E8400ED707E /* WeatherView.m */; };
 		8F1FB5C51D5C025800676743 /* photo_delete@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8F1FB5B11D5C025800676743 /* photo_delete@2x.png */; };
 		8F1FB5C61D5C025800676743 /* TZAssetCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F1FB5B31D5C025800676743 /* TZAssetCell.m */; };
 		8F1FB5C71D5C025800676743 /* TZAssetModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F1FB5B51D5C025800676743 /* TZAssetModel.m */; };
@@ -623,6 +631,20 @@
 		8F1498281D8F8B6E00ED707E /* RepairVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RepairVC.m; sourceTree = "<group>"; };
 		8F14982B1D8F8B8600ED707E /* MyAdviceTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyAdviceTVC.h; sourceTree = "<group>"; };
 		8F14982C1D8F8B8600ED707E /* MyAdviceTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyAdviceTVC.m; sourceTree = "<group>"; };
+		8F1498321D8FA79900ED707E /* ServiceVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServiceVC.h; sourceTree = "<group>"; };
+		8F1498331D8FA79900ED707E /* ServiceVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServiceVC.m; sourceTree = "<group>"; };
+		8F1498361D8FAA5500ED707E /* ServiceView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServiceView.h; sourceTree = "<group>"; };
+		8F1498371D8FAA5500ED707E /* ServiceView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServiceView.m; sourceTree = "<group>"; };
+		8F14983A1D8FB63200ED707E /* ServiceCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServiceCell.h; sourceTree = "<group>"; };
+		8F14983B1D8FB63200ED707E /* ServiceCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServiceCell.m; sourceTree = "<group>"; };
+		8F14983E1D902BD600ED707E /* NoticeVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NoticeVC.h; sourceTree = "<group>"; };
+		8F14983F1D902BD600ED707E /* NoticeVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NoticeVC.m; sourceTree = "<group>"; };
+		8F1499021D91139B00ED707E /* NoticeMessageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NoticeMessageView.h; sourceTree = "<group>"; };
+		8F1499031D91139B00ED707E /* NoticeMessageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NoticeMessageView.m; sourceTree = "<group>"; };
+		8F1499451D9213CE00ED707E /* WeatherVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WeatherVC.h; sourceTree = "<group>"; };
+		8F1499461D9213CE00ED707E /* WeatherVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WeatherVC.m; sourceTree = "<group>"; };
+		8F14994A1D925E8400ED707E /* WeatherView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WeatherView.h; sourceTree = "<group>"; };
+		8F14994B1D925E8400ED707E /* WeatherView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WeatherView.m; sourceTree = "<group>"; };
 		8F1FB5B11D5C025800676743 /* photo_delete@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "photo_delete@2x.png"; sourceTree = "<group>"; };
 		8F1FB5B21D5C025800676743 /* TZAssetCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TZAssetCell.h; sourceTree = "<group>"; };
 		8F1FB5B31D5C025800676743 /* TZAssetCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TZAssetCell.m; sourceTree = "<group>"; };
@@ -1685,6 +1707,8 @@
 		8F14981F1D8F844D00ED707E /* 社区服务 */ = {
 			isa = PBXGroup;
 			children = (
+				8F1498311D8FA6F300ED707E /* Controllers */,
+				8F1498391D8FAA5F00ED707E /* View */,
 			);
 			name = "社区服务";
 			sourceTree = "<group>";
@@ -1706,6 +1730,62 @@
 				AFB4E3A11D90DF22004A148A /* lookScheduleVC.m */,
 			);
 			name = "物业";
+			sourceTree = "<group>";
+		};
+		8F1498311D8FA6F300ED707E /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				8F1498321D8FA79900ED707E /* ServiceVC.h */,
+				8F1498331D8FA79900ED707E /* ServiceVC.m */,
+			);
+			name = Controllers;
+			sourceTree = "<group>";
+		};
+		8F1498391D8FAA5F00ED707E /* View */ = {
+			isa = PBXGroup;
+			children = (
+				8F14983A1D8FB63200ED707E /* ServiceCell.h */,
+				8F14983B1D8FB63200ED707E /* ServiceCell.m */,
+				8F1498361D8FAA5500ED707E /* ServiceView.h */,
+				8F1498371D8FAA5500ED707E /* ServiceView.m */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
+		8F14983D1D901C9D00ED707E /* 公告 */ = {
+			isa = PBXGroup;
+			children = (
+				8F14983E1D902BD600ED707E /* NoticeVC.h */,
+				8F14983F1D902BD600ED707E /* NoticeVC.m */,
+			);
+			name = "公告";
+			sourceTree = "<group>";
+		};
+		8F1499441D92134600ED707E /* 天气 */ = {
+			isa = PBXGroup;
+			children = (
+				8F1499491D925D0100ED707E /* View */,
+				8F1499481D925CEC00ED707E /* Controllers */,
+			);
+			name = "天气";
+			sourceTree = "<group>";
+		};
+		8F1499481D925CEC00ED707E /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				8F1499451D9213CE00ED707E /* WeatherVC.h */,
+				8F1499461D9213CE00ED707E /* WeatherVC.m */,
+			);
+			name = Controllers;
+			sourceTree = "<group>";
+		};
+		8F1499491D925D0100ED707E /* View */ = {
+			isa = PBXGroup;
+			children = (
+				8F14994A1D925E8400ED707E /* WeatherView.h */,
+				8F14994B1D925E8400ED707E /* WeatherView.m */,
+			);
+			name = View;
 			sourceTree = "<group>";
 		};
 		8F1FB5B01D5C025800676743 /* TZImagePickerController */ = {
@@ -3137,18 +3217,18 @@
 		8FAF9D991D868C9C0005B08C /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				8FAF9D8E1D863F780005B08C /* NewsVC.h */,
-				8FAF9D8F1D863F780005B08C /* NewsVC.m */,
-				8FAF9D911D8648010005B08C /* NewsSettingVC.h */,
-				8FAF9D921D8648010005B08C /* NewsSettingVC.m */,
-				8FAF9D9A1D879A210005B08C /* NewsDetailVC.h */,
-				8FAF9D9B1D879A210005B08C /* NewsDetailVC.m */,
 				8F5B734E1D88D20800E23248 /* HistoryNewsVC.h */,
 				8F5B734F1D88D20800E23248 /* HistoryNewsVC.m */,
+				8FAF9D9A1D879A210005B08C /* NewsDetailVC.h */,
+				8FAF9D9B1D879A210005B08C /* NewsDetailVC.m */,
 				8F1497991D8E23E800ED707E /* NewsFriendsVC.h */,
 				8F14979A1D8E23E800ED707E /* NewsFriendsVC.m */,
 				8F14979C1D8E2AAC00ED707E /* NewsNeighborVC.h */,
 				8F14979D1D8E2AAC00ED707E /* NewsNeighborVC.m */,
+				8FAF9D911D8648010005B08C /* NewsSettingVC.h */,
+				8FAF9D921D8648010005B08C /* NewsSettingVC.m */,
+				8FAF9D8E1D863F780005B08C /* NewsVC.h */,
+				8FAF9D8F1D863F780005B08C /* NewsVC.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -3182,6 +3262,7 @@
 				AFB4E3A91D921FFC004A148A /* 商圈 */,
 				8F1498211D8F8ADE00ED707E /* 物业 */,
 				8F14981F1D8F844D00ED707E /* 社区服务 */,
+				8F1498211D8F8ADE00ED707E /* 物业 */,
 				8FAF9D971D868C090005B08C /* 新闻 */,
 				8FB6FA461D41B48B00E6C71A /* Controllers */,
 				8FB6FA451D41B47C00E6C71A /* Models */,
@@ -3426,20 +3507,20 @@
 		AF5293C91D12964E00503975 /* Gloable */ = {
 			isa = PBXGroup;
 			children = (
+				AFCE1F971CDAD1B20085F10F /* AppDelegate.h */,
+				AFCE1F981CDAD1B20085F10F /* AppDelegate.mm */,
 				AF5293D71D12982E00503975 /* FirstTabBarController.h */,
 				AF5293D21D1297DC00503975 /* FirstTabBarController.m */,
 				AFE569451CFE652A00C0F745 /* HeaderFile.h */,
-				AFCE1F971CDAD1B20085F10F /* AppDelegate.h */,
-				AFCE1F981CDAD1B20085F10F /* AppDelegate.mm */,
-				AFCE1F9B1CDAD1B20085F10F /* ViewController.m */,
 				AFCE1F9A1CDAD1B20085F10F /* ViewController.h */,
-				AFE569351CFE642300C0F745 /* View */,
+				AFCE1F9B1CDAD1B20085F10F /* ViewController.m */,
 				8FD637DC1D54187700F500D9 /* AddList */,
 				8F7539A11D5182380090A7C2 /* Call */,
-				8F51E1E81D33242C0094A4E5 /* Data */,
-				8FD637DA1D54177300F500D9 /* Tool */,
 				8FD637DB1D5417EF00F500D9 /* Controllers */,
+				8F51E1E81D33242C0094A4E5 /* Data */,
 				8F0F1B4B1D191F4200404C46 /* Search */,
+				8FD637DA1D54177300F500D9 /* Tool */,
+				AFE569351CFE642300C0F745 /* View */,
 			);
 			name = Gloable;
 			sourceTree = "<group>";
@@ -3555,17 +3636,17 @@
 		AFCE1F931CDAD1B20085F10F /* nfsYouLin */ = {
 			isa = PBXGroup;
 			children = (
-				8F1FB5B01D5C025800676743 /* TZImagePickerController */,
-				AF5293C91D12964E00503975 /* Gloable */,
-				AF7850071CFFC587009F6982 /* FMDB */,
-				8F5304461CDB79C90078FD64 /* youLinMain */,
-				8F5304451CDB79920078FD64 /* youLinStroyboard */,
-				8FAFCD2E1CDADA74008F4B48 /* youLinDiscoveryModule */,
-				8FAFCD2F1CDADA8C008F4B48 /* youLinNeighborModule */,
-				8FAFCD2D1CDAD99E008F4B48 /* youLinITabModule */,
 				AFCE1FA51CDAD1B20085F10F /* Info.plist */,
+				AF7850071CFFC587009F6982 /* FMDB */,
+				AF5293C91D12964E00503975 /* Gloable */,
 				AFCE1FA21CDAD1B20085F10F /* LaunchScreen.storyboard */,
 				AFCE1F941CDAD1B20085F10F /* Supporting Files */,
+				8F1FB5B01D5C025800676743 /* TZImagePickerController */,
+				8FAFCD2E1CDADA74008F4B48 /* youLinDiscoveryModule */,
+				8FAFCD2D1CDAD99E008F4B48 /* youLinITabModule */,
+				8F5304461CDB79C90078FD64 /* youLinMain */,
+				8FAFCD2F1CDADA8C008F4B48 /* youLinNeighborModule */,
+				8F5304451CDB79920078FD64 /* youLinStroyboard */,
 			);
 			path = nfsYouLin;
 			sourceTree = "<group>";
@@ -3678,6 +3759,8 @@
 				8FB6F9A61D3F53E100E6C71A /* WaitView.m */,
 				AF197E451D6C2A4B0070AAC4 /* RectWaitView.h */,
 				AF197E461D6C2A4B0070AAC4 /* RectWaitView.m */,
+				8F1499021D91139B00ED707E /* NoticeMessageView.h */,
+				8F1499031D91139B00ED707E /* NoticeMessageView.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -4069,6 +4152,7 @@
 				8F648D401D00547A00E3B155 /* EaseViewController.m in Sources */,
 				8F648D491D00547A00E3B155 /* EaseBubbleView+Location.m in Sources */,
 				8F648CE31D00547900E3B155 /* EMAudioRecorderUtil.m in Sources */,
+				8F1498381D8FAA5500ED707E /* ServiceView.m in Sources */,
 				8F648D421D00547A00E3B155 /* EaseBaseMessageCell.m in Sources */,
 				8F14979B1D8E23E800ED707E /* NewsFriendsVC.m in Sources */,
 				8F51E2801D338FBF0094A4E5 /* SDWebImageDownloader.m in Sources */,
@@ -4130,6 +4214,7 @@
 				8F51E2901D33C0080094A4E5 /* StartVC.m in Sources */,
 				AF4B302B1D2F90AA00CBF257 /* ModifyPasswordViewController.m in Sources */,
 				8F73C8D01D2B53E6009C83C2 /* AFHTTPSessionManager.m in Sources */,
+				8F14983C1D8FB63200ED707E /* ServiceCell.m in Sources */,
 				8F648D4D1D00547A00E3B155 /* EaseBubbleView.m in Sources */,
 				8F648D021D00547A00E3B155 /* UIView+MJExtension.m in Sources */,
 				AFE569331CFE62F500C0F745 /* NeighborData.m in Sources */,
@@ -4148,6 +4233,7 @@
 				8F73C8D51D2B53E6009C83C2 /* AFURLSessionManager.m in Sources */,
 				8F51E2821D338FBF0094A4E5 /* SDWebImageManager.m in Sources */,
 				AF5293DD1D12985400503975 /* BackgroundView.m in Sources */,
+				8F1498341D8FA79900ED707E /* ServiceVC.m in Sources */,
 				8F648D241D00547A00E3B155 /* PSTCollectionViewUpdateItem.m in Sources */,
 				8F0F1B511D19247900404C46 /* SearchBarView.m in Sources */,
 				AF197E541D6D91930070AAC4 /* ICollectVC.m in Sources */,
@@ -4232,6 +4318,7 @@
 				8F648D221D00547A00E3B155 /* PSTCollectionViewItemKey.m in Sources */,
 				8FAF9D4E1D823E1A0005B08C /* PeopleInfoCell.m in Sources */,
 				8F1FB6D51D6444A200676743 /* MASConstraintMaker.m in Sources */,
+				8F1499041D91139B00ED707E /* NoticeMessageView.m in Sources */,
 				8F648CF01D00547A00E3B155 /* MJRefreshAutoFooter.m in Sources */,
 				8F648CFA1D00547A00E3B155 /* MJRefreshBackStateFooter.m in Sources */,
 				8F51E27D1D338FBF0094A4E5 /* SDImageCache.m in Sources */,
@@ -4302,6 +4389,7 @@
 				AF4B301F1D2F901E00CBF257 /* UILabeltouch.m in Sources */,
 				8F1FB5CB1D5C025800676743 /* TZPhotoPickerController.m in Sources */,
 				AF4B30221D2F903600CBF257 /* UIViewLinkmanTouch.m in Sources */,
+				8F1498401D902BD600ED707E /* NoticeVC.m in Sources */,
 				AFCE1F961CDAD1B20085F10F /* main.m in Sources */,
 				8F648D471D00547A00E3B155 /* EaseBubbleView+Gif.m in Sources */,
 				AF4B305D1D332A6700CBF257 /* LewPopupViewAnimationSlide.m in Sources */,
@@ -4354,6 +4442,7 @@
 				8F648D091D00547A00E3B155 /* MWTapDetectingView.m in Sources */,
 				8F648D0F1D00547A00E3B155 /* EMSDWebImageDownloader.m in Sources */,
 				8F648D071D00547A00E3B155 /* MWPhotoBrowser.m in Sources */,
+				8F14994C1D925E8400ED707E /* WeatherView.m in Sources */,
 				8F648D1E1D00547A00E3B155 /* PSTCollectionViewCell.m in Sources */,
 				AFD75EA81D470971006B5A4B /* PopupGoodsExchageView.m in Sources */,
 				AF5410471CE571380037673F /* aboutTermsViewController.m in Sources */,

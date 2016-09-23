@@ -727,6 +727,8 @@
     }
     else if(userId == myId)
     {
+        NSLog(@"111111");
+        [_delegate ownInfoViewController];
     }
     else
     {
