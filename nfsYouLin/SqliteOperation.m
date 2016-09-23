@@ -444,5 +444,31 @@
     return addrssStr;
 
 }
++(NSString*)getUserAddressSqlite
+{
+    
+    AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+    FMDatabase *db = delegate.db;
+    
+    if ( ![ db open ] )
+    {
+        NSLog(@"打开数据库失败");
+    }
+    // 查找表
+    NSString *addrssStr=@"";
+    NSString *query =[NSString stringWithFormat:@"select * from table_all_family where primary_flag= '%d'", 1];
+    
+    FMResultSet* resultSet = [ db executeQuery:query];
+    // 逐行读取数据
+    while ( [ resultSet next ] )
+    {
+        // 对应字段来取数据
+        addrssStr=[resultSet stringForColumn: @"family_address" ];
+        NSLog(@"addrssStr is %@",addrssStr);
+    }
+    [ db close ];
+    return addrssStr;
+    
+}
 
 @end

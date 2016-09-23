@@ -7,7 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "NCellDelegate.h"
 
-@interface RepairVC : UIViewController
-
+@interface RepairVC : UIViewController<cellDelegate,UITableViewDelegate,UITableViewDataSource>
+@property (nonatomic,strong)NSMutableArray *neighborDataArray;
+@property (nonatomic,strong)UITableView* tableView;
+@property (nonatomic,strong)NSString *userIdStr;//用户ID或者查询用户ID
 @end

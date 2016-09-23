@@ -43,6 +43,21 @@
         {
             [self initCancelApplyView:frame];
         }
+        else if([flag isEqualToString:@"deleteRepair"])
+        {
+            [self initDeleteRepairView:frame];
+        }
+        else if([flag isEqualToString:@"searchType"])
+        {
+            
+            [self initSearchTypeView:frame];
+        }
+        else if([flag isEqualToString:@"orderType"])
+        {
+        
+           // [self initOrderTypeView:frame];
+        
+        }
     }
     
     return self;
@@ -142,7 +157,6 @@
     title.text = @"我要报名";
     title.textColor = [UIColor colorWithRed:255/255.0 green:186/255.0 blue:2/255.0 alpha:1];
     title.textAlignment = NSTextAlignmentCenter;
-    
     [self.backView addSubview:title];
     
     UILabel* adultLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, CGRectGetMaxY(title.frame), 55, 55)];
@@ -214,14 +228,14 @@
 
     
     
-    self.applyYes = [[UIButton alloc] initWithFrame:CGRectMake(0,  151, CGRectGetWidth(self.backView.frame) / 2 - 0.5, 50)];
+     self.applyYes = [[UIButton alloc] initWithFrame:CGRectMake(0,  151, CGRectGetWidth(self.backView.frame) / 2 - 0.5, 50)];
     [self.applyYes setTitle:@"确定" forState:UIControlStateNormal];
-    self.applyYes.backgroundColor = [UIColor whiteColor];
+     self.applyYes.backgroundColor = [UIColor whiteColor];
     [self.applyYes setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     
-    self.applyNo = [[UIButton alloc] initWithFrame:CGRectMake(CGRectGetMaxX(self.applyYes.frame) + 1,  151, CGRectGetWidth(self.backView.frame) / 2 - 0.5, 50)];
+     self.applyNo = [[UIButton alloc] initWithFrame:CGRectMake(CGRectGetMaxX(self.applyYes.frame) + 1,  151, CGRectGetWidth(self.backView.frame) / 2 - 0.5, 50)];
     [self.applyNo setTitle:@"取消" forState:UIControlStateNormal];
-    self.applyNo.backgroundColor = [UIColor whiteColor];
+     self.applyNo.backgroundColor = [UIColor whiteColor];
     [self.applyNo setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [self.backView addSubview:self.applyYes];
     [self.backView addSubview:self.applyNo];
@@ -250,21 +264,53 @@
     
     self.cancelApplyYes = [[UIButton alloc] initWithFrame:CGRectMake(0, 41, CGRectGetWidth(self.backView.frame) / 2 - 0.5, 39)];
     [self.cancelApplyYes setTitle:@"确定" forState:UIControlStateNormal];
-    self.cancelApplyYes.backgroundColor = [UIColor whiteColor];
+     self.cancelApplyYes.backgroundColor = [UIColor whiteColor];
     [self.cancelApplyYes setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [self.backView addSubview:self.cancelApplyYes];
     
     
-    self.cancelApplyNo = [[UIButton alloc] initWithFrame:CGRectMake(CGRectGetWidth(self.backView.frame) / 2 + 0.5 , 41, CGRectGetWidth(self.backView.frame) / 2 - 0.5, 39)];
+     self.cancelApplyNo = [[UIButton alloc] initWithFrame:CGRectMake(CGRectGetWidth(self.backView.frame) / 2 + 0.5 , 41, CGRectGetWidth(self.backView.frame) / 2 - 0.5, 39)];
     [self.cancelApplyNo setTitle:@"取消" forState:UIControlStateNormal];
-    self.cancelApplyNo.backgroundColor = [UIColor whiteColor];
+     self.cancelApplyNo.backgroundColor = [UIColor whiteColor];
     [self.cancelApplyNo setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [self.backView addSubview:self.cancelApplyNo];
     [self addSubview:self.backView];
 }
 
+// 删除报修
+- (void) initDeleteRepairView: (CGRect) frame
+{
+  //OneBtn  AllBtn
+    self.backgroundColor = [UIColor clearColor];
+    self.backView = [[UIView alloc] initWithFrame:CGRectMake(60, (frame.size.height - 80) / 2, frame.size.width - 120, 80)];
+    self.backView.backgroundColor = [UIColor whiteColor];
+    self.OneCtl=[[UIControl alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.backView.frame), 40)];
+    self.OneCtl.backgroundColor=[UIColor colorWithRed:255/255.0 green:186/255.0 blue:2/255.0 alpha:1];
+    self.OneLab=[[UILabel alloc]initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.backView.frame), 40)];
+    self.OneLab.text=@"删除";
+    self.OneLab.textAlignment=NSTextAlignmentCenter;
+    self.OneLab.textColor=[UIColor whiteColor];
+   [self.OneCtl addSubview:_OneLab];
+    
+    self.AllCtl=[[UIControl alloc] initWithFrame:CGRectMake(0, 41, CGRectGetWidth(self.backView.frame), 39)];
+    self.AllCtl.backgroundColor=[UIColor colorWithRed:255/255.0 green:186/255.0 blue:2/255.0 alpha:1];
+    self.AllLab=[[UILabel alloc]initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.backView.frame), 40)];
+    self.AllLab.text=@"删除全部";
+    self.AllLab.textAlignment=NSTextAlignmentCenter;
+    self.AllLab.textColor=[UIColor whiteColor];
+   [self.AllCtl addSubview:_AllLab];
+   [self.backView addSubview:_AllCtl];
+   [self.backView addSubview:_OneCtl];
+   [self addSubview:self.backView];
 
 
+}
+
+//商圈选择商家类型
+-(void)initSearchTypeView:(CGRect) frame{
+
+
+}
 
 
 - (void) touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event

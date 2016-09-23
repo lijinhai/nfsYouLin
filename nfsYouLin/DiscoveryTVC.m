@@ -11,7 +11,7 @@
 #import "ChatDemoHelper.h"
 #import "DiscoveryViewCell.h"
 #import "NewsVC.h"
-
+#import "SellerMPVC.h"
 #import "PropertyVC.h"
 @interface DiscoveryTVC ()
 
@@ -228,7 +228,12 @@
         case 1:
         {
             // 商圈
+             UIBarButtonItem* sellerNavItem = [[UIBarButtonItem alloc] initWithTitle:@"商圈" style:UIBarButtonItemStylePlain target:nil action:nil];
+             SellerMPVC *smpVC = [[SellerMPVC alloc] init];
+            self.parentViewController.navigationItem.backBarButtonItem=sellerNavItem;
+            [self.navigationController pushViewController:smpVC animated:YES];
             break;
+            
         }
         case 2:
         {

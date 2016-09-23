@@ -75,6 +75,8 @@
 // 发布范围
 @property(strong, nonatomic) NSString* forumName;
 
+// 私信列表
+@property(strong, nonatomic)NSMutableArray* propertyUserId;
 
 @property(strong, nonatomic) NSString* topicCategoryType;
 

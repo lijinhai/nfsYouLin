@@ -48,6 +48,7 @@
 // 判断当前地址是否通过审核
 +(BOOL)checkAudiAddressResult;
 
-// 获取用户当前地址
+// 获取用户当前地址及小区
 +(NSString*)getUserNowAddressSqlite;
++(NSString*)getUserAddressSqlite;
 @end

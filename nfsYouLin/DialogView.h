@@ -32,6 +32,18 @@
 @property(strong, nonatomic)UIButton* cancelApplyYes;
 @property(strong, nonatomic)UIButton* cancelApplyNo;
 
+//删除报修
+// 删除一个
+@property(strong, nonatomic)UIControl *OneCtl;
+@property(strong, nonatomic)UILabel* OneLab;
+// 删除全部
+@property(strong, nonatomic)UIControl *AllCtl;
+@property(strong, nonatomic)UILabel* AllLab;
+
+
+
+
+
 - (id) initWithFrame:(CGRect)frame View:(UIView*) view Flag:(NSString*) flag;
 
 

@@ -261,7 +261,7 @@
                 /*我发的*/
                 UIControl *publishControlView=cell.publishView;
                 //cell.integralView.backgroundColor=[UIColor whiteColor];
-                publishControlView.tag=2018;
+                 publishControlView.tag=2018;
                 [publishControlView addTarget:self action:@selector(touchDownPublish:) forControlEvents:UIControlEventTouchDown];
                 postLab=cell.publishLable;
             }
