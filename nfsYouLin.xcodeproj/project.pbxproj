@@ -28,6 +28,8 @@
 		8F1499041D91139B00ED707E /* NoticeMessageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F1499031D91139B00ED707E /* NoticeMessageView.m */; };
 		8F1499471D9213CE00ED707E /* WeatherVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F1499461D9213CE00ED707E /* WeatherVC.m */; };
 		8F14994C1D925E8400ED707E /* WeatherView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F14994B1D925E8400ED707E /* WeatherView.m */; };
+		8F1499CF1D94B04E00ED707E /* WeatherDetailVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F1499CE1D94B04E00ED707E /* WeatherDetailVC.m */; };
+		8F1499D21D951AD400ED707E /* ConstellationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F1499D11D951AD400ED707E /* ConstellationView.m */; };
 		8F1FB5C51D5C025800676743 /* photo_delete@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8F1FB5B11D5C025800676743 /* photo_delete@2x.png */; };
 		8F1FB5C61D5C025800676743 /* TZAssetCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F1FB5B31D5C025800676743 /* TZAssetCell.m */; };
 		8F1FB5C71D5C025800676743 /* TZAssetModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F1FB5B51D5C025800676743 /* TZAssetModel.m */; };
@@ -463,6 +465,7 @@
 		8FB6FA881D485AEC00E6C71A /* ChatDemoHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FB6FA861D485AEC00E6C71A /* ChatDemoHelper.m */; };
 		8FBCF9661D81497E0005F50A /* BlackListVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FBCF9651D81497E0005F50A /* BlackListVC.m */; };
 		8FBCF9691D818A460005F50A /* PeopleInfoVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FBCF9681D818A460005F50A /* PeopleInfoVC.m */; };
+		8FC897971D98FAC100C9B32C /* WeatherCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FC897961D98FAC100C9B32C /* WeatherCell.m */; };
 		8FD121481D7467150066C8E3 /* BaiduMapAPI_Base.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FD121411D7467150066C8E3 /* BaiduMapAPI_Base.framework */; };
 		8FD121491D7467150066C8E3 /* BaiduMapAPI_Cloud.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FD121421D7467150066C8E3 /* BaiduMapAPI_Cloud.framework */; };
 		8FD1214A1D7467150066C8E3 /* BaiduMapAPI_Location.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FD121431D7467150066C8E3 /* BaiduMapAPI_Location.framework */; };
@@ -633,6 +636,10 @@
 		8F1499461D9213CE00ED707E /* WeatherVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WeatherVC.m; sourceTree = "<group>"; };
 		8F14994A1D925E8400ED707E /* WeatherView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WeatherView.h; sourceTree = "<group>"; };
 		8F14994B1D925E8400ED707E /* WeatherView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WeatherView.m; sourceTree = "<group>"; };
+		8F1499CD1D94B04E00ED707E /* WeatherDetailVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WeatherDetailVC.h; sourceTree = "<group>"; };
+		8F1499CE1D94B04E00ED707E /* WeatherDetailVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WeatherDetailVC.m; sourceTree = "<group>"; };
+		8F1499D01D951AD400ED707E /* ConstellationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConstellationView.h; sourceTree = "<group>"; };
+		8F1499D11D951AD400ED707E /* ConstellationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConstellationView.m; sourceTree = "<group>"; };
 		8F1FB5B11D5C025800676743 /* photo_delete@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "photo_delete@2x.png"; sourceTree = "<group>"; };
 		8F1FB5B21D5C025800676743 /* TZAssetCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TZAssetCell.h; sourceTree = "<group>"; };
 		8F1FB5B31D5C025800676743 /* TZAssetCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TZAssetCell.m; sourceTree = "<group>"; };
@@ -1355,6 +1362,8 @@
 		8FBCF9651D81497E0005F50A /* BlackListVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BlackListVC.m; sourceTree = "<group>"; };
 		8FBCF9671D818A460005F50A /* PeopleInfoVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PeopleInfoVC.h; sourceTree = "<group>"; };
 		8FBCF9681D818A460005F50A /* PeopleInfoVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PeopleInfoVC.m; sourceTree = "<group>"; };
+		8FC897951D98FAC100C9B32C /* WeatherCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WeatherCell.h; sourceTree = "<group>"; };
+		8FC897961D98FAC100C9B32C /* WeatherCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WeatherCell.m; sourceTree = "<group>"; };
 		8FD121411D7467150066C8E3 /* BaiduMapAPI_Base.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = BaiduMapAPI_Base.framework; sourceTree = "<group>"; };
 		8FD121421D7467150066C8E3 /* BaiduMapAPI_Cloud.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = BaiduMapAPI_Cloud.framework; sourceTree = "<group>"; };
 		8FD121431D7467150066C8E3 /* BaiduMapAPI_Location.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = BaiduMapAPI_Location.framework; sourceTree = "<group>"; };
@@ -1737,6 +1746,8 @@
 			children = (
 				8F1499451D9213CE00ED707E /* WeatherVC.h */,
 				8F1499461D9213CE00ED707E /* WeatherVC.m */,
+				8F1499CD1D94B04E00ED707E /* WeatherDetailVC.h */,
+				8F1499CE1D94B04E00ED707E /* WeatherDetailVC.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -1746,6 +1757,10 @@
 			children = (
 				8F14994A1D925E8400ED707E /* WeatherView.h */,
 				8F14994B1D925E8400ED707E /* WeatherView.m */,
+				8F1499D01D951AD400ED707E /* ConstellationView.h */,
+				8F1499D11D951AD400ED707E /* ConstellationView.m */,
+				8FC897951D98FAC100C9B32C /* WeatherCell.h */,
+				8FC897961D98FAC100C9B32C /* WeatherCell.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -4101,6 +4116,7 @@
 				8F1FB6F41D6BD2CA00676743 /* CreateActivityVC.m in Sources */,
 				8F5B73501D88D20800E23248 /* HistoryNewsVC.m in Sources */,
 				8F648D311D00547A00E3B155 /* UIViewController+DismissKeyboard.m in Sources */,
+				8FC897971D98FAC100C9B32C /* WeatherCell.m in Sources */,
 				8F5304491CDB7A8B0078FD64 /* homeViewController.m in Sources */,
 				AF4B30281D2F909B00CBF257 /* NickNameViewController.m in Sources */,
 				AF7FF1801D3CBDD90068F8D9 /* FDCalendarItem.m in Sources */,
@@ -4190,6 +4206,7 @@
 				AF5410441CE3072E0037673F /* redrawTextField.m in Sources */,
 				8FB6FA5C1D41BAAE00E6C71A /* Friends.m in Sources */,
 				8F1FB5DA1D5C031D00676743 /* CreateTVC.m in Sources */,
+				8F1499D21D951AD400ED707E /* ConstellationView.m in Sources */,
 				8F648CE61D00547900E3B155 /* EMCDDeviceManager+ProximitySensor.m in Sources */,
 				8F648D081D00547A00E3B155 /* MWTapDetectingImageView.m in Sources */,
 				8F648CFF1D00547A00E3B155 /* MJRefreshConst.m in Sources */,
@@ -4232,6 +4249,7 @@
 				8F1FB5C61D5C025800676743 /* TZAssetCell.m in Sources */,
 				AF4B304E1D33282800CBF257 /* FeedbackViewController.m in Sources */,
 				AF4B30571D3329AB00CBF257 /* PopupFeedBackTypeView.m in Sources */,
+				8F1499CF1D94B04E00ED707E /* WeatherDetailVC.m in Sources */,
 				8F648CE11D00547900E3B155 /* EaseUI.m in Sources */,
 				8F51E2861D338FBF0094A4E5 /* UIImage+MultiFormat.m in Sources */,
 				8F648D151D00547A00E3B155 /* UIButton+EMWebCache.m in Sources */,

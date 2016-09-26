@@ -36,7 +36,7 @@
         self.tableView.bounces = NO;
         _viewColor = [UIColor colorWithRed:243/255.0 green:243/255.0 blue:240/255.0 alpha:1];
         _discoveryServiceName = @[@"邻居", @"商圈", @"公告" ,@"新闻" ,@"天气" ,@"社区服务", @"物业"];
-        _discoveryServiceImages = @[@"icon_linju.png", @"icon_shangquan.png" ,@"icon_gonggao.png", @"icon_xinwen.png" ,@"icon_xinwen.png", @"icon_shequfuwu.png", @"icon_wuye.png"];
+        _discoveryServiceImages = @[@"icon_linju.png", @"icon_shangquan.png" ,@"icon_gonggao.png", @"icon_xinwen.png" ,@"weatherinfo.png", @"icon_shequfuwu.png", @"icon_wuye.png"];
         /*tableViewCell 下划线 长度设置为屏幕的宽*/
         if ([self.tableView respondsToSelector:@selector(setSeparatorInset:)]) {
             [self.tableView setSeparatorInset:UIEdgeInsetsZero];
