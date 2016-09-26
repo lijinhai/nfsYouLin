@@ -12,6 +12,7 @@
 #import "StringMD5.h"
 #import "HeaderFile.h"
 #import "MyAdviceTVC.h"
+#import "RepairVC.h"
 #import "SqliteOperation.h"
 
 @interface PropertyVC ()
@@ -167,6 +168,12 @@
 -(void) touchDownRepair:(id)sender{
 
         NSLog(@"维修");
+    RepairVC *repairTVC=[[RepairVC alloc] init];
+    UIBarButtonItem *backItemTitle = [[UIBarButtonItem alloc] initWithTitle:@"报修" style:UIBarButtonItemStylePlain target:nil action:nil];
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    repairTVC.userIdStr=[defaults stringForKey:@"userId"];
+    [self.navigationItem setBackBarButtonItem:backItemTitle];
+    [self.navigationController pushViewController:repairTVC animated:YES];
 
 
 

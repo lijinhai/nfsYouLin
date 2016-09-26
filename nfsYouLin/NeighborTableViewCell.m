@@ -146,7 +146,7 @@
             deleteButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
             self.deleteButton = deleteButton;
             [self.deleteButton addTarget:self action:@selector(deleteBtn) forControlEvents:UIControlEventTouchDown];
-            
+        
             
 
         }
@@ -327,7 +327,66 @@
                         [separatorView setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
             [self.contentView addSubview:separatorView];
 
+        }else if([reuseIdentifier isEqualToString:@"cellRepair"]){
+        
+            self.selectionStyle = UITableViewCellSelectionStyleNone;
+            // 添加私信
+            self.letterView = [[UIControl alloc] initWithFrame:CGRectMake(0, 0, self.contentView.frame.size.width / 2, 40)];
+            self.letterView.backgroundColor = [UIColor whiteColor];
+            
+            UIView *lineView1 = [[UIView alloc] initWithFrame:CGRectMake(CGRectGetMaxX(self.letterView.frame), 10.0f, 1.0f, 20)];
+            [lineView1 setBackgroundColor:[UIColor blackColor]];
+            
+            _letterIV = [[UIImageView alloc] initWithFrame:CGRectMake(self.letterView.frame.size.width / 2 - 10, 10, 20, 20)];
+            _letterIV.image = [UIImage imageNamed:@"comment"];
+            [self.letterView addSubview:_letterIV];
+            
+            UILabel* letterLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(_letterIV.frame) + 2, 10, 30, 20)];
+            letterLabel.text = @"私信";
+            letterLabel.textAlignment = NSTextAlignmentLeft;
+            letterLabel.font = [UIFont systemFontOfSize:15];
+            [letterLabel setAutoresizingMask:UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin];
+            [_letterIV setAutoresizingMask:UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin];
+            self.letterLabel = letterLabel;
+            [self.letterView addSubview:letterLabel];
+            
+            [self.letterView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin];
+            [lineView1 setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin];
+            
+            [self.contentView addSubview:self.letterView];
+            [self.contentView addSubview:lineView1];
+            
+            
+            // 添加进度
+            self.scheduleView = [[UIControl alloc] initWithFrame:CGRectMake(CGRectGetMaxX(lineView1.frame), 0, self.contentView.frame.size.width / 2, 40)];
+            self.scheduleView.backgroundColor = [UIColor whiteColor];
+            
+            UIView *lineView2 = [[UIView alloc] initWithFrame:CGRectMake(CGRectGetMaxX(self.scheduleView.frame), 10.0f, 1.0f, 20)];
+            [lineView2 setBackgroundColor:[UIColor blackColor]];
+            
+            _scheduleIV = [[UIImageView alloc] initWithFrame:CGRectMake(self.scheduleView.frame.size.width/ 2-38 , 14, 28, 10)];
+            _scheduleIV.image = [UIImage imageNamed:@"jindu"];
+            [_scheduleIV setAutoresizingMask:UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin];
+            [self.scheduleView addSubview:_scheduleIV];
+            
+            _scheduleLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(_scheduleIV.frame) + 26, 10, 30, 20)];
+            _scheduleLabel.text = @"进度";
+            _scheduleLabel.font = [UIFont systemFontOfSize:15];
+            _scheduleLabel.textAlignment = NSTextAlignmentLeft;
+            [_scheduleIV setAutoresizingMask:UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin];
+            [self.scheduleView addSubview:_scheduleLabel];
+            
+            [self.scheduleView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin];
+                       
+            [self.contentView addSubview:self.scheduleView];
+            // 添加表格底边框
+            UIView* separatorView = [[UIView alloc] initWithFrame:CGRectMake(0, 39, CGRectGetWidth(self.contentView.frame), 1)];
+            separatorView.backgroundColor = [UIColor blackColor];
+            [separatorView setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
+            [self.contentView addSubview:separatorView];            
+            
         }
+            
         
     }
     return self;
@@ -346,6 +405,8 @@
     NSLog(@"%@",sender.titleLabel.text);
     [_delegate reloadShowByTitle:sender.titleLabel.text];
 }
+
+
 
 // 点击回复
 - (void) touchDownReply
@@ -581,7 +642,6 @@
         [self.newsView removeFromSuperview];
     }
     
-    
    
     if([self.neighborDataFrame.neighborData.senderId integerValue] == [userId integerValue])
     {
@@ -593,7 +653,12 @@
         [self.deleteButton removeFromSuperview];
 
     }
-
+    if([self.neighborDataFrame.neighborData.topicCategoryType integerValue] == 4)
+    {
+        [self.applyView removeFromSuperview];
+        [self.pastImageView removeFromSuperview];
+        [self.deleteButton removeFromSuperview];
+    }
     self.deleteButton.frame = self.neighborDataFrame.deleteFrame;
     if(self.neighborDataFrame.textCount >= 4)
     {

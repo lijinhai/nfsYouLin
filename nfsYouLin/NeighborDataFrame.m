@@ -167,7 +167,8 @@
     
     self.cellHeight += 2 * PADDING;
     
-    
+   
+
     // 报名详情
      if([self.neighborData.topicCategory integerValue] == 1)
      {
@@ -201,9 +202,13 @@
     {
         self.deleteFrame = CGRectMake(0, 0, 0, 0);
     }
-
     
-   
+   //私信位置
+    if([self.neighborData.topicCategoryType integerValue] == 4)
+    {
+        self.cellHeight -= 6 * PADDING;
+        self.deleteFrame = CGRectMake(0, 0, 0, 0);
+    }
 }
 
 

@@ -540,7 +540,7 @@
     {
         NSString* senderId = [NSString stringWithFormat:@"%ld",[self.neighborData.senderId integerValue]];
         NSString* nickName = self.neighborData.senderName;
-        ChatViewController *chatVC = [[ChatViewController alloc]initWithConversationChatter:senderId conversationType:EMConversationTypeChat];
+        ChatViewController *chatVC = [[ChatViewController alloc] initWithConversationChatter:senderId conversationType:EMConversationTypeChat];
         chatVC.title = nickName;
         [self.navigationController  pushViewController:chatVC animated:YES];
 

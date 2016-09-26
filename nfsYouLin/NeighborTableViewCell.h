@@ -33,6 +33,7 @@
 @property(strong, nonatomic) UIControl* watchView;
 @property(strong, nonatomic) UILabel* watchLabel;
 
+
 // 帖子数据
 @property (nonatomic, strong)NeighborDataFrame *neighborDataFrame;
 
@@ -80,6 +81,17 @@
 @property (strong, nonatomic)UIControl* newsView;
 @property (strong, nonatomic)UIImageView* newsIV;
 @property (strong, nonatomic)UILabel* newsTitleL;
+
+
+// 私信
+@property(strong, nonatomic) UIControl* letterView;
+@property(strong, nonatomic) UILabel* letterLabel;
+@property (strong, nonatomic)UIImageView* letterIV;
+
+// 进度
+@property(strong, nonatomic) UIControl* scheduleView;
+@property(strong, nonatomic) UILabel* scheduleLabel;
+@property (strong, nonatomic)UIImageView* scheduleIV;
 
 @property (nonatomic,assign) id<cellDelegate> delegate;
 
