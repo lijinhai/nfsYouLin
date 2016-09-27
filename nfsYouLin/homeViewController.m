@@ -223,6 +223,8 @@
             [defaults setObject:[personDic valueForKey:@"user_news_receive"] forKey:@"news_status"];
             [defaults setObject:[personDic valueForKey:@"user_nick"] forKey:@"nick"];
             [defaults setObject:[personDic valueForKey:@"user_password"] forKey:@"password"];
+            [defaults setObject:[personDic valueForKey:@"user_type"] forKey:@"type"];
+
             [defaults synchronize];
             
             SqlDictionary* sqlDict = [[SqlDictionary alloc] init];
