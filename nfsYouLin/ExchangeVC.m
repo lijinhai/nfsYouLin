@@ -893,6 +893,7 @@
     {
         _price = -1;
         [self.tableView reloadData];
+        return;
     }
     
     WaitView* waitView = [[WaitView alloc] initWithFrame:self.parentViewController.view.frame Title:@"正在发布..."];

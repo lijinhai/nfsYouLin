@@ -33,7 +33,10 @@
         self.layer.cornerRadius = 5;
         self.clipsToBounds = YES;
         
-        UIView* bgV1 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(frame), 260)];
+        UITapGestureRecognizer* tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(weatherGesture)];
+        [self addGestureRecognizer:tapGesture];
+        
+        UIControl* bgV1 = [[UIControl alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(frame), 260)];
         bgV1.backgroundColor = [UIColor whiteColor];
         [self addSubview:bgV1];
         
@@ -127,7 +130,7 @@
         _afterTomTL = afterTomTL;
         [weatherV addSubview:afterTomTL];
         
-        UIView* bgV2 = [[UIView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(bgV1.frame) + 2, CGRectGetWidth(self.frame), 70)];
+        UIControl* bgV2 = [[UIControl alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(bgV1.frame) + 2, CGRectGetWidth(self.frame), 70)];
         bgV2.backgroundColor = [UIColor whiteColor];
         [self addSubview:bgV2];
         
@@ -214,18 +217,22 @@
     NSInteger dayT = [[weatherInfo valueForKey:@"day_temperature"] integerValue];
     NSInteger nightT = [[weatherInfo valueForKey:@"night_temperature"] integerValue];
     NSInteger lowT = dayT < nightT ? dayT : nightT;
-    NSString* infoStr = [NSString stringWithFormat:@"%@   %ld°/%ld°",info, lowT, dayT];
+    NSInteger highT = dayT < nightT ? nightT : dayT;
+    NSString* infoStr = [NSString stringWithFormat:@"%@   %ld°/%ld°",info, lowT, highT];
     _infoL.text = infoStr;
 
     NSInteger dayTomorrowT = [[weatherInfo valueForKey:@"tomorrow_day_temperature"] integerValue];
     NSInteger nightTomorrowT = [[weatherInfo valueForKey:@"tomorrow_night_temperature"] integerValue];
     NSInteger lowTomorrowT = dayTomorrowT < nightTomorrowT ? dayTomorrowT : nightTomorrowT;
-    NSString* tommottowStr = [NSString stringWithFormat:@"%ld°/%ld°",lowTomorrowT, dayTomorrowT];
+    NSInteger highTomorrowT = dayTomorrowT > nightTomorrowT ? dayTomorrowT : nightTomorrowT;
+    NSString* tommottowStr = [NSString stringWithFormat:@"%ld°/%ld°",lowTomorrowT, highTomorrowT];
     _tomorrowTL.text = tommottowStr;
     
     NSInteger dayAfterT = [[weatherInfo valueForKey:@"after_day_temperature"] integerValue];
     NSInteger nightAfterT = [[weatherInfo valueForKey:@"after_night_temperature"] integerValue];
     NSInteger lowAfterT = dayAfterT < nightAfterT ? dayAfterT : nightAfterT;
+    NSInteger highAfterT = dayAfterT > nightAfterT ? dayAfterT : nightAfterT;
+
     NSString* afterStr = [NSString stringWithFormat:@"%ld°/%ld°",lowAfterT, dayAfterT];
     _afterTomTL.text = afterStr;
     
@@ -233,6 +240,14 @@
     _constellationL.text = [[_weatherInfo valueForKey:@"luck"] substringWithRange:NSMakeRange(0, 30)];
     [_constellationIV sd_setImageWithURL:[NSURL URLWithString:[_weatherInfo valueForKey:@"constellation"]] placeholderImage:[UIImage imageNamed:@"error.png"] options:SDWebImageAllowInvalidSSLCertificates];
     
+}
+
+
+#pragma mark -点击
+- (void)weatherGesture
+{
+    NSInteger weatherId = [[_weatherInfo valueForKey:@"weatherId"] integerValue];
+    [_deleagate intoWeatherDetail:weatherId];
 }
 
 - (CAGradientLayer *)shadowAsInverse

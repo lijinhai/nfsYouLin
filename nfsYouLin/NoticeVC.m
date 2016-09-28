@@ -50,6 +50,17 @@
     [super viewDidLoad];
     self.tableView.backgroundColor = [UIColor whiteColor];
     
+    UIBarButtonItem* rightItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(createClicked)];
+    
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSInteger serType = [[defaults stringForKey:@"type"] integerValue];
+    
+    if(serType == 4)
+    {
+        self.navigationItem.rightBarButtonItem = rightItem;
+    }
+    
+    
     if ([self.tableView respondsToSelector:@selector(setSeparatorInset:)]) {
         [self.tableView setSeparatorInset:UIEdgeInsetsZero];
     }
@@ -1064,5 +1075,10 @@
     
 }
 
+#pragma -mark 创建公告
+- (void) createClicked
+{
+    NSLog(@"createClicked");
+}
 
 @end

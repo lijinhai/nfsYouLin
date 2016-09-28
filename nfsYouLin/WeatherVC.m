@@ -13,9 +13,9 @@
 #import "StringMD5.h"
 #import "WeatherView.h"
 #import "MJRefresh.h"
+#import "WeatherDetailVC.h"
 
-
-@interface WeatherVC ()
+@interface WeatherVC () <WeatherDelegate>
 
 @end
 
@@ -41,7 +41,6 @@
     _scrollView.backgroundColor = BackgroundColor;
     _scrollView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(downDate)];
     _scrollView.mj_footer = [MJRefreshBackNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(upDate)];
-    indicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
     
     indicatorView = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(screenWidth / 2 - 20, screenHeight / 2, 40, 40)];
     indicatorView.hidesWhenStopped = YES;
@@ -265,7 +264,9 @@
         
         WeatherView* weatherView = [[WeatherView alloc] initWithFrame:CGRectMake(20, Y, screenWidth - 40, 330)];
         weatherView.tag = i;
+        weatherView.deleagate = self;
         NSMutableDictionary* weatherInfo = [[NSMutableDictionary alloc] init];
+        weatherInfo[@"weatherId"] = [weatherDict valueForKey:@"weaorzod_id"];
         weatherInfo[@"temperature"] = [[[[weatherDict valueForKey:@"wpr_detail"] valueForKey:@"realtime"] valueForKey:@"weather"] valueForKey:@"temperature"];
         weatherInfo[@"city_name"] = [[[weatherDict valueForKey:@"wpr_detail"] valueForKey:@"realtime"] valueForKey:@"city_name"];
         weatherInfo[@"info"] = [[[[weatherDict valueForKey:@"wpr_detail"] valueForKey:@"realtime"] valueForKey:@"weather"] valueForKey:@"info"];
@@ -287,6 +288,15 @@
     }
     _scrollView.contentSize = CGSizeMake(CGRectGetWidth(self.view.frame), Y);
     [indicatorView stopAnimating];
+}
+
+#pragma mark -WeatherDelegate
+- (void) intoWeatherDetail:(NSInteger)weatherId
+{
+    NSLog(@"weatherId = %ld",weatherId);  
+    WeatherDetailVC* weaherDetailVC = [[WeatherDetailVC alloc] init];
+    weaherDetailVC.weatherId = weatherId;
+    [self.navigationController pushViewController:weaherDetailVC animated:YES];
 }
 
 

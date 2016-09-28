@@ -7,14 +7,11 @@
 //
 
 #import "CreateTVC.h"
+#import "HeaderFile.h"
 
 @implementation CreateTVC
 {
     UILabel* limitLabel;
-    
-    CGFloat startW;
-    CGFloat endW;
-    CGFloat addressW;
 
     UIImageView* startIV;
     UIImageView* endIV;
@@ -24,7 +21,6 @@
     UIImageView* LevelIV;
 
     UITextField* _priceTF;
-    CGFloat priceW;
     UIImageView* priceIV;
     NSNumberFormatter* numberFormatter;
     NSCharacterSet* inputCharacterSet;
@@ -38,20 +34,20 @@
     {
         if([reuseIdentifier isEqualToString:@"limit"])
         {
-            limitLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetWidth(self.contentView.frame), 2, 60, CGRectGetHeight(self.contentView.frame))];
+            limitLabel = [[UILabel alloc] initWithFrame:CGRectMake(0,2, screenWidth - 35, CGRectGetHeight(self.contentView.frame))];
             limitLabel.font = [UIFont systemFontOfSize:15];
             limitLabel.textAlignment = NSTextAlignmentRight;
             [self.contentView addSubview:limitLabel];
         }
         else if([reuseIdentifier isEqualToString:@"level"])
         {
-            UILabel* levelL = [[UILabel alloc] initWithFrame:CGRectMake(60, 2, CGRectGetWidth(self.contentView.frame), CGRectGetHeight(self.contentView.frame))];
+            UILabel* levelL = [[UILabel alloc] initWithFrame:CGRectMake(0, 2, screenWidth - 35, CGRectGetHeight(self.contentView.frame))];
             levelL.font = [UIFont systemFontOfSize:15];
             levelL.textAlignment = NSTextAlignmentRight;
             LevelL = levelL;
             [self.contentView addSubview:levelL];
             
-            UIImageView* emptyIV = [[UIImageView alloc] initWithFrame:CGRectMake(CGRectGetMaxX(levelL.frame) - 20, 15, 20, 20)];
+            UIImageView* emptyIV = [[UIImageView alloc] initWithFrame:CGRectMake(screenWidth - 55, 15, 20, 20)];
             emptyIV.image = [UIImage imageNamed:@"tanhao.png"];
             emptyIV.layer.masksToBounds = YES;
             emptyIV.layer.cornerRadius = 10;
@@ -66,7 +62,7 @@
             [numberFormatter setMinimumFractionDigits:0];
             [numberFormatter setMaximumFractionDigits:0];
 
-            priceW = CGRectGetWidth(self.contentView.frame);
+            CGFloat priceW = screenWidth - 125;
             UITextField* priceTF = [[UITextField alloc] initWithFrame:CGRectMake(60, 2, priceW, CGRectGetHeight(self.contentView.frame))];
             priceTF.font = [UIFont systemFontOfSize:15];
             priceTF.keyboardType = UIKeyboardTypeNumberPad;
@@ -76,7 +72,7 @@
             _priceTF = priceTF;
             [self.contentView addSubview:priceTF];
             
-            UIImageView* emptyIV = [[UIImageView alloc] initWithFrame:CGRectMake(CGRectGetWidth(self.contentView.frame) + 40, 15, 20, 20)];
+            UIImageView* emptyIV = [[UIImageView alloc] initWithFrame:CGRectMake(screenWidth - 55, 15, 20, 20)];
             emptyIV.image = [UIImage imageNamed:@"tanhao.png"];
             emptyIV.layer.masksToBounds = YES;
             emptyIV.layer.cornerRadius = 10;
@@ -87,9 +83,8 @@
         else if([reuseIdentifier isEqualToString:@"start"])
         {
             
-            startW = CGRectGetWidth(self.contentView.frame);
+            CGFloat startW = screenWidth - 95;
             UILabel* startL = [[UILabel alloc] initWithFrame:CGRectMake(0, 2, startW, CGRectGetHeight(self.contentView.frame))];
-//            startL.backgroundColor = [UIColor blueColor];
             startL.font = [UIFont systemFontOfSize:15];
             startL.text = @"开始时间";
             startL.enabled = NO;
@@ -97,14 +92,14 @@
             [self.contentView addSubview:startL];
             self.startL = startL;
             
-            UIImageView* emptyIV = [[UIImageView alloc] initWithFrame:CGRectMake(CGRectGetWidth(self.contentView.frame) + 5, 15, 20, 20)];
+            UIImageView* emptyIV = [[UIImageView alloc] initWithFrame:CGRectMake(screenWidth - 85, 15, 20, 20)];
             emptyIV.image = [UIImage imageNamed:@"tanhao.png"];
             emptyIV.layer.masksToBounds = YES;
             emptyIV.layer.cornerRadius = 10;
             [self.contentView addSubview:emptyIV];
             startIV = emptyIV;
             
-            UIImageView* timeIV = [[UIImageView alloc] initWithFrame:CGRectMake(CGRectGetMaxX(emptyIV.frame) + 5, 15, 20, 20)];
+            UIImageView* timeIV = [[UIImageView alloc] initWithFrame:CGRectMake(screenWidth - 55, 15, 20, 20)];
             timeIV.layer.masksToBounds = YES;
             timeIV.layer.cornerRadius = 10;
             timeIV.image = [UIImage imageNamed:@"pic_shijina.png"];
@@ -112,7 +107,7 @@
         }
         else if([reuseIdentifier isEqualToString:@"end"])
         {
-            endW = CGRectGetWidth(self.contentView.frame);
+            CGFloat endW = screenWidth - 95;
             UILabel* endL = [[UILabel alloc] initWithFrame:CGRectMake(0, 2, endW, CGRectGetHeight(self.contentView.frame))];
             endL.font = [UIFont systemFontOfSize:15];
             endL.text = @"结束时间";
@@ -121,14 +116,14 @@
             [self.contentView addSubview:endL];
             self.endL = endL;
             
-            UIImageView* emptyIV = [[UIImageView alloc] initWithFrame:CGRectMake(CGRectGetWidth(self.contentView.frame) + 5, 15, 20, 20)];
+            UIImageView* emptyIV = [[UIImageView alloc] initWithFrame:CGRectMake(screenWidth - 85, 15, 20, 20)];
             emptyIV.image = [UIImage imageNamed:@"tanhao.png"];
             emptyIV.layer.masksToBounds = YES;
             emptyIV.layer.cornerRadius = 10;
             [self.contentView addSubview:emptyIV];
             endIV = emptyIV;
             
-            UIImageView* timeIV = [[UIImageView alloc] initWithFrame:CGRectMake(CGRectGetMaxX(emptyIV.frame) + 5, 15, 20, 20)];
+            UIImageView* timeIV = [[UIImageView alloc] initWithFrame:CGRectMake(screenWidth - 55, 15, 20, 20)];
             timeIV.layer.masksToBounds = YES;
             timeIV.layer.cornerRadius = 10;
             timeIV.image = [UIImage imageNamed:@"pic_shijina.png"];
@@ -136,7 +131,7 @@
         }
         else if([reuseIdentifier isEqualToString:@"address"])
         {
-            addressW = CGRectGetWidth(self.contentView.frame);
+            CGFloat addressW = screenWidth - 165;
             UILabel* addressL = [[UILabel alloc] initWithFrame:CGRectMake(100, 2, addressW, CGRectGetHeight(self.contentView.frame))];
             addressL.font = [UIFont systemFontOfSize:15];
             addressL.numberOfLines = 2;
@@ -146,7 +141,7 @@
             [self.contentView addSubview:addressL];
             self.addressL = addressL;
             
-            UIImageView* emptyIV = [[UIImageView alloc] initWithFrame:CGRectMake(CGRectGetWidth(self.contentView.frame) + 30, 15, 20, 20)];
+            UIImageView* emptyIV = [[UIImageView alloc] initWithFrame:CGRectMake(screenWidth - 55, 15, 20, 20)];
             emptyIV.image = [UIImage imageNamed:@"tanhao.png"];
             emptyIV.layer.masksToBounds = YES;
             emptyIV.layer.cornerRadius = 10;
@@ -183,17 +178,18 @@
 - (void) setStartB:(BOOL)startB
 {
     _startB = startB;
+
     if(_startB)
     {
         CGRect rect = self.startL.frame;
-        rect.size.width = startW + 20;
+        rect.size.width = screenWidth - 65;
         self.startL.frame = rect;
         startIV.hidden = YES;
     }
     else
     {
         CGRect rect = self.startL.frame;
-        rect.size.width = startW - 5;
+        rect.size.width = screenWidth - 95;
         self.startL.frame = rect;
         startIV.hidden = NO;
     }
@@ -206,14 +202,14 @@
     if(_endB)
     {
         CGRect rect = self.endL.frame;
-        rect.size.width = endW + 20;
+        rect.size.width = screenWidth - 65;
         self.endL.frame = rect;
         endIV.hidden = YES;
     }
     else
     {
         CGRect rect = self.endL.frame;
-        rect.size.width = endW - 5;
+        rect.size.width = screenWidth - 95;
         self.endL.frame = rect;
         endIV.hidden = NO;
     }
@@ -226,14 +222,14 @@
     if(_addressB)
     {
         CGRect rect = self.addressL.frame;
-        rect.size.width = addressW - 40;
+        rect.size.width = screenWidth - 135;
         self.addressL.frame = rect;
         addressIV.hidden = YES;
     }
     else
     {
         CGRect rect = self.addressL.frame;
-        rect.size.width = addressW - 75;
+        rect.size.width = screenWidth - 165;
         self.addressL.frame = rect;
         addressIV.hidden = NO;
     }
@@ -245,14 +241,14 @@
     if(_priceB)
     {
         CGRect rect = _priceTF.frame;
-        rect.size.width = priceW;
+        rect.size.width = screenWidth - 95;
         _priceTF.frame = rect;
         priceIV.hidden = YES;
     }
     else
     {
         CGRect rect = _priceTF.frame;
-        rect.size.width = priceW - 30;
+        rect.size.width = screenWidth - 125;
         _priceTF.frame = rect;
         priceIV.hidden = NO;
     }

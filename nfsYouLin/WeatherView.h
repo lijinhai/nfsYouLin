@@ -8,9 +8,16 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol WeatherDelegate <NSObject>
+
+- (void) intoWeatherDetail:(NSInteger) weatherId;
+
+@end
+
 @interface WeatherView : UIControl
 
 @property(strong, nonatomic)NSDictionary* weatherInfo;
+@property(strong, nonatomic)id <WeatherDelegate> deleagate;
 
 - (id) initWithFrame:(CGRect)frame;
 
