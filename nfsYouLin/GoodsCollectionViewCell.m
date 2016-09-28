@@ -9,6 +9,7 @@
 #import "GoodsCollectionViewCell.h"
 #import "UIImageView+WebCache.h"
 #import "StringMD5.h"
+#import "HeaderFile.h"
 @implementation GoodsCollectionViewCell
 
 - (id)initWithFrame:(CGRect)frame
@@ -44,7 +45,7 @@
             sendTimeL.text=@"本周五送达";
         }
         UILabel *line=[[UILabel alloc] initWithFrame:CGRectMake(0, frame.size.height-1, frame.size.width, 1)];
-        line.backgroundColor=[UIColor lightGrayColor];
+        line.backgroundColor = UIColorFromRGB(0xf5f5f5);
         
         [self.contentView addSubview:line];
         [self.contentView addSubview:_iconIV];

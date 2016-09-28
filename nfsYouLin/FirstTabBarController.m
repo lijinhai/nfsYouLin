@@ -79,12 +79,12 @@
                 action:@selector(popupAddressSettingTable:)
       forControlEvents:UIControlEventTouchUpInside
      ];
-    NSLog(@"nowAddressBtn text is %@",_nowAddressBtn.titleLabel.text);
+    //NSLog(@"nowAddressBtn text is %@",_nowAddressBtn.titleLabel.text);
 }
 
 -(void)popupAddressSettingTable:(id)sender{
 
-    PopChangeAddress *view = [PopChangeAddress defaultPopupView:nowAddressStr tFrame:CGRectMake(0, 0, 320, 250)];
+    PopChangeAddress *view = [PopChangeAddress defaultPopupView:nowAddressStr tFrame:CGRectMake(0, 0, screenWidth-40, 280)];
     view.parentVC = self;
     [self lew_presentPopupView:view animation:[LewPopupViewAnimationRight new] dismissed:^{
         

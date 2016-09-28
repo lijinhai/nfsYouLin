@@ -176,10 +176,9 @@
     }];
     /*生日信息初始化*/
     datePicker = [[UIDatePicker alloc] init];
-    UILabel *line=[[UILabel alloc] initWithFrame:CGRectMake(0, 38, 270, 0.6)];
-    dateLabel=[[UILabel alloc] initWithFrame:CGRectMake(5, 15, 270, 20)];
-    line.layer.borderColor=[UIColor blackColor].CGColor;
-    line.backgroundColor=[UIColor lightGrayColor];
+    UILabel *line=[[UILabel alloc] initWithFrame:CGRectMake(0, 38, 270, 1)];
+    dateLabel=[[UILabel alloc] initWithFrame:CGRectMake(5, 10, 270, 20)];
+    line.backgroundColor=[UIColor lightGrayColor];//UIColorFromRGB(0xf5f5f5)
     datePicker.datePickerMode = UIDatePickerModeDate;
     datePicker.frame=CGRectMake(0,40, 270, 200);
      NSString *dateString=[self setInitDate:datePicker.date];

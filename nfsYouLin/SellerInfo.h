@@ -25,5 +25,8 @@
 // 商家评级
 @property(nonatomic,strong)NSString* sellerLevel;
 
+// 商家唯一标示
+@property(nonatomic,strong)NSString* sellerUuid;
+
 - (id) initWithDict:(NSDictionary*)dict;
 @end

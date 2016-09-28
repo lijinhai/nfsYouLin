@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface DetailSellerInfoVC : UIViewController
-
+@interface DetailSellerInfoVC : UIViewController<CLLocationManagerDelegate>
+@property(nonatomic,strong) NSString* uuid;
+@property(nonatomic,strong) NSString* insteadIVURL;
 @end

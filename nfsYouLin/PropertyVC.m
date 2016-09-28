@@ -22,6 +22,7 @@
 @implementation PropertyVC{
 
     NSMutableDictionary* propertyObj;
+    UILabel *phoneVL;
 
 }
 
@@ -75,6 +76,11 @@
             upBackV.layer.cornerRadius = 4.0;
             upBackV.backgroundColor = [UIColor whiteColor];
             upBackV.center = CGPointMake(screenWidth/2, screenHeight/4+20);
+            upBackV.layer.shadowColor = [UIColor blackColor].CGColor;
+            upBackV.layer.shadowOffset = CGSizeMake(0.7,1);
+            upBackV.layer.shadowOpacity = 0.5;
+            upBackV.layer.shadowRadius = 1;
+            
             
             UIImageView *propertyIV = [[UIImageView alloc] initWithFrame:CGRectMake(screenWidth/2, 15, 60, 60)];
             propertyIV.image = [UIImage imageNamed:@"pic_wuye"];
@@ -108,16 +114,22 @@
             phoneIV.image=[UIImage imageNamed:@"store_dianhua"];
             UILabel *phonelab= [[UILabel alloc] initWithFrame:CGRectMake(50, upBackV.frame.size.height/2+60, 105, 20)];
             phonelab.text=@"服务电话 ：";
-            UILabel *phoneVL=[[UILabel alloc] initWithFrame:CGRectMake(145, upBackV.frame.size.height/2+60, 300, 20)];
+            phoneVL=[[UILabel alloc] initWithFrame:CGRectMake(145, upBackV.frame.size.height/2+60, 300, 20)];
             phoneVL.text=[NSString stringWithFormat:@"%@",[responseObject valueForKey:@"phone"]];
             phoneVL.textColor=UIColorFromRGB(0xFFBA02);
+            phoneVL.userInteractionEnabled = YES;
+            UITapGestureRecognizer* phoneTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(phoneTapGesture)];
+            [phoneVL addGestureRecognizer:phoneTap];
             [upBackV addSubview:phoneIV];
             [upBackV addSubview:phonelab];
             [upBackV addSubview:phoneVL];
             
             UIView *downView=[[UIView alloc] initWithFrame:CGRectMake(0, screenHeight/2, screenWidth, 60)];
             downView.backgroundColor=[UIColor whiteColor];
-            
+            downView.layer.shadowColor = [UIColor blackColor].CGColor;
+            downView.layer.shadowOffset = CGSizeMake(0,1);
+            downView.layer.shadowOpacity = 0.5;
+            downView.layer.shadowRadius = 1;
             UILabel *shuLine=[[UILabel alloc] initWithFrame:CGRectMake(downView.frame.size.width/2, 5, 1, 50)];
             shuLine.backgroundColor = [UIColor lightGrayColor];
             _repairCtl=[[UIControl alloc] initWithFrame:CGRectMake(0, 0, downView.frame.size.width/2, 60)];
@@ -191,6 +203,13 @@
         NSLog(@"建议");
 }
 
+-(void)phoneTapGesture{
+
+    NSMutableString *phoneNum = [[NSMutableString alloc] initWithFormat:@"tel:%@",phoneVL.text];
+    UIWebView * callWebview = [[UIWebView alloc] init];
+    [callWebview loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:phoneNum]]];
+    [self.view addSubview:callWebview];
+}
 /*
 #pragma mark - Navigation
 

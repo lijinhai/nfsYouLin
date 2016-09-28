@@ -27,7 +27,7 @@
         _tableView.delegate = self;
         _tableView.dataSource = self;
         _tableView.bounces = NO;
-        _tableView.separatorColor = [UIColor darkGrayColor];
+        //_tableView.separatorColor = [UIColor darkGrayColor];
         if ([_tableView respondsToSelector:@selector(setSeparatorInset:)]) {
             [_tableView setSeparatorInset:UIEdgeInsetsZero];
         }

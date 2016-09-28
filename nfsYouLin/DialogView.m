@@ -47,17 +47,12 @@
         {
             [self initDeleteRepairView:frame];
         }
-        else if([flag isEqualToString:@"searchType"])
+        else if([flag isEqualToString:@"bussnessName"])
         {
             
-            [self initSearchTypeView:frame];
+            [self showBussnessNameView:frame];
         }
-        else if([flag isEqualToString:@"orderType"])
-        {
         
-           // [self initOrderTypeView:frame];
-        
-        }
     }
     
     return self;
@@ -305,13 +300,31 @@
 
 
 }
+//展示详细商家地址框
+-(void)showBussnessNameView:(CGRect)frame{
 
-//商圈选择商家类型
--(void)initSearchTypeView:(CGRect) frame{
-
+    self.backgroundColor = [UIColor clearColor];
+    self.backView = [[UIView alloc] initWithFrame:CGRectMake(50, (frame.size.height - 80) / 2, frame.size.width - 100, 100)];
+    self.backView.backgroundColor = [UIColor lightGrayColor];
+    
+    UIView* titleV = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.backView.frame), 60)];
+    titleV.backgroundColor = [UIColor whiteColor];
+    [self.backView addSubview:titleV];
+    
+    self.titleL = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, CGRectGetWidth(titleV.frame) - 20, 60)];
+    self.titleL.font = [UIFont systemFontOfSize:16];
+    self.titleL.numberOfLines = 2;
+    self.titleL.textColor = [UIColor blackColor];
+    [titleV addSubview:self.titleL];
+    
+     self.OKbtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 61, CGRectGetWidth(self.backView.frame), 39)];
+    [self.OKbtn setTitle:@"确定" forState:UIControlStateNormal];
+     self.OKbtn.backgroundColor = [UIColor whiteColor];
+    [self.OKbtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [self.backView addSubview:self.OKbtn];
+    [self addSubview:self.backView];
 
 }
-
 
 - (void) touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
 {

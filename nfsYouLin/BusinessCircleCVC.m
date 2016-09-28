@@ -15,6 +15,7 @@
 #import "HeaderFile.h"
 #import "MBProgressHUBTool.h"
 #import "SellerInfo.h"
+#import "DetailSellerInfoVC.h"
 #import "MJRefresh.h"
 
 @interface BusinessCircleCVC ()
@@ -26,6 +27,7 @@
     NSMutableArray* sellerAry;
     UIActivityIndicatorView* _indicator;
     UIPanGestureRecognizer* _panGesture;
+    NSInteger pageNo;
 
 }
 
@@ -47,9 +49,6 @@ static NSString * const reuseIdentifier = @"Cell";
     
     // 设置cell之间的间距
     layout.minimumInteritemSpacing = 0;
-    //
-    //    // 组间距
-    //    layout.sectionInset = UIEdgeInsetsMake(100, 20, 0, 30);
     
     return [super initWithCollectionViewLayout:layout];
 }
@@ -57,7 +56,7 @@ static NSString * const reuseIdentifier = @"Cell";
 - (void)viewDidLoad {
     [super viewDidLoad];
    
-    _indicator = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(self.view.frame.size.width / 2-25 , self.view.frame.size.height / 2-150, 50, 50)];
+    _indicator = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(self.view.frame.size.width / 2-25 , 200, 50, 50)];
     [self.view addSubview:_indicator];
     _indicator.hidesWhenStopped = YES;
     _indicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhiteLarge;
@@ -71,9 +70,10 @@ static NSString * const reuseIdentifier = @"Cell";
      self.collectionView.bounces = NO;
      self.collectionView.backgroundColor = [UIColor whiteColor];
      self.collectionView.mj_footer = [MJRefreshBackNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(upRefreshData)];
-    // Register cell classes
+    pageNo = 1;
     _panGesture = self.collectionView.panGestureRecognizer;
     [_panGesture addTarget:self action:@selector(handlePan:)];
+    // Register cell classes
     [self.collectionView registerClass:[SellerCVCell class] forCellWithReuseIdentifier:reuseIdentifier];
 }
 
@@ -160,12 +160,13 @@ static NSString * const reuseIdentifier = @"Cell";
         {
             for (int i = 0; i < [responseObject count]; i++)
             {
-                SellerInfo* sellerObj=[[SellerInfo alloc] init];
-                sellerObj.sellerPicUrl=[[responseObject objectAtIndex:i] valueForKey:@"img_url"];
-                sellerObj.sellerPosition=[[responseObject objectAtIndex:i] valueForKey:@"address"];
-                sellerObj.sellerDistance=[NSString stringWithFormat:@"%@",[[responseObject objectAtIndex:i] valueForKey:@"distance"]];
-                sellerObj.sellerLevel=[NSString stringWithFormat:@"%@",[[responseObject objectAtIndex:i] valueForKey:@"facility"]];
-                sellerObj.sellerName=[[responseObject objectAtIndex:i] valueForKey:@"name"];
+                SellerInfo* sellerObj = [[SellerInfo alloc] init];
+                sellerObj.sellerPicUrl = [[responseObject objectAtIndex:i] valueForKey:@"img_url"];
+                sellerObj.sellerPosition = [[responseObject objectAtIndex:i] valueForKey:@"address"];
+                sellerObj.sellerDistance = [NSString stringWithFormat:@"%@",[[responseObject objectAtIndex:i] valueForKey:@"distance"]];
+                sellerObj.sellerLevel = [NSString stringWithFormat:@"%@",[[responseObject objectAtIndex:i] valueForKey:@"facility"]];
+                sellerObj.sellerName = [[responseObject objectAtIndex:i] valueForKey:@"name"];
+                sellerObj.sellerUuid = [NSString stringWithFormat:@"%@",[[responseObject objectAtIndex:i] valueForKey:@"uid"]];
                 [sellerAry addObject:sellerObj];
             
             }
@@ -189,9 +190,69 @@ static NSString * const reuseIdentifier = @"Cell";
 // 上拉刷新获取更多商圈信息
 -(void)upRefreshData{
 
-
-    [self.collectionView.mj_footer endRefreshing];
-     NSLog(@"刷新中请等待");
+    [sellerAry removeAllObjects];
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSString* communityId = [defaults stringForKey:@"communityId"];
+    NSString* sortStr = _sort;
+    NSString* bctagStr = _bctag;
+    
+    AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
+    manager.securityPolicy.allowInvalidCertificates = YES;
+    [manager.securityPolicy setValidatesDomainName:NO];
+    
+    
+    NSString* MD5String = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"sort%@community_id%@page%@bctag%@",sortStr,communityId,[NSString stringWithFormat:@"%ld",pageNo],bctagStr]];
+    NSString* hashString = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"%@1", MD5String]];
+    
+    NSDictionary* parameter = @{@"sort" : sortStr,
+                                @"community_id" : communityId,
+                                @"page" : [NSString stringWithFormat:@"%ld",pageNo],
+                                @"bctag" : bctagStr,
+                                @"apitype" : @"address",
+                                @"tag" : @"bizcir",
+                                @"salt" : @"1",
+                                @"hash" : hashString,
+                                @"keyset" : @"sort:community_id:page:bctag:",
+                                };
+    
+    [manager POST:POST_URL parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+        
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
+        NSLog(@"小区商圈上拉请求:%@", responseObject);
+        if([responseObject isKindOfClass:[NSArray class]])
+        {
+            for (int i = 0; i < [responseObject count]; i++)
+            {
+                SellerInfo* sellerObj = [[SellerInfo alloc] init];
+                sellerObj.sellerPicUrl = [[responseObject objectAtIndex:i] valueForKey:@"img_url"];
+                sellerObj.sellerPosition = [[responseObject objectAtIndex:i] valueForKey:@"address"];
+                sellerObj.sellerDistance = [NSString stringWithFormat:@"%@",[[responseObject objectAtIndex:i] valueForKey:@"distance"]];
+                sellerObj.sellerLevel = [NSString stringWithFormat:@"%@",[[responseObject objectAtIndex:i] valueForKey:@"facility"]];
+                sellerObj.sellerName = [[responseObject objectAtIndex:i] valueForKey:@"name"];
+                sellerObj.sellerUuid = [NSString stringWithFormat:@"%@",[[responseObject objectAtIndex:i] valueForKey:@"uid"]];
+                [sellerAry addObject:sellerObj];
+                
+            }
+            
+            pageNo++;
+            [self.collectionView.mj_footer endRefreshing];
+            [self.collectionView reloadData];
+            
+        }else{
+            
+            
+            [MBProgressHUBTool textToast:self.view Tip:[responseObject valueForKey:@"yl_msg"]];
+            [self.collectionView.mj_footer endRefreshing];
+            
+        }
+   
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"请求失败:%@", error.description);
+        return;
+    }];
 
 }
 #pragma mark <UICollectionViewDataSource>
@@ -218,6 +279,21 @@ static NSString * const reuseIdentifier = @"Cell";
     return cell;
 }
 
+// 点击跳转至商家详情
+-(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
+  
+    NSLog(@"indexPath.section is %ld",indexPath.section);
+    DetailSellerInfoVC *jumpDSIVC = [[DetailSellerInfoVC alloc] init];
+    SellerInfo* cellSellers = [sellerAry objectAtIndex:indexPath.section];
+    jumpDSIVC.uuid = cellSellers.sellerUuid;
+    jumpDSIVC.insteadIVURL = cellSellers.sellerPicUrl;
+    UIBarButtonItem* backItem = [[UIBarButtonItem alloc] initWithTitle:@"内容详情" style:UIBarButtonItemStylePlain target:nil action:nil];
+    //[[self.navigationController.navigationBar.subviews objectAtIndex:1] removeFromSuperview];
+     self.parentViewController.navigationItem.backBarButtonItem = backItem;
+    [self.parentViewController.navigationController pushViewController:jumpDSIVC animated:NO];
+    NSLog(@"jumpDSIVC.uuid is %@",jumpDSIVC.uuid);
+}
+
 #pragma mark <UICollectionViewDelegate>
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
     
@@ -241,34 +317,5 @@ static NSString * const reuseIdentifier = @"Cell";
 {
     return UIEdgeInsetsMake(0.5, 0.5, 0.5, 0.5);//分别为上、左、下、右
 }
-
-/*
-// Uncomment this method to specify if the specified item should be highlighted during tracking
-- (BOOL)collectionView:(UICollectionView *)collectionView shouldHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
-	return YES;
-}
-*/
-
-/*
-// Uncomment this method to specify if the specified item should be selected
-- (BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    return YES;
-}
-*/
-
-/*
-// Uncomment these methods to specify if an action menu should be displayed for the specified item, and react to actions performed on the item
-- (BOOL)collectionView:(UICollectionView *)collectionView shouldShowMenuForItemAtIndexPath:(NSIndexPath *)indexPath {
-	return NO;
-}
-
-- (BOOL)collectionView:(UICollectionView *)collectionView canPerformAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
-	return NO;
-}
-
-- (void)collectionView:(UICollectionView *)collectionView performAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
-	
-}
-*/
 
 @end
