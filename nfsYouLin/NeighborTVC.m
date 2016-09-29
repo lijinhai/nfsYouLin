@@ -896,8 +896,6 @@ static BOOL upState = YES;
     
     [manager POST:POST_URL parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
         
-        
-        
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSLog(@"获取所有帖子网络请求:%@", responseObject);
         for (int i = 0; i < [responseObject count]; i++,sectionCount++)
@@ -1295,7 +1293,8 @@ static BOOL upState = YES;
              @"praiseCount" : responseDict[@"likeNum"],
              @"replyCount" : responseDict[@"commentNum"],
              @"topicId" : responseDict[@"topicId"],
-             
+             @"forumName" : responseDict[@"forumName"],
+             @"topicCategoryType" : responseDict[@"topicCategoryType"],
              };
     return dict;
 }
@@ -1415,9 +1414,6 @@ static BOOL upState = YES;
     }
     
 }
-
-
-
 
 // 浏览帖子次数网络请求
 // topicId 帖子id

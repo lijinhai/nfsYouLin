@@ -507,8 +507,8 @@
     
     [self.navigationController pushViewController:limitVC animated:YES];
 }
-#pragma mark UITextViewDelegate
 
+#pragma mark UITextViewDelegate
 -(BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
     if ([text isEqualToString:@"\n"])
@@ -770,7 +770,7 @@
     [self.view endEditing:YES];
 }
 
-#pragma mark NSNotificationCenter UIKeyboard
+#pragma mark -NSNotificationCenter UIKeyboard
 
 //当键出现时调用
 - (void)keyboardWillShow:(NSNotification *)aNotification

@@ -912,7 +912,6 @@
         parameter[@"topic_id"] = [self.topicInfo valueForKey:@"topicId"];
     }
 
-    
     [manager POST:POST_URL parameters:parameter constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
         if([selectedPhotos count] != 0)
         {
@@ -954,7 +953,8 @@
         [waitView removeFromSuperview];
         [backgroundView removeFromSuperview];
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        NSLog(@"上传失败 %@", error);
+        NSData* data = error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey];
+        NSLog(@"上传失败 %@",  [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
         [waitView removeFromSuperview];
         [backgroundView removeFromSuperview];
     }];

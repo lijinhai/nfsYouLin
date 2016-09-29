@@ -47,12 +47,12 @@
 
 // 环信
 #define HXAppKey @"nfs-hlj#youlinapp"
-#define HXApnsCertName @"chatCertName"
+#define HXApnsCertName @"production"
 
 // 极光
 #define JGAppKey @"64de302e0f10c70af07b0ed4"
 static NSString *channel = @"Publish channel";
-static BOOL isProduction = FALSE;
+static BOOL isProduction = true;
 
 // 百度地图Key
 #define BMAP_KEY @"BDiQ7UU9TW9vUv81GUh1Ej2WlRyUXM6n"

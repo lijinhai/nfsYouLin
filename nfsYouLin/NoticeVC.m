@@ -24,6 +24,7 @@
 #import "NewsDetailVC.h"
 #import "PersonalInformationViewController.h"
 #import "PeopleInfoVC.h"
+#import "CreateNoticeVC.h"
 
 @interface NoticeVC ()
 
@@ -1078,7 +1079,10 @@
 #pragma -mark 创建公告
 - (void) createClicked
 {
-    NSLog(@"createClicked");
+    CreateNoticeVC* createNTC = [[CreateNoticeVC alloc] init];
+    UIBarButtonItem* item = [[UIBarButtonItem alloc] initWithTitle:@"物业公告" style:UIBarButtonItemStylePlain target:nil action:nil];
+    self.navigationItem.backBarButtonItem = item;
+    [self.navigationController pushViewController:createNTC animated:YES];
 }
 
 @end
