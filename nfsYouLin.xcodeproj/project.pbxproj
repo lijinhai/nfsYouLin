@@ -558,7 +558,6 @@
 		AFCE1F9C1CDAD1B20085F10F /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AFCE1F9B1CDAD1B20085F10F /* ViewController.m */; };
 		AFCE1FA41CDAD1B20085F10F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AFCE1FA21CDAD1B20085F10F /* LaunchScreen.storyboard */; };
 		AFCE1FAF1CDAD1B20085F10F /* nfsYouLinTests.m in Sources */ = {isa = PBXBuildFile; fileRef = AFCE1FAE1CDAD1B20085F10F /* nfsYouLinTests.m */; };
-		AFCE1FBA1CDAD1B20085F10F /* nfsYouLinUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = AFCE1FB91CDAD1B20085F10F /* nfsYouLinUITests.m */; };
 		AFCE1FCB1CDAD2020085F10F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AFCE1FC71CDAD2020085F10F /* Main.storyboard */; };
 		AFD75EA81D470971006B5A4B /* PopupGoodsExchageView.m in Sources */ = {isa = PBXBuildFile; fileRef = AFD75EA71D470971006B5A4B /* PopupGoodsExchageView.m */; };
 		AFD75EAB1D49E9FF006B5A4B /* IntegralRulesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AFD75EAA1D49E9FF006B5A4B /* IntegralRulesViewController.m */; };
@@ -589,9 +588,6 @@
 		AFEB36581D4ED43C0081A5E6 /* ExchangedGiftsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AFEB36571D4ED43C0081A5E6 /* ExchangedGiftsViewController.m */; };
 		AFEB365E1D503F050081A5E6 /* GoodsCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = AFEB365D1D503F050081A5E6 /* GoodsCollectionViewCell.m */; };
 		AFEB36651D506F6F0081A5E6 /* goodsInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = AFEB36641D506F6F0081A5E6 /* goodsInfo.m */; };
-		AFF727E61D9902FB0072E523 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AFF727E51D9902FA0072E523 /* QuartzCore.framework */; };
-		AFF727E81D9903080072E523 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AFF727E71D9903080072E523 /* OpenGLES.framework */; };
-		AFF727EA1D9903530072E523 /* libsqlite3.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = AFF727E91D9903530072E523 /* libsqlite3.0.tbd */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1131,7 +1127,6 @@
 		8F648DA11D00549E00E3B155 /* chat_sender_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "chat_sender_bg@2x.png"; sourceTree = "<group>"; };
 		8F648DA21D00549E00E3B155 /* user@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "user@2x.png"; sourceTree = "<group>"; };
 		8F648DA31D00549E00E3B155 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
-		8F648DE71D00553B00E3B155 /* PrefixHeader.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PrefixHeader.pch; sourceTree = "<group>"; };
 		8F648DEA1D005D1500E3B155 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 		8F64912A1D05435100E3B155 /* NeighborDetailTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NeighborDetailTVC.h; sourceTree = "<group>"; };
 		8F64912B1D05435100E3B155 /* NeighborDetailTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NeighborDetailTVC.m; sourceTree = "<group>"; };
@@ -1558,8 +1553,6 @@
 		AFCE1FAE1CDAD1B20085F10F /* nfsYouLinTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = nfsYouLinTests.m; sourceTree = "<group>"; };
 		AFCE1FB01CDAD1B20085F10F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AFCE1FB51CDAD1B20085F10F /* nfsYouLinUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = nfsYouLinUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		AFCE1FB91CDAD1B20085F10F /* nfsYouLinUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = nfsYouLinUITests.m; sourceTree = "<group>"; };
-		AFCE1FBB1CDAD1B20085F10F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AFCE1FC71CDAD2020085F10F /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		AFD75EA61D470971006B5A4B /* PopupGoodsExchageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PopupGoodsExchageView.h; sourceTree = "<group>"; };
 		AFD75EA71D470971006B5A4B /* PopupGoodsExchageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PopupGoodsExchageView.m; sourceTree = "<group>"; };
@@ -1612,9 +1605,6 @@
 		AFEB365D1D503F050081A5E6 /* GoodsCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GoodsCollectionViewCell.m; sourceTree = "<group>"; };
 		AFEB36631D506F6F0081A5E6 /* goodsInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = goodsInfo.h; sourceTree = "<group>"; };
 		AFEB36641D506F6F0081A5E6 /* goodsInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = goodsInfo.m; sourceTree = "<group>"; };
-		AFF727E51D9902FA0072E523 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
-		AFF727E71D9903080072E523 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
-		AFF727E91D9903530072E523 /* libsqlite3.0.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.0.tbd; path = usr/lib/libsqlite3.0.tbd; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1624,12 +1614,9 @@
 			files = (
 				8F648B851D00535100E3B155 /* libstdc++.6.0.9.tbd in Frameworks */,
 				8F1FB6E71D65846B00676743 /* CoreTelephony.framework in Frameworks */,
-				AFF727EA1D9903530072E523 /* libsqlite3.0.tbd in Frameworks */,
 				8F1FB6F11D6584B800676743 /* Security.framework in Frameworks */,
 				8F1FB6EB1D65849700676743 /* CoreGraphics.framework in Frameworks */,
 				8F1FB6E91D65848E00676743 /* SystemConfiguration.framework in Frameworks */,
-				AFF727E81D9903080072E523 /* OpenGLES.framework in Frameworks */,
-				AFF727E61D9902FB0072E523 /* QuartzCore.framework in Frameworks */,
 				8FB6FA801D484CDD00E6C71A /* CoreLocation.framework in Frameworks */,
 				8FA53CEB1D7F9C5C00841B1D /* ContactsUI.framework in Frameworks */,
 				8FD1214A1D7467150066C8E3 /* BaiduMapAPI_Location.framework in Frameworks */,
@@ -3249,8 +3236,6 @@
 				8FC897AA1D99182E00C9B32C /* 公告 */,
 				8FC897981D9914F800C9B32C /* 天气 */,
 				AFB4E3A91D921FFC004A148A /* 商圈 */,
-				8F1499441D92134600ED707E /* 天气 */,
-				8F14983D1D901C9D00ED707E /* 公告 */,
 				8F14981F1D8F844D00ED707E /* 社区服务 */,
 				8F1498211D8F8ADE00ED707E /* 物业 */,
 				8FAF9D971D868C090005B08C /* 新闻 */,
@@ -3646,9 +3631,6 @@
 		AFCE1F881CDAD1B20085F10F = {
 			isa = PBXGroup;
 			children = (
-				AFF727E91D9903530072E523 /* libsqlite3.0.tbd */,
-				AFF727E71D9903080072E523 /* OpenGLES.framework */,
-				AFF727E51D9902FA0072E523 /* QuartzCore.framework */,
 				8F9481881D88F3660039C415 /* JSONKit */,
 				8FA53D0E1D80FAFD00841B1D /* ShareSDK */,
 				8FD121401D7467150066C8E3 /* BaiduMapAPI */,
@@ -3725,9 +3707,6 @@
 		AFCE1FB81CDAD1B20085F10F /* nfsYouLinUITests */ = {
 			isa = PBXGroup;
 			children = (
-				AFCE1FB91CDAD1B20085F10F /* nfsYouLinUITests.m */,
-				AFCE1FBB1CDAD1B20085F10F /* Info.plist */,
-				8F648DE71D00553B00E3B155 /* PrefixHeader.pch */,
 			);
 			path = nfsYouLinUITests;
 			sourceTree = "<group>";
@@ -4193,7 +4172,6 @@
 				8F648D351D00547A00E3B155 /* EaseMessageReadManager.m in Sources */,
 				8F648CFD1D00547A00E3B155 /* MJRefreshStateHeader.m in Sources */,
 				8F648CFC1D00547A00E3B155 /* MJRefreshNormalHeader.m in Sources */,
-				8F1499471D9213CE00ED707E /* WeatherVC.m in Sources */,
 				AF4B4F1D1D07ACF90039BE42 /* LewPopupViewAnimationRight.m in Sources */,
 				8F51E27C1D338FBF0094A4E5 /* NSData+ImageContentType.m in Sources */,
 				AF1DBD971CED80D400557E43 /* myCommunityViewController.m in Sources */,
@@ -4522,7 +4500,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AFCE1FBA1CDAD1B20085F10F /* nfsYouLinUITests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4602,7 +4579,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				PROVISIONING_PROFILE = "18b3b4b6-c1be-4d81-9052-6cf31aabb6a3";
+				PROVISIONING_PROFILE = "ae82bd4b-8ebb-4287-a202-348be7b390f4";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -4640,7 +4617,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				MTL_ENABLE_DEBUG_INFO = NO;
-				PROVISIONING_PROFILE = "18b3b4b6-c1be-4d81-9052-6cf31aabb6a3";
+				PROVISIONING_PROFILE = "39888ae0-a4d0-4241-98f9-3c8804d42bfd";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -4666,6 +4643,7 @@
 					"$(PROJECT_DIR)/ShareSDK/Support/PlatformSDK/RenRenSDK",
 					"$(PROJECT_DIR)/ShareSDK/Support/Required",
 				);
+				GCC_INPUT_FILETYPE = automatic;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = /Volumes/IOS/nfsYouLin2/nfsYouLinUITests/PrefixHeader.pch;
 				INFOPLIST_FILE = nfsYouLin/Info.plist;
@@ -4684,7 +4662,7 @@
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				OTHER_LIBTOOLFLAGS = "";
-				PRODUCT_BUNDLE_IDENTIFIER = com.youfan.youlin;
+				PRODUCT_BUNDLE_IDENTIFIER = nfs.Youlin;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 			};
@@ -4710,6 +4688,7 @@
 					"$(PROJECT_DIR)/ShareSDK/Support/PlatformSDK/RenRenSDK",
 					"$(PROJECT_DIR)/ShareSDK/Support/Required",
 				);
+				GCC_INPUT_FILETYPE = automatic;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = /Volumes/IOS/nfsYouLin2/nfsYouLinUITests/PrefixHeader.pch;
 				INFOPLIST_FILE = nfsYouLin/Info.plist;
@@ -4728,7 +4707,7 @@
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				OTHER_LIBTOOLFLAGS = "";
-				PRODUCT_BUNDLE_IDENTIFIER = com.youfan.youlin;
+				PRODUCT_BUNDLE_IDENTIFIER = nfs.Youlin;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 			};
