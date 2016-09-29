@@ -32,12 +32,13 @@
     NSString*  lastGoodsIdStr;
     BOOL updateFlag;
     NSTimer *timer;
+    UIPanGestureRecognizer* _panGesture;
   
 }
 static NSString * const reuseIdentifier = @"Cell";
 
 
--(void) getExchangingGifts:(NSString *)actionType ueId:(NSString *)goodsId{
+-(void) getExchangedGifts:(NSString *)actionType ueId:(NSString *)goodsId{
     
     AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
     manager.securityPolicy.allowInvalidCertificates = YES;
@@ -66,6 +67,8 @@ static NSString * const reuseIdentifier = @"Cell";
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         
         NSLog(@"responseObjectsssss is %@",responseObject);
+        if([responseObject objectForKey:@"info"])
+        {
         NSMutableArray *responseObjectAry=[responseObject objectForKey:@"info"];
         for(int i=0;i<[responseObjectAry count];i++){
             goodsInfo* goodsObj=[[goodsInfo alloc] init];
@@ -81,17 +84,23 @@ static NSString * const reuseIdentifier = @"Cell";
         lastGoodsIdStr=[[responseObjectAry objectAtIndex:[responseObjectAry count]-1] objectForKey:@"ue_id"];
         if(lastGoodsIdStr==NULL)
         {
-            NSLog(@"lastGoodsIdStr is %@",lastGoodsIdStr);
             updateFlag=NO;
-            [self setUpdateLabelState];
             
         }else{
             
             updateFlag=YES;
+            [self.collectionView.mj_footer endRefreshing];
             [self.collectionView reloadData];
         }
         [_indicator stopAnimating];
-        
+        [self.collectionView reloadData];
+        [self.collectionView.mj_footer endRefreshing];
+        }else{
+            
+            updateFlag=NO;
+            [self setUpdateLabelState];
+            [self.collectionView.mj_footer endRefreshing];
+        }
         
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         NSLog(@"请求失败:%@", error.description);
@@ -107,45 +116,57 @@ static NSString * const reuseIdentifier = @"Cell";
     
     [self.collectionView registerClass:[GoodsCollectionViewCell class] forCellWithReuseIdentifier:reuseIdentifier ];
     [self.collectionView setBackgroundColor:[UIColor whiteColor]];
-    
-    
-    footer  = [MJRefreshAutoNormalFooter   footerWithRefreshingTarget:self refreshingAction:@selector(loadExchangeData)];
-    self.collectionView.mj_footer = footer;
-    
-    [footer setTitle:@"" forState:MJRefreshStateIdle];
-    [footer setTitle:@"放开以刷新" forState:MJRefreshStatePulling];
-    [footer setTitle:@"正在载入" forState:MJRefreshStateRefreshing];
-    [footer setTitle:@"没有更多数据" forState:MJRefreshStateNoMoreData];
-    
+    self.collectionView.bounces = NO;
+    self.collectionView.backgroundColor = [UIColor whiteColor];
+    self.collectionView.mj_footer = [MJRefreshBackNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(upRefreshData)];
+     _panGesture = self.collectionView.panGestureRecognizer;
+    [_panGesture addTarget:self action:@selector(handlePan:)];
     
 }
 - (void)viewWillAppear:(BOOL)animated{
     
-    NSLog(@"*******************");
     self.collectionView.translatesAutoresizingMaskIntoConstraints=NO;
     self.collectionView.alwaysBounceVertical=YES;
     exchangedArr=[[NSMutableArray alloc] init];
-    [self getExchangingGifts:@"1" ueId:@"0"];
+    [self getExchangedGifts:@"1" ueId:@"0"];
     
 }
 
--(void)loadExchangeData{
-    
-    if(updateFlag)
+-(void) handlePan:(UIPanGestureRecognizer*)gesture
+{
+    CGPoint translation = [gesture translationInView:self.collectionView];
+    if(gesture.state == UIGestureRecognizerStateBegan)
     {
-        [self.collectionView.mj_footer beginRefreshing];
-        [self getExchangingGifts:@"2" ueId:lastGoodsIdStr];
-        
-        [self performSelector:@selector(doneWithView) withObject:nil afterDelay:2.0];
+        if(translation.y > 0)
+        {
+            self.collectionView.bounces = NO;
+        }
+        // 底部上拉
+        else if(translation.y < 0)
+        {
+            self.collectionView.bounces = YES;
+        }
+    }
+    else if(gesture.state == UIGestureRecognizerStateChanged)
+    {
+    }
+    else if(gesture.state == UIGestureRecognizerStateEnded)
+    {
+        CGFloat h = self.collectionView.contentSize.height;
+        CGFloat H = CGRectGetHeight(self.view.frame);
+        if(h <= H)
+        {
+            self.collectionView.contentSize = CGSizeMake(CGRectGetWidth(self.collectionView.frame), H + 5);
+        }
     }
 }
-- (void)doneWithView
-{
-    [self.collectionView reloadData];
-    
-    [self.collectionView.mj_footer endRefreshing];
-}
 
+
+-(void)upRefreshData{
+    
+ 
+        [self getExchangedGifts:@"2" ueId:lastGoodsIdStr];
+}
 
 -(id)init{
     
@@ -219,33 +240,7 @@ static NSString * const reuseIdentifier = @"Cell";
 {
     return UIEdgeInsetsMake(0.5, 0.5, 0.5, 0.5);//分别为上、左、下、右
 }
-#pragma mark- *UIScrollViewDelegate*
--(void)scrollViewDidScroll:(UIScrollView *)scrollView{
-    
-    float offset=self.collectionView.contentOffset.y;
-    if(offset<=0)
-    {
-        [self.collectionView setContentOffset:CGPointMake(0,0) animated:YES];
-    }
-}
 
--(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
-{
-    float offset=self.collectionView.contentOffset.y;
-    NSLog(@"offset is %f",offset);
-    if(offset<5.0){
-        
-        [self.collectionView setContentOffset:CGPointMake(0,0) animated:YES];
-        [footer setTitle:@"" forState:MJRefreshStateNoMoreData];
-        [footer endRefreshingWithNoMoreData];
-        
-    }else{
-        [footer setTitle:@"正在载入中..." forState:MJRefreshStateRefreshing];
-        
-    }
-    [self setUpdateLabelState];
-    
-}
 -(void)dismissLabelText{
     
     UILabel* label1=(UILabel *)[self.view viewWithTag:102];
@@ -259,7 +254,7 @@ static NSString * const reuseIdentifier = @"Cell";
         UILabel* label1=(UILabel *)[self.view viewWithTag:102];
         label1.textAlignment=NSTextAlignmentCenter;
         label1.font=[UIFont systemFontOfSize:12];
-        label1.text=@"没有更多";
+        label1.text=@"没有更多...";
         timer=[NSTimer scheduledTimerWithTimeInterval:3
                                                target:self
                                              selector:@selector(dismissLabelText)

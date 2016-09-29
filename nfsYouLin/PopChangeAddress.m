@@ -36,10 +36,13 @@
 - (id)initWithFrame:(CGRect)frame clickFieldValue:(NSString*) flagValue
 {
     self = [super initWithFrame:frame];
+    self.layer.masksToBounds = YES;
+    self.layer.cornerRadius=6;
     UIView* backV=[[UIView alloc] initWithFrame:frame];
     backV.backgroundColor=[UIColor whiteColor];
+    backV.layer.masksToBounds = YES;
     backV.layer.cornerRadius=6;
-    self.layer.cornerRadius=6;
+    
     if([flagValue isEqualToString:@""])
     {
     
@@ -50,7 +53,7 @@
     }
     
     UILabel * label = [[UILabel alloc] init];
-    label.frame = CGRectMake(0, 0, frame.size.width, 30);
+    label.frame = CGRectMake(0, 0, frame.size.width, 40);
     label.font=[UIFont systemFontOfSize:14];
     label.text = sectionTitle;
     label.textColor=UIColorFromRGB(0xFFBA02);
@@ -59,32 +62,33 @@
     
       [dataSource removeAllObjects];
        dataSource = [self getAddressList];
-     addressSettingTable = [[UITableView alloc] initWithFrame:CGRectMake(0, 32, frame.size.width, frame.size.height-62)];
+     addressSettingTable = [[UITableView alloc] initWithFrame:CGRectMake(0, 42, frame.size.width, frame.size.height-72)];
      addressSettingTable.delegate=self;
      addressSettingTable.dataSource=self;
+     addressSettingTable.bounces = NO;
      addressSettingTable.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
     [addressSettingTable setSeparatorInset:UIEdgeInsetsZero];
     [addressSettingTable setLayoutMargins:UIEdgeInsetsZero];
     
-    UIView *jumpV=[[UIView alloc] initWithFrame:CGRectMake(0, frame.size.height-30, frame.size.width, 20)];
+    UIView *jumpV=[[UIView alloc] initWithFrame:CGRectMake(0, frame.size.height-30, frame.size.width, 30)];
     jumpV.backgroundColor=[UIColor whiteColor];
     jumpV.userInteractionEnabled=YES;
     UITapGestureRecognizer*tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(jumpAddressSettingAction)];
     [jumpV addGestureRecognizer:tapGesture];
 
-    UILabel *jumpLab=[[UILabel alloc] initWithFrame:CGRectMake(0, 5, frame.size.width-60, 20)];
+    UILabel *jumpLab=[[UILabel alloc] initWithFrame:CGRectMake(0, 4, frame.size.width-60, 20)];
     jumpLab.text=@"   地址信息";
     jumpLab.font=[UIFont systemFontOfSize:13];
     jumpLab.textColor=[UIColor darkGrayColor];
-    UILabel *jiantouLab=[[UILabel alloc] initWithFrame:CGRectMake(frame.size.width-53, 5, 60, 20)];
-    jiantouLab.text=@">";
+    UILabel *jiantouLab=[[UILabel alloc] initWithFrame:CGRectMake(frame.size.width-68, 4, 60, 20)];
+    jiantouLab.text=@"＞";
     jiantouLab.font=[UIFont systemFontOfSize:13];
     jiantouLab.textColor=[UIColor lightGrayColor];
     [jumpV addSubview:jiantouLab];
     [jumpV addSubview:jumpLab];
     
     UIImage *fenGeXianImage = [UIImage imageNamed:@"fengexian"];
-    UIImageView *imageView=[[UIImageView alloc] initWithFrame:CGRectMake(0, 31, frame.size.width, 1)];
+    UIImageView *imageView=[[UIImageView alloc] initWithFrame:CGRectMake(0, 41, frame.size.width, 1)];
     imageView.image=fenGeXianImage;
     
     [backV addSubview:imageView];

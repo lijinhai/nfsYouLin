@@ -8,6 +8,5 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ExchangedGiftsViewController : UICollectionViewController<UIScrollViewDelegate>
-
+@interface ExchangedGiftsViewController : UICollectionViewController
 @end

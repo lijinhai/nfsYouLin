@@ -12,6 +12,7 @@
 #import "StringMD5.h"
 #import "SqliteOperation.h"
 #import "HeaderFile.h"
+#import "MBProgressHUBTool.h"
 
 
 @interface SellerMPVC (){
@@ -32,9 +33,8 @@
     DownListView *listView;
     UIImageView *backIV;
     UILabel *backLabel;
-    UITextField* searchTF;
     NSMutableArray *typeName;
-    UIControl* view;
+  
 }
 
 - (void)viewDidLoad
@@ -63,55 +63,58 @@
 -(void)searchBussessCircle:(id)sender{
 
     CGSize size = [StringMD5 sizeWithString:@"搜索" font:[UIFont systemFontOfSize:20] maxSize:CGSizeMake(MAXFLOAT, MAXFLOAT)];
-    view = [[UIControl alloc] initWithFrame:CGRectMake(0, 0,self.navigationController.navigationBar.frame.size.width, self.navigationController.navigationBar.frame.size.height)];
-    view.backgroundColor = MainColor;
-    backIV = [[UIImageView alloc] initWithFrame:CGRectMake(10, view.frame.size.height / 4, 20, view.frame.size.height / 2)];
+    _backView = [[UIControl alloc] initWithFrame:CGRectMake(0, 0,self.navigationController.navigationBar.frame.size.width, self.navigationController.navigationBar.frame.size.height)];
+    _backView.backgroundColor = MainColor;
+    _backView.tag = 101;
+    backIV = [[UIImageView alloc] initWithFrame:CGRectMake(10, _backView.frame.size.height / 4, 20, _backView.frame.size.height / 2)];
     backIV.image = [UIImage imageNamed:@"mm_title_back.png"];
-    backLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(backIV.frame) + 5, 0, size.width, view.frame.size.height)];
+    backLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(backIV.frame) + 5, 0, size.width, _backView.frame.size.height)];
     
     backLabel.text = @"搜索";
     backLabel.textColor = [UIColor whiteColor];
     UIView *paddingView0 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 10, 30)];
-    searchTF = [[UITextField alloc] initWithFrame:CGRectMake(95, 8, self.navigationController.navigationBar.frame.size.width-110,29)];
-    searchTF.layer.cornerRadius = 9;
-    searchTF.backgroundColor = [UIColor whiteColor];
-    searchTF.placeholder = @"请输入您想要搜索的关键字";
-    searchTF.font = [UIFont systemFontOfSize:13.f];
-    searchTF.leftView = paddingView0;
-    searchTF.leftViewMode = UITextFieldViewModeAlways;
-    searchTF.returnKeyType = UIReturnKeyNext;
+    _searchTF = [[UITextField alloc] initWithFrame:CGRectMake(95, 8, self.navigationController.navigationBar.frame.size.width-110,29)];
+    _searchTF.layer.cornerRadius = 9;
+    _searchTF.backgroundColor = [UIColor whiteColor];
+    _searchTF.placeholder = @"请输入您想要搜索的关键字";
+    _searchTF.font = [UIFont systemFontOfSize:13.f];
+    _searchTF.leftView = paddingView0;
+    _searchTF.leftViewMode = UITextFieldViewModeAlways;
+    _searchTF.returnKeyType = UIReturnKeyNext;
+    _searchTF.tag = 102;
     UIImageView *rightView = [[UIImageView alloc]init];
     rightView.image = [UIImage imageNamed:@"sousuohuang"];
     rightView.frame = CGRectMake(0, 0, 20, 20);
     rightView.userInteractionEnabled = YES;
    [rightView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(clickCategory:)]];
     
-    searchTF.contentMode = UIViewContentModeCenter;
-    searchTF.rightView = rightView;
-    searchTF.rightViewMode = UITextFieldViewModeAlways;
+    _searchTF.contentMode = UIViewContentModeCenter;
+    _searchTF.rightView = rightView;
+    _searchTF.rightViewMode = UITextFieldViewModeAlways;
     
     
-    [view addSubview:backIV];
-    [view addSubview:backLabel];
+    [_backView addSubview:backIV];
+    [_backView addSubview:backLabel];
     
-    [view addTarget:self action:@selector(changeAlpha) forControlEvents:UIControlEventTouchDown];
-    [view addTarget:self action:@selector(backAction) forControlEvents:UIControlEventTouchUpInside];
-    [self.navigationController.navigationBar addSubview:view];
-    [self.navigationController.navigationBar addSubview:searchTF];
+    [_backView addTarget:self action:@selector(changeAlpha) forControlEvents:UIControlEventTouchDown];
+    [_backView addTarget:self action:@selector(backAction) forControlEvents:UIControlEventTouchUpInside];
+    [self.navigationController.navigationBar addSubview:_backView];
+    [self.navigationController.navigationBar addSubview:_searchTF];
 
 }
 -(void)clickCategory:(UITapGestureRecognizer *)gestureRecognizer
 {
     NSLog(@"click");
+    if([_searchTF.text isEqualToString:@""])
+    {
+        [MBProgressHUBTool textToast:self.view Tip:@"请输入正确的✅搜索关键字"];
+         return;
+    }
     [self searchTypeAndOrder];
     [busCirCVContoller  viewDidLoad];
 }
 
--(void) TextFieldDidChange{
 
-    NSLog(@"搜索中国");
-
-}
 
 -(void)changeAlpha{
 
@@ -123,8 +126,8 @@
 
     backLabel.alpha = 1.0;
     backIV.alpha = 1.0;
-    [view removeFromSuperview];
-    [searchTF removeFromSuperview];
+    [_backView removeFromSuperview];
+    [_searchTF removeFromSuperview];
 
 }
 -(void)searchTypeAndOrder

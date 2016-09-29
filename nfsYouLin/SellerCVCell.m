@@ -71,11 +71,8 @@
         
         // 分割线
         UILabel *line=[[UILabel alloc] initWithFrame:CGRectMake(0, frame.size.height-1, frame.size.width, 1)];
-        line.backgroundColor=[UIColor lightGrayColor];
-        
-        
-        
-        
+        line.backgroundColor = UIColorFromRGB(0xf5f5f5);
+
         [self.contentView addSubview:_sellerIV];
         [self.contentView addSubview:_sellerNL];
         [self.contentView addSubview:dingweiIV];
@@ -94,12 +91,12 @@
 }
 
 
+
 -(void) setSellerData:(SellerInfo *)sellerData{
     
     _sellerData = sellerData;
-    
+    [SDWebImageDownloader.sharedDownloader setValue:@"ios-dev" forHTTPHeaderField:@"User-Agent"];
     [self.sellerIV sd_setImageWithURL:[NSURL URLWithString:_sellerData.sellerPicUrl] placeholderImage:[UIImage imageNamed:@"bg_error.png"] options:(SDWebImageAllowInvalidSSLCertificates) completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-        //UIImage *newImg=[self scaleFromImage:image toSize:CGSizeMake(90, 67)];
         if(image.size.width == image.size.height)
         {
             
@@ -114,7 +111,7 @@
     
     self.sellerNL.text = _sellerData.sellerName;
     sizeN = [self.sellerNL.text sizeWithAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIFont systemFontOfSize:16],NSFontAttributeName, nil]];
-    self.sellerNL.frame=CGRectMake(110,3,sizeN.width+20, 30);
+    self.sellerNL.frame=CGRectMake(110,3,screenWidth-110-80, 30);
     
     dingweiIV.frame = CGRectMake(110, self.frame.size.height/2-6, 9, 12);
     dingweiIV.image = [UIImage imageNamed:@"icon_dibiao"];

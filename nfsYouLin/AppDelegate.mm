@@ -264,6 +264,19 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
         [_friendVC jumpToChatList:fromId];
     }
 }
+//处理URL请求
+- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url
+{
+    if ([[url scheme] isEqualToString:@"baidumap"]) {
+        
+        [application setApplicationIconBadgeNumber:10];
+        
+        return YES;
+    }
+    
+    return NO;
+}
+
 //应用程序的沙盒路径
 - (NSString *) dataFilePath
 {

@@ -18,6 +18,8 @@
 @property (nonatomic, strong) UIImageView *leftDownArrowIV;
 @property (nonatomic, strong) UIImageView *rightUpArrowIV;
 @property (nonatomic, strong) UIImageView *rightDownArrowIV;
+@property (nonatomic, strong) UITextField* searchTF;
+@property (nonatomic, strong) UIControl* backView;
 //刷新子ViewController
 -(void)refreshChildViewController;
 @end

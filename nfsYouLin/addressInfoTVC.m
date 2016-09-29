@@ -53,7 +53,7 @@
         [self.contentView addSubview:audiLabel];
         // 详细地址
         CGSize addressSize = [StringMD5 sizeWithString:@"哈哈哈哈哈哈哈哈" font:[UIFont systemFontOfSize:10] maxSize:CGSizeMake(CGRectGetWidth(self.contentView.frame),50)];
-        UILabel* addressLabel = [[UILabel alloc] initWithFrame:CGRectMake(15,8, addressSize.width+105, addressSize.height)];
+        UILabel* addressLabel = [[UILabel alloc] initWithFrame:CGRectMake(15,8, addressSize.width+150, addressSize.height)];
         
         addressLabel.font =[UIFont systemFontOfSize:12];
         addressLabel.enabled = NO;
@@ -62,7 +62,7 @@
         [self.contentView addSubview:addressLabel];
         
         // 选择
-         UIButton* selectBtn = [[UIButton alloc] initWithFrame:CGRectMake(self.contentView.frame.size.width-60, 18, 20, 20)];
+         UIButton* selectBtn = [[UIButton alloc] initWithFrame:CGRectMake(self.frame.size.width-20, 18, 20, 20)];
          selectBtn.layer.masksToBounds = YES;
          selectBtn.layer.cornerRadius = 10;
         if([[dic valueForKey:@"keyprimary"] isEqualToString:@"0"])
