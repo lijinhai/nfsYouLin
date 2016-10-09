@@ -291,10 +291,9 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
     AppDelegate *myDelegate = [[UIApplication sharedApplication] delegate];
     NSFileManager *fileManager = [NSFileManager defaultManager];
     self.db = [FMDatabase databaseWithPath:myDelegate.dbPath];
-//    NSLog(@"INSERT_USERS_TABLE =  %@",INSERT_USERS_TABLE);
-    [fileManager removeItemAtPath:self.dbPath error:nil];
 
-    
+//    [fileManager removeItemAtPath:self.dbPath error:nil];
+
     if (![fileManager fileExistsAtPath:myDelegate.dbPath]) {
         NSLog(@"还未创建数据库，现在正在创建数据库");
         if ([self.db open]) {

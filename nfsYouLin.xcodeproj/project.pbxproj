@@ -4665,6 +4665,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = nfs.Youlin;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				WARNING_CFLAGS = "-Wno-deprecated-declarations";
 			};
 			name = Debug;
 		};
@@ -4710,6 +4711,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = nfs.Youlin;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				WARNING_CFLAGS = "-Wno-deprecated-declarations";
 			};
 			name = Release;
 		};

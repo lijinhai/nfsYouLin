@@ -875,7 +875,8 @@ static BOOL upState = YES;
     NSLog(@"getTopicNet");
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     NSString* communityId = [defaults stringForKey:@"communityId"];
-    NSString* userId = [defaults stringForKey:@"userId"];
+    NSString* userId = [defaults valueForKey:@"userId"];
+        
     AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
     manager.securityPolicy.allowInvalidCertificates = YES;
     [manager.securityPolicy setValidatesDomainName:NO];
