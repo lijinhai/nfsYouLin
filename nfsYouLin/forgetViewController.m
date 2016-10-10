@@ -37,6 +37,10 @@
     self.navigationItem.rightBarButtonItem = barrightBtn;
     
     self.phoneNumTF.keyboardType = UIKeyboardTypeNumberPad;
+    UIView *paddingView0 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 8, 30)];
+    self.phoneNumTF.backgroundColor = [UIColor whiteColor];
+    self.phoneNumTF.leftView = paddingView0;
+    self.phoneNumTF.leftViewMode = UITextFieldViewModeAlways;
     [self.phoneNumTF addTarget:self action:@selector(TextFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
     
     self.verifyCodeTF.keyboardType = UIKeyboardTypeNumberPad;

@@ -10,7 +10,6 @@
 #import "LewPopupViewController.h"
 #import "quitView.h"
 #import "LxxPlaySound.h"
-//#import "BlackListViewController.h"
 #import "AFHTTPSessionManager.h"
 #import "MBProgressHUBTool.h"
 #import "StringMD5.h"
@@ -28,14 +27,12 @@
 
 {
     NSArray* _settingTypeName;
-    //NSArray* _discoveryServiceImages;
     UIColor* _viewColor;
     UISwitch *switchNoticeButton;
     UISwitch *switchShockButton;
     NSString *shockflag;
     NSString *noticeflag;
     UILabel *cacheCountLable;
-    //BlackListViewController *BlackListController;
     LoginNC* loginNC;
     UIView* backgroundView;
     
@@ -67,10 +64,12 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     _viewColor = [UIColor colorWithRed:243/255.0 green:243/255.0 blue:240/255.0 alpha:1];
-    
+    _tableView.frame = CGRectMake(0, 0, screenWidth,screenHeight*6/7);
+    _tableView.bounces = NO;
     self.view.backgroundColor = _viewColor;
     _settingTypeName = @[@"通知声音", @"振动", @"黑名单" ,@"检查更新" ,@"清除缓存" ,@"退出登录"];
     /*tableViewCell 下划线 长度设置为屏幕的宽*/
+    NSLog(@"tableview height is %f",self.tableView.frame.size.height/6);
     if ([self.tableView respondsToSelector:@selector(setSeparatorInset:)]) {
         [self.tableView setSeparatorInset:UIEdgeInsetsZero];
     }
@@ -178,58 +177,6 @@
     [fileManager removeItemAtPath:cacheFilePath error:nil];
     
 }
-////获取黑名单
-//-(void)getBlackListInfo{
-//
-//    BlackListController.blackListAry=nil;
-//    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-//    NSString* userId = [defaults stringForKey:@"userId"];
-//
-//    AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
-//    manager.securityPolicy.allowInvalidCertificates = YES;
-//    [manager.securityPolicy setValidatesDomainName:NO];
-//    
-//    NSString* MD5String = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"user_id%@",userId]];
-//    NSString* hashString = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"%@1", MD5String]];
-//    
-//    NSDictionary* parameter = @{@"user_id" : userId,
-//                                @"deviceType": @"ios",
-//                                @"apitype" : @"users",
-//                                @"salt" : @"1",
-//                                @"tag" : @"getblacklist",
-//                                @"hash" : hashString,
-//                                @"keyset" : @"user_id:",
-//                                };
-//    
-//    [manager POST:POST_URL parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
-//        
-//        
-//        
-//    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-//        NSLog(@"黑名单信息:%@", responseObject);
-//        
-//        UIBarButtonItem *backItemTitle = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
-//        [self.navigationItem setBackBarButtonItem:backItemTitle];
-//        if([[responseObject valueForKey:@"flag"] isEqualToString:@"ok"])
-//        {
-//            NSLog(@"成功");
-//            BlackListController.blackListAry=[[responseObject objectForKey:@"black_users_id"] mutableCopy];
-//            NSLog(@"BlackListController.blackListAry is %@",BlackListController.blackListAry);
-//            
-//        }
-//        else
-//        {
-//            BlackListController.blackListAry=nil;
-//            NSLog(@"无黑名单");
-//        }
-//        [self.navigationController pushViewController:BlackListController animated:YES];
-//       
-//    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-//        NSLog(@"请求失败:%@", error.description);
-//        return;
-//    }];
-//    
-//}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -352,19 +299,19 @@
 {
     
     UIView* headerView = nil;
-    headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 1)];
+    headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, screenWidth, 1)];
     headerView.backgroundColor = _viewColor;
     return headerView;
 }
 
 
-- (UIView*)tableView: (UITableView *)tableView viewForFooterInSection:(NSInteger)section
-{
-    UIView* footerView = nil;
-    footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 1)];
-    footerView.backgroundColor = _viewColor;
-    return footerView;
-}
+//- (UIView*)tableView: (UITableView *)tableView viewForFooterInSection:(NSInteger)section
+//{
+//    UIView* footerView = nil;
+//    footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 1)];
+//    footerView.backgroundColor = _viewColor;
+//    return footerView;
+//}
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {

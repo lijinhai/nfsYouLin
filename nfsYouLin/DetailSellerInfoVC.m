@@ -116,7 +116,7 @@
      UITapGestureRecognizer* addressTapa = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(addressTapGesture:)];
      [detailAddressNL addGestureRecognizer:addressTapa];
      detailAddressNL.font = [UIFont systemFontOfSize:14];
-     detailAddressVL = [[UILabel alloc] initWithFrame:CGRectMake(120, 0,250, 50)];
+     detailAddressVL = [[UILabel alloc] initWithFrame:CGRectMake(120, 0,screenWidth/2, 50)];
      detailAddressVL.font = [UIFont systemFontOfSize:14];
      detailAddressVL.userInteractionEnabled = YES;
      UITapGestureRecognizer* addressTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(addressTapGesture:)];

@@ -77,13 +77,14 @@
     repeattiplab.textColor=[UIColor blackColor];
     rsize = [repeattiplab.text sizeWithAttributes:[NSDictionary dictionaryWithObjectsAndKeys:fnt,NSFontAttributeName, nil]];
     
-    xImageView.frame = CGRectMake(CGRectGetMaxX(_oldPassWordTextField.frame)-24, 15,15,15);
-    xImageView1.frame = CGRectMake(CGRectGetMaxX(_oldPassWordTextField.frame)-24, 15,15,15);
-    xImageView2.frame = CGRectMake(CGRectGetMaxX(_oldPassWordTextField.frame)-24, 15,15,15);
-    
-    [oldrightView addSubview:xImageView];
-    [firstrightView addSubview:xImageView1];
-    [repeatrightView addSubview:xImageView2];
+    //xImageView.frame = CGRectMake(CGRectGetMaxX(_oldPassWordTextField.frame)-24, 15,15,15);
+    //[oldrightView addSubview:xImageView];
+    //xImageView1.frame = CGRectMake(CGRectGetMaxX(_oldPassWordTextField.frame)-24, 15,15,15);
+    //[firstrightView addSubview:xImageView1];
+    //[oldrightView addSubview:xImageView];
+    //[firstrightView addSubview:xImageView1];
+    //xImageView2.frame = CGRectMake(CGRectGetMaxX(_oldPassWordTextField.frame)-24, 15,15,15);
+    //[repeatrightView addSubview:xImageView2];
 
 }
 
@@ -119,16 +120,25 @@
     _bgView.backgroundColor=_viewColor;
     
     self.navigationItem.title=@"";
+     //_oldPassWordTextField.translatesAutoresizingMaskIntoConstraints=YES;
     [_oldPassWordTextField mas_makeConstraints:^(MASConstraintMaker *make) {
                  make.top.equalTo(self.view.mas_top).offset(90);
+                 make.left.equalTo(self.view.mas_left).offset(21);
+                 make.size.mas_equalTo(CGSizeMake(screenWidth-42, 45));
+                 //make.width.equalTo(self.view.mas_width).offset(-10);
  
      }];
     [_firstPasswordTextField mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.view.mas_top).offset(136);
+        make.left.equalTo(self.view.mas_left).offset(21);
+        make.size.mas_equalTo(CGSizeMake(screenWidth-42, 45));
+        
         
     }];
     [_repeatPassWordTextField mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.view.mas_top).offset(182);
+        make.left.equalTo(self.view.mas_left).offset(21);
+        make.size.mas_equalTo(CGSizeMake(screenWidth-42, 45));
     }];
 
 }
@@ -231,8 +241,16 @@
        [_bgView addSubview: repeattiplab];
        [_bgView addSubview: oldtiplab];
        
+       xImageView.frame = CGRectMake(CGRectGetMaxX(_oldPassWordTextField.frame)-24, 15,15,15);
+       [oldrightView addSubview:xImageView];
        [_oldPassWordTextField addSubview:oldrightView];
+      
+        xImageView2.frame = CGRectMake(CGRectGetMaxX(_oldPassWordTextField.frame)-24, 15,15,15);
+       [repeatrightView addSubview:xImageView2];
        [_repeatPassWordTextField addSubview:repeatrightView];
+      
+       xImageView1.frame = CGRectMake(CGRectGetMaxX(_oldPassWordTextField.frame)-24, 15,15,15);
+       [firstrightView addSubview:xImageView1];
        [_firstPasswordTextField addSubview:firstrightView];
        return;
     
@@ -253,8 +271,13 @@
        repeattiplab.frame=CGRectMake(CGRectGetMaxX(_repeatPassWordTextField.frame)-rsize.width, CGRectGetMaxY(_repeatPassWordTextField.frame)+2, rsize.width, 30);
        [_bgView addSubview: firsttiplab];
        [_bgView addSubview: repeattiplab];
-
+       
+       xImageView2.frame = CGRectMake(CGRectGetMaxX(_oldPassWordTextField.frame)-24, 15,15,15);
+       [repeatrightView addSubview:xImageView2];
        [_repeatPassWordTextField addSubview:repeatrightView];
+       
+       xImageView1.frame = CGRectMake(CGRectGetMaxX(_oldPassWordTextField.frame)-24, 15,15,15);
+       [firstrightView addSubview:xImageView1];
        [_firstPasswordTextField addSubview:firstrightView];
        return;
       
@@ -276,7 +299,11 @@
        repeattiplab.frame=CGRectMake(CGRectGetMaxX(_repeatPassWordTextField.frame)-rsize.width, CGRectGetMaxY(_repeatPassWordTextField.frame)+2, rsize.width, 30);
        [_bgView addSubview: oldtiplab];
        [_bgView addSubview: repeattiplab];
+       xImageView.frame = CGRectMake(CGRectGetMaxX(_oldPassWordTextField.frame)-24, 15,15,15);
+       [oldrightView addSubview:xImageView];
        [_oldPassWordTextField addSubview:oldrightView];
+       xImageView2.frame = CGRectMake(CGRectGetMaxX(_oldPassWordTextField.frame)-24, 15,15,15);
+       [repeatrightView addSubview:xImageView2];
        [_repeatPassWordTextField addSubview:repeatrightView];
        return;
    
@@ -296,6 +323,8 @@
        [self.view layoutIfNeeded];
        oldtiplab.frame=CGRectMake(CGRectGetMaxX(_oldPassWordTextField.frame)-osize.width, CGRectGetMaxY(_oldPassWordTextField.frame)+2, osize.width, 30);
        [_bgView addSubview: oldtiplab];
+       xImageView.frame = CGRectMake(CGRectGetMaxX(_oldPassWordTextField.frame)-24, 15,15,15);
+       [oldrightView addSubview:xImageView];
        [_oldPassWordTextField addSubview:oldrightView];
        return;
        
@@ -313,7 +342,11 @@
        NSLog(@"repeattiplab text is %@",repeattiplab.text);
        [_bgView addSubview: repeattiplab];
        [_bgView addSubview: firsttiplab];
+       xImageView2.frame = CGRectMake(CGRectGetMaxX(_oldPassWordTextField.frame)-24, 15,15,15);
+       [repeatrightView addSubview:xImageView2];
        [_repeatPassWordTextField addSubview:repeatrightView];
+       xImageView1.frame = CGRectMake(CGRectGetMaxX(_oldPassWordTextField.frame)-24, 15,15,15);
+       [firstrightView addSubview:xImageView1];
        [_firstPasswordTextField addSubview:firstrightView];
        return;
    
@@ -331,7 +364,11 @@
        NSLog(@"repeattiplab text is %@",repeattiplab.text);
        [_bgView addSubview: repeattiplab];
        [_bgView addSubview: firsttiplab];
+       xImageView2.frame = CGRectMake(CGRectGetMaxX(_oldPassWordTextField.frame)-24, 15,15,15);
+       [repeatrightView addSubview:xImageView2];
        [_repeatPassWordTextField addSubview:repeatrightView];
+       xImageView1.frame = CGRectMake(CGRectGetMaxX(_oldPassWordTextField.frame)-24, 15,15,15);
+       [firstrightView addSubview:xImageView1];
        [_firstPasswordTextField addSubview:firstrightView];
        return;
    }

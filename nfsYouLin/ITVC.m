@@ -218,7 +218,7 @@
     NSInteger rowNo = indexPath.row;
     NSInteger section = indexPath.section;
     multiTableViewCell* cell = nil;
-    signButton = [[UIButton alloc] initWithFrame:CGRectMake(320, 30, 40, 40)];
+    signButton = [[UIButton alloc] initWithFrame:CGRectMake(screenWidth-90, 30, 40, 40)];
     signButton.layer.cornerRadius = signButton.frame.size.width / 2;
     signButton.layer.masksToBounds = YES;
     [signButton setBackgroundImage:[UIImage imageNamed:@"btn_qiandao.png"] forState:UIControlStateNormal];

@@ -50,12 +50,18 @@
     UIImageView* xImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"btn_x.png"]];
     xImageView.frame = CGRectMake(10, 0,14,14);
     [rightVeiw addSubview:xImageView];
+    UIView *paddingView0 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 30, 30)];
+    self.phoneTextField.leftView = paddingView0;
+    self.phoneTextField.rightViewMode = UITextFieldViewModeAlways;
     self.phoneTextField.rightView = rightVeiw;
     self.phoneTextField.rightViewMode = UITextFieldViewModeWhileEditing;
     self.phoneTextField.keyboardType = UIKeyboardTypeNumberPad;
     [self.phoneTextField addTarget:self action:@selector(phoneTextFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
     self.phoneTextField.delegate = self;
     
+    UIView *paddingView1 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 30, 30)];
+    self.passwordTextField.leftView = paddingView1;
+    self.passwordTextField.rightViewMode = UITextFieldViewModeAlways;
     self.passwordTextField.rightView = rightVeiw;
     self.passwordTextField.rightViewMode = UITextFieldViewModeWhileEditing;
     self.passwordTextField.delegate = self;

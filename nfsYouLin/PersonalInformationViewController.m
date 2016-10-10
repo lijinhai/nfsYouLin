@@ -69,26 +69,17 @@
     _birthdayLabel=[[UILabel alloc] init];
     _professionLabel=[[UILabel alloc] init];
     [self userDetailInfoInit];
+    _personalInfoTable.frame = CGRectMake(0, 0, screenWidth,screenHeight*6/7);
+    /*数据源初始化*/
+    dataSource = @[@"头像", @"昵称", @"修改密码", @"生日", @"性别", @"职业", @"家庭住址是否公开"];
+    _switchFamliyAddressButton = [[UISwitch alloc] initWithFrame:CGRectMake(screenWidth-70, 10, 40, 5)];
+    [_switchFamliyAddressButton addTarget:self action:@selector(showFamliyAddressAction:) forControlEvents:UIControlEventValueChanged];
+    
     /*个人信息表格初始化*/
     _personalInfoTable.delegate=self;
     _personalInfoTable.dataSource=self;
     _personalInfoTable.scrollEnabled=NO;
-    /*数据源初始化*/
-    dataSource = @[@"头像", @"昵称", @"修改密码", @"生日", @"性别", @"职业", @"家庭住址是否公开"];
-    _switchFamliyAddressButton = [[UISwitch alloc] initWithFrame:CGRectMake(_personalInfoTable.frame.size.width-70, 10, 40, 5)];
-    [_switchFamliyAddressButton addTarget:self action:@selector(showFamliyAddressAction:) forControlEvents:UIControlEventValueChanged];
-    
-//    /*初始化地址发布状态*/
-//    NSLog(@"family_statusValue is %@",_statusValue);
-//    addressStatusInt=[_statusValue intValue];
-//    if([_statusValue isEqualToString:@"2"]||[_statusValue isEqualToString:@"4"])
-//    {
-//         NSLog(@"abc");
-//        [_switchFamliyAddressButton setOn:YES];
-//    }else{
-//         NSLog(@"def");
-//        [_switchFamliyAddressButton setOn:NO];
-//    }
+    _personalInfoTable.bounces = NO;
        /*tableViewCell 下划线 长度设置为屏幕的宽*/
     if ([self.personalInfoTable respondsToSelector:@selector(setSeparatorInset:)]) {
         [self.personalInfoTable setSeparatorInset:UIEdgeInsetsZero];
@@ -107,7 +98,7 @@
     
     /*图片设置*/
      _imageView=[[UIImageView alloc] init];
-     _imageView.frame = CGRectMake(_personalInfoTable.frame.size.width-100, 10, 60, 60);
+     _imageView.frame = CGRectMake(screenWidth-100, 10, 60, 60);
      _imageView.userInteractionEnabled = YES;
     UITapGestureRecognizer* tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(headTapAction:)];
     [_imageView addGestureRecognizer:tapGesture];
@@ -399,7 +390,7 @@
             elementOfSection = 5;
             break;
         default:
-            elementOfSection = -1;
+            elementOfSection = 0;
             break;
     }
     return elementOfSection;
@@ -427,11 +418,11 @@
         initWorkName=@"";
     }
     /*性别*/
-    _sexLabel.frame=CGRectMake(_personalInfoTable.frame.size.width-70, 15, 70, 15);
+    _sexLabel.frame=CGRectMake(screenWidth-70, 15, 70, 15);
     _sexLabel.tag=1126;
     
     /*生日*/
-    _birthdayLabel.frame=CGRectMake(_personalInfoTable.frame.size.width-160, 15, 150, 15);
+    _birthdayLabel.frame=CGRectMake(screenWidth-160, 15, 150, 15);
     _birthdayLabel.tag=1988;
     
     /*昵称*/
@@ -440,13 +431,13 @@
     _nicknameLabel.font = fnt;
         //[userInfo objectForKey:@"current_nick"];
     CGSize size = [_nicknameLabel.text sizeWithAttributes:[NSDictionary dictionaryWithObjectsAndKeys:fnt,NSFontAttributeName, nil]];
-    _nicknameLabel.frame=CGRectMake(_personalInfoTable.frame.size.width-size.width-40, 15, size.width, 20);
+    _nicknameLabel.frame=CGRectMake(screenWidth-size.width-40, 15, size.width, 20);
     _nicknameLabel.tag=2016;
     
     /*职业*/
     _professionLabel.font = fnt;
     CGSize professionSize = [_professionLabel.text sizeWithAttributes:[NSDictionary dictionaryWithObjectsAndKeys:fnt,NSFontAttributeName, nil]];
-    _professionLabel.frame=CGRectMake(_personalInfoTable.frame.size.width-professionSize.width-40, 15, professionSize.width, 20);
+    _professionLabel.frame=CGRectMake(screenWidth-professionSize.width-40, 15, professionSize.width, 20);
     _professionLabel.tag=614;
     
     
@@ -463,13 +454,12 @@
         {
             if(rowNo == 0)
             {
-                //_imageView.center=CGPointMake(cell.frame.size.width-10, cell.frame.size.height/2-10);
+
                 [cell.contentView addSubview:_imageView];
             }
             else if(rowNo == 1)
             {
                 
-                //NSLog(@"调用昵称 %@",nicknameLabel.text);
                 [cell.contentView addSubview:_nicknameLabel];
                 
             }
@@ -558,12 +548,15 @@
         return 0.0f;
     }else
         return 8.0f;
+    
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    
-    return 8.0f;
+    if (section == 0) {
+        return 8.0f;
+    }else
+        return 0.0f;
 }
 
 
@@ -571,7 +564,7 @@
 {
     
     UIView* headerView = nil;
-    headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 1)];
+    headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, screenWidth, 1)];
     headerView.backgroundColor = _viewColor;
     return headerView;
 }
@@ -580,7 +573,7 @@
 - (UIView*)tableView: (UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
     UIView* footerView = nil;
-    footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 1)];
+    footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, screenWidth, 1)];
     footerView.backgroundColor = _viewColor;
     return footerView;
 }
@@ -706,7 +699,7 @@
                 case 2:
                 {
                     // 性别
-                    ChooseSexTypeController.sexValue=_sexLabel.text;
+                    ChooseSexTypeController.sexValue = _sexLabel.text;
                     backItemTitle = [[UIBarButtonItem alloc] initWithTitle:@"性别" style:UIBarButtonItemStylePlain target:nil action:nil];
                     [self.navigationItem setBackBarButtonItem:backItemTitle];
                     [self.navigationController pushViewController:ChooseSexTypeController animated:YES];
@@ -715,9 +708,9 @@
                 case 3:
                 {
                     // 职业
-                    NSLog(@"statusValue is %@",_statusValue);
-                    ProfessionSettingController.workerValue=_professionLabel.text;
-                    ProfessionSettingController.statusState=_statusValue;
+                    NSLog(@"statusValue is %@ ", _statusValue);
+                    ProfessionSettingController.workerValue = _professionLabel.text;
+                    ProfessionSettingController.statusState = _statusValue;
                     backItemTitle = [[UIBarButtonItem alloc] initWithTitle:@"职业" style:UIBarButtonItemStylePlain target:nil action:nil];
                     [self.navigationItem setBackBarButtonItem:backItemTitle];
                     [self.navigationController pushViewController:ProfessionSettingController animated:YES];
@@ -777,10 +770,8 @@
     if(success) {
         success = [fileManager removeItemAtPath:imageFilePath error:&error];
     }
-    //UIImage *smallImage=[self scaleFromImage:image toSize:CGSizeMake(80.0f, 80.0f)];
      UIImage *smallImage = [self imageCompressForSize:image targetSize:CGSizeMake(60, 60)];
     [UIImageJPEGRepresentation(smallImage, 1.0f) writeToFile:imageFilePath atomically:YES];
-     //_imageView.image=NULL;
      UIImage* newHeadPhoto = [UIImage imageWithContentsOfFile:imageFilePath];
      _imageView.image=newHeadPhoto;
     [_imageView.layer setCornerRadius:CGRectGetHeight([_imageView bounds]) / 2];
