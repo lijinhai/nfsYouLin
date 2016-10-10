@@ -382,7 +382,7 @@
                  if (!error)
                  {
                      NSLog(@"获取验证码成功");
-                     [self overTimer];
+//                     [self overTimer];
 
                  }
                  else
@@ -392,7 +392,6 @@
 
                  }
              }];
-
         }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         NSLog(@"请求失败:%@", error.description);
@@ -425,7 +424,7 @@
 
 - (void) getVerifyCode
 {
-    _secTime--;
+    _secTime --;
     timeLabel.text = [NSString stringWithFormat:@"%ld",_secTime];
    
     if(_secTime == 10)
@@ -436,7 +435,7 @@
     if(_secTime == 0)
     {
         [self overTimer];
-        [self clearTextField];
+//        [self clearTextField];
     }
 }
 

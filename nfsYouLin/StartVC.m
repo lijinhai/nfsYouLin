@@ -56,25 +56,61 @@
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSLog(@"验证账户可用性 网络请求请求成功:%@", responseObject);
         NSString* flag = [responseObject valueForKey:@"flag"];
-        if([flag isEqualToString:@"ok"])
-        {
-             NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-            [defaults setObject:[responseObject valueForKey:@"user_nick"] forKey:@"nick"];
-            [defaults setObject:[responseObject valueForKey:@"user_id"] forKey:@"userId"];
-            [defaults synchronize];
-            [self presentViewController:_firstTBC animated:YES completion:nil];
-        }
-        else if([flag isEqualToString:@"no"])
-        {
-            NSString* shareInfo = [StringMD5 replaceUnicode:[responseObject valueForKey:@"share_info"]];
-            NSLog(@"shareInfo = %@",shareInfo);
-            [self presentViewController:_loginNC animated:YES completion:nil];
-        }
-        else
-        {
-            [self presentViewController:_loginNC animated:YES completion:nil];
+        NSString* addr_flag = [responseObject valueForKey:@"addr_flag"];
+        
+        UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"flag+addr_flag" message:[NSString stringWithFormat:@"%@+%@",flag,addr_flag] preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction* action = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            if([flag isEqualToString:@"ok"] && [addr_flag isEqualToString:@"ok"])
+            {
+                NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+                [defaults setObject:[responseObject valueForKey:@"user_nick"] forKey:@"nick"];
+                [defaults setObject:[responseObject valueForKey:@"user_id"] forKey:@"userId"];
+                [defaults synchronize];
+                [self presentViewController:_firstTBC animated:YES completion:nil];
+            }
+            else if([addr_flag isEqualToString:@"empty"])
+            {
+                if([flag isEqualToString:@"no"])
+                {
+                    [self presentViewController:_firstTBC animated:YES completion:nil];
+                }
+                else
+                {
+                    NSString* shareInfo = [StringMD5 replaceUnicode:[responseObject valueForKey:@"share_info"]];
+                    NSLog(@"shareInfo = %@",shareInfo);
+                    [self presentViewController:_loginNC animated:YES completion:nil];
+                }
+                
+            }
+            else
+            {
+                [self presentViewController:_loginNC animated:YES completion:nil];
+                
+            }
 
-        }
+        }];
+        [alert addAction:action];
+        [self presentViewController:alert animated:YES completion:nil];
+        
+//        if([flag isEqualToString:@"ok"])
+//        {
+//             NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+//            [defaults setObject:[responseObject valueForKey:@"user_nick"] forKey:@"nick"];
+//            [defaults setObject:[responseObject valueForKey:@"user_id"] forKey:@"userId"];
+//            [defaults synchronize];
+//            [self presentViewController:_firstTBC animated:YES completion:nil];
+//        }
+//        else if([flag isEqualToString:@"no"])
+//        {
+//            NSString* shareInfo = [StringMD5 replaceUnicode:[responseObject valueForKey:@"share_info"]];
+//            NSLog(@"shareInfo = %@",shareInfo);
+//            [self presentViewController:_loginNC animated:YES completion:nil];
+//        }
+//        else
+//        {
+//            [self presentViewController:_loginNC animated:YES completion:nil];
+//
+//        }
         
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         NSLog(@"请求失败:%@", error.description);

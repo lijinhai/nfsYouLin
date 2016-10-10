@@ -47,12 +47,12 @@
 
 // 环信
 #define HXAppKey @"nfs-hlj#youlinapp"
-#define HXApnsCertName @"chatCertName"
+#define HXApnsCertName @"production"
 
 // 极光
 #define JGAppKey @"64de302e0f10c70af07b0ed4"
 static NSString *channel = @"Publish channel";
-static BOOL isProduction = FALSE;
+static BOOL isProduction = true;
 
 // 百度地图Key
 #define BMAP_KEY @"BDiQ7UU9TW9vUv81GUh1Ej2WlRyUXM6n"
@@ -291,10 +291,9 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
     AppDelegate *myDelegate = [[UIApplication sharedApplication] delegate];
     NSFileManager *fileManager = [NSFileManager defaultManager];
     self.db = [FMDatabase databaseWithPath:myDelegate.dbPath];
-//    NSLog(@"INSERT_USERS_TABLE =  %@",INSERT_USERS_TABLE);
-    [fileManager removeItemAtPath:self.dbPath error:nil];
 
-    
+//    [fileManager removeItemAtPath:self.dbPath error:nil];
+
     if (![fileManager fileExistsAtPath:myDelegate.dbPath]) {
         NSLog(@"还未创建数据库，现在正在创建数据库");
         if ([self.db open]) {

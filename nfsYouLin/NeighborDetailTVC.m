@@ -22,7 +22,8 @@
 #import "PeopleInfoVC.h"
 #import "NewsDetailVC.h"
 #import "PersonalInformationViewController.h"
-
+#import "CreateNoticeVC.h"
+#import "CreateAdviceVC.h"
 
 @interface NeighborDetailTVC ()
 
@@ -260,15 +261,7 @@
         }
         else
         {
-//            while ([cell.contentView.subviews lastObject] != nil)
-//            {
-//                 //删除并进行重新分配
-//                [(UIView*)[cell.contentView.subviews lastObject] removeFromSuperview];
-//            }
-//            for(UIView *view in cell.contentView.subviews) {
-//                [view removeFromSuperview];
-//            }
-//
+            
         }
         
         NSDictionary* dict = replyArr[indexPath.row - 3];
@@ -326,18 +319,6 @@
 }
 
 
-
-//// 点击背景隐藏
-//-(void)keyBoardHidden:(UITapGestureRecognizer *)tapRecognizer
-//{
-//    NSLog(@"点击背景键盘");
-//    if (tapRecognizer.state == UIGestureRecognizerStateEnded)
-//    {
-//        [self.chatToolbar endEditing:YES];
-//    }
-//   
-//}
-
 - (void) viewWillDisappear:(BOOL)animated
 {
     [self.chatToolbar removeFromSuperview];
@@ -352,7 +333,6 @@
 }
 
 // 计算回复表格行高度
-// remark @标识
 - (CGFloat) heightOfOtherRow: (NSString*)replyText Remark:(BOOL) remark Type:(NSString*)type
 {
     CGFloat cellHeight = 5 * PADDING + 25;
@@ -492,17 +472,35 @@
             // 话题
             case 0:
             {
-                CreateTopicVC* topicVC = [[CreateTopicVC alloc] init];
+                NSInteger topicType = [self.neighborData.topicCategoryType integerValue];
+                NSLog(@"id = %@",self.neighborData.topicId);
                 NSMutableDictionary* dict = [NSMutableDictionary dictionaryWithObjectsAndKeys:
                                              @"update",@"option",
                                              self.neighborData.titleName, @"title",
                                              self.neighborData.publishText, @"content",
-                                             self.neighborData.forumName, @"forumName",
                                              self.neighborData.topicId, @"topicId",
                                              self.neighborDF , @"dataFrame",
+                                             self.neighborData.forumName, @"forumName",
                                              nil];
-                [topicVC setTopicInfo:dict];
-                [self.navigationController pushViewController:topicVC animated:YES];
+                if(topicType == 3)
+                {
+                    CreateNoticeVC* topicVC = [[CreateNoticeVC alloc] init];
+                    [topicVC setTopicInfo:dict];
+                    [self.navigationController pushViewController:topicVC animated:YES];
+                }
+                else if(topicType == 5)
+                {
+                    CreateAdviceVC* topicVC = [[CreateAdviceVC alloc] init];
+                    [topicVC setTopicInfo:dict];
+                    [self.navigationController pushViewController:topicVC animated:YES];
+                }
+                else
+                {
+                    CreateTopicVC* topicVC = [[CreateTopicVC alloc] init];
+                    [topicVC setTopicInfo:dict];
+                    [self.navigationController pushViewController:topicVC animated:YES];
+                }
+               
                 break;
             }
             // 活动

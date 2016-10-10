@@ -223,14 +223,12 @@
             NSLog(@"defaults is @@@@@@@@@@@");
             [defaults setInteger:[[personDic valueForKey:@"addr_handle_cache"] integerValue] forKey:@"addrCache"];
             
-            //[defaults setObject:[personDic valueForKey:@"user_family_id"] forKey:@"familyId"];
-
             [defaults setObject:[personDic valueForKey:@"user_portrait"] forKey:@"portrait"];
             [defaults setObject:[personDic valueForKey:@"user_news_receive"] forKey:@"news_status"];
             [defaults setObject:[personDic valueForKey:@"user_nick"] forKey:@"nick"];
+            [defaults setObject:[usersDict valueForKey:@"pk"] forKey:@"userId"];
             [defaults setObject:[personDic valueForKey:@"user_password"] forKey:@"password"];
             [defaults setObject:[personDic valueForKey:@"user_type"] forKey:@"type"];
-
             [defaults synchronize];
             
             SqlDictionary* sqlDict = [[SqlDictionary alloc] init];
@@ -270,6 +268,7 @@
                 {
                     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
                     [defaults setInteger:[[familyDict valueForKey:@"block_id"] integerValue] forKey:@"block_id"];
+                    [defaults setObject:[familyDict valueForKey:@"community_name"] forKey:@"familyAddress"];
                     [defaults synchronize];
                 }
                 personInfoDic[@"family_apt_id"] = familyDict[@"apt_num_id"];

@@ -875,7 +875,8 @@ static BOOL upState = YES;
     NSLog(@"getTopicNet");
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     NSString* communityId = [defaults stringForKey:@"communityId"];
-    NSString* userId = [defaults stringForKey:@"userId"];
+    NSString* userId = [defaults valueForKey:@"userId"];
+        
     AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
     manager.securityPolicy.allowInvalidCertificates = YES;
     [manager.securityPolicy setValidatesDomainName:NO];
@@ -895,8 +896,6 @@ static BOOL upState = YES;
                                 };
     
     [manager POST:POST_URL parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
-        
-        
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSLog(@"获取所有帖子网络请求:%@", responseObject);
@@ -1295,7 +1294,8 @@ static BOOL upState = YES;
              @"praiseCount" : responseDict[@"likeNum"],
              @"replyCount" : responseDict[@"commentNum"],
              @"topicId" : responseDict[@"topicId"],
-             
+             @"forumName" : responseDict[@"forumName"],
+             @"topicCategoryType" : responseDict[@"topicCategoryType"],
              };
     return dict;
 }
@@ -1415,9 +1415,6 @@ static BOOL upState = YES;
     }
     
 }
-
-
-
 
 // 浏览帖子次数网络请求
 // topicId 帖子id

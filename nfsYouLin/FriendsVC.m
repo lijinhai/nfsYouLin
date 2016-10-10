@@ -433,7 +433,7 @@ static NSString *kConversationChatter = @"ConversationChatter";
         
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        NSLog(@"获取邻居列表网络请求:%@", responseObject);
+//        NSLog(@"获取邻居列表网络请求:%@", responseObject);
         if([responseObject isKindOfClass:[NSArray class]])
         {
             

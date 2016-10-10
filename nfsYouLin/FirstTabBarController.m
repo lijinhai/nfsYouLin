@@ -49,7 +49,10 @@
 {
     [super viewWillAppear:animated];
      
-    nowAddressStr=[SqliteOperation getUserNowAddressSqlite];
+//    nowAddressStr=[SqliteOperation getUserNowAddressSqlite];
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    nowAddressStr = [defaults stringForKey:@"familyAddress"];
+    
     if([nowAddressStr isEqualToString:@""])
     {
       
@@ -88,7 +91,9 @@
     view.parentVC = self;
     [self lew_presentPopupView:view animation:[LewPopupViewAnimationRight new] dismissed:^{
         
-        nowAddressStr=[SqliteOperation getUserNowAddressSqlite];
+//        nowAddressStr=[SqliteOperation getUserNowAddressSqlite];
+        NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+        nowAddressStr = [defaults stringForKey:@"familyAddress"];
         if([nowAddressStr isEqualToString:@""])
         {
             
@@ -114,11 +119,6 @@
     // 环信登录
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     NSString* userId = [defaults stringForKey:@"userId"];
-    NSLog(@"userid = %@",userId);
-//    EMOptions *options = [EMOptions optionsWithAppkey:@"nfs-hlj#youlinapp"];
-//    [[EMClient sharedClient] initializeSDKWithOptions:options];
-//    EMError *error = [[EMClient sharedClient] loginWithUsername:userId password:userId];
-    
     
     [[EMClient sharedClient] asyncLoginWithUsername:userId password:userId success:^{
         NSLog(@"环信登陆成功");
