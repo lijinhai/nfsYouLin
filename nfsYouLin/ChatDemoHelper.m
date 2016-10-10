@@ -204,7 +204,7 @@ static ChatDemoHelper *helper = nil;
 //         */
 //        NSDictionary *dict = message.ext;
 //        needShowNotification = (dict && [dict valueForKey:RedpacketKeyRedpacketTakenMessageSign]) ? NO : needShowNotification;
-//#endif
+//#endif    ·
         
         if (needShowNotification) {
 #if !TARGET_IPHONE_SIMULATOR

@@ -481,14 +481,10 @@ static NSString *kConversationChatter = @"ConversationChatter";
 
 }
 
-
-
-
 // 消息推送
 - (void)showNotificationWithMessage:(EMMessage *)message
 {
     EMPushOptions *options = [[EMClient sharedClient] pushOptions];
-    
     //发送本地推送
     UILocalNotification *notification = [[UILocalNotification alloc] init];
     //触发通知的时间
@@ -919,5 +915,35 @@ static NSString *kConversationChatter = @"ConversationChatter";
         return;
     }];
 }
+
+#pragma mark -cellDelegate
+// 	圆形头像点击事件回调
+- (void)showCircularImageViewWithImage:(UIImage*) image
+{
+    UIWindow *window = [UIApplication sharedApplication].keyWindow;
+    UIViewController* rootVC = window.rootViewController.navigationController;
+    self.tableView.scrollEnabled = NO;
+    UIView* addView = [[UIView alloc] initWithFrame:rootVC.view.bounds];
+    addView.alpha = 1.0;
+    addView.backgroundColor = [UIColor whiteColor];
+    [rootVC.view addSubview:addView];
+    ShowImageView* showImage = [[ShowImageView alloc] initWithFrame:self.view.frame circularImage:image];
+    [showImage show:addView didFinish:^()
+     {
+         [UIView animateWithDuration:0.5f animations:^{
+             
+             showImage.alpha = 0.0f;
+             addView.alpha = 0.0f;
+             
+         } completion:^(BOOL finished) {
+             self.tableView.scrollEnabled = YES;
+             [showImage removeFromSuperview];
+             [addView removeFromSuperview];
+         }];
+         
+     }];
+    
+}
+
 
 @end
