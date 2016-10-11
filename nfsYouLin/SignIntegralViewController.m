@@ -351,7 +351,7 @@
         _todayPoints=[[responseObjectAry objectAtIndex:0][@"credit"] intValue];
         NSInteger points=_todayPoints;//今天签到所得分数
         NSLog(@"points is %ld",points);
-        PopupCalendarView *view = [PopupCalendarView defaultPopupView:points tFrame:CGRectMake(0, 0, 365, 375) signArray:self.monthSignedArray];
+        PopupCalendarView *view = [PopupCalendarView defaultPopupView:points tFrame:CGRectMake(0, 0, screenWidth-40, 375) signArray:self.monthSignedArray];
         view.parentVC = self;
         [self lew_presentPopupView:view animation:[LewPopupViewAnimationRight new] dismissed:^{
             NSLog(@"动画结束");

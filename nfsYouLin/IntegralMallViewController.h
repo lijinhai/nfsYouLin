@@ -19,6 +19,8 @@
 @property (nonatomic, strong) NSMutableArray *goodsArray;
 @property (nonatomic, strong) NSString *pointStr;
 @property (weak, nonatomic) IBOutlet UICollectionView *goodsCollectView;
+@property (weak, nonatomic) IBOutlet UIView *titleView;
+@property (weak, nonatomic) IBOutlet UILabel *exchangeTitleLab;
 
 @property (nonatomic, strong) UILabel *downRectLabel;
 
