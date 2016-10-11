@@ -33,6 +33,7 @@ typedef void (^ReturnWorkerShowBlock)(NSString *showVal);
 - (IBAction)profession_DiaEndOnExit:(id)sender;
 - (IBAction)View_TouchDown:(id)sender;
 
+@property (weak, nonatomic) IBOutlet UILabel *workerTipLab;
 
 @end
 

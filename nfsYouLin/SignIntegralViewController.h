@@ -11,6 +11,9 @@
 @interface SignIntegralViewController : UIViewController
 @property (weak, nonatomic) IBOutlet UIImageView *pleaseSignImage;
 @property (weak, nonatomic) IBOutlet UILabel *pointsLabel;
+
+@property (weak, nonatomic) IBOutlet UILabel *myPointsNameLab;
+
 @property (weak, nonatomic) IBOutlet UIImageView *dateRulerImageView;
 
 @property (weak, nonatomic) IBOutlet UILabel *MONLabel;
@@ -26,6 +29,14 @@
 @property (weak, nonatomic) IBOutlet UILabel *SATLabel;
 
 @property (weak, nonatomic) IBOutlet UILabel *SUNLabel;
+
+@property (weak, nonatomic) IBOutlet UILabel *signedTitleLab;
+
+@property (weak, nonatomic) IBOutlet UILabel *oneTipLabel;
+@property (weak, nonatomic) IBOutlet UILabel *twoTipLabel;
+@property (weak, nonatomic) IBOutlet UILabel *threeTipLabel;
+
+@property (weak, nonatomic) IBOutlet UIImageView *bg;
 
 @property (nonatomic, strong) NSMutableArray *nowWeekSignedArray;
 @property (nonatomic, strong) NSMutableArray *monthSignedArray;

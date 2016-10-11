@@ -33,24 +33,22 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1、每天可签到一次，每次签到可获得3积分" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Zen-2N-TLA">
-                                <rect key="frame" x="39" y="437" width="335" height="21"/>
+                                <rect key="frame" x="39" y="437" width="298" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="2、每天签到积分可以累加" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="9jt-p1-UcV">
-                                <rect key="frame" x="39" y="480" width="197" height="21"/>
+                                <rect key="frame" x="39" y="480" width="185" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="2c6-Uz-1Mq">
-                                <rect key="frame" x="39" y="518" width="375" height="60"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="3、对不正当手段参与活动的用户，优邻有权禁止其参加活动，取消其活动资格" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="2c6-Uz-1Mq">
+                                <rect key="frame" x="39" y="518" width="375" height="55"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <string key="text">3、对不正当手段参与活动的用户，优邻有权禁止其参加
-活动，取消其活动资格</string>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
@@ -130,9 +128,15 @@
                         <outlet property="THULabel" destination="KOU-Sf-Jhw" id="yqo-p9-XZg"/>
                         <outlet property="TUELabel" destination="gKJ-U5-GzQ" id="hei-6E-j7W"/>
                         <outlet property="WEDLabel" destination="0XI-W7-DOu" id="hFH-JW-SgZ"/>
+                        <outlet property="bg" destination="hJ2-fz-H5l" id="vGR-md-YkG"/>
                         <outlet property="dateRulerImageView" destination="8HK-xh-PSX" id="Z97-Tb-KKT"/>
+                        <outlet property="myPointsNameLab" destination="AtX-y5-t24" id="WFy-0x-piu"/>
+                        <outlet property="oneTipLabel" destination="Zen-2N-TLA" id="mLg-l3-Shz"/>
                         <outlet property="pleaseSignImage" destination="YLL-j8-kFa" id="bWy-hY-cgR"/>
                         <outlet property="pointsLabel" destination="mxJ-wb-OtM" id="VYL-Yf-Wht"/>
+                        <outlet property="signedTitleLab" destination="2JF-Fw-iad" id="ejQ-gU-1Mf"/>
+                        <outlet property="threeTipLabel" destination="2c6-Uz-1Mq" id="GhE-nP-24e"/>
+                        <outlet property="twoTipLabel" destination="9jt-p1-UcV" id="hur-21-Nzp"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="NYx-Ag-IDJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -634,6 +638,7 @@
                     <connections>
                         <outlet property="workSettingTable" destination="3ZS-mv-vzp" id="9A5-jJ-eTe"/>
                         <outlet property="workerNameTextField" destination="BkC-qm-uNf" id="p2X-C1-wTM"/>
+                        <outlet property="workerTipLab" destination="Qs0-xz-5CK" id="Cn7-Q1-6Tr"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ee2-be-rrP" userLabel="First Responder" sceneMemberID="firstResponder"/>

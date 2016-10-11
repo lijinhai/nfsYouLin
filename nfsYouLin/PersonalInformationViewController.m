@@ -69,7 +69,8 @@
     _birthdayLabel=[[UILabel alloc] init];
     _professionLabel=[[UILabel alloc] init];
     [self userDetailInfoInit];
-    _personalInfoTable.frame = CGRectMake(0, 0, screenWidth,screenHeight*6/7);
+
+    _personalInfoTable.frame = CGRectMake(0, 0, screenWidth,475);
     /*数据源初始化*/
     dataSource = @[@"头像", @"昵称", @"修改密码", @"生日", @"性别", @"职业", @"家庭住址是否公开"];
     _switchFamliyAddressButton = [[UISwitch alloc] initWithFrame:CGRectMake(screenWidth-70, 10, 40, 5)];

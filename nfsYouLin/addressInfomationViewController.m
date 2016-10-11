@@ -13,6 +13,8 @@
 #import "PopupAddressSettingView.h"
 #import "MBProgressHUD.h"
 #import "addressVerificationViewController.h"
+#import "HeaderFile.h"
+
 
 
 @interface addressInfomationViewController ()<UITableViewDelegate,UITableViewDataSource>
@@ -56,15 +58,15 @@
     /*加载相关地址的TableView*/
     /*读取数据库，获取用户地址信息*/
     _addressAndStatuArray=[self getAddressList];
-    _addressTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 60, self.view.frame.size.width, self.view.frame.size.height) style:UITableViewStylePlain];
+    _addressTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 60, screenWidth, screenHeight) style:UITableViewStylePlain];
     _addressTableView.dataSource=self;
     _addressTableView.delegate=self;
     _addressTableView.scrollEnabled=NO;
     _addressTableView.tableHeaderView=[[UIView alloc]initWithFrame:CGRectMake(0, 0, _addressTableView.bounds.size.width, 0.01)];
+    _addressTableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     [_addressTableView setSeparatorInset:UIEdgeInsetsZero];
     [_addressTableView setLayoutMargins:UIEdgeInsetsZero];
     // 设置数据源
-    NSLog(@"addressArray length is %ld",[_addressAndStatuArray count]);
     if([_addressAndStatuArray count]!=0)
     {
      [self.view addSubview:_addressTableView];
@@ -99,10 +101,10 @@
     //self.addressTableView.hidden = NO;
     
         NSLog(@"*******delete address info!!!!********");
-    UIView *rightVeiw = [[UIView alloc] initWithFrame:CGRectMake(0,0,15,15)];
+    UIView *rightVeiw = [[UIView alloc] initWithFrame:CGRectMake(screenWidth-30,14,15,15)];
     rightVeiw.tag=3000;
     UIImageView* xImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"btn_xuanzhong_a"]];
-    xImageView.frame = CGRectMake(375,14,15,15);
+    xImageView.frame = CGRectMake(0,0,15,15);
     [rightVeiw addSubview:xImageView];
     //xImageView.tag=521;
     /** NOTE: This method can return nil so you need to account for that in code */

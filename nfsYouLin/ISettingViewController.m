@@ -64,12 +64,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     _viewColor = [UIColor colorWithRed:243/255.0 green:243/255.0 blue:240/255.0 alpha:1];
-    _tableView.frame = CGRectMake(0, 0, screenWidth,screenHeight*6/7);
+    _tableView.frame = CGRectMake(0, 0, screenWidth,530);
     _tableView.bounces = NO;
     self.view.backgroundColor = _viewColor;
     _settingTypeName = @[@"通知声音", @"振动", @"黑名单" ,@"检查更新" ,@"清除缓存" ,@"退出登录"];
     /*tableViewCell 下划线 长度设置为屏幕的宽*/
-    NSLog(@"tableview height is %f",self.tableView.frame.size.height/6);
     if ([self.tableView respondsToSelector:@selector(setSeparatorInset:)]) {
         [self.tableView setSeparatorInset:UIEdgeInsetsZero];
     }
