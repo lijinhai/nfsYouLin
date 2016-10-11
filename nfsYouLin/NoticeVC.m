@@ -374,10 +374,7 @@
     
 }
 
-
-
 #pragma mark -cellDelegate
-
 // 	圆形头像点击事件回调
 - (void)showCircularImageViewWithImage:(UIImage*) image
 {

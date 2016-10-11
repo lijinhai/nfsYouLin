@@ -173,8 +173,9 @@ CGFloat const EaseConversationCellPadding = 10;
    
 
     self.titleLabel.text = [[PersonModel sharedPersonModel].nickDict valueForKey:userId];
+    NSLog(@"userDict = %@", [PersonModel sharedPersonModel].userDict);
     _model.avatarURLPath = [[PersonModel sharedPersonModel].userDict valueForKey:userId];
-    
+    NSLog(@"userId = %@ path = %@",userId,_model.avatarURLPath);
     
     if (self.showAvatar) {
         if ([_model.avatarURLPath length] > 0){
