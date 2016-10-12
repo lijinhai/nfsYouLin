@@ -141,6 +141,7 @@
                     alias:@"youlin_alias_10000"
          callbackSelector:@selector(tagsAliasCallback:tags:alias:)
                    target:self];
+    
     [self JGPushSetNet];
     
     [self setupSubviews];
@@ -150,7 +151,6 @@
     if(!app.friendVC)
     {
         app.friendVC = [[FriendsVC alloc] init];
-        
     }
 
     [ChatDemoHelper shareHelper];

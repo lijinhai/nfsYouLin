@@ -642,6 +642,7 @@
 		8F14983B1D8FB63200ED707E /* ServiceCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServiceCell.m; sourceTree = "<group>"; };
 		8F1499021D91139B00ED707E /* NoticeMessageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NoticeMessageView.h; sourceTree = "<group>"; };
 		8F1499031D91139B00ED707E /* NoticeMessageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NoticeMessageView.m; sourceTree = "<group>"; };
+		8F1C11A11DACB655005FEFB2 /* nfsYouLin.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = nfsYouLin.entitlements; sourceTree = "<group>"; };
 		8F1FB5B11D5C025800676743 /* photo_delete@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "photo_delete@2x.png"; sourceTree = "<group>"; };
 		8F1FB5B21D5C025800676743 /* TZAssetCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TZAssetCell.h; sourceTree = "<group>"; };
 		8F1FB5B31D5C025800676743 /* TZAssetCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TZAssetCell.m; sourceTree = "<group>"; };
@@ -3675,6 +3676,7 @@
 		AFCE1F931CDAD1B20085F10F /* nfsYouLin */ = {
 			isa = PBXGroup;
 			children = (
+				8F1C11A11DACB655005FEFB2 /* nfsYouLin.entitlements */,
 				AFCE1FA51CDAD1B20085F10F /* Info.plist */,
 				AF7850071CFFC587009F6982 /* FMDB */,
 				AF5293C91D12964E00503975 /* Gloable */,
@@ -3911,6 +3913,14 @@
 					AFCE1F901CDAD1B20085F10F = {
 						CreatedOnToolsVersion = 7.3;
 						DevelopmentTeam = KJG9FUNH9Q;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 0;
+							};
+							com.apple.Push = {
+								enabled = 1;
+							};
+						};
 					};
 					AFCE1FA91CDAD1B20085F10F = {
 						CreatedOnToolsVersion = 7.3;
@@ -4657,6 +4667,7 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = nfsYouLin/nfsYouLin.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = KJG9FUNH9Q;
@@ -4696,6 +4707,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = nfs.Youlin;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "ae82bd4b-8ebb-4287-a202-348be7b390f4";
+				PROVISIONING_PROFILE_SPECIFIER = Development;
 				WARNING_CFLAGS = "-Wno-deprecated-declarations";
 			};
 			name = Debug;
@@ -4705,6 +4717,7 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = nfsYouLin/nfsYouLin.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				DEVELOPMENT_TEAM = KJG9FUNH9Q;
