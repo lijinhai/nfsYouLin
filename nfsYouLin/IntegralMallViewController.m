@@ -50,6 +50,7 @@
     [super viewDidLoad];
      _viewColor = [UIColor colorWithRed:243/255.0 green:243/255.0 blue:240/255.0 alpha:1];
     self.view.backgroundColor=_viewColor;
+    _integralRuleLabel.frame = CGRectMake(screenWidth-80, 70, 80, 20);
     _integralRuleLabel.userInteractionEnabled=YES;
     UITapGestureRecognizer *labelTapGestureRecognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(integralRuleTouchUpInside:)];
     [_integralRuleLabel addGestureRecognizer:labelTapGestureRecognizer];
@@ -90,6 +91,7 @@
     [[UIBarButtonItem appearance] setBackButtonBackgroundImage:backButtonImage forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
     [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
      self.navigationItem.title=@"";
+     self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:255/255.0 green:186/255.0 blue:2/255.0 alpha:1];
     self.backView.backgroundColor=[UIColor colorWithRed:255/255.0 green:186/255.0 blue:2/255.0 alpha:1];
     /*积分label设置*/
     _integralValueLabel.attributedText=[self setIntegralLabel:self.pointStr];
@@ -102,6 +104,8 @@
     self.goodsCollectView.alwaysBounceVertical=YES;
     [self.goodsCollectView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"GoodsCell"];
     /*me label设置*/
+    _meLabel.frame = CGRectMake(screenWidth-65, CGRectGetMaxY(_exchangeTitleLab.frame)-41, 50, 30);
+    _meImageView.frame = CGRectMake(screenWidth-25, CGRectGetMaxY(_exchangeTitleLab.frame)-36.5, 15, 18);
     _meLabel.userInteractionEnabled=YES;
     UITapGestureRecognizer *labelTapGestureRecognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(meLabelTouchUpInside:)];
     
@@ -235,9 +239,10 @@
     NSInteger section = indexPath.section;
     static NSString *CellIdentifier = @"GoodsCell";
     UICollectionViewCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:CellIdentifier forIndexPath:indexPath];
-    
+    cell.frame = CGRectMake(screenWidth/2*rowNo, 120*section, screenWidth/2-1, 119);
     if (!cell) {
-        cell = [[UICollectionViewCell alloc]init ];
+        
+        cell = [[UICollectionViewCell alloc] initWithFrame:CGRectMake(0, 0, screenWidth/2, 90) ];
     }else{
         while ([cell.contentView.subviews lastObject] != nil) {
             [[cell.contentView.subviews lastObject] removeFromSuperview];
@@ -251,7 +256,7 @@
     float scale=0.6;//缩放比例
     UIImageView* goodsPic=[[UIImageView alloc] init];
     UILabel* pointsLable=[[UILabel alloc] initWithFrame:CGRectMake(0, 0, 60, 20)];
-    pointsLable.center=CGPointMake(cell.frame.size.width/2+30, 25);
+    pointsLable.center=CGPointMake(cell.frame.size.width/2+36, 25);
     pointsLable.textColor=fontColor;
     NSString *pointsInfo=[NSString stringWithFormat:@"%@%@",[[dataArray objectAtIndex:(section*2+rowNo)] objectForKey:@"gl_credit"],@"  分"];
     NSMutableAttributedString *AttributedStr = [[NSMutableAttributedString alloc]initWithString:pointsInfo];
@@ -266,7 +271,7 @@
     UILabel* nameLable=[[UILabel alloc] initWithFrame:CGRectMake(0, 0, 60, 20)];
     nameLable.text=[[dataArray objectAtIndex:(section*2+rowNo)] objectForKey:@"gl_name"];
     nameLable.font=[UIFont systemFontOfSize:14];
-    nameLable.center=CGPointMake(cell.frame.size.width/2+30, 47);
+    nameLable.center=CGPointMake(cell.frame.size.width/2+36, 48);
     
     UIButton* clickGetGoods=[[UIButton alloc] init];
     clickGetGoods.frame=CGRectMake(0,0,75, 25);
@@ -482,6 +487,8 @@
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView{
 
     float offset=self.goodsCollectView.contentOffset.y;
+    if([dataArray count]==0)
+        return;
     if(offset<=0)
     {
         [self.goodsCollectView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UICollectionViewScrollPositionNone animated:NO];
@@ -491,7 +498,8 @@
 -(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
     float offset=self.goodsCollectView.contentOffset.y;
-    NSLog(@"offset is %f",offset);
+    if([dataArray count]==0)
+        return;
     if(offset<5.0){
     
     [self.goodsCollectView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UICollectionViewScrollPositionNone animated:NO];

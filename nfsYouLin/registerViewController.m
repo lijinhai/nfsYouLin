@@ -67,7 +67,7 @@
     // 添加验证码输入框
     self.verifyTextField = [[UITextField alloc] initWithFrame:CGRectZero];
     UIView *paddingView1 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 10, 30)];
-    self.verifyTextField.frame = CGRectMake(3, -1, 368, 49);
+    self.verifyTextField.frame = CGRectMake(3, -1, screenWidth-50, 49);
     self.verifyTextField.backgroundColor = [UIColor whiteColor];
     self.verifyTextField.placeholder = @"请输入验证码";
     self.verifyTextField.leftView = paddingView1;
@@ -75,11 +75,11 @@
     self.verifyTextField.keyboardType = UIKeyboardTypeNumberPad;
     [self.verifyTextField addTarget:self action:@selector(TextFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
     
-    redrawTextField *codesTextfield=[[redrawTextField alloc] init:CGRectMake(20,169, 374, 51) addTextField:self.verifyTextField];
+    redrawTextField *codesTextfield=[[redrawTextField alloc] init:CGRectMake(20,169, screenWidth-40, 51) addTextField:self.verifyTextField];
     // 添加邀请码
     self.inviteTextField = [[UITextField alloc] initWithFrame:CGRectZero];
     UIView *paddingView2 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 10, 30)];
-    self.inviteTextField.frame = CGRectMake(3, -1, 368, 49);
+    self.inviteTextField.frame = CGRectMake(3, -1, screenWidth-50, 49);
     self.inviteTextField.backgroundColor = [UIColor whiteColor];
     self.inviteTextField.placeholder=@"(选填)请输入邀请码或推荐人手机号";
     self.inviteTextField.leftView=paddingView2;
@@ -87,7 +87,7 @@
     self.inviteTextField.keyboardType = UIKeyboardTypeNumberPad;
     [self.inviteTextField addTarget:self action:@selector(TextFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
     
-    redrawTextField *inviteCodeTextfield=[[redrawTextField alloc] init:CGRectMake(20,248, 374, 51) addTextField:self.inviteTextField];
+    redrawTextField *inviteCodeTextfield=[[redrawTextField alloc] init:CGRectMake(20,248, screenWidth-40, 51) addTextField:self.inviteTextField];
     
     [self.view addSubview:phoneLineField];
     [self.view addSubview:codesTextfield];

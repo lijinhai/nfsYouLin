@@ -46,6 +46,9 @@
     UIBarButtonItem *barrightBtn=[[UIBarButtonItem alloc]initWithTitle:@"确定" style:UIBarButtonItemStylePlain target:self action:@selector(sureAction)];
     self.navigationItem.rightBarButtonItem=barrightBtn;
     /*设置textfield属性*/
+    _nikeNameTextField.frame = CGRectMake(20, 80, screenWidth-40, 40);
+    _tipLabel.frame = CGRectMake(20, 128, screenWidth-40, 40);
+    _tipLabel.numberOfLines = 0;
     _nikeNameTextField.backgroundColor=[UIColor whiteColor];
     
     [_nikeNameTextField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];

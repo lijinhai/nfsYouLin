@@ -40,27 +40,48 @@
     [[UIBarButtonItem appearance] setBackButtonBackgroundImage:backButtonImage forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
     [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
     self.navigationItem.title=@"";
+    _dateRulerImageView.frame = CGRectMake(30, 288, screenWidth-60, 20);
+    NSLog(@"screenWidth-40 is %f",screenWidth-40);
+    _pleaseSignImage.frame = CGRectMake(screenWidth/2-55, 90, 110, 110);
+    _myPointsNameLab.frame = CGRectMake(screenWidth/2-48, CGRectGetMaxY(_pleaseSignImage.frame)+35, 90, 20);
+    _pointsLabel.frame = CGRectMake(screenWidth/2+41, CGRectGetMaxY(_pleaseSignImage.frame)+35, 100, 20);
+    _pointsLabel.font = [UIFont boldSystemFontOfSize:17.5f];
     _pointsLabel.text=[NSString stringWithFormat:@"%ld",_allPoints];
     /*设置周label日期*/
     _weekDateArray=[self getWeekTime];
-    self.MONLabel.text=[_weekDateArray objectAtIndex:0];
+    float rectW = CGRectGetWidth(_dateRulerImageView.frame);
+    self.MONLabel.frame = CGRectMake(28, 310, 39, 21);
+    self.MONLabel.textAlignment = NSTextAlignmentLeft;
+    self.MONLabel.text = [_weekDateArray objectAtIndex:0];
     self.MONLabel.tag=0;
     
+    self.TUELabel.frame = CGRectMake(25+rectW/6, 310, 39, 21);
     self.TUELabel.text=[_weekDateArray objectAtIndex:1];
+    self.TUELabel.textAlignment = NSTextAlignmentLeft;
     self.TUELabel.tag=1;
     
+    self.WEDLabel.frame = CGRectMake(22+rectW/6*2, 310, 39, 21);
+    self.WEDLabel.textAlignment = NSTextAlignmentLeft;
     self.WEDLabel.text=[_weekDateArray objectAtIndex:2];
     self.WEDLabel.tag=2;
     
+    self.THULabel.frame = CGRectMake(19+rectW/6*3, 310, 39, 21);
+    self.THULabel.textAlignment = NSTextAlignmentLeft;
     self.THULabel.text=[_weekDateArray objectAtIndex:3];
     self.THULabel.tag=3;
     
+    self.FRILabel.frame = CGRectMake(16+rectW/6*4, 310, 39, 21);
+    self.FRILabel.textAlignment = NSTextAlignmentLeft;
     self.FRILabel.text=[_weekDateArray objectAtIndex:4];
     self.FRILabel.tag=4;
     
+    self.SATLabel.frame = CGRectMake(13+rectW/6*5, 310, 39, 21);
+    self.SATLabel.textAlignment = NSTextAlignmentLeft;
     self.SATLabel.text=[_weekDateArray objectAtIndex:5];
     self.SATLabel.tag=5;
     
+    self.SUNLabel.frame = CGRectMake(10+rectW/6*6, 310, 39, 21);
+    self.SUNLabel.textAlignment = NSTextAlignmentLeft;
     self.SUNLabel.text=[_weekDateArray objectAtIndex:6];
     self.SUNLabel.tag=6;
    /*设置周签到标示*/
@@ -70,7 +91,7 @@
         
            if([self checkWeekSignedDay:[_weekDateArray objectAtIndex:i]])
            {
-               UIView *layerView=[[UIView alloc] initWithFrame:CGRectMake(17.5+59*i, 286,24, 24)];
+               UIView *layerView=[[UIView alloc] initWithFrame:CGRectMake(27+rectW/6*i, 286,24, 24)];
                UIImageView *picView=[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"pic_dian2"]];
                picView.frame=CGRectMake(0, 0,24, 24);
                [layerView addSubview:picView];
@@ -87,6 +108,23 @@
         }
         
     }
+    /*签到积分说明*/
+    _signedTitleLab.frame = CGRectMake(screenWidth/2-60, CGRectGetMaxY(_bg.frame)+20, 120, 30);
+    _signedTitleLab.textAlignment = NSTextAlignmentLeft;
+    
+    _oneTipLabel.frame = CGRectMake(20, CGRectGetMaxY(_signedTitleLab.frame)+15, screenWidth-40, 25);
+    _oneTipLabel.textAlignment = NSTextAlignmentLeft;
+    _oneTipLabel.numberOfLines = 0;
+    
+    _twoTipLabel.frame = CGRectMake(20, CGRectGetMaxY(_oneTipLabel.frame)+10, screenWidth-40, 25);
+    _twoTipLabel.textAlignment = NSTextAlignmentLeft;
+    _twoTipLabel.numberOfLines = 0;
+    
+    _threeTipLabel.frame = CGRectMake(20, CGRectGetMaxY(_twoTipLabel.frame)+10, screenWidth-40, 50);
+    _threeTipLabel.textAlignment = NSTextAlignmentLeft;
+    _threeTipLabel.numberOfLines = 0;
+    
+    
     /*签到点击事件*/
     
     [_pleaseSignImage setUserInteractionEnabled:YES];
@@ -313,7 +351,7 @@
         _todayPoints=[[responseObjectAry objectAtIndex:0][@"credit"] intValue];
         NSInteger points=_todayPoints;//今天签到所得分数
         NSLog(@"points is %ld",points);
-        PopupCalendarView *view = [PopupCalendarView defaultPopupView:points tFrame:CGRectMake(0, 0, 365, 375) signArray:self.monthSignedArray];
+        PopupCalendarView *view = [PopupCalendarView defaultPopupView:points tFrame:CGRectMake(0, 0, screenWidth-40, 375) signArray:self.monthSignedArray];
         view.parentVC = self;
         [self lew_presentPopupView:view animation:[LewPopupViewAnimationRight new] dismissed:^{
             NSLog(@"动画结束");

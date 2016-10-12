@@ -117,7 +117,7 @@
     dingweiIV.image = [UIImage imageNamed:@"icon_dibiao"];
     self.sellerPL.text =_sellerData.sellerPosition;
     CGSize sizeP = [self.sellerPL.text sizeWithAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIFont systemFontOfSize:10],NSFontAttributeName, nil]];
-    self.sellerPL.frame=CGRectMake(127,self.frame.size.height/2-8,sizeP.width+50, 20);
+    self.sellerPL.frame=CGRectMake(127,self.frame.size.height/2-8,screenWidth*2/3, 20);
     
     
     

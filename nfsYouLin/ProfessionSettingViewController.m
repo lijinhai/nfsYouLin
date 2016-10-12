@@ -43,6 +43,14 @@
     UIBarButtonItem *barrightBtn=[[UIBarButtonItem alloc]initWithTitle:@"确定" style:UIBarButtonItemStylePlain target:self action:@selector(sureAction)];
     self.navigationItem.rightBarButtonItem=barrightBtn;
     /*switch 按钮*/
+    _workSettingTable.frame = CGRectMake(0, 210, screenWidth, screenHeight);
+    _workerNameTextField.frame = CGRectMake(20, 85, screenWidth-40, 50);
+    UIView *paddingView0 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 10, 30)];
+    _workerNameTextField.leftView = paddingView0;
+    _workerNameTextField.leftViewMode = UITextFieldViewModeAlways;
+    _workerTipLab.frame = CGRectMake(20, 145, screenWidth-40, 40);
+    _workerTipLab.numberOfLines = 0;
+    
     switchWorkerButton = [[UISwitch alloc] initWithFrame:CGRectMake(_workSettingTable.frame.size.width-70, 10, 40, 5)];
     NSLog(@"999999_statusStateis %@",_statusState);
     if([@"3" isEqualToString:_statusState]||[@"4" isEqualToString:_statusState])
@@ -57,6 +65,7 @@
     [switchWorkerButton addTarget:self action:@selector(switchWorkerAction:) forControlEvents:UIControlEventValueChanged];
     NSLog(@"*******");
     /*表格初始化*/
+    
     _workSettingTable.dataSource=self;
     _workSettingTable.delegate=self;
     /*tableViewCell 下划线 长度设置为屏幕的宽*/
@@ -182,9 +191,9 @@
     NSInteger section = indexPath.section;
     static NSString *CellIdentifier = @"infoid";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    UILabel *tiplabel=[[UILabel alloc] initWithFrame:CGRectMake(15, 40, tableView.frame.size.width,60)];
+    UILabel *tiplabel=[[UILabel alloc] initWithFrame:CGRectMake(15, 40, tableView.frame.size.width-15,60)];
     tiplabel.font=[UIFont systemFontOfSize:14];
-    tiplabel.text=@"找到更多同兴趣的好友，一起交流进步，与此同时也能与其他行\n业的好友进行沟通，扩展知识面，发现自己感兴趣的圈子，从而\n丰富自己的生活";
+    tiplabel.text=@"找到更多同兴趣的好友，一起交流进步，与此同时也能与其他行业的好友进行沟通，扩展知识面，发现自己感兴趣的圈子，从而丰富自己的生活";
     tiplabel.textColor=[UIColor darkGrayColor];
     tiplabel.numberOfLines=0;
     
