@@ -19,7 +19,7 @@
         [self setPlaceholderColor:[UIColor lightGrayColor]];
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textChanged:) name:UITextViewTextDidChangeNotification object:nil];
-        
+       
     }
 
     return self;

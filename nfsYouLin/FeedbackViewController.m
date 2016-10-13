@@ -79,7 +79,7 @@
     suggestTextView.textAlignment =NSTextAlignmentLeft;
     suggestTextView.editable = YES;
     suggestTextView.layer.borderColor = kTextBorderColor.CGColor;
-    suggestTextView.layer.borderWidth = 0.5;
+    suggestTextView.layer.borderWidth = 0.f;
     suggestTextView.placeholderColor = RGBCOLOR(0x89, 0x89, 0x89);
     suggestTextView.placeholder = @"在这里输入意见哦，亲";
     [self.view addSubview:suggestTextView];

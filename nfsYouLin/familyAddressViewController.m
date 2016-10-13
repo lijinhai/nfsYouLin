@@ -79,7 +79,7 @@
     tipsView = [[UIView alloc] initWithFrame:CGRectMake(screenWidth/2-40, CGRectGetMaxY(label.frame)+50, 150.0f, 44.0f)];
     [tipsView addSubview:imageView];
     [tipsView addSubview:tipsLabel];
-     downLabel = [[UILabel alloc] initWithFrame:CGRectMake(15, CGRectGetMaxY(tipsView.frame)-20, screenWidth-30, 0.5)];
+     downLabel = [[UILabel alloc] initWithFrame:CGRectMake(15, CGRectGetMaxY(tipsView.frame)-20, screenWidth-30, 0.3)];
      downLabel.backgroundColor = [UIColor lightGrayColor];
     
     UILabel *footLabelView=[[UILabel alloc] initWithFrame:CGRectMake(12, CGRectGetMaxY(downLabel.frame)+15, screenWidth-24,44.0)];

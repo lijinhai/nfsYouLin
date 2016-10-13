@@ -48,7 +48,6 @@
     multiTableViewCell *multiTableCell;
     SignIntegralViewController *SignIntegralController;
     IntegralMallViewController *IntegralMallController;
-    //IPostVC *postVC;
     
     ICollectVC *collectVC;
     UIBarButtonItem* backItemTitle;

@@ -7,7 +7,7 @@
 //
 
 #import "IntegralRulesViewController.h"
-
+#import "HeaderFile.h"
 @interface IntegralRulesViewController ()
 
 @end
@@ -27,6 +27,7 @@
     /*设置导航*/
     self.navigationController.navigationBarHidden = NO;
     self.navigationItem.title=@"";
+    integralRulesWebView.frame = CGRectMake(0, 0, screenWidth, screenHeight);
     
 }
 - (void)didReceiveMemoryWarning {
