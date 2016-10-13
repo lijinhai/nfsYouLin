@@ -133,15 +133,17 @@
         [self.headIV addGestureRecognizer:tapGesture];
         [self.contentView addSubview:self.headIV];
         
-        
-        UIView* view = [[UIView alloc] initWithFrame:CGRectMake(70, 25, 400, 50)];
-        self.nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 15, 10)];
+        NSLog(@"CGRectGetMaxX(self.headIV.frame)+9 is %f",CGRectGetMaxX(self.headIV.frame)+15);
+        UIView* view = [[UIView alloc] initWithFrame:CGRectMake(CGRectGetMaxX(self.headIV.frame)+15, 25, 400, 50)];
+        self.nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 15, 15, 10)];
+        self.nameLabel.textAlignment = NSTextAlignmentLeft;
         self.nameLabel.text = @"姓名";
         self.nameLabel.tag=1314;
+        
         self.phoneLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 15, 120, 15)];
         self.phoneLabel.text = @"15114599422";
         self.phoneLabel.enabled = NO;
-        [self.nameLabel setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
+
         [view setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin];
         
         [view addSubview:self.nameLabel];

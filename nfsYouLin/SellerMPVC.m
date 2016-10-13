@@ -245,7 +245,9 @@
             {
                 [listView removeFromSuperview];
             }
-            listView = [[DownListView alloc] initWithArray:CGRectMake(0, CGRectGetMaxY(_typeCL.frame)+0.5, _typeCL.frame.size.width, 160) array:typeName];
+            listView = [[DownListView alloc] initWithArray:CGRectMake(0, CGRectGetMaxY(_typeCL.frame)+0.5, screenWidth/2, 160) array:typeName];
+            NSLog(@"CGRectGetMaxY(_typeCL.frame) is %f",screenWidth/2);
+            //CGRectMake(0, CGRectGetMaxY(_typeCL.frame)+0.5, _typeCL.frame.size.width, 160)
             listView.backgroundColor=[UIColor whiteColor];
             listView.selectId = 1;
             listView.defaultSV = _typeRL.text;
@@ -264,7 +266,7 @@
             {
                 [listView removeFromSuperview];
             }
-            listView = [[DownListView alloc] initWithArray:CGRectMake(screenWidth/2+1, CGRectGetMaxY(_orderCL.frame)+0.5, _orderCL.frame.size.width, 160) array:typeName];
+            listView = [[DownListView alloc] initWithArray:CGRectMake(screenWidth/2+1, CGRectGetMaxY(_orderCL.frame)+0.5, screenWidth/2-1, 160) array:typeName];
             listView.backgroundColor=[UIColor whiteColor];
             listView.selectId = 2;
             listView.defaultSV = _orderRL.text;

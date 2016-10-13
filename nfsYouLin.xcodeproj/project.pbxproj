@@ -588,6 +588,7 @@
 		AFEB36581D4ED43C0081A5E6 /* ExchangedGiftsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AFEB36571D4ED43C0081A5E6 /* ExchangedGiftsViewController.m */; };
 		AFEB365E1D503F050081A5E6 /* GoodsCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = AFEB365D1D503F050081A5E6 /* GoodsCollectionViewCell.m */; };
 		AFEB36651D506F6F0081A5E6 /* goodsInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = AFEB36641D506F6F0081A5E6 /* goodsInfo.m */; };
+		AFF728E11DAF19410072E523 /* DeviceType.m in Sources */ = {isa = PBXBuildFile; fileRef = AFF728E01DAF19410072E523 /* DeviceType.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1605,6 +1606,8 @@
 		AFEB365D1D503F050081A5E6 /* GoodsCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GoodsCollectionViewCell.m; sourceTree = "<group>"; };
 		AFEB36631D506F6F0081A5E6 /* goodsInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = goodsInfo.h; sourceTree = "<group>"; };
 		AFEB36641D506F6F0081A5E6 /* goodsInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = goodsInfo.m; sourceTree = "<group>"; };
+		AFF728DF1DAF19410072E523 /* DeviceType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeviceType.h; sourceTree = "<group>"; };
+		AFF728E01DAF19410072E523 /* DeviceType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeviceType.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -3554,6 +3557,8 @@
 				AFE569451CFE652A00C0F745 /* HeaderFile.h */,
 				AFCE1F9A1CDAD1B20085F10F /* ViewController.h */,
 				AFCE1F9B1CDAD1B20085F10F /* ViewController.m */,
+				AFF728DF1DAF19410072E523 /* DeviceType.h */,
+				AFF728E01DAF19410072E523 /* DeviceType.m */,
 				8FD637DC1D54187700F500D9 /* AddList */,
 				8F7539A11D5182380090A7C2 /* Call */,
 				8FD637DB1D5417EF00F500D9 /* Controllers */,
@@ -4220,6 +4225,7 @@
 				8FB6FA5F1D41BAD500E6C71A /* FriendsManager.m in Sources */,
 				AF4B30341D2F932500CBF257 /* fillVerifyCodeViewController.m in Sources */,
 				8F648CE41D00547900E3B155 /* EMCDDeviceManager+Media.m in Sources */,
+				AFF728E11DAF19410072E523 /* DeviceType.m in Sources */,
 				8F648CE91D00547900E3B155 /* amrFileCodec.mm in Sources */,
 				8F648CF91D00547A00E3B155 /* MJRefreshBackNormalFooter.m in Sources */,
 				AF54103E1CE2BF960037673F /* registerViewController.m in Sources */,

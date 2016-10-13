@@ -24,6 +24,7 @@
         _nameArray = nameArray;
         self.frame = frame;
         _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.frame), CGRectGetHeight(self.frame))];
+        NSLog(@"self.frame is %f",CGRectGetWidth(self.frame));
         _tableView.delegate = self;
         _tableView.dataSource = self;
         _tableView.bounces = NO;
@@ -93,6 +94,7 @@
     {
         cell = [[DownListCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
     }
+    NSLog(@"cell 宽度 %f",CGRectGetWidth(cell.frame));
     cell.defaultV = _defaultSV;
     cell.action = [_nameArray objectAtIndex:indexPath.row];
    

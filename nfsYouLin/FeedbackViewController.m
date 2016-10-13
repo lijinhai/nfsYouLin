@@ -69,16 +69,6 @@
         [self.otherTableView setLayoutMargins:UIEdgeInsetsMake(0,15, 0, 15)];
     }
     [self.view addSubview:_otherTableView];
-    /*提交按钮设置*/
-    UIButton* submitButton=[[UIButton alloc] initWithFrame:CGRectMake(0, 0, 250, 40)];
-    submitButton.center=CGPointMake(self.view.frame.size.width/2, self.view.frame.size.height/2+60);
-    submitButton.titleLabel.textColor=[UIColor blackColor];
-    submitButton.titleLabel.font=[UIFont systemFontOfSize:16];
-    submitButton.layer.cornerRadius=6;
-    submitButton.backgroundColor=[UIColor colorWithRed:255/255.0 green:186/255.0 blue:2/255.0 alpha:1];
-    [submitButton setTitle:@"提交" forState:UIControlStateNormal];
-    [submitButton addTarget:self action:@selector(submitSuggestAction:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:submitButton];
     /*初始化文本框*/
     PlaceholderTextView* suggestTextView = [[PlaceholderTextView alloc]initWithFrame:CGRectMake(0, 100, self.view.frame.size.width, 280)];
     suggestTextView.tag=1024;
@@ -93,6 +83,16 @@
     suggestTextView.placeholderColor = RGBCOLOR(0x89, 0x89, 0x89);
     suggestTextView.placeholder = @"在这里输入意见哦，亲";
     [self.view addSubview:suggestTextView];
+    /*提交按钮设置*/
+    UIButton* submitButton=[[UIButton alloc] initWithFrame:CGRectMake(0, 0, 250, 40)];
+    submitButton.center=CGPointMake(self.view.frame.size.width/2, CGRectGetHeight(suggestTextView.frame)+140);
+    submitButton.titleLabel.textColor=[UIColor blackColor];
+    submitButton.titleLabel.font=[UIFont systemFontOfSize:16];
+    submitButton.layer.cornerRadius=6;
+    submitButton.backgroundColor=[UIColor colorWithRed:255/255.0 green:186/255.0 blue:2/255.0 alpha:1];
+    [submitButton setTitle:@"提交" forState:UIControlStateNormal];
+    [submitButton addTarget:self action:@selector(submitSuggestAction:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:submitButton];
     /*设置缓冲*/
     UILabel* indicatorText=[[UILabel alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(_indicator.frame), 60, 30)];
     indicatorText.text=@"发布中";

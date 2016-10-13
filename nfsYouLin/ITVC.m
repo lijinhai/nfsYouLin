@@ -56,7 +56,7 @@
     NSInteger nowPoints;
     __block NSString *initIntegralValue;
     Users* user;
-    
+    BOOL pushFlag;
 }
 
 - (id) init
@@ -90,9 +90,6 @@
         PersonalInformationController=[iStoryBoard instantiateViewControllerWithIdentifier:@"personalinformationcontroller"];
         SignIntegralController=[iStoryBoard instantiateViewControllerWithIdentifier:@"signintegralcontroller"];
         IntegralMallController=[iStoryBoard instantiateViewControllerWithIdentifier:@"integralmallcontroller"];
-        
-        //postVC=[iStoryBoard instantiateViewControllerWithIdentifier:@"ipostid"];
-        //collectVC=[iStoryBoard instantiateViewControllerWithIdentifier:@"icollectid"];
         
     }
     
@@ -132,11 +129,11 @@
     {
         integralLab.text= [NSString stringWithFormat:@"%@",initIntegralValue];
     }
-    /*获取返回后收藏数*/
-    
     /*获取返回后我发的数*/
     [self initUser];
     [self.tableView reloadData];
+    
+    pushFlag = YES;
     
     
 }
@@ -415,13 +412,17 @@
                 }
             }
             /*获取最近三个月的签到日期*/
-            NSString *composeDateString=[NSString stringWithFormat:@"%@%@%@%@%@",year,@".",month,@".",day];
+             NSString *composeDateString=[NSString stringWithFormat:@"%@%@%@%@%@",year,@".",month,@".",day];
             [SignIntegralController.monthSignedArray addObject:composeDateString];
         }
         backItemTitle = [[UIBarButtonItem alloc] initWithTitle:@"积分签到" style:UIBarButtonItemStylePlain target:nil action:nil];
         [self.parentViewController.navigationItem setBackBarButtonItem:backItemTitle];
-        [self.parentViewController.navigationController pushViewController:SignIntegralController animated:YES];
-        
+        if(pushFlag == YES)
+        {
+          
+          pushFlag = NO;
+         [self.parentViewController.navigationController pushViewController:SignIntegralController animated:YES];
+        }
         
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         // 请求失败

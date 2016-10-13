@@ -22,7 +22,7 @@
 
     NSString *signFlag;
     UIImage *signedImage;
-   
+    float rectW;
 
 }
 
@@ -39,6 +39,7 @@
     
     [[UIBarButtonItem appearance] setBackButtonBackgroundImage:backButtonImage forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
     [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
+    self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:255/255.0 green:186/255.0 blue:2/255.0 alpha:1];
     self.navigationItem.title=@"";
     _dateRulerImageView.frame = CGRectMake(30, 288, screenWidth-60, 20);
     NSLog(@"screenWidth-40 is %f",screenWidth-40);
@@ -49,7 +50,7 @@
     _pointsLabel.text=[NSString stringWithFormat:@"%ld",_allPoints];
     /*设置周label日期*/
     _weekDateArray=[self getWeekTime];
-    float rectW = CGRectGetWidth(_dateRulerImageView.frame);
+    rectW = CGRectGetWidth(_dateRulerImageView.frame);
     self.MONLabel.frame = CGRectMake(28, 310, 39, 21);
     self.MONLabel.textAlignment = NSTextAlignmentLeft;
     self.MONLabel.text = [_weekDateArray objectAtIndex:0];
@@ -91,7 +92,7 @@
         
            if([self checkWeekSignedDay:[_weekDateArray objectAtIndex:i]])
            {
-               UIView *layerView=[[UIView alloc] initWithFrame:CGRectMake(27+rectW/6*i, 286,24, 24)];
+               UIView *layerView=[[UIView alloc] initWithFrame:CGRectMake(27-i*3+rectW/6*i, 286,24, 24)];
                UIImageView *picView=[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"pic_dian2"]];
                picView.frame=CGRectMake(0, 0,24, 24);
                [layerView addSubview:picView];
@@ -112,15 +113,15 @@
     _signedTitleLab.frame = CGRectMake(screenWidth/2-60, CGRectGetMaxY(_bg.frame)+20, 120, 30);
     _signedTitleLab.textAlignment = NSTextAlignmentLeft;
     
-    _oneTipLabel.frame = CGRectMake(20, CGRectGetMaxY(_signedTitleLab.frame)+15, screenWidth-40, 25);
+    _oneTipLabel.frame = CGRectMake(15, CGRectGetMaxY(_signedTitleLab.frame)+15, screenWidth-20, 25);
     _oneTipLabel.textAlignment = NSTextAlignmentLeft;
     _oneTipLabel.numberOfLines = 0;
     
-    _twoTipLabel.frame = CGRectMake(20, CGRectGetMaxY(_oneTipLabel.frame)+10, screenWidth-40, 25);
+    _twoTipLabel.frame = CGRectMake(15, CGRectGetMaxY(_oneTipLabel.frame)+10, screenWidth-30, 25);
     _twoTipLabel.textAlignment = NSTextAlignmentLeft;
     _twoTipLabel.numberOfLines = 0;
     
-    _threeTipLabel.frame = CGRectMake(20, CGRectGetMaxY(_twoTipLabel.frame)+10, screenWidth-40, 50);
+    _threeTipLabel.frame = CGRectMake(15, CGRectGetMaxY(_twoTipLabel.frame)+10, screenWidth-30, 50);
     _threeTipLabel.textAlignment = NSTextAlignmentLeft;
     _threeTipLabel.numberOfLines = 0;
     
@@ -165,10 +166,10 @@
         UIView *layerView=[[UIView alloc] init];
         if(weekDay!=1)
         {
-            layerView.frame=CGRectMake(17.5+59*(weekDay-2), 286,24, 24);
+            layerView.frame=CGRectMake(27-(weekDay-2)*3+rectW/6*(weekDay-2), 286,24, 24);
         }else{
         
-            layerView.frame=CGRectMake(17.5+59*6, 286,24, 24);
+            layerView.frame=CGRectMake(10+rectW/6*6, 286,24, 24);
         
         }
         UIImageView *picView=[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"pic_dian2"]];
@@ -351,7 +352,8 @@
         _todayPoints=[[responseObjectAry objectAtIndex:0][@"credit"] intValue];
         NSInteger points=_todayPoints;//今天签到所得分数
         NSLog(@"points is %ld",points);
-        PopupCalendarView *view = [PopupCalendarView defaultPopupView:points tFrame:CGRectMake(0, 0, screenWidth-40, 375) signArray:self.monthSignedArray];
+        PopupCalendarView *view = [PopupCalendarView defaultPopupView:points tFrame:CGRectMake(0, 0, screenWidth-40, (screenWidth-40)/0.94) signArray:self.monthSignedArray];
+        NSLog(@"宽 高 比 = %f",(screenWidth-40)/375);
         view.parentVC = self;
         [self lew_presentPopupView:view animation:[LewPopupViewAnimationRight new] dismissed:^{
             NSLog(@"动画结束");

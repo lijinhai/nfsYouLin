@@ -36,6 +36,7 @@
     UITextField *doorPlateNumView;
     UIView *tipsView;
     UILabel *label;
+    UILabel *label1;
     NSString *flag1;
     NSString *successFlag;
     UIView *rightVeiw;
@@ -46,6 +47,7 @@
     NSMutableArray *platePkAry;
     NSString *blockIdStr;
     NSString    *plateId;
+    UILabel *downLabel;
 }
 
 - (void)viewDidLoad {
@@ -53,17 +55,7 @@
     // Do any additional setup after loading the view.
     NSArray *list = [NSArray arrayWithObjects:@"选城市",@"填小区",@"楼栋号",@"门牌号",@"",nil];
     self.listtitle = list;
-    UILabel *footLabelView=[[UILabel alloc] initWithFrame:CGRectMake(3, 3, 450.0,44.0)];
-    footLabelView.font=[UIFont systemFontOfSize:13.0];
-    footLabelView.textColor=[UIColor lightGrayColor];
-    footLabelView.numberOfLines=0;
-    footLabelView.text=@"  请用户填写您真实的地址，否则在申请地址认证的过程中给您和其他\n  用户带来不必要的麻烦。";
-    _myfamilyAddressTableView.sectionFooterHeight = 800.0f;
-    UIView *footView = [UIView new];
-    [footView addSubview:footLabelView];
-    _myfamilyAddressTableView.tableFooterView=footView;
-    footView.frame = CGRectMake(0, 0, 0, 0);
-    [self.myfamilyAddressTableView setTableFooterView:footView];
+    
     _myfamilyAddressTableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
     [_myfamilyAddressTableView setSeparatorInset:UIEdgeInsetsMake(0,15, 0, 15)];
     [_myfamilyAddressTableView setLayoutMargins:UIEdgeInsetsMake(0,15, 0, 15)];
@@ -71,6 +63,35 @@
     {
      [self getFieldFocus];
     }
+    
+    label = [[UILabel alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(_myfamilyAddressTableView.frame), screenWidth, 0.3)];
+    label1 = [[UILabel alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(_myfamilyAddressTableView.frame)+1.2, screenWidth, 0.3)];
+    label.backgroundColor = [UIColor lightGrayColor];
+    label1.backgroundColor = [UIColor lightGrayColor];
+    /*温馨提示*/
+    UIImage *leftheartImage = [UIImage imageNamed:@"gray_heart"];
+    UIImageView *imageView=[[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 17, 16)];
+    imageView.image=leftheartImage;
+    UILabel *tipsLabel = [[UILabel alloc] initWithFrame:CGRectMake(25, 0, 144, 16)];
+    tipsLabel.text=@"温馨提示";
+    tipsLabel.font=[UIFont systemFontOfSize:13.0];
+    tipsLabel.textColor=[UIColor grayColor];
+    tipsView = [[UIView alloc] initWithFrame:CGRectMake(screenWidth/2-40, CGRectGetMaxY(label.frame)+50, 150.0f, 44.0f)];
+    [tipsView addSubview:imageView];
+    [tipsView addSubview:tipsLabel];
+     downLabel = [[UILabel alloc] initWithFrame:CGRectMake(15, CGRectGetMaxY(tipsView.frame)-20, screenWidth-30, 0.5)];
+     downLabel.backgroundColor = [UIColor lightGrayColor];
+    
+    UILabel *footLabelView=[[UILabel alloc] initWithFrame:CGRectMake(12, CGRectGetMaxY(downLabel.frame)+15, screenWidth-24,44.0)];
+    footLabelView.font=[UIFont systemFontOfSize:13.0];
+    footLabelView.textColor=[UIColor lightGrayColor];
+    footLabelView.numberOfLines=0;
+    footLabelView.text=@"请用户填写您真实的地址，否则在申请地址认证的过程中给您和其他用户带来不必要的麻烦。";
+    [self.view addSubview:label];
+    [self.view addSubview:label1];
+    [self.view addSubview:tipsView];
+    [self.view addSubview:downLabel];
+    [self.view addSubview:footLabelView];
     /*跳转至相关界面*/
     UIStoryboard* storyBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     jumpChooseCityController = [storyBoard instantiateViewControllerWithIdentifier:@"cityController"];
@@ -175,7 +196,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView
  numberOfRowsInSection:(NSInteger)section {
-    return 5;
+    return 4;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView
@@ -251,20 +272,7 @@
         doorPlateNumView.clearsOnBeginEditing = YES;
         doorPlateNumView.tag=1002;
         doorPlateNumView.delegate=self;
-        label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 450, 0.5)];
-        label.backgroundColor = [UIColor lightGrayColor];
         
-        /*温馨提示*/
-        UIImage *leftheartImage = [UIImage imageNamed:@"gray_heart"];
-        UIImageView *imageView=[[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 17, 16)];
-        imageView.image=leftheartImage;
-        UILabel *tipsLabel = [[UILabel alloc] initWithFrame:CGRectMake(25, 0, 144, 16)];
-        tipsLabel.text=@"温馨提示";
-        tipsLabel.font=[UIFont systemFontOfSize:13.0];
-        tipsLabel.textColor=[UIColor grayColor];
-        tipsView = [[UIView alloc] initWithFrame:CGRectMake(150.0f, 55.0f, 150.0f, 44.0f)];
-        [tipsView addSubview:imageView];
-        [tipsView addSubview:tipsLabel];
         NSUInteger rowNumber=[indexPath row];
         switch (rowNumber) {
             case 0:
@@ -288,12 +296,12 @@
                 [cell.contentView addSubview:doorPlateNumView];
                 
                 break;
-            case 4:
-                //NSLog(@"rowNumber 5");
-                cell.selectionStyle = UITableViewCellSelectionStyleNone;
-                [cell.contentView addSubview:label];
-                [cell.contentView addSubview:tipsView];
-                break;
+//            case 4:
+//                //NSLog(@"rowNumber 5");
+//                cell.selectionStyle = UITableViewCellSelectionStyleNone;
+//                [cell.contentView addSubview:label];
+//                [cell.contentView addSubview:tipsView];
+//                break;
             default:
                 break;
         }

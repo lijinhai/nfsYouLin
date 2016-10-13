@@ -8,6 +8,7 @@
 
 #import "FDCalendar.h"
 #import "FDCalendarItem.h"
+#import "HeaderFile.h"
 
 #define Weekdays @[@"日", @"一", @"二", @"三", @"四", @"五", @"六"]
 
@@ -172,22 +173,22 @@ static NSDateFormatter *dateFormattor;
 // 设置星期文字的显示
 - (void)setupWeekHeader {
     NSInteger count = [Weekdays count];
-    CGFloat offsetX =12;
+    CGFloat offsetX = 8;
     
     UIView *weekdayBackgroundView = [[UIView alloc] init];
     weekdayBackgroundView.backgroundColor = RGBAlpha(238, 232, 170, 0.6);
-    weekdayBackgroundView.frame = CGRectMake(0, 10, 365, 20);
+    weekdayBackgroundView.frame = CGRectMake(0, 10, screenWidth-40, 20);
     [self addSubview:weekdayBackgroundView];
     
     for (int i = 0; i < count; i++) {
-        UILabel *weekdayLabel = [[UILabel alloc] initWithFrame:CGRectMake(offsetX, 0, (DeviceWidth-20) / count, 20)];
+        UILabel *weekdayLabel = [[UILabel alloc] initWithFrame:CGRectMake(offsetX, 0, (DeviceWidth-56) / count, 20)];
          weekdayLabel.textAlignment = NSTextAlignmentCenter;
          weekdayLabel.text = Weekdays[i];
          weekdayLabel.font = [UIFont systemFontOfSize:14];
          weekdayLabel.backgroundColor = [UIColor clearColor];
          weekdayLabel.textColor       = RGB(255, 140, 0);
         [weekdayBackgroundView addSubview:weekdayLabel];
-        offsetX += weekdayLabel.frame.size.width;
+         offsetX += weekdayLabel.frame.size.width;
     }
 }
 
