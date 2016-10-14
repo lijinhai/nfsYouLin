@@ -51,4 +51,6 @@
 // 获取用户当前地址及小区
 +(NSString*)getUserNowAddressSqlite;
 +(NSString*)getUserAddressSqlite;
+//清除数据库内所有数据
++ (BOOL) deleteSqlite;
 @end

@@ -42,15 +42,15 @@
     {
         /*获取用户积分、收藏数，发帖数*/
         //[self getCredPostCol:[SqliteOperation getUserId]];
-        self.integralView = [[UIControl alloc] initWithFrame:CGRectMake(0, 0, self.contentView.frame.size.width / 3 - 1 , 80)];
+        self.integralView = [[UIControl alloc] initWithFrame:CGRectMake(0, 0, self.contentView.frame.size.width / 3 - 1 , 60)];
         self.integralView.backgroundColor = [UIColor whiteColor];
-        UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(self.integralView.bounds.size.width + 1 , 20.0f, 1.0f, 40)];
+        UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(self.integralView.bounds.size.width + 1 , 15.0f, 0.8f, 30)];
         [lineView setBackgroundColor:[UIColor blackColor]];
-        UILabel* lable1 = [[UILabel alloc] initWithFrame:CGRectMake(0, 10, self.integralView.bounds.size.width, 50) ];
+        UILabel* lable1 = [[UILabel alloc] initWithFrame:CGRectMake(0, 7, self.integralView.bounds.size.width, 20) ];
         lable1.text = @"积分";
         lable1.enabled = NO;
         lable1.textAlignment = NSTextAlignmentCenter;
-        self.integralLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 50, self.integralView.bounds.size.width, 30)];
+        self.integralLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 27, self.integralView.bounds.size.width, 30)];
         self.integralLabel.tag=222;
         self.integralLabel.textAlignment = NSTextAlignmentCenter;
 
@@ -62,23 +62,21 @@
         [lineView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin];
         [self.integralView addSubview:lable1];
         [self.integralView addSubview:self.integralLabel];
-        //[self.integralView addTarget:self action:@selector(touchDownIntegral) forControlEvents:UIControlEventTouchDown];
-        //[self.integralView addTarget:self action:@selector(touchCancelIntegral) forControlEvents:UIControlEventTouchUpInside ];
         [self.contentView addSubview:self.integralView];
         [self.contentView addSubview:lineView];
         
         
-        self.publishView = [[UIControl alloc] initWithFrame:CGRectMake(self.integralView.bounds.size.width + 2, 0, self.contentView.bounds.size.width / 3 - 1, 80)];
+        self.publishView = [[UIControl alloc] initWithFrame:CGRectMake(self.integralView.bounds.size.width + 2, 0, self.contentView.bounds.size.width / 3 - 1, 60)];
         self.publishView.backgroundColor = [UIColor whiteColor];
-        UILabel* lable2 = [[UILabel alloc] initWithFrame:CGRectMake(0, 10, self.publishView.bounds.size.width, 50) ];
+        UILabel* lable2 = [[UILabel alloc] initWithFrame:CGRectMake(0, 7, self.publishView.bounds.size.width, 20) ];
         lable2.text = @"我发的";
         lable2.enabled = NO;
         lable2.textAlignment = NSTextAlignmentCenter;
-        UIView *lineView2 = [[UIView alloc] initWithFrame:CGRectMake(self.integralView.bounds.size.width + self.publishView.bounds.size.width + 2, 20.0f, 1.0f, 40)];
+        UIView *lineView2 = [[UIView alloc] initWithFrame:CGRectMake(self.integralView.bounds.size.width + self.publishView.bounds.size.width + 2, 15.0f, 0.8f, 30)];
         
         [lineView2 setBackgroundColor:[UIColor blackColor]];
         
-        self.publishLable = [[UILabel alloc] initWithFrame:CGRectMake(0, 50, self.publishView.bounds.size.width, 30)];
+        self.publishLable = [[UILabel alloc] initWithFrame:CGRectMake(0, 27, self.publishView.bounds.size.width, 30)];
        
         self.publishLable.textAlignment = NSTextAlignmentCenter;
         self.publishLable.text = [NSString stringWithFormat:@"%ld",self.publishCount];
@@ -100,13 +98,13 @@
         
         
         
-        self.favoriteView = [[UIControl alloc] initWithFrame:CGRectMake(2 * (self.integralView.bounds.size.width) + 3, 0, self.contentView.bounds.size.width / 3 , 80)];
+        self.favoriteView = [[UIControl alloc] initWithFrame:CGRectMake(2 * (self.integralView.bounds.size.width) + 3, 0, self.contentView.bounds.size.width / 3 , 60)];
         self.favoriteView.backgroundColor = [UIColor whiteColor];
-        UILabel* lable3 = [[UILabel alloc] initWithFrame:CGRectMake(0, 10, self.favoriteView.bounds.size.width, 50) ];
+        UILabel* lable3 = [[UILabel alloc] initWithFrame:CGRectMake(0, 7, self.favoriteView.bounds.size.width, 20) ];
         lable3.text = @"收藏";
         lable3.enabled = NO;
         lable3.textAlignment = NSTextAlignmentCenter;
-        self.favoriteLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 50, self.favoriteView.bounds.size.width, 30)];
+        self.favoriteLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 27, self.favoriteView.bounds.size.width, 30)];
         self.favoriteLabel.textAlignment = NSTextAlignmentCenter;
         self.favoriteLabel.text = [NSString stringWithFormat:@"%ld",self.favoriteCount];
         
@@ -124,7 +122,7 @@
     {
         // 处理头像
         
-        self.headIV = [[UIImageView alloc] initWithFrame:CGRectMake(10, 20, 60, 60)];
+        self.headIV = [[UIImageView alloc] initWithFrame:CGRectMake(10, 10, 60, 60)];
         self.headIV.layer.masksToBounds = YES;
         self.headIV.layer.cornerRadius = 30;
         self.headIV.userInteractionEnabled = YES;

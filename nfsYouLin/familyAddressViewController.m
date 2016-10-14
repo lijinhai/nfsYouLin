@@ -65,7 +65,7 @@
     }
     
     label = [[UILabel alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(_myfamilyAddressTableView.frame), screenWidth, 0.3)];
-    label1 = [[UILabel alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(_myfamilyAddressTableView.frame)+1.2, screenWidth, 0.3)];
+    label1 = [[UILabel alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(_myfamilyAddressTableView.frame)+1.3, screenWidth, 0.3)];
     label.backgroundColor = [UIColor lightGrayColor];
     label1.backgroundColor = [UIColor lightGrayColor];
     /*温馨提示*/
