@@ -10,13 +10,17 @@
 #import "ShowImageView.h"
 #import "NeighborTableViewCell.h"
 #import "NeighborDataFrame.h"
+#import "JPushNotification.h"
 
-@interface NeighborTVC : UITableViewController <cellDelegate>
+@interface NeighborTVC : UIViewController <JPushNotificationDelegate, cellDelegate,UITableViewDelegate,UITableViewDataSource>
 
 - (id) init;
 
-@property (nonatomic,strong)NSMutableArray *neighborDataArray;
+@property(nonatomic, strong)UITableView* tableView;
+@property (nonatomic, strong)NSMutableArray *neighborDataArray;
 // 上拉刷新
 @property (assign, nonatomic)BOOL refresh;
+
+- (void) handleTopicNotification:(NSDictionary *)userInfo;
 
 @end

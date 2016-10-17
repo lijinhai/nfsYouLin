@@ -16,6 +16,7 @@
 #import "PeopleInfoVC.h"
 #import "NewsDetailVC.h"
 #import "PersonalInformationViewController.h"
+#import "AppDelegate.h"
 
 @interface NeighborTVC ()
 
@@ -78,6 +79,9 @@
     
     NSInteger sectionCount;
     UIViewController* rootVC;
+    
+    UIButton* noticeBtn;
+    UIView* noticeView;
 }
 
 - (id) init
@@ -94,6 +98,10 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+    AppDelegate* app = (AppDelegate*)[[UIApplication sharedApplication] delegate];
+    app.notification.delegate = self;
+    
     // 修改导航栏颜色
     [self.navigationController.navigationBar setBarTintColor:_color];
     
@@ -127,10 +135,32 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
+    self.tableView.dataSource = self;
+    self.tableView.delegate = self;
+    [self.view addSubview:self.tableView];
+    
     _color = [UIColor colorWithRed:255/255.0 green:222/255.0 blue:31/255.0 alpha:1];
     
     UIWindow *window = [UIApplication sharedApplication].keyWindow;
     rootVC = window.rootViewController.navigationController;
+    
+    noticeView = [[UIView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(self.navigationController.navigationBar.frame), screenWidth, 50)];
+    noticeView.backgroundColor = [UIColor grayColor];
+    noticeView.alpha = 0.5;
+    noticeView.hidden = YES;
+    [self.view addSubview:noticeView];
+    
+    noticeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    noticeBtn.frame = noticeView.frame;
+    [noticeBtn setTitle:@"有更多新消息" forState:UIControlStateNormal];
+    [noticeBtn setTitleColor:_color forState:UIControlStateNormal];
+    [noticeBtn setBackgroundColor:[UIColor clearColor]];
+    [noticeBtn addTarget:self action:@selector(noticeClicked) forControlEvents:UIControlEventTouchUpInside];
+    noticeBtn.hidden = YES;
+    [self.view addSubview:noticeBtn];
+    
     backgroundView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
     backgroundView.backgroundColor = [UIColor grayColor];
     backgroundView.alpha = 0.8;
@@ -624,6 +654,7 @@ static BOOL upState = YES;
     
 }
 
+#pragma mark -帖子切换
 // 帖子切换回调
 - (void)reloadShowByTitle: (NSString* )text
 {
@@ -850,6 +881,7 @@ static BOOL upState = YES;
     UIButton* cancelBtn = hiView.cancel;
     [cancelBtn addTarget:self action:@selector(hiNoAction:) forControlEvents:UIControlEventTouchUpInside];
 }
+
 
 // 删除帖子回调
 - (void)deleteTopic:(NSInteger)topicId
@@ -1140,7 +1172,7 @@ static BOOL upState = YES;
 }
 
 
-
+#pragma mark - 上拉刷新
 // 上拉刷新网络请求 全部 话题 活动
 - (void) upRefreshNet
 {
@@ -1359,6 +1391,7 @@ static BOOL upState = YES;
     
 }
 
+#pragma mark -删除帖子
 // 确定删除帖子
 - (void) deleteOkAction: (id) sender
 {
@@ -1768,5 +1801,58 @@ static BOOL upState = YES;
     [self.parentViewController.navigationItem setBackBarButtonItem:infoItem];
     [self.navigationController pushViewController:peopleInfoVC animated:YES];
 }
+
+#pragma mark -新消息点击
+- (void)noticeClicked
+{
+    [self reloadShowByTitle:@"全部"];
+    noticeView.hidden = YES;
+    noticeBtn.hidden = YES;
+}
+
+
+#pragma mark -JPushNotification Delegate
+- (void) JPushNotificationWithDictory:(NSDictionary *)userInfo
+{
+    NSLog(@"xxx userInfo = %@",userInfo);
+    
+    NSString* title = [userInfo valueForKey:@"title"];
+    NSString* content = [userInfo valueForKey:@"content"];
+    NSArray* contentArr = [content componentsSeparatedByString:@":"];
+    
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSInteger userId = [[defaults valueForKey:@"userId"] integerValue];
+    NSInteger topicId = [[contentArr objectAtIndex:0] integerValue];
+    
+    
+    if([title isEqualToString:@"push_new_topic"])
+    {
+        NSInteger senderId = [[contentArr objectAtIndex:1] integerValue];
+        if(senderId != userId)
+        {
+            noticeView.hidden = NO;
+            noticeBtn.hidden = NO;
+        }
+    }
+    else if([title isEqualToString:@"push_del_topic"])
+    {
+        for(int i = 0; i < [self.neighborDataArray count] ;i++)
+        {
+            NeighborDataFrame* neighborDataFrame = self.neighborDataArray[i];
+            NeighborData* neighborData = neighborDataFrame.neighborData;
+            
+            if([neighborData.topicId integerValue] == topicId)
+            {
+                [self.neighborDataArray removeObject:neighborDataFrame];
+                sectionCount = sectionCount - 1;
+                break;
+            }
+        }
+        
+        [self.tableView reloadData];
+    }
+
+}
+
 
 @end

@@ -18,8 +18,10 @@
 #import "WaitView.h"
 #import "AppDelegate.h"
 #import "ErrorVC.h"
+#import "NoticeView.h"
+#import "NoticeBGView.h"
 
-@interface CreateNoticeVC ()
+@interface CreateNoticeVC () <NoticeViewDelegate>
 
 @end
 
@@ -48,6 +50,7 @@
     
     
     UIImageView* emptyIV;
+    UIImageView* emptyIV1;
     
     NSString* userId;
     NSString* familyId;
@@ -63,6 +66,9 @@
     UIView* backgroundView;
     DialogView* dialogView;
     UIViewController* rootVC;
+    
+    NoticeView* noticeView;
+    NoticeBGView* noticeBGView;
 }
 
 - (id) init
@@ -101,6 +107,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.automaticallyAdjustsScrollViewInsets = NO;
+    
+    
     [self searchSql];
     
     UIBarButtonItem* rightItem = [[UIBarButtonItem alloc] initWithTitle:@"发送" style:UIBarButtonItemStylePlain target:self action:@selector(sendResult)];
@@ -124,13 +132,16 @@
     line.backgroundColor = lineColor;
     [self.bgView addSubview:line];
     
+    
     self.titleTV = [[UITextView alloc] initWithFrame:CGRectMake(20, 1, CGRectGetWidth(self.bgView.frame) - 40, 38)];
     self.titleTV.backgroundColor = [UIColor whiteColor];
     self.titleTV.scrollEnabled = NO;
+    self.titleTV.editable = NO;
     self.titleTV.font = [UIFont boldSystemFontOfSize:18];
     self.titleTV.delegate = self;
     self.titleTV.returnKeyType = UIReturnKeyDone;
     self.titleTV.autoresizingMask = UIViewAutoresizingNone;
+    
     titlePreHeight = ceilf([self.titleTV sizeThatFits:self.titleTV.frame.size].height);
     titleMinHeight = titlePreHeight;
     
@@ -141,6 +152,11 @@
     self.titlePlaceholder.enabled = NO;
     [self.titleTV addSubview:self.titlePlaceholder];
     [self.bgView addSubview:self.titleTV];
+    
+    UIControl* titleV = [[UIControl alloc] initWithFrame:CGRectMake(20, 1, screenWidth, 38)];
+    [titleV addTarget:self action:@selector(titleClicked) forControlEvents:UIControlEventTouchUpInside];
+    titleV.backgroundColor = [UIColor clearColor];
+    [self.bgView addSubview:titleV];
     
     emptyIV = [[UIImageView alloc] initWithFrame:CGRectMake(CGRectGetMaxX(line.frame) - 10, 10, 20, 20)];
     emptyIV.image = [UIImage imageNamed:@"tanhao.png"];
@@ -167,6 +183,13 @@
     [self.contentTV addSubview:self.contentPlaceholder];
     [self.bgView addSubview:self.contentTV];
     
+    emptyIV1 = [[UIImageView alloc] initWithFrame:CGRectMake(CGRectGetMaxX(line.frame) - 10, CGRectGetMaxY(line.frame) + 5, 20, 20)];
+    emptyIV1.image = [UIImage imageNamed:@"tanhao.png"];
+    emptyIV1.layer.masksToBounds = YES;
+    emptyIV1.layer.cornerRadius = 10;
+    emptyIV1.hidden = YES;
+    [self.bgView addSubview:emptyIV1];
+
     selectedPhotos = [NSMutableArray array];
     selectedAssets = [NSMutableArray array];
     imageMargin = 4;
@@ -209,9 +232,13 @@
     UIWindow *window = [UIApplication sharedApplication].keyWindow;
     rootVC = window.rootViewController.navigationController;
     backgroundView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
-    backgroundView.backgroundColor = [UIColor grayColor];
+    backgroundView.backgroundColor = [UIColor lightGrayColor];
     backgroundView.alpha = 0.8;
     dialogView = nil;
+    
+    noticeView = [[NoticeView alloc] initWithFrame:CGRectMake(screenWidth, screenHeight * 0.5 + 50, screenWidth - 40, 100)];
+    noticeView.delegate = self;
+    noticeBGView = [[NoticeBGView alloc] initWithFrame:rootVC.view.bounds subView:noticeView];
     [self initTopicData];
 
 }
@@ -545,16 +572,77 @@
     self.scrollView.contentInset = UIEdgeInsetsZero;
 }
 
+#pragma mark -标题点击事件
+- (void) titleClicked
+{
+    noticeBGView.alpha = 0.1;
+    [rootVC.view  addSubview:noticeBGView];
+    [rootVC.view addSubview:noticeView];
+    
+    [UIView transitionWithView:noticeView duration:0.3 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+        noticeView.frame = CGRectMake(20, screenHeight * 0.5 - 50, screenWidth - 40, 100);
+    } completion:^(BOOL finished) {
+        noticeBGView.alpha = 0.5;
+    }];
+    
+}
+
+#pragma mark -NoticeViewDelegate
+
+- (void) seletedNotice:(NSInteger)tag
+{
+    
+    self.titlePlaceholder.text = @"";
+    [emptyIV setHidden:YES];
+    [UIView transitionWithView:noticeView duration:0.3 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+        noticeView.frame =CGRectMake(screenWidth, screenHeight * 0.5 + 50, screenWidth - 40, 100);
+    } completion:^(BOOL finished) {
+        [noticeBGView removeFromSuperview];
+        [noticeView removeFromSuperview];
+        
+    }];
+    
+    switch (tag) {
+        case 0:
+            self.titleTV.text = @"停水通知";
+            break;
+        case 1:
+            self.titleTV.text = @"活动通知";
+            break;
+        case 2:
+            self.titleTV.text = @"缴费通知";
+            break;
+        case 3:
+            self.titleTV.text = @"其他";
+            break;
+            
+            
+        default:
+            break;
+    }
+
+}
+
 #pragma mark -发送
 - (void)sendResult
 {
-//    NSString* title = self.titleTV.text;
-    NSString* title = @"#物业公告#停水通知";
+    NSString* title;
+//    NSString* title = @"#物业公告#停水通知";
     NSString* content = self.contentTV.text;
     
-    if(title.length == 0)
+    if(self.titleTV.text.length == 0)
     {
         [emptyIV setHidden:NO];
+        return;
+    }
+    else
+    {
+        title = [NSString stringWithFormat:@"#物业公告#%@",self.titleTV.text];
+    }
+    
+    if(content.length == 0)
+    {
+        [emptyIV1 setHidden:NO];
         return;
     }
     
@@ -614,7 +702,7 @@
                                       displayName, @"display_name",
                                       @"0", @"send_status",
                                       @"0", @"sender_lever",
-                                      @"comm", @"apitype",
+                                      @"apiproperty", @"apitype",
                                       @"setnotice", @"tag",
                                       @"1", @"salt",
                                       hashString, @"hash",
@@ -881,6 +969,7 @@
         if(textView.text.length > 0)
         {
             self.contentPlaceholder.text = @"";
+            [emptyIV1 setHidden:YES];
         }
         else
         {

@@ -68,6 +68,8 @@ static BOOL isProduction = NO;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+
+    self.notification = [[JPushNotification alloc] init];
     
     // 百度地图，启动BaiduMapManager
     _mapManager = [[BMKMapManager alloc]init];
@@ -252,6 +254,9 @@ static BOOL isProduction = NO;
 
     }
 }
+
+#pragma mark- JPUSHRegisterDelegate
+// iOS 10 Support
 
 
 - (void)application:(UIApplication *)application
@@ -502,23 +507,10 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
 }
 
 - (void)networkDidReceiveMessage:(NSNotification *)notification {
-    NSLog(@"networkDidReceiveMessage");
     NSDictionary * userInfo = [notification userInfo];
-    NSString *content = [userInfo valueForKey:@"content"];
-    NSDictionary *extras = [userInfo valueForKey:@"extras"];
-    
-    UIAlertView *alert = [[UIAlertView alloc]
-                          initWithTitle:@"收到xx推送消息"
-                          message:content
-                          delegate:nil
-                          cancelButtonTitle:@"取消"
-                          otherButtonTitles:@"确定",nil];
-    [alert show];
-
-    
-    NSLog(@"content = %@",content);
-//    NSString *customizeField1 = [extras valueForKey:@"customizeField1"]; //服务端传递的Extras附加字段，key是自己定义的
+    [self.notification JPshNotification:userInfo];
 }
+
 
 @end
 

@@ -119,6 +119,7 @@
     // 环信登录
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     NSString* userId = [defaults stringForKey:@"userId"];
+    NSString* communityId = [defaults stringForKey:@"communityId"];
     
     [[EMClient sharedClient] asyncLoginWithUsername:userId password:userId success:^{
         NSLog(@"环信登陆成功");
@@ -137,17 +138,23 @@
     }];
     
     // 设置极光推送设置
-    [JPUSHService setTags:nil
-                    alias:@"youlin_alias_10000"
-         callbackSelector:@selector(tagsAliasCallback:tags:alias:)
-                   target:self];
+    NSString* jpushAlias = [NSString stringWithFormat:@"youlin_tag_%@",userId];
+    NSSet* jpushTag = [[NSSet alloc] initWithObjects: [NSString stringWithFormat:@"community_topic_%@",communityId],
+                                                      [NSString stringWithFormat:@"push_news_%@",communityId],nil];
+    NSLog(@"set= %@",jpushTag);
+    [JPUSHService setTags:jpushTag alias:jpushAlias
+        fetchCompletionHandle:
+            ^(int iResCode, NSSet *iTags, NSString *iAlias) {
+        NSLog(@"-----++++-------JPUSHService setTag code = %d",iResCode);
+    }];
     
-    [self JGPushSetNet];
+    
+//    [self JGPushSetNet];
     
     [self setupSubviews];
     [ChatDemoHelper shareHelper].discoveryVC = _discoveryVC;
     [ChatDemoHelper shareHelper].neighborVC = _neighborVC;
-    AppDelegate* app = [[UIApplication sharedApplication] delegate];
+    AppDelegate* app = (AppDelegate*)[[UIApplication sharedApplication] delegate];
     if(!app.friendVC)
     {
         app.friendVC = [[FriendsVC alloc] init];
@@ -358,9 +365,7 @@
     
 //    NSString* MD5String = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"user_phone_number%@user_id%ldimei%@",phoneNum,userId,identifierNumber]];
 //    NSString* hashString = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"%@1", MD5String]];
-    
-   
-    
+
     NSDictionary* parameter = @{@"access" : @"9527",
                                 @"push_alias" : @"10000",
                                 @"apitype" : @"jpush",

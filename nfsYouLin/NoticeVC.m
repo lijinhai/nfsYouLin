@@ -82,20 +82,21 @@
     dialogView = nil;
     [ChatDemoHelper shareHelper].neighborVC.refresh = YES;
     _topicId = 0;
-    WaitView* waitView = [[WaitView alloc] initWithRect:@"正在加载，请稍后..."];
-    waitBgV = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
-    waitBgV.backgroundColor = [UIColor clearColor];
-    [waitBgV addSubview:waitView];
     _panGesture = self.tableView.panGestureRecognizer;
     [_panGesture addTarget:self action:@selector(handlePan:)];
-    
-    [self noticeNet];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    [self.neighborDataArray removeAllObjects];
     [self.tableView reloadData];
+    WaitView* waitView = [[WaitView alloc] initWithRect:@"正在加载，请稍后..."];
+    waitBgV = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    waitBgV.backgroundColor = [UIColor clearColor];
+    [waitBgV addSubview:waitView];
+    [self noticeNet];
+
 }
 
 // 表格分区包含多少元素
