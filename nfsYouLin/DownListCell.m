@@ -30,7 +30,8 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if(self)
     {
-        _actionL = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 203, CGRectGetHeight(self.contentView.frame))];
+        _actionL = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, screenWidth/2-10, CGRectGetHeight(self.contentView.frame))];
+        NSLog(@"_actionL 宽度 %f",CGRectGetWidth(_actionL.frame));
         _actionL.textAlignment = NSTextAlignmentCenter;
         [self.contentView addSubview:_actionL];
     }

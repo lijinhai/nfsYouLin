@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-#define DeviceWidth 365
+#define DeviceWidth [UIScreen mainScreen].bounds.size.width
 //[UIScreen mainScreen].bounds.size.width
 
 @protocol FDCalendarItemDelegate;

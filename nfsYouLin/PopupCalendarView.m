@@ -12,6 +12,7 @@
 #import "FMDB.h"
 #import "MBProgressHUD.h"
 #import "FDCalendar.h"
+#import "HeaderFile.h"
 #define RGB(r,g,b) [UIColor colorWithRed:(r)/255.0 green:(g)/255.0 blue:(b)/255.0 alpha:1.0]
 #define RGBAlpha(r,g,b,a) [UIColor colorWithRed:(r)/255.0 green:(g)/255.0 blue:(b)/255.0 alpha:(a)]
 @implementation PopupCalendarView
@@ -48,7 +49,7 @@
     /*加载日历*/
     //NSMutableArray *arrayStr=[[NSMutableArray alloc] init];
     FDCalendar *calendar = [[FDCalendar alloc] initWithCurrentDate:[NSDate date] signArray:threeMonthSignedArray];
-    CGRect frame1 = CGRectMake(0, 40, 365, 360);
+    CGRect frame1 = CGRectMake(0, 40, screenWidth-40, 360);
     frame.origin.y = 0;
     calendar.frame = frame1;
     [self addSubview:calendar];
@@ -63,10 +64,4 @@
     [_parentVC lew_dismissPopupViewWithanimation:[LewPopupViewAnimationRight new]];
 }
 
--(void)loadSignedCalendar{
-
-
-
-
-}
 @end

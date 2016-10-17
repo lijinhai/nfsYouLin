@@ -7,6 +7,9 @@
 //
 
 #import "FDCalendarItem.h"
+#import "HeaderFile.h"
+#import "DeviceType.h"
+
 #define RGB(r,g,b) [UIColor colorWithRed:(r)/255.0 green:(g)/255.0 blue:(b)/255.0 alpha:1.0]
 #define RGBAlpha(r,g,b,a) [UIColor colorWithRed:(r)/255.0 green:(g)/255.0 blue:(b)/255.0 alpha:(a)]
 @interface FDCalendarCell : UICollectionViewCell
@@ -36,10 +39,28 @@
     if (!_signDayLabel) {
         _signDayLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 20, 10)];
         _signDayLabel.textAlignment = NSTextAlignmentCenter;
-        _signDayLabel.font = [UIFont boldSystemFontOfSize:9];
-        
         CGPoint point = _dayLabel.center;
-        point.y += 15;
+        if([[DeviceType iphoneType] isEqualToString:@"iPhone Simulator"]){
+            
+          _signDayLabel.font = [UIFont boldSystemFontOfSize:9];
+             point.y += 15;
+        }else{
+        
+          NSInteger typeNum = [[[DeviceType iphoneType] substringWithRange:NSMakeRange(7,1)] intValue];
+          NSLog(@"device type is %ld",typeNum);
+            if(typeNum > 5)
+            {
+                
+                _signDayLabel.font = [UIFont boldSystemFontOfSize:9];
+                point.y += 15;
+            }else{
+            
+                _signDayLabel.font = [UIFont boldSystemFontOfSize:7];
+                point.y += 12;
+            }
+        
+        }
+
         _signDayLabel.center = point;
         [self addSubview:_signDayLabel];
     }
@@ -64,13 +85,16 @@ typedef NS_ENUM(NSUInteger, FDCalendarMonth) {
 
 @end
 
-@implementation FDCalendarItem
+@implementation FDCalendarItem{
+
+    CGSize cellS;
+}
 
 - (instancetype)init {
     if (self = [super init]) {
         self.backgroundColor = [UIColor clearColor];
         [self setupCollectionView];
-        [self setFrame:CGRectMake(0, 0, DeviceWidth, self.collectionView.frame.size.height + CollectionViewVerticalMargin * 2)];
+        [self setFrame:CGRectMake(0, 0, screenWidth-40, self.collectionView.frame.size.height + CollectionViewVerticalMargin * 2)];//DeviceWidth
     }
     return self;
 }
@@ -141,8 +165,14 @@ typedef NS_ENUM(NSUInteger, FDCalendarMonth) {
 
 // collectionView显示日期单元，设置其属性
 - (void)setupCollectionView {
-    CGFloat itemWidth = (DeviceWidth - CollectionViewHorizonMargin * 2) / 7;
+    CGFloat itemWidth = (screenWidth - CollectionViewHorizonMargin * 2) / 7;//DeviceWidth
     CGFloat itemHeight = itemWidth;
+    NSLog(@"view 宽度 = %f",screenWidth-40);
+    
+    NSLog(@"(screenWidth - 40 - 36 - 33)/7 is %f",(screenWidth - 40 - 36 - 33)/7);
+    cellS = CGSizeMake((screenWidth - 40 - 36 - 33)/7, (screenWidth - 40 - 36 - 33)/7);
+    NSLog(@"itemWidth = %f",itemWidth);
+    
     
     UICollectionViewFlowLayout *flowLayot = [[UICollectionViewFlowLayout alloc] init];
     flowLayot.sectionInset = UIEdgeInsetsZero;
@@ -150,7 +180,7 @@ typedef NS_ENUM(NSUInteger, FDCalendarMonth) {
     flowLayot.minimumLineSpacing = 0;
     flowLayot.minimumInteritemSpacing = 0;
     
-    CGRect collectionViewFrame = CGRectMake(CollectionViewHorizonMargin, CollectionViewVerticalMargin, DeviceWidth - CollectionViewHorizonMargin * 2, itemHeight * 6);
+    CGRect collectionViewFrame = CGRectMake(CollectionViewHorizonMargin, CollectionViewVerticalMargin, screenWidth - 40 -CollectionViewHorizonMargin * 2, itemHeight * 6);//DeviceWidth
     self.collectionView = [[UICollectionView alloc] initWithFrame:collectionViewFrame collectionViewLayout:flowLayot];
     [self addSubview:self.collectionView];
     self.collectionView.dataSource = self;
@@ -348,7 +378,8 @@ typedef NS_ENUM(NSUInteger, FDCalendarMonth) {
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    return CGSizeMake(40, 40);
+    return cellS;
+    //CGSizeMake(40, 40);
 }
 
 //每个section中不同的行之间的行间距

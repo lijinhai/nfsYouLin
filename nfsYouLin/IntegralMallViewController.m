@@ -239,7 +239,8 @@
     NSInteger section = indexPath.section;
     static NSString *CellIdentifier = @"GoodsCell";
     UICollectionViewCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:CellIdentifier forIndexPath:indexPath];
-    cell.frame = CGRectMake(screenWidth/2*rowNo, 120*section, screenWidth/2-1, 119);
+    cell.frame = CGRectMake(screenWidth/2*rowNo, ((screenWidth/2-1)/1.6+1)*section, screenWidth/2-1, (screenWidth/2-1)/1.6);
+    NSLog(@"screenWidth/2-1 = %f",screenWidth/2-1);
     if (!cell) {
         
         cell = [[UICollectionViewCell alloc] initWithFrame:CGRectMake(0, 0, screenWidth/2, 90) ];
@@ -255,44 +256,80 @@
     NSLog(@"url is %@",url);
     float scale=0.6;//缩放比例
     UIImageView* goodsPic=[[UIImageView alloc] init];
-    UILabel* pointsLable=[[UILabel alloc] initWithFrame:CGRectMake(0, 0, 60, 20)];
-    pointsLable.center=CGPointMake(cell.frame.size.width/2+36, 25);
-    pointsLable.textColor=fontColor;
-    NSString *pointsInfo=[NSString stringWithFormat:@"%@%@",[[dataArray objectAtIndex:(section*2+rowNo)] objectForKey:@"gl_credit"],@"  分"];
-    NSMutableAttributedString *AttributedStr = [[NSMutableAttributedString alloc]initWithString:pointsInfo];
-    
-    [AttributedStr setAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:18]}
-                          range:NSMakeRange(0, pointsInfo.length-3)];
-    [AttributedStr setAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:14]}
-                           range:NSMakeRange(pointsInfo.length-3, 3)];
-    pointsLable.attributedText = AttributedStr;
-    pointsLable.textAlignment=NSTextAlignmentLeft;
-
-    UILabel* nameLable=[[UILabel alloc] initWithFrame:CGRectMake(0, 0, 60, 20)];
-    nameLable.text=[[dataArray objectAtIndex:(section*2+rowNo)] objectForKey:@"gl_name"];
-    nameLable.font=[UIFont systemFontOfSize:14];
-    nameLable.center=CGPointMake(cell.frame.size.width/2+36, 48);
-    
-    UIButton* clickGetGoods=[[UIButton alloc] init];
-    clickGetGoods.frame=CGRectMake(0,0,75, 25);
-    clickGetGoods.center=CGPointMake(cell.frame.size.width/2, cell.frame.size.height-25);
-    clickGetGoods.tag=section*2+rowNo;
-    clickGetGoods.titleLabel.textColor=[UIColor whiteColor];
-    clickGetGoods.titleLabel.font=[UIFont systemFontOfSize:14];
-    clickGetGoods.layer.cornerRadius=12;
-    clickGetGoods.backgroundColor=[UIColor colorWithRed:255/255.0 green:186/255.0 blue:2/255.0 alpha:1];
-    [clickGetGoods setTitle:@"点击领取" forState:UIControlStateNormal];
-    [clickGetGoods addTarget:self action:@selector(clickGetGoods:) forControlEvents:UIControlEventTouchUpInside];
-
     [goodsPic sd_setImageWithURL:url placeholderImage:[UIImage imageNamed:@"bg_error.png"] options:(SDWebImageAllowInvalidSSLCertificates) completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+            
+            goodsPic.frame = CGRectMake(0, 0, image.size.width*scale, image.size.height*scale);
+            goodsPic.center=CGPointMake(55, 40);
+        UILabel* pointsLable=[[UILabel alloc] initWithFrame:CGRectMake(0, 0, 60, 20)];
+        NSLog(@"goodsPic.frame = %f",CGRectGetWidth(goodsPic.frame));
+        pointsLable.center=CGPointMake(CGRectGetWidth(goodsPic.frame)+53, 25);
+        pointsLable.textColor=fontColor;
+        NSString *pointsInfo=[NSString stringWithFormat:@"%@%@",[[dataArray objectAtIndex:(section*2+rowNo)] objectForKey:@"gl_credit"],@"  分"];
+        NSMutableAttributedString *AttributedStr = [[NSMutableAttributedString alloc]initWithString:pointsInfo];
         
-        goodsPic.frame = CGRectMake(0, 0, image.size.width*scale, image.size.height*scale);
-        goodsPic.center=CGPointMake(55, 40);
-    }];
-    [cell.contentView addSubview:goodsPic];
-    [cell.contentView addSubview:nameLable];
-    [cell.contentView addSubview:pointsLable];
-    [cell.contentView addSubview:clickGetGoods];
+        [AttributedStr setAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:18]}
+                               range:NSMakeRange(0, pointsInfo.length-3)];
+        [AttributedStr setAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:14]}
+                               range:NSMakeRange(pointsInfo.length-3, 3)];
+        pointsLable.attributedText = AttributedStr;
+        pointsLable.textAlignment=NSTextAlignmentLeft;
+        
+        UILabel* nameLable=[[UILabel alloc] initWithFrame:CGRectMake(0, 0, 60, 20)];
+        nameLable.text=[[dataArray objectAtIndex:(section*2+rowNo)] objectForKey:@"gl_name"];
+        nameLable.font=[UIFont systemFontOfSize:14];
+        nameLable.center=CGPointMake(CGRectGetWidth(goodsPic.frame)+53, 48);
+        
+        UIButton* clickGetGoods=[[UIButton alloc] init];
+        clickGetGoods.frame=CGRectMake(0,0,CGRectGetWidth(cell.frame)*0.37, CGRectGetWidth(cell.frame)*0.13);
+        clickGetGoods.center=CGPointMake(cell.frame.size.width/2, cell.frame.size.height-18);
+        clickGetGoods.tag=section*2+rowNo;
+        clickGetGoods.titleLabel.textColor=[UIColor whiteColor];
+        clickGetGoods.titleLabel.font=[UIFont systemFontOfSize:14];
+        clickGetGoods.layer.cornerRadius=12;
+        clickGetGoods.backgroundColor=[UIColor colorWithRed:255/255.0 green:186/255.0 blue:2/255.0 alpha:1];
+        [clickGetGoods setTitle:@"点击领取" forState:UIControlStateNormal];
+        [clickGetGoods addTarget:self action:@selector(clickGetGoods:) forControlEvents:UIControlEventTouchUpInside];
+        
+        [cell.contentView addSubview:goodsPic];
+        [cell.contentView addSubview:pointsLable];
+        [cell.contentView addSubview:nameLable];
+        [cell.contentView addSubview:clickGetGoods];
+        }];
+
+//    UILabel* pointsLable=[[UILabel alloc] initWithFrame:CGRectMake(0, 0, 60, 20)];
+//        NSLog(@"goodsPic.frame = %f",CGRectGetWidth(goodsPic.frame));
+//    pointsLable.center=CGPointMake(CGRectGetWidth(goodsPic.frame)+40, 25);
+//    pointsLable.textColor=fontColor;
+//    NSString *pointsInfo=[NSString stringWithFormat:@"%@%@",[[dataArray objectAtIndex:(section*2+rowNo)] objectForKey:@"gl_credit"],@"  分"];
+//    NSMutableAttributedString *AttributedStr = [[NSMutableAttributedString alloc]initWithString:pointsInfo];
+//    
+//    [AttributedStr setAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:18]}
+//                          range:NSMakeRange(0, pointsInfo.length-3)];
+//    [AttributedStr setAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:14]}
+//                           range:NSMakeRange(pointsInfo.length-3, 3)];
+//    pointsLable.attributedText = AttributedStr;
+//    pointsLable.textAlignment=NSTextAlignmentLeft;
+
+//    UILabel* nameLable=[[UILabel alloc] initWithFrame:CGRectMake(0, 0, 60, 20)];
+//    nameLable.text=[[dataArray objectAtIndex:(section*2+rowNo)] objectForKey:@"gl_name"];
+//    nameLable.font=[UIFont systemFontOfSize:14];
+//    nameLable.center=CGPointMake(cell.frame.size.width/2+40, 48);
+    
+//    UIButton* clickGetGoods=[[UIButton alloc] init];
+//    clickGetGoods.frame=CGRectMake(0,0,75, 25);
+//    clickGetGoods.center=CGPointMake(cell.frame.size.width/2, cell.frame.size.height-25);
+//    clickGetGoods.tag=section*2+rowNo;
+//    clickGetGoods.titleLabel.textColor=[UIColor whiteColor];
+//    clickGetGoods.titleLabel.font=[UIFont systemFontOfSize:14];
+//    clickGetGoods.layer.cornerRadius=12;
+//    clickGetGoods.backgroundColor=[UIColor colorWithRed:255/255.0 green:186/255.0 blue:2/255.0 alpha:1];
+//    [clickGetGoods setTitle:@"点击领取" forState:UIControlStateNormal];
+//    [clickGetGoods addTarget:self action:@selector(clickGetGoods:) forControlEvents:UIControlEventTouchUpInside];
+//
+//    [cell.contentView addSubview:goodsPic];
+    //[cell.contentView addSubview:nameLable];
+    //[cell.contentView addSubview:pointsLable];
+    //[cell.contentView addSubview:clickGetGoods];
     }
     return cell;
 }

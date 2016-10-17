@@ -10,6 +10,11 @@
 
 @interface AboutYouLinViewController : UIViewController
 @property (weak, nonatomic) IBOutlet UILabel *yinsiLabel;
-@property (nonatomic, strong)UIView *checkUpdateView;
+@property (weak, nonatomic) IBOutlet UILabel *youfanLabel;
 
+@property (nonatomic, strong)UIView *checkUpdateView;
+@property (weak, nonatomic) IBOutlet UIImageView *youlinIV;
+@property (weak, nonatomic) IBOutlet UILabel *versionLab;
+
+@property (weak, nonatomic) IBOutlet UILabel *tipLab;
 @end

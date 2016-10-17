@@ -38,7 +38,7 @@
 -(void)viewWillAppear:(BOOL)animated{
 
   /*表格初始化*/
-    _sexTable.frame = CGRectMake(0, 0, screenWidth, screenHeight);
+    _sexTable.frame = CGRectMake(0, 0, screenWidth, 214);
     _sexTable.dataSource = self;
     _sexTable.delegate = self;
   /*tableViewCell 下划线 长度设置为屏幕的宽*/
@@ -194,18 +194,18 @@
         return 0.0f;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
-{
-    
-    return 450.0f;
-}
-- (UIView*)tableView: (UITableView *)tableView viewForFooterInSection:(NSInteger)section
-{
-    UIView* footerView = nil;
-    footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, screenWidth, 500)];
-    footerView.backgroundColor = _viewColor;
-    return footerView;
-}
+//- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+//{
+//    
+//    return 450.0f;
+//}
+//- (UIView*)tableView: (UITableView *)tableView viewForFooterInSection:(NSInteger)section
+//{
+//    UIView* footerView = nil;
+//    footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, screenWidth, 500)];
+//    footerView.backgroundColor = _viewColor;
+//    return footerView;
+//}
 -(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     

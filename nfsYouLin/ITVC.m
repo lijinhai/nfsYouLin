@@ -48,7 +48,6 @@
     multiTableViewCell *multiTableCell;
     SignIntegralViewController *SignIntegralController;
     IntegralMallViewController *IntegralMallController;
-    //IPostVC *postVC;
     
     ICollectVC *collectVC;
     UIBarButtonItem* backItemTitle;
@@ -56,7 +55,7 @@
     NSInteger nowPoints;
     __block NSString *initIntegralValue;
     Users* user;
-    
+    BOOL pushFlag;
 }
 
 - (id) init
@@ -65,6 +64,7 @@
     if(self)
     {
         [self initUser];
+        self.tableView.frame = CGRectMake(0, 0, screenWidth,460);
         self.tableView.bounces = NO;
         _viewColor = [UIColor colorWithRed:243/255.0 green:243/255.0 blue:240/255.0 alpha:1];
         self.view.backgroundColor = _viewColor;
@@ -91,9 +91,6 @@
         SignIntegralController=[iStoryBoard instantiateViewControllerWithIdentifier:@"signintegralcontroller"];
         IntegralMallController=[iStoryBoard instantiateViewControllerWithIdentifier:@"integralmallcontroller"];
         
-        //postVC=[iStoryBoard instantiateViewControllerWithIdentifier:@"ipostid"];
-        //collectVC=[iStoryBoard instantiateViewControllerWithIdentifier:@"icollectid"];
-        
     }
     
     return self;
@@ -109,7 +106,7 @@
 {
     
     [super viewWillAppear:animated];
-  
+    self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     UIControl *integralView=(UIControl *)[self.view viewWithTag:2016];
     integralView.backgroundColor=[UIColor whiteColor];
     UIControl *favoriteView=(UIControl *)[self.view viewWithTag:2017];
@@ -132,11 +129,11 @@
     {
         integralLab.text= [NSString stringWithFormat:@"%@",initIntegralValue];
     }
-    /*获取返回后收藏数*/
-    
     /*获取返回后我发的数*/
     [self initUser];
     [self.tableView reloadData];
+    
+    pushFlag = YES;
     
     
 }
@@ -218,7 +215,7 @@
     NSInteger rowNo = indexPath.row;
     NSInteger section = indexPath.section;
     multiTableViewCell* cell = nil;
-    signButton = [[UIButton alloc] initWithFrame:CGRectMake(screenWidth-90, 30, 40, 40)];
+    signButton = [[UIButton alloc] initWithFrame:CGRectMake(screenWidth-90, 20, 40, 40)];
     signButton.layer.cornerRadius = signButton.frame.size.width / 2;
     signButton.layer.masksToBounds = YES;
     [signButton setBackgroundImage:[UIImage imageNamed:@"btn_qiandao.png"] forState:UIControlStateNormal];
@@ -415,13 +412,17 @@
                 }
             }
             /*获取最近三个月的签到日期*/
-            NSString *composeDateString=[NSString stringWithFormat:@"%@%@%@%@%@",year,@".",month,@".",day];
+             NSString *composeDateString=[NSString stringWithFormat:@"%@%@%@%@%@",year,@".",month,@".",day];
             [SignIntegralController.monthSignedArray addObject:composeDateString];
         }
         backItemTitle = [[UIBarButtonItem alloc] initWithTitle:@"积分签到" style:UIBarButtonItemStylePlain target:nil action:nil];
         [self.parentViewController.navigationItem setBackBarButtonItem:backItemTitle];
-        [self.parentViewController.navigationController pushViewController:SignIntegralController animated:YES];
-        
+        if(pushFlag == YES)
+        {
+          
+          pushFlag = NO;
+         [self.parentViewController.navigationController pushViewController:SignIntegralController animated:YES];
+        }
         
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         // 请求失败
@@ -486,43 +487,43 @@
     if (section == 0) {
         return 0.0f;
     }else
-        return 8.0f;
+        return 10.0f;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
-{
-    
-    return 8.0f;
-}
+//- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+//{
+//    
+//    return 8.0f;
+//}
 
 
-- (UIView*)tableView: (UITableView *)tableView viewForHeaderInSection:(NSInteger)section
-{
-    
-    UIView* headerView = nil;
-    headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 1)];
-    headerView.backgroundColor = _viewColor;
-    return headerView;
-}
-
-
-- (UIView*)tableView: (UITableView *)tableView viewForFooterInSection:(NSInteger)section
-{
-    UIView* footerView = nil;
-    footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 1)];
-    footerView.backgroundColor = _viewColor;
-    return footerView;
-}
+//- (UIView*)tableView: (UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+//{
+//    
+//    UIView* headerView = nil;
+//    headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 1)];
+//    headerView.backgroundColor = _viewColor;
+//    return headerView;
+//}
+//
+//
+//- (UIView*)tableView: (UITableView *)tableView viewForFooterInSection:(NSInteger)section
+//{
+//    UIView* footerView = nil;
+//    footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 1)];
+//    footerView.backgroundColor = _viewColor;
+//    return footerView;
+//}
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if(indexPath.section == 0 && indexPath.row
        == 0)
     {
-        return 100;
-    }
-    else
         return 80;
+    }
+
+        return 60;
 }
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath

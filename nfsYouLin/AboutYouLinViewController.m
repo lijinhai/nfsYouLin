@@ -32,9 +32,10 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     _viewColor = [UIColor colorWithRed:243/255.0 green:243/255.0 blue:240/255.0 alpha:1];
+    self.view.frame = CGRectMake(0, 0, screenWidth, screenHeight);
     self.view.backgroundColor = _viewColor;
     WaitView* waitView = [[WaitView alloc] initWithFrame:self.parentViewController.view.frame Title:@"检查中..."];
-    backgroundView = [[UIView alloc] initWithFrame:self.parentViewController.view.frame];
+    backgroundView = [[UIView alloc] initWithFrame:self.view.frame];
     backgroundView.backgroundColor = [UIColor clearColor];
     [backgroundView addSubview:waitView];
     // Do any additional setup after loading the view.
@@ -47,7 +48,15 @@
     [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
     self.navigationItem.title=@"";
     /*设置协议初始化*/
+    _yinsiLabel.frame = CGRectMake(0, screenHeight-65, screenWidth, 30);
+    _yinsiLabel.textAlignment = NSTextAlignmentCenter;
     _yinsiLabel.userInteractionEnabled=YES;
+    _youfanLabel.frame = CGRectMake(0, screenHeight-40, screenWidth, 30);
+    _youfanLabel.textAlignment = NSTextAlignmentCenter;
+    _youlinIV.center = CGPointMake(screenWidth/2, 90);
+    _versionLab.center = CGPointMake(screenWidth/2, 150);
+    _tipLab.center = CGPointMake(screenWidth/2, 190);
+    
     UITapGestureRecognizer *labelTapGestureRecognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(yinSiTouchUpInside)];
     [_yinsiLabel addGestureRecognizer:labelTapGestureRecognizer];
     /*添加检查更新的view*/
@@ -97,7 +106,12 @@
                   //打印版本号
                   NSLog(@"当前版本号:%@\n商店版本号:%@",currentVersion,appStoreVersion);
                   //更新
-                   [self performSelectorOnMainThread:@selector(updateUI) withObject:self.view waitUntilDone:NO];
+                  [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                      //Do UI stuff here
+                      [self updateUI];
+                  }];
+
+                   //[self performSelectorOnMainThread:@selector(updateUI) withObject:self.view waitUntilDone:NO];
                   if([currentVersion floatValue] < [appStoreVersion floatValue])
                   {
                       
@@ -115,8 +129,10 @@
                       [alertVC addAction:OKAction];
                       [self presentViewController:alertVC animated:YES completion:nil];
                   }else{
-                      [MBProgressHUBTool textToast:self.view Tip:@"已经是最新版本！"];
-                      
+                      [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                          //Do UI stuff here
+                       [MBProgressHUBTool textToast:self.view Tip:@"已经是最新版本！"];
+                      }];
                   }
             
               }];

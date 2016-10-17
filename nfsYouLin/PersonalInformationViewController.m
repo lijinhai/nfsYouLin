@@ -70,7 +70,7 @@
     _professionLabel=[[UILabel alloc] init];
     [self userDetailInfoInit];
 
-    _personalInfoTable.frame = CGRectMake(0, 0, screenWidth,475);
+    _personalInfoTable.frame = CGRectMake(0, 0, screenWidth,460);
     /*数据源初始化*/
     dataSource = @[@"头像", @"昵称", @"修改密码", @"生日", @"性别", @"职业", @"家庭住址是否公开"];
     _switchFamliyAddressButton = [[UISwitch alloc] initWithFrame:CGRectMake(screenWidth-70, 10, 40, 5)];
@@ -466,6 +466,7 @@
             }
             
             cell.textLabel.text = dataSource[rowNo];
+            cell.textLabel.textColor = [UIColor lightGrayColor];
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             
         }
@@ -498,6 +499,7 @@
                 cell.selectionStyle = UITableViewCellSelectionStyleNone;
             }
             cell.textLabel.text = dataSource[rowNo+2];
+            cell.textLabel.textColor = [UIColor lightGrayColor];
             
         }
         else

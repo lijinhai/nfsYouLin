@@ -471,4 +471,50 @@
     
 }
 
++ (BOOL) deleteSqlite
+{
+    AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+    FMDatabase *db = delegate.db;
+    
+    if([db open])
+    {
+        NSLog(@"iSettingVC: db open success!");
+        BOOL success =  [db executeUpdate:@"DELETE FROM table_users"];
+        if(success)
+        {
+            NSLog(@"iSettingVC: delete table_users success!");
+        }
+        else
+        {
+            NSLog(@"iSettingVC: delete table_users failed!");
+            [db close];
+            return NO;
+        }
+        
+        success =  [db executeUpdate:@"DELETE FROM table_all_family"];
+        if(success)
+        {
+            NSLog(@"iSettingVC: delete table_all_family success!");
+        }
+        else
+        {
+            NSLog(@"iSettingVC: delete table_all_family failed!");
+            [db close];
+            return NO;
+        }
+        
+        
+        [db close];
+        
+    }
+    else
+    {
+        NSLog(@"iVC: db open error!");
+        return NO;
+    }
+    
+    
+    return YES;
+}
+
 @end

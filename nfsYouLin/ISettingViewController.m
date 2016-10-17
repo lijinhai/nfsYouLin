@@ -18,6 +18,7 @@
 #import "WaitView.h"
 #import "AppDelegate.h"
 #import "BlackListVC.h"
+#import "SqliteOperation.h"
 
 @interface ISettingViewController ()<UITableViewDataSource,UITableViewDelegate>
 
@@ -64,7 +65,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     _viewColor = [UIColor colorWithRed:243/255.0 green:243/255.0 blue:240/255.0 alpha:1];
-    _tableView.frame = CGRectMake(0, 0, screenWidth,530);
+    _tableView.frame = CGRectMake(0, 0, screenWidth,470);
     _tableView.bounces = NO;
     self.view.backgroundColor = _viewColor;
     _settingTypeName = @[@"通知声音", @"振动", @"黑名单" ,@"检查更新" ,@"清除缓存" ,@"退出登录"];
@@ -87,10 +88,6 @@
     updatebgView.backgroundColor = [UIColor clearColor];
     [updatebgView addSubview:waitView1];
 
-    
-    UIStoryboard* storyBoard = [UIStoryboard storyboardWithName:@"Me" bundle:nil];
-   
-    //BlackListController=[storyBoard instantiateViewControllerWithIdentifier:@"blacklistcontroller"];
 
     UIStoryboard* MainSB = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     loginNC = [MainSB instantiateViewControllerWithIdentifier:@"loginNCID"];
@@ -106,7 +103,7 @@
     cacheCountLable.font = fnt;
     cacheCountLable.text=[self getCacheSize];
     size = [cacheCountLable.text sizeWithAttributes:[NSDictionary dictionaryWithObjectsAndKeys:fnt,NSFontAttributeName, nil]];
-    cacheCountLable.frame=CGRectMake(_tableView.frame.size.width-size.width-40, 24, size.width, 20);
+    cacheCountLable.frame=CGRectMake(_tableView.frame.size.width-size.width-40, 20, size.width, 20);
 }
 
 
@@ -170,7 +167,7 @@
 
     cacheCountLable.text=@"0.00M";
     size = [cacheCountLable.text sizeWithAttributes:[NSDictionary dictionaryWithObjectsAndKeys:fnt,NSFontAttributeName, nil]];
-    cacheCountLable.frame=CGRectMake(_tableView.frame.size.width-size.width-40, 24, size.width, 20);
+    cacheCountLable.frame=CGRectMake(_tableView.frame.size.width-size.width-40, 20, size.width, 20);
     NSFileManager *fileManager = [NSFileManager defaultManager];
     NSString *cacheFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Library/Caches"];
     [fileManager removeItemAtPath:cacheFilePath error:nil];
@@ -282,17 +279,19 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     if (section == 0) {
-        return 16.f;
+        return 16;
     }else
-        return 8.0f;
+        return 8;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    
-    return 8.0f;
+    if(section == 2)
+    {
+        return 0;
+    }else
+    return 8;
 }
-
 
 - (UIView*)tableView: (UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
@@ -304,13 +303,13 @@
 }
 
 
-//- (UIView*)tableView: (UITableView *)tableView viewForFooterInSection:(NSInteger)section
-//{
-//    UIView* footerView = nil;
-//    footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 1)];
-//    footerView.backgroundColor = _viewColor;
-//    return footerView;
-//}
+- (UIView*)tableView: (UITableView *)tableView viewForFooterInSection:(NSInteger)section
+{
+    UIView* footerView = nil;
+    footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, screenWidth, 1)];
+    footerView.backgroundColor = _viewColor;
+    return footerView;
+}
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -338,7 +337,6 @@
                 case 0:
                 {
                     // 黑名单
-                    //[self getBlackListInfo];
                     BlackListVC* blackListVC = [[BlackListVC alloc] initWithStyle:UITableViewStyleGrouped];
                     [self.navigationController pushViewController:blackListVC animated:YES];
                     break;
@@ -367,7 +365,7 @@
             quitView *view = [quitView defaultPopupView];
             UIButton* logoutBtn = view.logoutBtn;
             [logoutBtn addTarget:self action:@selector(logoutAction:) forControlEvents:UIControlEventTouchUpInside];
-            view.parentVC = self;
+             view.parentVC = self;
             [self lew_presentPopupView:view animation:[LewPopupViewAnimationSlide new] dismissed:^{
                 //[self.otherTableView reloadData];
                 
@@ -408,7 +406,11 @@
                   //打印版本号
                   NSLog(@"当前版本号:%@\n商店版本号:%@",currentVersion,appStoreVersion);
                   //更新
-                  [self performSelectorOnMainThread:@selector(updateUI) withObject:self.view waitUntilDone:NO];
+                  [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                      
+                      [self updateUI];
+                  }];
+                  
                   if([currentVersion floatValue] < [appStoreVersion floatValue])
                   {
                       
@@ -426,8 +428,11 @@
                       [alertVC addAction:OKAction];
                       [self presentViewController:alertVC animated:YES completion:nil];
                   }else{
-                      [MBProgressHUBTool textToast:self.view Tip:@"已经是最新版本！"];
                       
+                      [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                          //Do UI stuff here
+                          [MBProgressHUBTool textToast:self.view Tip:@"已经是最新版本！"];
+                      }];
                   }
                   
               }];
@@ -460,10 +465,10 @@
 }
 
 
-/* 设置单元格宽度 */
+/* 设置单元格高度 */
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 70.0f;
+    return 60;
 }
 
 
@@ -472,7 +477,7 @@
 {
     [self.parentViewController.view addSubview:backgroundView];
     [self lew_dismissPopupViewWithanimation:[LewPopupViewAnimationSlide new]];
-    [self deleteSqlite];
+    [SqliteOperation deleteSqlite];
     [self logoutNet];
 }
 
