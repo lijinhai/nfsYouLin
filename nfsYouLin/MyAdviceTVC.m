@@ -78,7 +78,7 @@
     _panGesture = self.tableView.panGestureRecognizer;
     [_panGesture addTarget:self action:@selector(handlePan:)];
     
-    [self getAdvicePosts];
+    
 }
 
 - (void)initWaitImageAnimate
@@ -101,7 +101,7 @@
     //[self.tableView reloadData];
     UIBarButtonItem *barrightBtn = [ [ UIBarButtonItem alloc ] initWithBarButtonSystemItem: UIBarButtonSystemItemAdd target: self action: @selector(addNewAdvice:)];
     self.navigationItem.rightBarButtonItem=barrightBtn;
-    
+    [self getAdvicePosts];
 }
 
 -(void)addNewAdvice:(id)sender{
