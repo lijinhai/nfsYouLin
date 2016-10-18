@@ -24,6 +24,7 @@
 #import "PersonalInformationViewController.h"
 #import "CreateNoticeVC.h"
 #import "CreateAdviceVC.h"
+#import "AppDelegate.h"
 
 @interface NeighborDetailTVC ()
 
@@ -64,6 +65,10 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+    AppDelegate* app = (AppDelegate*)[[UIApplication sharedApplication] delegate];
+    app.notification.delegate = self;
+    
     if (_chatToolbar)
     {
         [self.parentViewController.view addSubview:_chatToolbar];
@@ -807,6 +812,7 @@
     
 }
 
+#pragma mark -删除回复
 // 确定删除回复
 - (void) deleteOkReply: (id) sender
 {
@@ -1289,6 +1295,7 @@
     
 }
 
+#pragma mark -获取回复网络请求
 // 获取回复网络请求
 - (void) getReplyNet
 {
@@ -1338,9 +1345,6 @@
                 {
                     [_cellOtherHeight addObject:[NSNumber numberWithFloat:[self heightOfOtherRow:[sourceDict valueForKey:@"content"] Remark:YES Type:contentType]]];
                 }
-                
-               
-
                 [replyArr addObject:sourceDict];
             }
             [self.tableView reloadData];
@@ -1353,6 +1357,7 @@
     
 }
 
+#pragma mark -获取下拉回复网络请求
 // 获取下拉回复网络请求
 - (void) getDownReplyNet:(NSInteger) commentId
 {
@@ -1429,6 +1434,7 @@
     
 }
 
+#pragma mark -获取上拉回复网络请求
 // 获取上拉回复网络请求
 - (void) getUpReplyNet
 {
@@ -1497,6 +1503,7 @@
     
 }
 
+#pragma mark - 获取回复总数网络请求
 // 获取回复总数网络请求
 - (void) getTotalReplyCountNet
 {
@@ -1543,7 +1550,7 @@
 }
 
 
-// 删除回复网络请求
+#pragma mark -删除回复网络请求
 // commentId 回复id
 - (void) deleteReplyNet:(NSInteger)rowNum
 {
@@ -1895,6 +1902,43 @@
     return bCanRecord;
 }
 
+
+#pragma mark -JPushNotification Delegate
+- (void) JPushNotificationWithDictory:(NSDictionary *)userInfo
+{
+    NSString* content = [userInfo valueForKey:@"content"];
+    NSString* titile = [userInfo valueForKey:@"title"];
+    NSArray* contentArr = [content componentsSeparatedByString:@":"];
+    
+    NSInteger topicId = [[contentArr objectAtIndex:0] integerValue];
+    NSInteger senderId = [[contentArr objectAtIndex:1] integerValue];
+    NSInteger commId = [[contentArr objectAtIndex:3] integerValue];
+    
+    if([self.neighborData.topicId integerValue] == topicId )
+    {
+        if([titile isEqualToString:@"push_new_comm"])
+        {
+            NSDictionary* dict = [replyArr firstObject];
+            NSInteger commentId = [[dict valueForKey:@"commId"] integerValue];
+            [self getDownReplyNet:commentId];
+        }
+        else if([titile isEqualToString:@"push_del_comm"])
+        {
+            self.neighborData.replyCount = [contentArr objectAtIndex:4];
+            for (int i = 0; i < [replyArr count]; i ++) {
+                NSDictionary* dict = [replyArr objectAtIndex:i];
+                NSInteger commentId = [[dict valueForKey:@"commId"] integerValue];
+                NSInteger userId = [[dict valueForKey:@"senderId"] integerValue];
+                if(commentId == commId && userId == senderId)
+                {
+                    [replyArr removeObjectAtIndex:i];
+                    [_cellOtherHeight removeObjectAtIndex:i];
+                }
+            }
+            [self.tableView reloadData];
+        }
+    }
+}
 
 @end
 

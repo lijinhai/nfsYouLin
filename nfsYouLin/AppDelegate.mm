@@ -52,7 +52,7 @@
 // 极光
 #define JGAppKey @"64de302e0f10c70af07b0ed4"
 static NSString *channel = @"Publish channel";
-static BOOL isProduction = true;
+static BOOL isProduction = NO;
 
 // 百度地图Key
 #define BMAP_KEY @"BDiQ7UU9TW9vUv81GUh1Ej2WlRyUXM6n"
@@ -68,6 +68,8 @@ static BOOL isProduction = true;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+
+    self.notification = [[JPushNotification alloc] init];
     
     // 百度地图，启动BaiduMapManager
     _mapManager = [[BMKMapManager alloc]init];
@@ -109,6 +111,27 @@ static BOOL isProduction = true;
 
     NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
     [defaultCenter addObserver:self selector:@selector(networkDidReceiveMessage:) name:kJPFNetworkDidReceiveMessageNotification object:nil];
+    
+    [defaultCenter addObserver:self
+                      selector:@selector(networkDidSetup:)
+                          name:kJPFNetworkDidSetupNotification
+                        object:nil];
+    [defaultCenter addObserver:self
+                      selector:@selector(networkDidClose:)
+                          name:kJPFNetworkDidCloseNotification
+                        object:nil];
+    [defaultCenter addObserver:self
+                      selector:@selector(networkDidRegister:)
+                          name:kJPFNetworkDidRegisterNotification
+                        object:nil];
+    [defaultCenter addObserver:self
+                      selector:@selector(networkDidLogin:)
+                          name:kJPFNetworkDidLoginNotification
+                        object:nil];
+    [defaultCenter addObserver:self
+                      selector:@selector(serviceError:)
+                          name:kJPFServiceErrorNotification
+                        object:nil];
     
     // shareSDK 初始化
     /**
@@ -232,13 +255,14 @@ static BOOL isProduction = true;
     }
 }
 
+#pragma mark- JPUSHRegisterDelegate
+// iOS 10 Support
+
 
 - (void)application:(UIApplication *)application
 didReceiveRemoteNotification:(NSDictionary *)userInfo {
-    
-    
-    [JPUSHService handleRemoteNotification:userInfo];
     NSLog(@"收到通知:%@", [self logDic:userInfo]);
+    [JPUSHService handleRemoteNotification:userInfo];
 }
 
 
@@ -367,20 +391,6 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
     NSLog(@"FMDatabase:---------%@",self.db);
 }
 
-//- (void) reachabilityChanged: (NSNotification *)note
-//{
-//    Reachability* curReach = [note object];
-//    NetworkStatus status = [curReach currentReachabilityStatus];
-//    NSLog(@"reachabilityChanged = %ld",status);
-//    if(status == NotReachable)
-//    {
-////        [MBProgressHUBTool textToast:self Tip:@"网络连接异常"];
-//        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"提醒" message:@"服务器网络连接异常" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
-//        [alert show];
-//    }
-//    
-//}
-
 - (void) listenNetwork
 {
     // 1.获得网络监控的管理者
@@ -467,34 +477,42 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
     return str;
 }
 
+#pragma mark -极光推送notification
+
+- (void)networkDidSetup:(NSNotification *)notification {
+    NSLog(@"极光已连接");
+}
+
+- (void)networkDidClose:(NSNotification *)notification {
+    NSLog(@"极光已关闭");
+}
+
+- (void)networkDidRegister:(NSNotification *)notification {
+    NSLog(@"极光：%@", [notification userInfo]);
+    NSLog(@"极光已注册");
+}
+
+- (void)networkDidLogin:(NSNotification *)notification {
+    NSLog(@"极光已登录");
+    if ([JPUSHService registrationID]) {
+        NSLog(@"极光 RegistrationID = %@",[JPUSHService registrationID]);
+        
+    }
+}
+
+- (void)serviceError:(NSNotification *)notification {
+    NSDictionary *userInfo = [notification userInfo];
+    NSString *error = [userInfo valueForKey:@"error"];
+    NSLog(@"极光error :%@", error);
+}
 
 - (void)networkDidReceiveMessage:(NSNotification *)notification {
-    
-    
-    
     NSDictionary * userInfo = [notification userInfo];
-    NSString *content = [userInfo valueForKey:@"content"];
-    NSDictionary *extras = [userInfo valueForKey:@"extras"];
-    
-    UIAlertView *alert = [[UIAlertView alloc]
-                          initWithTitle:@"收到xx推送消息"
-                          message:content
-                          delegate:nil
-                          cancelButtonTitle:@"取消"
-                          otherButtonTitles:@"确定",nil];
-    [alert show];
-
-    
-    NSLog(@"content = %@",content);
-//    NSString *customizeField1 = [extras valueForKey:@"customizeField1"]; //服务端传递的Extras附加字段，key是自己定义的
-    
+    [self.notification JPshNotification:userInfo];
 }
 
 
 @end
-
-
-
 
 
 @implementation NSURLRequest(DataController)

@@ -12,7 +12,7 @@
 #import "HeaderFile.h"
 #import "FirstTabBarController.h"
 #import "LoginNC.h"
-
+#import "ErrorVC.h"
 
 
 @interface StartVC ()
@@ -30,7 +30,6 @@
     
     _firstTBC = [storyBoard instantiateViewControllerWithIdentifier:@"viewID"];
      _loginNC = [storyBoard instantiateViewControllerWithIdentifier:@"loginNCID"];
-    
     
     // 验证账户可用性 网络请求
     AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
@@ -91,11 +90,12 @@
             [self presentViewController:_loginNC animated:YES completion:nil];
             
         }
-
-        
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        NSLog(@"请求失败:%@", error.description);
-        return;
+        NSData* data = error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey];
+        ErrorVC* errorVC = [[ErrorVC alloc] init];
+        errorVC.error = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+        NSLog(@"验证账户可用性 请求失败:%@", errorVC.error);
+        [self.navigationController pushViewController:errorVC animated:YES];
     }];
 
     

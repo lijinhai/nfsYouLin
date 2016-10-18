@@ -12,8 +12,10 @@
 #import "NeighborDataFrame.h"
 #import "ShowImageView.h"
 #import "DetailListView.h"
+#import "JPushNotification.h"
 
-@interface NeighborDetailTVC : UITableViewController <DetailListViewDelegate,EMChatToolbarDelegate, EaseChatBarMoreViewDelegate,EMLocationViewDelegate,cellDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
+
+@interface NeighborDetailTVC : UITableViewController <JPushNotificationDelegate, DetailListViewDelegate,EMChatToolbarDelegate, EaseChatBarMoreViewDelegate,EMLocationViewDelegate,cellDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
 
 @property (nonatomic, strong) NeighborData* neighborData;
 @property (assign, nonatomic) NSInteger sectionNum;

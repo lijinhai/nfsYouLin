@@ -282,6 +282,7 @@
 		8F648DEB1D005D1500E3B155 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F648DEA1D005D1500E3B155 /* ImageIO.framework */; };
 		8F64912C1D05435100E3B155 /* NeighborDetailTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F64912B1D05435100E3B155 /* NeighborDetailTVC.m */; };
 		8F6491321D0653CB00E3B155 /* NDetailTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F6491311D0653CB00E3B155 /* NDetailTableViewCell.m */; };
+		8F6D07FC1DAF62DE00520512 /* JPushNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F6D07FB1DAF62DE00520512 /* JPushNotification.m */; };
 		8F73C8C11D2A545A009C83C2 /* StringMD5.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F73C8C01D2A545A009C83C2 /* StringMD5.m */; };
 		8F73C8D01D2B53E6009C83C2 /* AFHTTPSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F73C8C41D2B53E6009C83C2 /* AFHTTPSessionManager.m */; };
 		8F73C8D11D2B53E6009C83C2 /* AFNetworkReachabilityManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F73C8C71D2B53E6009C83C2 /* AFNetworkReachabilityManager.m */; };
@@ -460,6 +461,8 @@
 		8FB6FA881D485AEC00E6C71A /* ChatDemoHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FB6FA861D485AEC00E6C71A /* ChatDemoHelper.m */; };
 		8FBCF9661D81497E0005F50A /* BlackListVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FBCF9651D81497E0005F50A /* BlackListVC.m */; };
 		8FBCF9691D818A460005F50A /* PeopleInfoVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FBCF9681D818A460005F50A /* PeopleInfoVC.m */; };
+		8FC089D41DB49AAD00110646 /* NoticeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FC089D31DB49AAD00110646 /* NoticeView.m */; };
+		8FC089D71DB4A12500110646 /* NoticeBGView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FC089D61DB4A12500110646 /* NoticeBGView.m */; };
 		8FC8979F1D99159F00C9B32C /* WeatherDetailVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FC8979C1D99159F00C9B32C /* WeatherDetailVC.m */; };
 		8FC897A01D9915A000C9B32C /* WeatherVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FC8979D1D99159F00C9B32C /* WeatherVC.m */; };
 		8FC897A31D9915BA00C9B32C /* WeatherCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FC897A21D9915BA00C9B32C /* WeatherCell.m */; };
@@ -643,6 +646,7 @@
 		8F14983B1D8FB63200ED707E /* ServiceCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServiceCell.m; sourceTree = "<group>"; };
 		8F1499021D91139B00ED707E /* NoticeMessageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NoticeMessageView.h; sourceTree = "<group>"; };
 		8F1499031D91139B00ED707E /* NoticeMessageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NoticeMessageView.m; sourceTree = "<group>"; };
+		8F1C11A11DACB655005FEFB2 /* nfsYouLin.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = nfsYouLin.entitlements; sourceTree = "<group>"; };
 		8F1FB5B11D5C025800676743 /* photo_delete@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "photo_delete@2x.png"; sourceTree = "<group>"; };
 		8F1FB5B21D5C025800676743 /* TZAssetCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TZAssetCell.h; sourceTree = "<group>"; };
 		8F1FB5B31D5C025800676743 /* TZAssetCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TZAssetCell.m; sourceTree = "<group>"; };
@@ -1134,6 +1138,8 @@
 		8F6491301D0653CB00E3B155 /* NDetailTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NDetailTableViewCell.h; sourceTree = "<group>"; };
 		8F6491311D0653CB00E3B155 /* NDetailTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NDetailTableViewCell.m; sourceTree = "<group>"; };
 		8F6491361D065B9E00E3B155 /* NCellDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NCellDelegate.h; sourceTree = "<group>"; };
+		8F6D07FA1DAF62DE00520512 /* JPushNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JPushNotification.h; sourceTree = "<group>"; };
+		8F6D07FB1DAF62DE00520512 /* JPushNotification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JPushNotification.m; sourceTree = "<group>"; };
 		8F73C8BF1D2A545A009C83C2 /* StringMD5.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StringMD5.h; sourceTree = "<group>"; };
 		8F73C8C01D2A545A009C83C2 /* StringMD5.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StringMD5.m; sourceTree = "<group>"; };
 		8F73C8C31D2B53E6009C83C2 /* AFHTTPSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPSessionManager.h; sourceTree = "<group>"; };
@@ -1365,6 +1371,10 @@
 		8FBCF9651D81497E0005F50A /* BlackListVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BlackListVC.m; sourceTree = "<group>"; };
 		8FBCF9671D818A460005F50A /* PeopleInfoVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PeopleInfoVC.h; sourceTree = "<group>"; };
 		8FBCF9681D818A460005F50A /* PeopleInfoVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PeopleInfoVC.m; sourceTree = "<group>"; };
+		8FC089D21DB49AAD00110646 /* NoticeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NoticeView.h; sourceTree = "<group>"; };
+		8FC089D31DB49AAD00110646 /* NoticeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NoticeView.m; sourceTree = "<group>"; };
+		8FC089D51DB4A12500110646 /* NoticeBGView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NoticeBGView.h; sourceTree = "<group>"; };
+		8FC089D61DB4A12500110646 /* NoticeBGView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NoticeBGView.m; sourceTree = "<group>"; };
 		8FC8979B1D99159F00C9B32C /* WeatherDetailVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WeatherDetailVC.h; sourceTree = "<group>"; };
 		8FC8979C1D99159F00C9B32C /* WeatherDetailVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WeatherDetailVC.m; sourceTree = "<group>"; };
 		8FC8979D1D99159F00C9B32C /* WeatherVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WeatherVC.m; sourceTree = "<group>"; };
@@ -3356,6 +3366,17 @@
 			name = Models;
 			sourceTree = "<group>";
 		};
+		8FC089D11DB49A7F00110646 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				8FC089D21DB49AAD00110646 /* NoticeView.h */,
+				8FC089D31DB49AAD00110646 /* NoticeView.m */,
+				8FC089D51DB4A12500110646 /* NoticeBGView.h */,
+				8FC089D61DB4A12500110646 /* NoticeBGView.m */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
 		8FC897981D9914F800C9B32C /* 天气 */ = {
 			isa = PBXGroup;
 			children = (
@@ -3392,6 +3413,7 @@
 		8FC897AA1D99182E00C9B32C /* 公告 */ = {
 			isa = PBXGroup;
 			children = (
+				8FC089D11DB49A7F00110646 /* View */,
 				8FC897AB1D99183A00C9B32C /* Controllers */,
 			);
 			name = "公告";
@@ -3550,6 +3572,8 @@
 			children = (
 				8FC897B21D9B995B00C9B32C /* ErrorVC.h */,
 				8FC897B31D9B995B00C9B32C /* ErrorVC.m */,
+				8F6D07FA1DAF62DE00520512 /* JPushNotification.h */,
+				8F6D07FB1DAF62DE00520512 /* JPushNotification.m */,
 				AFCE1F971CDAD1B20085F10F /* AppDelegate.h */,
 				AFCE1F981CDAD1B20085F10F /* AppDelegate.mm */,
 				AF5293D71D12982E00503975 /* FirstTabBarController.h */,
@@ -3680,6 +3704,7 @@
 		AFCE1F931CDAD1B20085F10F /* nfsYouLin */ = {
 			isa = PBXGroup;
 			children = (
+				8F1C11A11DACB655005FEFB2 /* nfsYouLin.entitlements */,
 				AFCE1FA51CDAD1B20085F10F /* Info.plist */,
 				AF7850071CFFC587009F6982 /* FMDB */,
 				AF5293C91D12964E00503975 /* Gloable */,
@@ -3916,6 +3941,15 @@
 					AFCE1F901CDAD1B20085F10F = {
 						CreatedOnToolsVersion = 7.3;
 						DevelopmentTeam = KJG9FUNH9Q;
+						ProvisioningStyle = Manual;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 0;
+							};
+							com.apple.Push = {
+								enabled = 1;
+							};
+						};
 					};
 					AFCE1FA91CDAD1B20085F10F = {
 						CreatedOnToolsVersion = 7.3;
@@ -4219,6 +4253,7 @@
 				AFCE1F9C1CDAD1B20085F10F /* ViewController.m in Sources */,
 				AF4B304B1D3327F800CBF257 /* ChooseSexTypeViewController.m in Sources */,
 				8FB6FA881D485AEC00E6C71A /* ChatDemoHelper.m in Sources */,
+				8F6D07FC1DAF62DE00520512 /* JPushNotification.m in Sources */,
 				AFB4E3BE1D922AA3004A148A /* SellerMPVC.m in Sources */,
 				8F73C8C11D2A545A009C83C2 /* StringMD5.m in Sources */,
 				8F648CF81D00547A00E3B155 /* MJRefreshBackGifFooter.m in Sources */,
@@ -4234,6 +4269,7 @@
 				AFE569251CFD793400C0F745 /* addressInfomationViewController.m in Sources */,
 				AFB4E3BB1D9227CE004A148A /* DetailSellerInfoVC.m in Sources */,
 				8FC897A31D9915BA00C9B32C /* WeatherCell.m in Sources */,
+				8FC089D41DB49AAD00110646 /* NoticeView.m in Sources */,
 				8F648D0B1D00547A00E3B155 /* DACircularProgressView.m in Sources */,
 				8FA53CF71D7FF2ED00841B1D /* InviteRecordVC.m in Sources */,
 				8F060A691D6C20AA006F1B75 /* KMDatePicker.m in Sources */,
@@ -4471,6 +4507,7 @@
 				8FC897AE1D99185800C9B32C /* NoticeVC.m in Sources */,
 				AF4B30371D2F935700CBF257 /* addressVerificationViewController.m in Sources */,
 				8F648D531D00547A00E3B155 /* EaseFacialView.m in Sources */,
+				8FC089D71DB4A12500110646 /* NoticeBGView.m in Sources */,
 				8F648D141D00547A00E3B155 /* NSData+EMImageContentType.m in Sources */,
 				8F5303851CDB45B50078FD64 /* DiscoveryTVC.m in Sources */,
 				8F1FB6D61D6444A200676743 /* MASLayoutConstraint.m in Sources */,
@@ -4663,6 +4700,7 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = nfsYouLin/nfsYouLin.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = KJG9FUNH9Q;
@@ -4711,6 +4749,7 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = nfsYouLin/nfsYouLin.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = KJG9FUNH9Q;
