@@ -88,7 +88,7 @@
     //_panGesture = self.tableView.panGestureRecognizer;
     //[_panGesture addTarget:self action:@selector(handlePan:)];
     [self.view addSubview:_tableView];
-    [self getRepairPosts];
+    //[self getRepairPosts];
 }
 
 - (void)initWaitImageAnimate
@@ -103,6 +103,7 @@
     [_waitImageView addSubview:tiplab];
     [self.view addSubview:_waitImageView];
     
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -110,7 +111,7 @@
     [super viewWillAppear:animated];
     UIBarButtonItem *barrightBtn = [ [ UIBarButtonItem alloc ] initWithBarButtonSystemItem: UIBarButtonSystemItemAdd target: self action: @selector(addRepair:)];
     self.navigationItem.rightBarButtonItem=barrightBtn;
-    
+    [self getRepairPosts];
 }
 -(void)setSegmentedControl{
     

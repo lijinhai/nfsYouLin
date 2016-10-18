@@ -112,7 +112,7 @@
     [super viewDidLoad];
     
     self.automaticallyAdjustsScrollViewInsets = NO;
-    UIBarButtonItem* rightItem = [[UIBarButtonItem alloc] initWithTitle:@"发送" style:UIBarButtonItemStylePlain target:self action:@selector(sendResult:)];
+    UIBarButtonItem* rightItem = [[UIBarButtonItem alloc] initWithTitle:@"发送" style:UIBarButtonItemStylePlain target:self action:@selector(sendResult)];
     self.navigationItem.rightBarButtonItem = rightItem;
     UIColor* lineColor = [UIColor colorWithRed:217.0 / 255.0 green:216.0 / 255.0 blue:213.0 / 255.0 alpha:1];
     self.view.backgroundColor = [UIColor colorWithRed:243.0/255.0 green:243.0/255.0 blue:240.0/255.0 alpha:1];
@@ -796,7 +796,7 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (IBAction)sendResult:(id)sender
+- (void)sendResult
 {
     NSLog(@"发送");
     NSString* title = self.titleTV.text;
