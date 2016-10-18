@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "TZImagePickerController/TZImagePickerController.h"
 
-@interface CreateRepairVC : UIViewController<TZImagePickerControllerDelegate,UICollectionViewDelegate, UICollectionViewDataSource,UIImagePickerControllerDelegate,UINavigationControllerDelegate,UIAlertViewDelegate,UIActionSheetDelegate,UITableViewDelegate,UITableViewDataSource,UITextViewDelegate>
+@interface CreateRepairVC : UIViewController<TZImagePickerControllerDelegate,UICollectionViewDelegate, UICollectionViewDataSource,UIImagePickerControllerDelegate,UINavigationControllerDelegate,UIAlertViewDelegate,UIActionSheetDelegate,UITableViewDelegate,UITableViewDataSource,UITextViewDelegate,UITextFieldDelegate>
 
 @property(strong, nonatomic) UIScrollView* scrollView;
 @property(strong, nonatomic) UIScrollView* bgView;

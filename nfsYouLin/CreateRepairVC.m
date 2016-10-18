@@ -165,6 +165,7 @@
     describeTF.hidden = YES;
     describeTF.returnKeyType = UIReturnKeyDone;
     describeTF.autoresizingMask = UIViewAutoresizingNone;
+    describeTF.delegate = self;
     
     self.titleTV = [[UITextView alloc] initWithFrame:CGRectMake(60, 1, CGRectGetWidth(self.bgView.frame) - 40, 38)];
     self.titleTV.text=[SqliteOperation getUserAddressSqlite];
@@ -245,12 +246,10 @@
     self.tableView.backgroundColor = [UIColor orangeColor];
     self.tableView.bounces = NO;
     self.tableView.scrollEnabled = NO;
-    //[self.bgView addSubview:self.tableView];
     
     [self.bgView addSubview:line1];
     [self.bgView addSubview:line2];
-    //[self.bgView addSubview:line3];
-    //[self.bgView addSubview:line4];
+
     
     //增加监听，当键盘出现或改变时收出消息
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -279,6 +278,7 @@
 
 -(void) chooseTypeTouchUpInside:(UITapGestureRecognizer *)recognizer{
     
+    [self.contentTV resignFirstResponder];
     UILabel *label=(UILabel*)recognizer.view;
     NSString* typeStr=label.text;
     PopRepairTypeView *view = [PopRepairTypeView defaultPopupView];
@@ -570,6 +570,20 @@
     
     [self.navigationController pushViewController:limitVC animated:YES];
 }
+
+#pragma mark UITextField
+-(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)text
+{
+    if ([text isEqualToString:@"\n"])
+    {
+        
+        [textField resignFirstResponder];
+        return NO;
+    }
+    return YES;
+
+}
+
 #pragma mark UITextViewDelegate
 
 -(BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
@@ -829,7 +843,7 @@
 }
 
 
-- (void) touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
+- (void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
     [self.view endEditing:YES];
 }
