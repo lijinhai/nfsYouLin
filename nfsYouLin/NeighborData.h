@@ -18,7 +18,10 @@
 
 // 账户名称
 @property (strong, nonatomic) NSString* accountName;
-
+// 家庭住址
+@property (strong, nonatomic) NSString* familyName;
+// 电话
+@property (strong, nonatomic) NSString* phone;
 // 昵称
 @property (strong, nonatomic) NSString* senderName;
 // 帖子发表时间

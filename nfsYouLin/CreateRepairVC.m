@@ -119,7 +119,7 @@
     [super viewDidLoad];
     
     self.automaticallyAdjustsScrollViewInsets = NO;
-    UIBarButtonItem* rightItem = [[UIBarButtonItem alloc] initWithTitle:@"发送" style:UIBarButtonItemStylePlain target:self action:@selector(sendResult:)];
+    UIBarButtonItem* rightItem = [[UIBarButtonItem alloc] initWithTitle:@"发送" style:UIBarButtonItemStylePlain target:self action:@selector(sendResult)];
     self.navigationItem.rightBarButtonItem = rightItem;
     UIColor* lineColor = [UIColor colorWithRed:217.0 / 255.0 green:216.0 / 255.0 blue:213.0 / 255.0 alpha:1];
     self.view.backgroundColor = [UIColor colorWithRed:243.0/255.0 green:243.0/255.0 blue:240.0/255.0 alpha:1];
@@ -152,7 +152,7 @@
     addLab.text=@"地址";
     addLab.font = [UIFont systemFontOfSize:16];
     
-    cataLab=[[UILabel alloc] initWithFrame:CGRectMake(20, 41, 40, 38)];
+    cataLab=[[UILabel alloc] initWithFrame:CGRectMake(20, 41, screenWidth-20, 38)];
     cataLab.text=@"类别";
     cataLab.font = [UIFont systemFontOfSize:16];
     cataLab.userInteractionEnabled=YES;
@@ -165,6 +165,7 @@
     describeTF.hidden = YES;
     describeTF.returnKeyType = UIReturnKeyDone;
     describeTF.autoresizingMask = UIViewAutoresizingNone;
+    describeTF.delegate = self;
     
     self.titleTV = [[UITextView alloc] initWithFrame:CGRectMake(60, 1, CGRectGetWidth(self.bgView.frame) - 40, 38)];
     self.titleTV.text=[SqliteOperation getUserAddressSqlite];
@@ -245,12 +246,10 @@
     self.tableView.backgroundColor = [UIColor orangeColor];
     self.tableView.bounces = NO;
     self.tableView.scrollEnabled = NO;
-    //[self.bgView addSubview:self.tableView];
     
     [self.bgView addSubview:line1];
     [self.bgView addSubview:line2];
-    //[self.bgView addSubview:line3];
-    //[self.bgView addSubview:line4];
+
     
     //增加监听，当键盘出现或改变时收出消息
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -279,6 +278,7 @@
 
 -(void) chooseTypeTouchUpInside:(UITapGestureRecognizer *)recognizer{
     
+    [self.contentTV resignFirstResponder];
     UILabel *label=(UILabel*)recognizer.view;
     NSString* typeStr=label.text;
     PopRepairTypeView *view = [PopRepairTypeView defaultPopupView];
@@ -570,12 +570,27 @@
     
     [self.navigationController pushViewController:limitVC animated:YES];
 }
+
+#pragma mark UITextField
+-(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)text
+{
+    if ([text isEqualToString:@"\n"])
+    {
+        
+        [textField resignFirstResponder];
+        return NO;
+    }
+    return YES;
+
+}
+
 #pragma mark UITextViewDelegate
 
 -(BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
     if ([text isEqualToString:@"\n"])
     {
+        
         [textView resignFirstResponder];
         return NO;
     }
@@ -828,7 +843,7 @@
 }
 
 
-- (void) touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
+- (void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
     [self.view endEditing:YES];
 }
@@ -860,7 +875,7 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (IBAction)sendResult:(id)sender
+- (void)sendResult
 {
     NSLog(@"发送");//"#物业报修#"+repaircategory+"（"+repaircategorydescirbe+"）"
     NSString* title =[NSString stringWithFormat:@"%@%@%@%@%@",@"#物业报修#",cataLab.text,@"(",describeTF.text,@")"];

@@ -13,4 +13,5 @@
 + (NSString *)replaceUnicode:(NSString *)unicodeStr;
 + (CGSize) sizeWithString:(NSString *)str font:(UIFont *)font maxSize:(CGSize)maxSize;
 + (NSString *)calculateTimeInternal:(NSInteger) nowTime old:(NSInteger) oldTime;
++(NSString *)ConvertStrToTime:(NSString *)timeStr;
 @end

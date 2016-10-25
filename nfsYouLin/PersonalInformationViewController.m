@@ -1088,7 +1088,14 @@
         [userInfo setValue:[responseObject objectForKey:@"user_birthday"] forKey:@"user_birthday"];
         [userInfo setValue:[responseObject objectForKey:@"user_gender"] forKey:@"user_gender"];
         [userInfo setValue:[responseObject objectForKey:@"user_portrait"] forKey:@"user_portrait"];
-        [userInfo setValue:[responseObject objectForKey:@"user_profession"] forKey:@"user_profession"];
+        if([[NSString stringWithFormat:@"%@",[responseObject objectForKey:@"user_profession"] ]isEqualToString:@"<null>"])
+        {
+            
+         [userInfo setValue:@"" forKey:@"user_profession"];
+        }else{
+        
+         [userInfo setValue:[responseObject objectForKey:@"user_profession"] forKey:@"user_profession"];
+        }
         [userInfo setValue:[responseObject objectForKey:@"user_public_status"] forKey:@"user_public_status"];
         /*图片设置*/
         [_imageView sd_setImageWithURL:[NSURL URLWithString:[userInfo objectForKey:@"user_portrait"]] placeholderImage:[UIImage imageNamed:@"bg_error.png"] options:SDWebImageAllowInvalidSSLCertificates];

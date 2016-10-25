@@ -79,6 +79,23 @@
     return internalString;
 }
 
++ (NSString *)ConvertStrToTime:(NSString *)timeStr
+
+{
+    
+    long long time=[timeStr longLongValue];
+    
+    NSDate *d = [[NSDate alloc]initWithTimeIntervalSince1970:time/1000.0];
+    
+    NSDateFormatter *formatter = [[NSDateFormatter alloc]init];
+    
+    [formatter setDateFormat:@"MM月dd日 HH:mm"];
+    
+    NSString*timeString=[formatter stringFromDate:d];
+    
+    return timeString;
+    
+}
 
 @end
 
