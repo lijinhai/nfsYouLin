@@ -13,6 +13,7 @@
 #import "HeaderFile.h"
 #import "MyAdviceTVC.h"
 #import "RepairVC.h"
+#import "AdministratorRTVC.h"
 #import "SqliteOperation.h"
 
 @interface PropertyVC ()
@@ -180,27 +181,35 @@
 -(void) touchDownRepair:(id)sender{
 
         NSLog(@"维修");
-    RepairVC *repairTVC=[[RepairVC alloc] init];
-    UIBarButtonItem *backItemTitle = [[UIBarButtonItem alloc] initWithTitle:@"报修" style:UIBarButtonItemStylePlain target:nil action:nil];
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-    repairTVC.userIdStr=[defaults stringForKey:@"userId"];
-    [self.navigationItem setBackBarButtonItem:backItemTitle];
-    [self.navigationController pushViewController:repairTVC animated:YES];
-
-
+    if([[defaults stringForKey:@"type"] isEqualToString:@"0"])
+    {
+        RepairVC *repairTVC = [[RepairVC alloc] init];
+        UIBarButtonItem *backItemTitle = [[UIBarButtonItem alloc] initWithTitle:@"报修" style:UIBarButtonItemStylePlain target:nil action:nil];
+        repairTVC.userIdStr=[defaults stringForKey:@"userId"];
+        [self.navigationItem setBackBarButtonItem:backItemTitle];
+        [self.navigationController pushViewController:repairTVC animated:YES];
+    }else{
+        
+        AdministratorRTVC *admRTVC = [[AdministratorRTVC alloc] init];
+        UIBarButtonItem *backItemTitle = [[UIBarButtonItem alloc] initWithTitle:@"列表" style:UIBarButtonItemStylePlain target:nil action:nil];
+        [self.navigationItem setBackBarButtonItem:backItemTitle];
+        [self.navigationController pushViewController:admRTVC animated:YES];
+    }
 
 }
 
 -(void) touchDownAdvice:(id)sender{
     
         MyAdviceTVC *myATVC=[[MyAdviceTVC alloc] initWithStyle:UITableViewStyleGrouped];
-        UIBarButtonItem *backItemTitle = [[UIBarButtonItem alloc] initWithTitle:@"建议" style:UIBarButtonItemStylePlain target:nil action:nil];
+    
         NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
         myATVC.userIdStr=[defaults stringForKey:@"userId"];
+    
+        UIBarButtonItem *backItemTitle = [[UIBarButtonItem alloc] initWithTitle:@"建议" style:UIBarButtonItemStylePlain target:nil action:nil];
         [self.navigationItem setBackBarButtonItem:backItemTitle];
         [self.navigationController pushViewController:myATVC animated:YES];
-        
-        NSLog(@"建议");
+         NSLog(@"建议");
 }
 
 -(void)phoneTapGesture{

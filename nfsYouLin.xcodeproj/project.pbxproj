@@ -541,6 +541,10 @@
 		AF7FF17F1D3CBDD90068F8D9 /* FDCalendar.m in Sources */ = {isa = PBXBuildFile; fileRef = AF7FF17C1D3CBDD90068F8D9 /* FDCalendar.m */; };
 		AF7FF1801D3CBDD90068F8D9 /* FDCalendarItem.m in Sources */ = {isa = PBXBuildFile; fileRef = AF7FF17E1D3CBDD90068F8D9 /* FDCalendarItem.m */; };
 		AF81B32D1D42073900C48856 /* IntegralMallViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AF81B32C1D42073900C48856 /* IntegralMallViewController.m */; };
+		AF8B3A901DB8930A0003AEB2 /* DetailRepairVC.m in Sources */ = {isa = PBXBuildFile; fileRef = AF8B3A8F1DB8930A0003AEB2 /* DetailRepairVC.m */; };
+		AF9007B91DB5C8B0005BA7BA /* AdministratorRTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = AF9007B81DB5C8B0005BA7BA /* AdministratorRTVC.m */; };
+		AF9007C11DB6F992005BA7BA /* ResidentRTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = AF9007C01DB6F992005BA7BA /* ResidentRTVC.m */; };
+		AF9007C41DB6FAF7005BA7BA /* residenterRinfo.m in Sources */ = {isa = PBXBuildFile; fileRef = AF9007C31DB6FAF7005BA7BA /* residenterRinfo.m */; };
 		AFAB9AC01D93611C008EA787 /* DownListView.m in Sources */ = {isa = PBXBuildFile; fileRef = AFAB9ABF1D93611C008EA787 /* DownListView.m */; };
 		AFAB9AC31D936293008EA787 /* DownListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = AFAB9AC21D936293008EA787 /* DownListCell.m */; };
 		AFB4E3751D86790A004A148A /* PersonTopicTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = AFB4E3741D86790A004A148A /* PersonTopicTVC.m */; };
@@ -1523,6 +1527,14 @@
 		AF7FF17E1D3CBDD90068F8D9 /* FDCalendarItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDCalendarItem.m; sourceTree = "<group>"; };
 		AF81B32B1D42073900C48856 /* IntegralMallViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IntegralMallViewController.h; sourceTree = "<group>"; };
 		AF81B32C1D42073900C48856 /* IntegralMallViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IntegralMallViewController.m; sourceTree = "<group>"; };
+		AF8B3A8E1DB8930A0003AEB2 /* DetailRepairVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailRepairVC.h; sourceTree = "<group>"; };
+		AF8B3A8F1DB8930A0003AEB2 /* DetailRepairVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailRepairVC.m; sourceTree = "<group>"; };
+		AF9007B71DB5C8B0005BA7BA /* AdministratorRTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AdministratorRTVC.h; sourceTree = "<group>"; };
+		AF9007B81DB5C8B0005BA7BA /* AdministratorRTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AdministratorRTVC.m; sourceTree = "<group>"; };
+		AF9007BF1DB6F992005BA7BA /* ResidentRTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ResidentRTVC.h; sourceTree = "<group>"; };
+		AF9007C01DB6F992005BA7BA /* ResidentRTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ResidentRTVC.m; sourceTree = "<group>"; };
+		AF9007C21DB6FAF7005BA7BA /* residenterRinfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = residenterRinfo.h; sourceTree = "<group>"; };
+		AF9007C31DB6FAF7005BA7BA /* residenterRinfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = residenterRinfo.m; sourceTree = "<group>"; };
 		AFAB9ABE1D93611C008EA787 /* DownListView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DownListView.h; sourceTree = "<group>"; };
 		AFAB9ABF1D93611C008EA787 /* DownListView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DownListView.m; sourceTree = "<group>"; };
 		AFAB9AC11D936293008EA787 /* DownListCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DownListCell.h; sourceTree = "<group>"; };
@@ -1742,16 +1754,8 @@
 			children = (
 				8F1498221D8F8B3000ED707E /* PropertyVC.h */,
 				8F1498231D8F8B3000ED707E /* PropertyVC.m */,
-				8F14982B1D8F8B8600ED707E /* MyAdviceTVC.h */,
-				8F14982C1D8F8B8600ED707E /* MyAdviceTVC.m */,
-				8F1498271D8F8B6E00ED707E /* RepairVC.h */,
-				8F1498281D8F8B6E00ED707E /* RepairVC.m */,
-				8F1498251D8F8B6E00ED707E /* CreateAdviceVC.h */,
-				8F1498261D8F8B6E00ED707E /* CreateAdviceVC.m */,
-				AFB4E3A31D910C3C004A148A /* CreateRepairVC.h */,
-				AFB4E3A41D910C3C004A148A /* CreateRepairVC.m */,
-				AFB4E3A01D90DF22004A148A /* lookScheduleVC.h */,
-				AFB4E3A11D90DF22004A148A /* lookScheduleVC.m */,
+				AF9007BB1DB6066E005BA7BA /* 物业管理员 */,
+				AF9007BA1DB60660005BA7BA /* 普通用户 */,
 			);
 			name = "物业";
 			sourceTree = "<group>";
@@ -3612,6 +3616,62 @@
 			name = FMDB;
 			sourceTree = "<group>";
 		};
+		AF9007BA1DB60660005BA7BA /* 普通用户 */ = {
+			isa = PBXGroup;
+			children = (
+				8F14982B1D8F8B8600ED707E /* MyAdviceTVC.h */,
+				8F14982C1D8F8B8600ED707E /* MyAdviceTVC.m */,
+				8F1498271D8F8B6E00ED707E /* RepairVC.h */,
+				8F1498281D8F8B6E00ED707E /* RepairVC.m */,
+				8F1498251D8F8B6E00ED707E /* CreateAdviceVC.h */,
+				8F1498261D8F8B6E00ED707E /* CreateAdviceVC.m */,
+				AFB4E3A31D910C3C004A148A /* CreateRepairVC.h */,
+				AFB4E3A41D910C3C004A148A /* CreateRepairVC.m */,
+				AFB4E3A01D90DF22004A148A /* lookScheduleVC.h */,
+				AFB4E3A11D90DF22004A148A /* lookScheduleVC.m */,
+			);
+			name = "普通用户";
+			sourceTree = "<group>";
+		};
+		AF9007BB1DB6066E005BA7BA /* 物业管理员 */ = {
+			isa = PBXGroup;
+			children = (
+				AF9007BE1DB609DE005BA7BA /* control */,
+				AF9007BD1DB609D8005BA7BA /* view */,
+				AF9007BC1DB609D0005BA7BA /* model */,
+			);
+			name = "物业管理员";
+			sourceTree = "<group>";
+		};
+		AF9007BC1DB609D0005BA7BA /* model */ = {
+			isa = PBXGroup;
+			children = (
+				AF9007C21DB6FAF7005BA7BA /* residenterRinfo.h */,
+				AF9007C31DB6FAF7005BA7BA /* residenterRinfo.m */,
+			);
+			name = model;
+			sourceTree = "<group>";
+		};
+		AF9007BD1DB609D8005BA7BA /* view */ = {
+			isa = PBXGroup;
+			children = (
+				AF9007BF1DB6F992005BA7BA /* ResidentRTVC.h */,
+				AF9007C01DB6F992005BA7BA /* ResidentRTVC.m */,
+			);
+			name = view;
+			sourceTree = "<group>";
+		};
+		AF9007BE1DB609DE005BA7BA /* control */ = {
+			isa = PBXGroup;
+			children = (
+				AF9007B71DB5C8B0005BA7BA /* AdministratorRTVC.h */,
+				AF9007B81DB5C8B0005BA7BA /* AdministratorRTVC.m */,
+				AF8B3A8E1DB8930A0003AEB2 /* DetailRepairVC.h */,
+				AF8B3A8F1DB8930A0003AEB2 /* DetailRepairVC.m */,
+			);
+			name = control;
+			sourceTree = "<group>";
+		};
 		AFB4E3791D88F4BF004A148A /* AddressChange */ = {
 			isa = PBXGroup;
 			children = (
@@ -4324,8 +4384,10 @@
 				8F1FB6D81D6444A200676743 /* MASViewConstraint.m in Sources */,
 				AFE5693D1CFE649200C0F745 /* ITVC.m in Sources */,
 				8FAF9D9C1D879A210005B08C /* NewsDetailVC.m in Sources */,
+				AF8B3A901DB8930A0003AEB2 /* DetailRepairVC.m in Sources */,
 				8F14982A1D8F8B6E00ED707E /* RepairVC.m in Sources */,
 				8F73C8D51D2B53E6009C83C2 /* AFURLSessionManager.m in Sources */,
+				AF9007C11DB6F992005BA7BA /* ResidentRTVC.m in Sources */,
 				8F51E2821D338FBF0094A4E5 /* SDWebImageManager.m in Sources */,
 				AF5293DD1D12985400503975 /* BackgroundView.m in Sources */,
 				8F1498341D8FA79900ED707E /* ServiceVC.m in Sources */,
@@ -4398,6 +4460,7 @@
 				8F1FB5CE1D5C025800676743 /* TZVideoPlayerController.m in Sources */,
 				8F14979E1D8E2AAC00ED707E /* NewsNeighborVC.m in Sources */,
 				8F648D541D00547A00E3B155 /* EaseChatBarMoreView.m in Sources */,
+				AF9007C41DB6FAF7005BA7BA /* residenterRinfo.m in Sources */,
 				AF7FF17F1D3CBDD90068F8D9 /* FDCalendar.m in Sources */,
 				8F648D331D00547A00E3B155 /* EaseChineseToPinyin.m in Sources */,
 				AF7850151CFFC5C8009F6982 /* FMDatabasePool.m in Sources */,
@@ -4446,6 +4509,7 @@
 				AF4B30311D2F930000CBF257 /* scanQrCodeViewController.m in Sources */,
 				8F648D261D00547A00E3B155 /* PSTGridLayoutItem.m in Sources */,
 				8F7539A41D51825C0090A7C2 /* CallViewController.m in Sources */,
+				AF9007B91DB5C8B0005BA7BA /* AdministratorRTVC.m in Sources */,
 				8F648CEA1D00547900E3B155 /* wav.mm in Sources */,
 				8FA53CE61D7E4FFC00841B1D /* ReportVC.m in Sources */,
 				8F648D381D00547A00E3B155 /* EaseEmotionEscape.m in Sources */,
