@@ -25,6 +25,9 @@
 #import "PopChangeAddress.h"
 #import "LewPopupViewController.h"
 #import "NoticeMessageView.h"
+#import "PushNoticeCell.h"
+#import "JSONKit.h"
+
 
 @implementation FirstTabBarController
 {
@@ -42,7 +45,9 @@
     UIView* noticeBgV;
     
     NSMutableArray *dataArray;
-
+    
+    UIButton* noticeBtn;
+    UIView* badge;
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -114,12 +119,23 @@
     UIWindow *window = [UIApplication sharedApplication].keyWindow;
     window.rootViewController = self;
     
+    noticeBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
+    [noticeBtn setImage:[UIImage imageNamed:@"title_icon_new_msg.png"] forState:UIControlStateNormal];
+    [noticeBtn addTarget:self action:@selector(noticeBar:) forControlEvents:UIControlEventTouchUpInside];
+    
+    badge = [[UIView alloc] initWithFrame:CGRectMake(16, -4, 6, 6)];
+    badge.backgroundColor = [UIColor redColor];
+    badge.layer.cornerRadius = 3;
+    badge.layer.masksToBounds = YES;
+    self.noticeItem.customView = noticeBtn;
+    
     [self initNoticeView];
     
     // 环信登录
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     NSString* userId = [defaults stringForKey:@"userId"];
     NSString* communityId = [defaults stringForKey:@"communityId"];
+    NSInteger type = [[defaults stringForKey:@"type"] integerValue];
     
     [[EMClient sharedClient] asyncLoginWithUsername:userId password:userId success:^{
         NSLog(@"环信登陆成功");
@@ -134,14 +150,21 @@
         [[EMClient sharedClient] updatePushOptionsToServer];
 
     } failure:^(EMError *aError) {
-        NSLog(@"环信登录失败 aError:%@",aError);
+        NSLog(@"环信登录失败 aError:%@",aError.errorDescription);
     }];
     
     // 设置极光推送设置
     NSString* jpushAlias = [NSString stringWithFormat:@"youlin_tag_%@",userId];
-    NSSet* jpushTag = [[NSSet alloc] initWithObjects: [NSString stringWithFormat:@"community_topic_%@",communityId],
+    NSMutableSet* jpushTag = [[NSMutableSet alloc] initWithObjects: [NSString stringWithFormat:@"community_topic_%@",communityId],
                                                       [NSString stringWithFormat:@"push_news_%@",communityId],nil];
-    NSLog(@"set= %@",jpushTag);
+    
+    if(type == 4)
+    {
+        [jpushTag addObject:@"property_notice_1"];
+    }
+    
+    NSLog(@"type = %ld,jushTag = %@", type, jpushTag);
+    
     [JPUSHService setTags:jpushTag alias:jpushAlias
         fetchCompletionHandle:
             ^(int iResCode, NSSet *iTags, NSString *iAlias) {
@@ -225,11 +248,13 @@
     CGRect statusRect = [[UIApplication sharedApplication] statusBarFrame];
     CGFloat statusH = statusRect.size.height;
     
-    dataArray = [[NSMutableArray alloc] initWithObjects:@"哈哈哈-1",@"哈哈哈-2",@"哈哈哈-3",@"哈哈哈-4",@"哈哈哈-5",
+    /* dataArray = [[NSMutableArray alloc] initWithObjects:@"哈哈哈-1",@"哈哈哈-2",@"哈哈哈-3",@"哈哈哈-4",@"哈哈哈-5",
                                                         @"哈哈哈-6",@"哈哈哈-7",@"哈哈哈-8",@"哈哈哈-9",@"哈哈哈-10",
                                                         @"哈哈哈-11",@"哈哈哈-12",@"哈哈哈-13",@"哈哈哈-14",@"哈哈哈-15",
                                                         @"哈哈哈-16",@"哈哈哈-17",@"哈哈哈-18",@"哈哈哈-19",@"哈哈哈-20",nil];
-    
+    */
+    dataArray = [NSMutableArray array];
+    [self selectDataSql];
     noticeView = [[NoticeMessageView alloc ] initWithFrame:self.view.bounds];
     noticeView.backgroundColor = [UIColor blackColor];
     noticeView.alpha = 0;
@@ -243,6 +268,7 @@
     
     noticeBgV = [[UIView alloc] init];
     noticeBgV.backgroundColor = [UIColor whiteColor];
+    noticeBgV.alpha = 1;
     
     noticeView.bgView = noticeBgV;
     
@@ -292,14 +318,14 @@
     [self.parentViewController.view addSubview:noticeView];
     noticeView.alpha = 0.0;
     [UIView transitionWithView:noticeView duration:0.4 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-        noticeView.alpha = 0.5;
+        noticeView.alpha = 0.8;
     } completion:^(BOOL finished) {
         
     }];
     
     noticeTView.frame = CGRectMake(CGRectGetMaxX(self.view.frame) * 2 - 100, 20, 0, CGRectGetHeight(self.view.frame) - 10);
     [UIView transitionWithView:noticeTView duration:0.3	 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-        noticeView.alpha = 0.5;
+        noticeView.alpha = 0.8;
         noticeTView.frame = CGRectMake(CGRectGetMaxX(self.view.frame), 20, CGRectGetWidth(self.view.frame) - 100, CGRectGetHeight(self.view.frame) - 10);
         noticeBgV.frame = CGRectMake(100, 20, CGRectGetWidth(self.view.frame) - 100,
                                      CGRectGetHeight(self.view.frame));
@@ -459,14 +485,16 @@
 
 - (UITableViewCell *)tableView :(UITableView *)tableView cellForRowAtIndexPath :( NSIndexPath*)indexPath
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"identifier"];
+    PushNoticeCell *cell = [tableView dequeueReusableCellWithIdentifier:@"identifier"];
     if (cell == nil)
     {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
+        cell = [[PushNoticeCell alloc] initWithStyle:UITableViewCellStyleDefault
                                       reuseIdentifier:@"identifier"];
     }
     
-    cell.textLabel.text = [dataArray objectAtIndex:indexPath.row];
+    //cell.textLabel.text = [dataArray objectAtIndex:indexPath.row];
+    NSDictionary* dict = [dataArray objectAtIndex:indexPath.row];
+    cell.noticeDict = dict;
     return cell;
 }
 
@@ -520,6 +548,64 @@
     CGFloat H = rect.size.height;
     
     noticeBgV.frame = CGRectMake(X, Y, W, H);
+}
+
+#pragma mark -刷新消息列表
+- (void)refreshData
+{
+    [self selectDataSql];
+}
+
+#pragma mark -数据查询
+- (void) selectDataSql
+{
+    BOOL point = true;
+    AppDelegate* app = (AppDelegate*)[[UIApplication sharedApplication] delegate];
+    FMDatabase* db = app.db;
+    [dataArray removeAllObjects];
+    if([db open])
+    {
+        FMResultSet *set = [db executeQuery:@"select * from table_push_record"];
+        while ([set next]) {
+            NSString *content =  [set stringForColumn:@"content"];
+            NSString *commnityId = [set stringForColumn:@"community_id"];
+            NSString *type = [set stringForColumn:@"type"];
+            
+            if([type integerValue]== 1)
+            {
+                point = false;
+            }
+            
+            NSDictionary* dict = [NSDictionary
+                                  dictionaryWithObjectsAndKeys:
+                                  content, @"content",
+                                  commnityId, @"commnityId",
+                                  type, @"type",
+                                  nil];
+            [dataArray addObject:dict];
+        }
+    }
+    
+    if(point)
+    {
+        [self cancelRedPoint];
+    }
+    else
+    {
+        [self addRedPoint];
+    }
+}
+
+#pragma mark -消息添加红点
+- (void)addRedPoint
+{
+    [noticeBtn addSubview:badge];
+}
+
+#pragma mark -消息取消红点
+- (void) cancelRedPoint
+{
+    [badge removeFromSuperview];
 }
 
 @end

@@ -478,6 +478,17 @@
     [self.parentViewController.view addSubview:backgroundView];
     [self lew_dismissPopupViewWithanimation:[LewPopupViewAnimationSlide new]];
     [SqliteOperation deleteSqlite];
+    
+    // 注销环信
+    EMError *error = [[EMClient sharedClient] logout:YES];
+    if (!error) {
+        NSLog(@"环信退出成功");
+    }
+    else
+    {
+        NSLog(@"环信退出失败: error = %@", error.errorDescription);
+    }
+    
     [self logoutNet];
 }
 

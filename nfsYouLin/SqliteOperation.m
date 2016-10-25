@@ -54,7 +54,7 @@
 {
     if(!dict)
         return NO;
-    AppDelegate* app = [[UIApplication sharedApplication] delegate];
+    AppDelegate* app = (AppDelegate*)[[UIApplication sharedApplication] delegate];
     FMDatabase* db = app.db;
     if ([db open])
     {
