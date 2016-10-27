@@ -227,7 +227,9 @@
             [defaults setObject:[personDic valueForKey:@"user_portrait"] forKey:@"portrait"];
             [defaults setObject:[personDic valueForKey:@"user_news_receive"] forKey:@"news_status"];
             [defaults setObject:[personDic valueForKey:@"user_nick"] forKey:@"nick"];
+            NSLog(@"nick = %@",[personDic valueForKey:@"user_nick"]);
             [defaults setObject:[usersDict valueForKey:@"pk"] forKey:@"userId"];
+            
             [defaults setObject:[personDic valueForKey:@"user_password"] forKey:@"password"];
             [defaults setObject:[personDic valueForKey:@"user_type"] forKey:@"type"];
             [defaults synchronize];
@@ -258,7 +260,6 @@
                 return ;
             }
             [personInfoDic removeAllObjects];
-            
             
             for (int i = 1; i < [responseObject count]; i++) {
                 [personInfoDic removeAllObjects];

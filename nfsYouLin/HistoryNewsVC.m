@@ -38,7 +38,7 @@
 #pragma mark -数据库新闻表获取
 - (void) excuteSql
 {
-    AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+    AppDelegate *delegate =(AppDelegate*) [[UIApplication sharedApplication] delegate];
     FMDatabase *db = delegate.db;
     
     if([db open])

@@ -481,6 +481,7 @@
 		8FD121501D74674D0066C8E3 /* mapapi.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 8FD1214F1D74674D0066C8E3 /* mapapi.bundle */; };
 		8FD121531D7468270066C8E3 /* MapVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FD121521D7468270066C8E3 /* MapVC.m */; };
 		8FD637E31D541F6900F500D9 /* CreateTopicVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FD637E21D541F6900F500D9 /* CreateTopicVC.m */; };
+		8FDDDA201DB8947100F84649 /* PushNoticeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FDDDA1F1DB8947100F84649 /* PushNoticeCell.m */; };
 		8FE39CD51D7942EA00BA4332 /* DetailListView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FE39CD41D7942EA00BA4332 /* DetailListView.m */; };
 		8FE39CD81D7960B800BA4332 /* DetailListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FE39CD71D7960B800BA4332 /* DetailListCell.m */; };
 		8FF22DA41CE1733800EAE9BA /* forgetViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FF22DA31CE1733800EAE9BA /* forgetViewController.m */; };
@@ -1407,6 +1408,8 @@
 		8FD121521D7468270066C8E3 /* MapVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapVC.m; sourceTree = "<group>"; };
 		8FD637E11D541F6900F500D9 /* CreateTopicVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CreateTopicVC.h; sourceTree = "<group>"; };
 		8FD637E21D541F6900F500D9 /* CreateTopicVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CreateTopicVC.m; sourceTree = "<group>"; };
+		8FDDDA1E1DB8947100F84649 /* PushNoticeCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PushNoticeCell.h; sourceTree = "<group>"; };
+		8FDDDA1F1DB8947100F84649 /* PushNoticeCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PushNoticeCell.m; sourceTree = "<group>"; };
 		8FE39CD31D7942EA00BA4332 /* DetailListView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailListView.h; sourceTree = "<group>"; };
 		8FE39CD41D7942EA00BA4332 /* DetailListView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailListView.m; sourceTree = "<group>"; };
 		8FE39CD61D7960B800BA4332 /* DetailListCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailListCell.h; sourceTree = "<group>"; };
@@ -3887,6 +3890,8 @@
 				AF197E461D6C2A4B0070AAC4 /* RectWaitView.m */,
 				8F1499021D91139B00ED707E /* NoticeMessageView.h */,
 				8F1499031D91139B00ED707E /* NoticeMessageView.m */,
+				8FDDDA1E1DB8947100F84649 /* PushNoticeCell.h */,
+				8FDDDA1F1DB8947100F84649 /* PushNoticeCell.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -4576,6 +4581,7 @@
 				8F5303851CDB45B50078FD64 /* DiscoveryTVC.m in Sources */,
 				8F1FB6D61D6444A200676743 /* MASLayoutConstraint.m in Sources */,
 				AFD75EAB1D49E9FF006B5A4B /* IntegralRulesViewController.m in Sources */,
+				8FDDDA201DB8947100F84649 /* PushNoticeCell.m in Sources */,
 				8F060A6B1D6C20AA006F1B75 /* NSDate+CalculateDay.m in Sources */,
 				AFB4E3751D86790A004A148A /* PersonTopicTVC.m in Sources */,
 				8F648D011D00547A00E3B155 /* UIScrollView+MJRefresh.m in Sources */,

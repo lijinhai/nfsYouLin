@@ -258,16 +258,16 @@ static BOOL isProduction = NO;
 #pragma mark- JPUSHRegisterDelegate
 // iOS 10 Support
 
-
 - (void)application:(UIApplication *)application
 didReceiveRemoteNotification:(NSDictionary *)userInfo {
-    NSLog(@"收到通知:%@", [self logDic:userInfo]);
+    NSLog(@"收到w通知:%@", [self logDic:userInfo]);
     [JPUSHService handleRemoteNotification:userInfo];
 }
 
-
+#pragma mark -极光远程通知
 - (void)application:(UIApplication*)application didReceiveRemoteNotification:(NSDictionary*)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
+    NSLog(@"ooo");
     [JPUSHService handleRemoteNotification:userInfo];
     if (application.applicationState == UIApplicationStateActive) {
         UIAlertView *alert = [[UIAlertView alloc]
@@ -278,9 +278,32 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
                               otherButtonTitles:@"确定",nil];
         [alert show];
     }
-    NSLog(@"收到通知:%@", [self logDic:userInfo]);
+    
+    NSInteger communityId = [[userInfo valueForKey:@"communityId"] integerValue];
+    
+    // 转成json字符串存储
+    NSError *err = nil;
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:userInfo options:NSJSONWritingPrettyPrinted error:&err];
+    NSString *jsonStr = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    FMDatabase* db = self.db;
+    if ([db open])
+    {
+        [db executeUpdate:@"insert into table_push_record (type,content,community_id) values(?,?,?)",[NSNumber numberWithInteger:1],jsonStr,[NSNumber numberWithInteger:communityId]];
+    }
+    else
+    {
+        NSLog(@"didReceiveRemoteNotification 数据库打开失败");
+    }
+    [db close];
+    
+    // 消息刷新
+    if([ChatDemoHelper shareHelper].mainVC)
+    {
+        [[ChatDemoHelper shareHelper].mainVC refreshData];
+    }
+    
+    NSLog(@"收到o通知:%@", [self logDic:userInfo]);
     completionHandler(UIBackgroundFetchResultNewData);
-
     NSString* fromId = [userInfo valueForKey:@"f"];
     if(_friendVC)
     {
@@ -312,20 +335,20 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
 
 - (void)createTable
 {
-    AppDelegate *myDelegate = [[UIApplication sharedApplication] delegate];
+
     NSFileManager *fileManager = [NSFileManager defaultManager];
-    self.db = [FMDatabase databaseWithPath:myDelegate.dbPath];
+    self.db = [FMDatabase databaseWithPath:self.dbPath];
 
-//    [fileManager removeItemAtPath:self.dbPath error:nil];
+    [fileManager removeItemAtPath:self.dbPath error:nil];
 
-    if (![fileManager fileExistsAtPath:myDelegate.dbPath]) {
+    if (![fileManager fileExistsAtPath:self.dbPath]) {
         NSLog(@"还未创建数据库，现在正在创建数据库");
         if ([self.db open]) {
             /*创建新闻接收表*/
             [self.db executeUpdate:CREATE_TABLE_NEWS_RECEIVE];
-            /*创建推送记录表*/
-            [self.db executeUpdate:CREATE_INDEX_NEWS_RECEIVE_LA];
             /*创建接收新闻索引*/
+            [self.db executeUpdate:CREATE_INDEX_NEWS_RECEIVE_LA];
+            /*创建推送记录表*/
             [self.db executeUpdate:CREATE_TABLE_PUSH_RECORD];
             /*创建推送记录索引*/
             [self.db executeUpdate:CREATE_INDEX_PUSH_LA];
@@ -510,7 +533,6 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
     NSDictionary * userInfo = [notification userInfo];
     [self.notification JPshNotification:userInfo];
 }
-
 
 @end
 

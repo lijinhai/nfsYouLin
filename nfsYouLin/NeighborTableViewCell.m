@@ -792,7 +792,6 @@
     }
     else if(userId == myId)
     {
-        NSLog(@"111111 -->");
         [_delegate ownInfoViewController];
     }
     else
@@ -823,7 +822,6 @@
 - (void)readBtn
 {
     [_delegate readTotalInformation:self.sectionNum];
-
 }
 
 // 点击我要报名

@@ -10,6 +10,9 @@
 
 @interface FirstTabBarController : UITabBarController<UIScrollViewDelegate,UITableViewDelegate,UITableViewDataSource>
 
+@property (strong, nonatomic) IBOutlet UIBarButtonItem *noticeItem;
+
+
 
 - (IBAction)noticeBar:(id)sender;
 
@@ -17,6 +20,12 @@
 
 @property (weak, nonatomic) IBOutlet UIButton *nowAddressBtn;
 
+- (void)addRedPoint;
+- (void) cancelRedPoint;
+
+- (void) refreshData;
+
 - (void) setTableViewHidden;
+
 
 @end

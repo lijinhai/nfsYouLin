@@ -434,14 +434,12 @@
     CGSize size = [_nicknameLabel.text sizeWithAttributes:[NSDictionary dictionaryWithObjectsAndKeys:fnt,NSFontAttributeName, nil]];
     _nicknameLabel.frame=CGRectMake(screenWidth-size.width-40, 15, size.width, 20);
     _nicknameLabel.tag=2016;
-    
+    	
     /*职业*/
     _professionLabel.font = fnt;
     CGSize professionSize = [_professionLabel.text sizeWithAttributes:[NSDictionary dictionaryWithObjectsAndKeys:fnt,NSFontAttributeName, nil]];
     _professionLabel.frame=CGRectMake(screenWidth-professionSize.width-40, 15, professionSize.width, 20);
     _professionLabel.tag=614;
-    
-    
     
     static NSString *CellIdentifier = @"infoid";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];

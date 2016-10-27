@@ -1818,40 +1818,44 @@ static BOOL upState = YES;
     
     NSString* title = [userInfo valueForKey:@"title"];
     NSString* content = [userInfo valueForKey:@"content"];
-    NSArray* contentArr = [content componentsSeparatedByString:@":"];
-    
-    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-    NSInteger userId = [[defaults valueForKey:@"userId"] integerValue];
-    NSInteger topicId = [[contentArr objectAtIndex:0] integerValue];
-    
-    
-    if([title isEqualToString:@"push_new_topic"])
+    if([content isKindOfClass:[NSString class]])
     {
-        NSInteger senderId = [[contentArr objectAtIndex:1] integerValue];
-        if(senderId != userId)
+        NSArray* contentArr = [content componentsSeparatedByString:@":"];
+        
+        NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+        NSInteger userId = [[defaults valueForKey:@"userId"] integerValue];
+        NSInteger topicId = [[contentArr objectAtIndex:0] integerValue];
+        
+        
+        if([title isEqualToString:@"push_new_topic"])
         {
-            noticeView.hidden = NO;
-            noticeBtn.hidden = NO;
-        }
-    }
-    else if([title isEqualToString:@"push_del_topic"])
-    {
-        for(int i = 0; i < [self.neighborDataArray count] ;i++)
-        {
-            NeighborDataFrame* neighborDataFrame = self.neighborDataArray[i];
-            NeighborData* neighborData = neighborDataFrame.neighborData;
-            
-            if([neighborData.topicId integerValue] == topicId)
+            NSInteger senderId = [[contentArr objectAtIndex:1] integerValue];
+            if(senderId != userId)
             {
-                [self.neighborDataArray removeObject:neighborDataFrame];
-                sectionCount = sectionCount - 1;
-                break;
+                noticeView.hidden = NO;
+                noticeBtn.hidden = NO;
             }
         }
-        
-        [self.tableView reloadData];
-    }
+        else if([title isEqualToString:@"push_del_topic"])
+        {
+            for(int i = 0; i < [self.neighborDataArray count] ;i++)
+            {
+                NeighborDataFrame* neighborDataFrame = self.neighborDataArray[i];
+                NeighborData* neighborData = neighborDataFrame.neighborData;
+                
+                if([neighborData.topicId integerValue] == topicId)
+                {
+                    [self.neighborDataArray removeObject:neighborDataFrame];
+                    sectionCount = sectionCount - 1;
+                    break;
+                }
+            }
+            
+            [self.tableView reloadData];
+        }
 
+    }
+   
 }
 
 
