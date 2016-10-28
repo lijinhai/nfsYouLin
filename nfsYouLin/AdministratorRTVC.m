@@ -79,6 +79,8 @@
     _panGesture = self.tableView.panGestureRecognizer;
     [_panGesture addTarget:self action:@selector(handlePan:)];
     [self.view addSubview:_tableView];
+    self.userADAry = [[NSMutableArray alloc] init];
+    self.neighborDataArray = [[NSMutableArray alloc] init];
     [self initWaitImageAnimate];
     [self getUserRepairPosts];
     
@@ -102,8 +104,16 @@ static NSString * const reuseIdentifier = @"Cell";
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-     self.userADAry = [[NSMutableArray alloc] init];
-     self.neighborDataArray = [[NSMutableArray alloc] init];
+    if(segment.selectedSegmentIndex == 0)
+    {
+      
+        NSLog(@"当前的索引是0");
+        [self getUserRepairPosts];
+    }else{
+    
+        NSLog(@"当前的索引是1");
+        [self getUserRepairedPosts];
+    }
     //[self getUserRepairPosts];
 }
 -(void)setSegmentedControl{
@@ -156,7 +166,6 @@ static NSString * const reuseIdentifier = @"Cell";
             line2.backgroundColor=UIColorFromRGB(0xFFBA02);
             line1.backgroundColor=[UIColor darkGrayColor];
             [self getUserRepairedPosts];
-            //[self getCompleteRepairPosts];
             break;
         }
         default:
@@ -239,6 +248,7 @@ static NSString * const reuseIdentifier = @"Cell";
              @"publishText" : responseDict[@"topicContent"],
              @"picturesArray" : responseDict[@"mediaFile"],
              @"topicTime" : [NSString stringWithFormat:@"%@", responseDict[@"topicTime"]],
+             @"processData" : responseDict[@"process_data"],
              @"systemTime" : responseDict[@"systemTime"],
              @"senderName" : responseDict[@"senderName"],
              @"senderId" : responseDict[@"senderId"],
@@ -386,7 +396,7 @@ static NSString * const reuseIdentifier = @"Cell";
     [manager POST:POST_URL parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        NSLog(@"维修用户的网络请求:%@", responseObject);
+        //NSLog(@"维修用户的网络请求:%@", responseObject);
         //NSMutableArray *infoArray = [responseObject valueForKey:@"info"];
         if([responseObject isKindOfClass:[NSArray class]])
         {
@@ -473,7 +483,7 @@ static NSString * const reuseIdentifier = @"Cell";
     [manager POST:POST_URL parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        NSLog(@"维修用户的网络请求:%@", responseObject);
+        //NSLog(@"维修用户的网络请求:%@", responseObject);
         //NSMutableArray *infoArray = [responseObject valueForKey:@"info"];
         if([responseObject isKindOfClass:[NSArray class]])
         {
@@ -606,5 +616,8 @@ static NSString * const reuseIdentifier = @"Cell";
         return;
     }];
 }
+
+
+
 
 @end

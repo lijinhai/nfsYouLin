@@ -20,6 +20,8 @@
 @property (strong, nonatomic) NSString* accountName;
 // 家庭住址
 @property (strong, nonatomic) NSString* familyName;
+// 维修进度数据
+@property (strong,nonatomic) NSString* processData;
 // 电话
 @property (strong, nonatomic) NSString* phone;
 // 昵称

@@ -52,6 +52,11 @@
             
             [self showBussnessNameView:frame];
         }
+        else if([flag isEqualToString:@"repairStatus"])
+        {
+        
+            [self updateRepairStatusView:frame];
+        }
         
     }
     
@@ -272,6 +277,40 @@
     [self addSubview:self.backView];
 }
 
+//更新报修状态
+-(void)updateRepairStatusView:(CGRect) frame
+{
+
+    self.backgroundColor = [UIColor clearColor];
+    self.backView = [[UIView alloc] initWithFrame:CGRectMake(60, (frame.size.height - 80) / 2, frame.size.width - 120, 80)];
+    self.backView.backgroundColor = [UIColor lightGrayColor];
+    
+    self.repairTV = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.backView.frame), 40)];
+    self.repairTV.font = [UIFont systemFontOfSize:15];
+    self.repairTV.textAlignment = NSTextAlignmentCenter;
+    self.repairTV.text = @"是否更新当前进度";
+    self.repairTV.editable = NO;
+    self.repairTV.bounces = NO;
+    self.repairTV.textColor = [UIColor blackColor];
+    
+    [self.backView addSubview:self.repairTV];
+    
+    self.repairNo = [[UIButton alloc] initWithFrame:CGRectMake(0, 41, CGRectGetWidth(self.backView.frame) / 2 - 0.5, 39)];
+    [self.repairNo setTitle:@"取消" forState:UIControlStateNormal];
+    self.repairNo.backgroundColor = [UIColor whiteColor];
+    [self.repairNo setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [self.backView addSubview:self.repairNo];
+    
+    self.repairYes = [[UIButton alloc] initWithFrame:CGRectMake(CGRectGetWidth(self.backView.frame) / 2 + 0.5 , 41, CGRectGetWidth(self.backView.frame) / 2 - 0.5, 39)];
+    [self.repairYes setTitle:@"确定" forState:UIControlStateNormal];
+    [self.repairYes setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+    self.repairYes.backgroundColor = [UIColor whiteColor];
+    [self.repairYes setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [self.backView addSubview:self.repairYes];
+    
+    [self addSubview:self.backView];
+
+}
 // 删除报修
 - (void) initDeleteRepairView: (CGRect) frame
 {

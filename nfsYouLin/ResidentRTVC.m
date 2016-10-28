@@ -107,7 +107,7 @@
 
     self.repairDL.text = _residenterRepairData.repairDetailInfo;
     CGSize sizeD = [self.repairDL.text sizeWithAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIFont systemFontOfSize:10],NSFontAttributeName, nil]];
-    self.repairDL.frame = CGRectMake(63,CGRectGetMaxY(_nickNL.frame)+5,screenWidth*2/3, sizeD.height);
+    self.repairDL.frame = CGRectMake(63,CGRectGetMaxY(_nickNL.frame)+5,screenWidth*2/3-80, sizeD.height);
     self.repairDL.numberOfLines = 0;
 
     NSString* timeInterval = [StringMD5 calculateTimeInternal:[_residenterRepairData.systemTime  floatValue] / 1000 old:[_residenterRepairData.repairTime floatValue] / 1000];

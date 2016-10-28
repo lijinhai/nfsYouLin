@@ -12,6 +12,11 @@
 #import "UIImageView+WebCache.h"
 #import "StringMD5.h"
 #import "ChatViewController.h"
+#import "DialogView.h"
+#import "BackgroundView.h"
+#import "MBProgressHUBTool.h"
+#import "AFHTTPSessionManager.h"
+#import "SqliteOperation.h"
 
 @interface DetailRepairVC ()
 
@@ -34,12 +39,25 @@
     UIImageView* scheduIV;
     UILabel *line1;
     UILabel *line2;
-
+    
+    UILabel* timeLine;
+    UILabel *tipLab1;
+    UILabel *tipLab2;
+    UILabel *tipLab3;
+    DialogView* dialogView;
+    UIView* backgroundView;
+    UInt64 timeMid;
+    UInt64 timeLast;
+    
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    backgroundView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    backgroundView.backgroundColor = [UIColor grayColor];
+    backgroundView.alpha = 0.8;
+    dialogView = nil;
+
     // Do any additional setup after loading the view.
 }
 
@@ -48,6 +66,7 @@
     [super viewWillAppear:animated];
      self.view.backgroundColor = [UIColor whiteColor];
     [self setContentData];
+    
     
 }
 
@@ -275,34 +294,45 @@
 
 -(void) touchDownSchedu:(id)sender{
 
-    UILabel* timeLine = [[UILabel alloc] initWithFrame:CGRectMake(45, CGRectGetMaxY(line2.frame)+30, screenWidth-90, 2.5)];
+    timeLine = [[UILabel alloc] initWithFrame:CGRectMake(45, CGRectGetMaxY(line2.frame)+30, screenWidth-90, 2.5)];
     timeLine.backgroundColor = [UIColor lightGrayColor];
-    UIView* roundbegin = [[UIView alloc] initWithFrame:CGRectMake(0, -3.5, 10, 10)];
+    timeLine.userInteractionEnabled = YES;
+    UIButton* roundbegin = [[UIButton alloc] initWithFrame:CGRectMake(0, -3.5, 10, 10)];
     roundbegin.backgroundColor = [UIColor lightGrayColor];
     roundbegin.layer.masksToBounds = YES;
     roundbegin.layer.cornerRadius = 5;
-    UILabel* tipLab1 = [[UILabel alloc] initWithFrame:CGRectMake(30, CGRectGetMaxY(timeLine.frame)+15, 60, 20)];
+    tipLab1 = [[UILabel alloc] initWithFrame:CGRectMake(30, CGRectGetMaxY(timeLine.frame)+15, 60, 20)];
     tipLab1.font = [UIFont systemFontOfSize:13.0f];
     tipLab1.text = @"等待审核";
     tipLab1.textColor = [UIColor blackColor];
     
-    UIView* roundmid = [[UIView alloc] initWithFrame:CGRectMake((screenWidth-90)/2, -3.5, 10, 10)];
+    UIButton* roundmid = [[UIButton alloc] initWithFrame:CGRectMake((screenWidth-90)/2, -3.5, 10, 10)];
     roundmid.backgroundColor = [UIColor lightGrayColor];
     roundmid.layer.masksToBounds = YES;
     roundmid.layer.cornerRadius = 5;
-    UILabel* tipLab2 = [[UILabel alloc] initWithFrame:CGRectMake((screenWidth-90)/2+30, CGRectGetMaxY(timeLine.frame)+15, 60, 40)];
+    roundmid.userInteractionEnabled = YES;
+    tipLab2 = [[UILabel alloc] initWithFrame:CGRectMake((screenWidth-90)/2+30, CGRectGetMaxY(timeLine.frame)+15, 60, 40)];
     tipLab2.font = [UIFont systemFontOfSize:13.0f];
     tipLab2.text = @"审核通过派人维修";
     tipLab2.numberOfLines = 0 ;
+    tipLab2.userInteractionEnabled = YES;
+    tipLab2.tag = 1;
+    UITapGestureRecognizer *tapGR0 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tGRepairStatus:)];
+    [tipLab2 addGestureRecognizer:tapGR0];
     
-    
-    UIView* roundlast = [[UIView alloc] initWithFrame:CGRectMake(screenWidth-90, -3.5, 10, 10)];
+    UIButton* roundlast = [[UIButton alloc] initWithFrame:CGRectMake(screenWidth-90, -3.5, 10, 10)];
     roundlast.backgroundColor = [UIColor lightGrayColor];
     roundlast.layer.masksToBounds = YES;
     roundlast.layer.cornerRadius = 5;
-    UILabel* tipLab3 = [[UILabel alloc] initWithFrame:CGRectMake(screenWidth-50, CGRectGetMaxY(timeLine.frame)+15, 60, 20)];
+    roundlast.userInteractionEnabled = YES;
+    [roundlast addTarget:self action:@selector(tGRepairStatus:) forControlEvents:UIControlEventTouchUpInside];
+    tipLab3 = [[UILabel alloc] initWithFrame:CGRectMake(screenWidth-50, CGRectGetMaxY(timeLine.frame)+15, 60, 20)];
     tipLab3.font = [UIFont systemFontOfSize:13.0f];
     tipLab3.text = @"已维修";
+    tipLab3.userInteractionEnabled = YES;
+    tipLab3.tag = 2;
+    UITapGestureRecognizer *tapGR = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tGRepairStatus:)];
+    [tipLab3 addGestureRecognizer:tapGR];
     
     [timeLine addSubview:roundmid];
     [timeLine addSubview:roundlast];
@@ -316,6 +346,7 @@
         UIImageView* radius1 = [[UIImageView alloc] initWithFrame:CGRectMake(44.5, CGRectGetMaxY(timeLine.frame)-7, 12, 12)];
         radius1.image = [UIImage imageNamed:@"hongdian"];
         [self.view addSubview:radius1];
+        [tipLab3 setUserInteractionEnabled:NO];
         
     }else if([_repairF isEqualToString:@"维修完成"])
     {
@@ -329,6 +360,8 @@
         radius3.image = [UIImage imageNamed:@"hongdian"];
         [self.view addSubview:radius3];
         [timeLine setBackgroundColor:[UIColor redColor]];
+        [timeLine setUserInteractionEnabled:NO];
+        
     
     }else{
     
@@ -341,11 +374,192 @@
         UILabel* fugaiLine = [[UILabel alloc] initWithFrame:CGRectMake(56, CGRectGetMaxY(line2.frame)+30, (screenWidth-90)/2-11, 2.5)];
         fugaiLine.backgroundColor = [UIColor redColor];
         [self.view addSubview:fugaiLine];
-    
+        [tipLab2 setUserInteractionEnabled:NO];
+       
     }
     
 
 
 }
+-(void)tGRepairStatus:(id)sender{
 
+    UITapGestureRecognizer * singleTap = (UITapGestureRecognizer *)sender;
+    DialogView* repairView = [[DialogView alloc] initWithFrame:backgroundView.frame  View:backgroundView Flag:@"repairStatus"];
+    backgroundView.alpha = 0.0f;
+    repairView.alpha = 0.0f;
+    [self.view  addSubview:backgroundView];
+    [self.view  addSubview:repairView];
+    [UIView animateWithDuration:0.3f animations:^{
+        backgroundView.alpha = 0.8f;
+        repairView.alpha = 1.0f;
+    }];
+    dialogView = repairView;
+    UIButton* okBtn = repairView.repairYes;
+     okBtn.tag = [singleTap view].tag;
+    NSLog(@"okBtn.tag is %ld",okBtn.tag);
+    [okBtn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+    [okBtn addTarget:self action:@selector(okRepairAction:) forControlEvents:UIControlEventTouchUpInside];
+    
+    UIButton* cancelBtn = repairView.repairNo;
+    [cancelBtn addTarget:self action:@selector(cancelRepairAction:) forControlEvents:UIControlEventTouchUpInside];
+
+}
+
+// 确定更新维修进度
+- (void) okRepairAction: (id) sender
+{
+    NSLog(@" sender id is %ld",[sender tag]);
+    NSInteger statusVal = 0;
+    if([sender tag]==1)
+    {
+        UIImageView* radius2 = [[UIImageView alloc] initWithFrame:CGRectMake((screenWidth-90)/2+45, CGRectGetMaxY(timeLine.frame)-7, 12, 12)];
+        radius2.image = [UIImage imageNamed:@"hongdian"];
+        [self.view addSubview:radius2];
+        UILabel* fugaiLine = [[UILabel alloc] initWithFrame:CGRectMake(56, CGRectGetMaxY(line2.frame)+30, (screenWidth-90)/2-11, 2.5)];
+        fugaiLine.backgroundColor = [UIColor redColor];
+        [self.view addSubview:fugaiLine];
+        [tipLab2 setUserInteractionEnabled:NO];
+        [tipLab3 setUserInteractionEnabled:YES];
+        statusVal = 2;
+    
+    }else{
+    
+        UIImageView* radius3 = [[UIImageView alloc] initWithFrame:CGRectMake(screenWidth-44.5, CGRectGetMaxY(timeLine.frame)-7, 12, 12)];
+        radius3.image = [UIImage imageNamed:@"hongdian"];
+        [self.view addSubview:radius3];
+        UILabel* fugaiLine = [[UILabel alloc] initWithFrame:CGRectMake(34+(screenWidth-45)/2, CGRectGetMaxY(line2.frame)+30, (screenWidth-45)/2-33.5, 2.5)];
+        fugaiLine.backgroundColor = [UIColor redColor];
+        [self.view addSubview:fugaiLine];
+        [tipLab2 setUserInteractionEnabled:NO];
+        [tipLab3 setUserInteractionEnabled:NO];
+        statusVal = 3;
+    
+    }
+     NSString* proStr = [self dealProcessData:[sender tag]];
+    [self alertRepairStatus:statusVal proData:proStr];
+    [backgroundView removeFromSuperview];
+    if(dialogView)
+    {
+        [dialogView removeFromSuperview];
+         dialogView = nil;
+    }
+    
+}
+// processData处理
+-(NSString*) dealProcessData:(NSInteger)statusId
+{
+
+    NSString *processDataStr = [[self.neighborData.processData stringByReplacingOccurrencesOfString:@" " withString:@""] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"{ }"]];
+    NSArray *array = [processDataStr componentsSeparatedByString:@","]; //从字符A中分隔成2个元素的数组
+    NSString *strOne = nil;
+    NSString *strTwo = nil;
+    NSString *strThree = nil;
+    for(int i=0;i<[array count];i++)
+    {
+        NSArray *subArray = [array[i] componentsSeparatedByString:@":"];
+        for(int j=0;j<[subArray count];j++)
+        {
+            if([[NSString stringWithFormat:@"%@",subArray[j]] isEqualToString:@"'1'"]||[subArray[j] isEqualToString:@"1"])
+            {
+                
+                strOne = [NSString stringWithFormat:@"%@%@",@"{",array[i]];
+                NSLog(@"strOne is %@",strOne);
+                
+            }else if([subArray[j] isEqualToString:@"'2'"]||[subArray[j] isEqualToString:@"2"]){
+                if(statusId == 1)
+                {
+                 timeMid = [[NSDate date] timeIntervalSince1970]*1000;
+                 strTwo = [NSString stringWithFormat:@"%@%@%@%@%@",@"'2'",@":",@"'",[NSString stringWithFormat:@"%lld",timeMid],@"'"];
+                }else{
+                
+                    strTwo = [NSString stringWithFormat:@"%@",array[i]];
+                }
+                NSLog(@"strTwo is %@",strTwo);
+                
+            }else if([subArray[j] isEqualToString:@"'3'"]||[subArray[j] isEqualToString:@"3"]){
+                
+                if(statusId == 2)
+                {
+                    
+                    timeLast = [[NSDate date] timeIntervalSince1970]*1000;
+                    strThree = [NSString stringWithFormat:@"%@%@%@%@%@",@"'3'",@":",@"'",[NSString stringWithFormat:@"%lld",timeMid],@"'}"];
+                    
+                }else{
+                
+                    strThree = [NSString stringWithFormat:@"%@%@",array[i],@"}"];
+                }
+                 NSLog(@"strThree is %@",strThree);
+            }
+        }
+        
+    }
+    NSString *lstStr = [NSString stringWithFormat:@"%@%@%@%@%@",strOne,@",",strTwo,@",",strThree];
+    NSLog(@"lstStr:%@",lstStr);
+    return  lstStr;
+
+}
+
+// 取消弹出设置框
+- (void) cancelRepairAction: (id) sender
+{
+    
+    [backgroundView removeFromSuperview];
+    if(dialogView)
+    {
+        [dialogView removeFromSuperview];
+        dialogView = nil;
+    }
+    
+}
+//设置物业报修状态
+-(void) alertRepairStatus:(NSInteger) statusId proData:(NSString*) proDataStr{
+
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSString* communityId = [defaults stringForKey:@"communityId"];
+    NSString* userId = [defaults stringForKey:@"userId"];
+    NSString* processData = proDataStr;
+    NSString* processStatus = [NSString stringWithFormat:@"%ld",statusId];
+    NSString* topicId = self.neighborData.topicId;
+    AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
+    manager.securityPolicy.allowInvalidCertificates = YES;
+    [manager.securityPolicy setValidatesDomainName:NO];
+    
+    NSString* MD5String = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"user_id%@community_id%@topic_id%@process_data%@process_status%@",userId,communityId, topicId,processData,processStatus]];
+    NSString* hashString = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"%@1", MD5String]];
+    
+    NSDictionary* parameter = @{@"user_id" : userId,
+                                @"community_id" : communityId,
+                                @"topic_id" : topicId,
+                                @"process_data" : processData,
+                                @"process_status" : processStatus,
+                                @"apitype" : @"apiproperty",
+                                @"tag" :  @"setstatus",
+                                @"salt" : @"1",
+                                @"hash" : hashString,
+                                @"keyset" : @"user_id:community_id:topic_id:process_data:process_status:",
+                                };
+    
+    [manager POST:POST_URL parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSLog(@"获取数据是%@",responseObject);
+        if([[responseObject objectForKey:@"flag"] isEqualToString:@"ok"])
+        {
+        
+            return;
+            
+        }else{
+        
+            [MBProgressHUBTool textToast:self.view Tip:@"请检查网络"];
+            return;
+        }
+       
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"请求失败:%@", error.description);
+        
+        return;
+    }];
+
+
+}
 @end

@@ -39,7 +39,10 @@
 // 删除全部
 @property(strong, nonatomic)UIControl *AllCtl;
 @property(strong, nonatomic)UILabel* AllLab;
-
+// 更新维修状态
+@property(strong, nonatomic)UITextView* repairTV;
+@property(strong, nonatomic)UIButton* repairYes;
+@property(strong, nonatomic)UIButton* repairNo;
 
 
 
