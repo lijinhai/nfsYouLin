@@ -21,6 +21,8 @@
 // 上拉刷新
 @property (assign, nonatomic)BOOL refresh;
 
+- (NeighborData*) readInformation:(NSInteger)topicId;
+
 - (void) handleTopicNotification:(NSDictionary *)userInfo;
 
 @end

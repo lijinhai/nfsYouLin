@@ -27,7 +27,9 @@
 #import "NoticeMessageView.h"
 #import "PushNoticeCell.h"
 #import "JSONKit.h"
-
+#import "StringMD5.h"
+#import "NeighborDetailTVC.h"
+#import "ErrorVC.h"
 
 @implementation FirstTabBarController
 {
@@ -48,6 +50,9 @@
     
     UIButton* noticeBtn;
     UIView* badge;
+    
+    UIView* loadingView;
+    UIViewController* rootVC;
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -88,6 +93,8 @@
       forControlEvents:UIControlEventTouchUpInside
      ];
     //NSLog(@"nowAddressBtn text is %@",_nowAddressBtn.titleLabel.text);
+    
+    [self refreshData];
 }
 
 -(void)popupAddressSettingTable:(id)sender{
@@ -118,6 +125,7 @@
 {
     UIWindow *window = [UIApplication sharedApplication].keyWindow;
     window.rootViewController = self;
+    rootVC = window.rootViewController.navigationController;
     
     noticeBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
     [noticeBtn setImage:[UIImage imageNamed:@"title_icon_new_msg.png"] forState:UIControlStateNormal];
@@ -129,64 +137,82 @@
     badge.layer.masksToBounds = YES;
     self.noticeItem.customView = noticeBtn;
     
-    [self initNoticeView];
-    
-    // 环信登录
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     NSString* userId = [defaults stringForKey:@"userId"];
     NSString* communityId = [defaults stringForKey:@"communityId"];
     NSInteger type = [[defaults stringForKey:@"type"] integerValue];
+    NSString* nick = [defaults stringForKey:@"nick"];
     
+    [self initViewBar];
+    [self initNoticeView];
+    [self initListView];
+    [self initLoadingView];
+    [self huanXinLogin:userId name:nick];
+    [self jpushInit:userId community:communityId type:type];
+    [self initGlobalController];
+    
+}
+
+#pragma mark -环信登录
+- (void) huanXinLogin:(NSString*) userId name:(NSString*)nick
+{
+    // 环信登录
     [[EMClient sharedClient] asyncLoginWithUsername:userId password:userId success:^{
         NSLog(@"环信登陆成功");
-        NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-        NSString* nick = [defaults stringForKey:@"nick"];
-        NSLog(@"环信nick = %@",nick);
         //设置环信推送设置
         [[EMClient sharedClient] setApnsNickname:nick];
         
         EMPushOptions *options = [[EMClient sharedClient] pushOptions];
         options.displayStyle = EMPushDisplayStyleMessageSummary;
         [[EMClient sharedClient] updatePushOptionsToServer];
-
+        
     } failure:^(EMError *aError) {
         NSLog(@"环信登录失败 aError:%@",aError.errorDescription);
     }];
-    
+
+}
+
+#pragma mark -设置极光推送
+- (void) jpushInit:(NSString *)userId community:(NSString *)communityId type:(NSInteger)type
+{
     // 设置极光推送设置
     NSString* jpushAlias = [NSString stringWithFormat:@"youlin_tag_%@",userId];
     NSMutableSet* jpushTag = [[NSMutableSet alloc] initWithObjects: [NSString stringWithFormat:@"community_topic_%@",communityId],
-                                                      [NSString stringWithFormat:@"push_news_%@",communityId],nil];
+                              [NSString stringWithFormat:@"push_news_%@",communityId],nil];
     
     if(type == 4)
     {
         [jpushTag addObject:@"property_notice_1"];
     }
     
-    NSLog(@"type = %ld,jushTag = %@", type, jpushTag);
-    
     [JPUSHService setTags:jpushTag alias:jpushAlias
-        fetchCompletionHandle:
-            ^(int iResCode, NSSet *iTags, NSString *iAlias) {
-        NSLog(@"-----++++-------JPUSHService setTag code = %d",iResCode);
-    }];
-    
-    
-//    [self JGPushSetNet];
-    
-    [self setupSubviews];
-    [ChatDemoHelper shareHelper].discoveryVC = _discoveryVC;
-    [ChatDemoHelper shareHelper].neighborVC = _neighborVC;
+    fetchCompletionHandle:
+     ^(int iResCode, NSSet *iTags, NSString *iAlias) {
+         NSLog(@"-----++++-------JPUSHService setTag code = %d",iResCode);
+     }];
+
+}
+
+#pragma mark -初始化全局控制器
+- (void) initGlobalController
+{
     AppDelegate* app = (AppDelegate*)[[UIApplication sharedApplication] delegate];
     if(!app.friendVC)
     {
         app.friendVC = [[FriendsVC alloc] init];
     }
-
+    
+    [ChatDemoHelper shareHelper].discoveryVC = _discoveryVC;
+    [ChatDemoHelper shareHelper].neighborVC = _neighborVC;
     [ChatDemoHelper shareHelper];
     [[ChatDemoHelper shareHelper] asyncPushOptions];
     [ChatDemoHelper shareHelper].friendVC = app.friendVC;
     [ChatDemoHelper shareHelper].mainVC = self;
+}
+
+#pragma mark -初始化下拉视图
+-(void) initListView
+{
     UIViewController* controller = self;
     _listTableView = [[ListTableView alloc] initWithFrame:CGRectMake(self.view.frame.size.width - 150, CGRectGetMaxY(self.navigationController.navigationBar.frame), 150, 200)];
     
@@ -194,7 +220,7 @@
     BackgroundView* backGroundView = _backGroundView;
     NSArray* nameArray = @[@"新建话题", @"发起活动", @"闲品会", @"邀请"];
     NSArray* imageArray = @[@"huati", @"huodong", @"change", @"nav_yaoqinghaoyou"];
-
+    
     [_listTableView setListTableView:nameArray image:imageArray block:^(NSString* string){
         NSLog(@"string = %@",string);
         [backGroundView removeFromSuperview];
@@ -203,8 +229,8 @@
             NSLog(@"开始新建话题~~");
             CreateTopicVC* topicVC = [[CreateTopicVC alloc] init];
             NSMutableDictionary* dict = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-                                        @"create",@"option",
-                                        nil];
+                                         @"create",@"option",
+                                         nil];
             [topicVC setTopicInfo:dict];
             [controller.navigationController pushViewController:topicVC animated:YES];
         }
@@ -216,13 +242,13 @@
                                          nil];
             [activityVC setTopicInfo:dict];
             [controller.navigationController pushViewController:activityVC animated:YES];
-
+            
         }
         else if([string isEqualToString:@"闲品会"])
         {
             ExchangeVC* exchangeVC = [[ExchangeVC alloc] init];
             [controller.navigationController pushViewController:exchangeVC animated:YES];
-
+            
         }
         else if([string isEqualToString:@"邀请"])
         {
@@ -231,15 +257,13 @@
             UIBarButtonItem* backItemTitle = [[UIBarButtonItem alloc] initWithTitle:@"邀请好友" style:UIBarButtonItemStylePlain target:nil action:nil];
             [controller.navigationItem setBackBarButtonItem:backItemTitle];
             [controller.navigationController pushViewController:inviteVC animated:YES];
-
+            
         }
         
     }];
-       // 去掉tableview 顶部空白区域
-//    self.automaticallyAdjustsScrollViewInsets = false;
-    
-    
+
 }
+
 
 #pragma mark -初始化消息视图
 - (void) initNoticeView
@@ -335,13 +359,23 @@
     
     [UIView transitionWithView:noticeBgV duration:0.3 options:UIViewAnimationOptionCurveEaseInOut
                     animations:^{
-                        noticeBgV.frame = CGRectMake(100, 20, CGRectGetWidth(self.view.frame) - 100,
+            noticeBgV.frame = CGRectMake(100, 20, CGRectGetWidth(self.view.frame) - 100,
                                                      CGRectGetHeight(self.view.frame));
-                    } completion:nil];
+    } completion:nil];
 
 }
 
-- (void)setupSubviews
+#pragma -mark 结束加载和取消消息视图
+- (void) finishNoticeBar
+{
+    [loadingView removeFromSuperview];
+    [noticeView removeFromSuperview];
+    [noticeBgV removeFromSuperview];
+}
+
+
+#pragma mark 设置页面标签
+- (void)initViewBar
 {
     
     UIColor *fontColor= [UIColor colorWithRed:255/255.0 green:186/255.0 blue:2/255.0 alpha:1];
@@ -467,7 +501,24 @@
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-
+    NSInteger row = indexPath.row;
+    NSString* contentStr = [[dataArray objectAtIndex:row] valueForKey:@"content"];
+    NSDictionary* content =  (NSDictionary*)[contentStr objectFromJSONString];
+    NSInteger pushType = [[content valueForKey:@"pushType"] integerValue];
+    switch (pushType) {
+        case 6:
+        {
+            NSInteger topicId = [[content valueForKey:@"topicId"] integerValue];
+            NeighborData* neighborData = [[ChatDemoHelper shareHelper].neighborVC readInformation:topicId];
+            [rootVC.view addSubview:loadingView];
+            [self updateDataSqlAndArr:row];
+            [self intoReplyViewNet:neighborData];
+            break;
+        }
+        default:
+            break;
+    }
+    
 }
 
 - (void) tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
@@ -505,6 +556,8 @@
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if (editingStyle == UITableViewCellEditingStyleDelete) {
+        NSDictionary* dict = [dataArray objectAtIndex:indexPath.row];
+        [self deleteDataSql:[[dict valueForKey:@"recordId"] integerValue]];
         [dataArray removeObjectAtIndex:indexPath.row];
         [noticeTView deleteRowsAtIndexPaths:
                 [NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
@@ -535,7 +588,6 @@
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    
     if ([scrollView isKindOfClass:[UITableView class]]) {
         return;
     }
@@ -550,13 +602,60 @@
     noticeBgV.frame = CGRectMake(X, Y, W, H);
 }
 
+#pragma mark -数据修改
+- (void) updateDataSqlAndArr:(NSInteger) num
+{
+    
+    NSDictionary* content = [dataArray objectAtIndex:num];
+    NSMutableDictionary* dict = [NSMutableDictionary dictionaryWithDictionary:content];
+    dict[@"type"] = @"0";
+    [dataArray replaceObjectAtIndex:num withObject:dict];
+    NSInteger recordId = [[dict valueForKey:@"recordId"] integerValue];
+    AppDelegate* app = (AppDelegate*)[[UIApplication sharedApplication] delegate];
+    FMDatabase* db = app.db;
+    if([db open])
+    {
+        NSString* updateSql = [NSString stringWithFormat:@"update table_push_record SET type = '0' where record_id = %ld",recordId];
+        BOOL isSuccess = [db executeUpdate:updateSql];
+        if(isSuccess)
+        {
+            NSLog(@"db: type update success!");
+        }
+        else{
+            NSLog(@"db: type update failed!");
+        }
+    }
+    [db close];
+}
+
+
+#pragma mark -数据删除
+- (void) deleteDataSql:(NSInteger) recordId
+{
+    AppDelegate* app = (AppDelegate*)[[UIApplication sharedApplication] delegate];
+    FMDatabase* db = app.db;
+    if([db open])
+    {
+        NSString *deleteSql = [NSString stringWithFormat:
+                               @"delete from table_push_record where record_id = '%ld'",
+                               recordId];
+        BOOL res = [db executeUpdate:deleteSql];
+        if (!res) {
+            NSLog(@"error when delete db table_push_record");
+        } else {
+            NSLog(@"success to delete db table_push_record");
+        }
+    }
+
+}
+
 #pragma mark -刷新消息列表
 - (void)refreshData
 {
     [self selectDataSql];
 }
 
-#pragma mark -数据查询
+#pragma mark -数据获取
 - (void) selectDataSql
 {
     BOOL point = true;
@@ -570,6 +669,10 @@
             NSString *content =  [set stringForColumn:@"content"];
             NSString *commnityId = [set stringForColumn:@"community_id"];
             NSString *type = [set stringForColumn:@"type"];
+            NSString* recordId = [set stringForColumn:@"record_id"];
+            NSString* topicId = [set stringForColumn:@"topic_id"];
+            NSString* userId = [set stringForColumn:@"user_id"];
+            NSLog(@"topic_id = %@ userId = %@", topicId, userId);
             
             if([type integerValue]== 1)
             {
@@ -581,6 +684,7 @@
                                   content, @"content",
                                   commnityId, @"commnityId",
                                   type, @"type",
+                                  recordId, @"recordId",
                                   nil];
             [dataArray addObject:dict];
         }
@@ -594,6 +698,7 @@
     {
         [self addRedPoint];
     }
+    [noticeTView reloadData];
 }
 
 #pragma mark -消息添加红点
@@ -607,5 +712,98 @@
 {
     [badge removeFromSuperview];
 }
+
+#pragma mark -创建加载页面
+- (void) initLoadingView
+{
+    loadingView = [[UIView alloc] initWithFrame:self.view.bounds];
+    loadingView.backgroundColor = [UIColor blackColor];
+    loadingView.alpha = 0.2;
+    
+    UIActivityIndicatorView* indicator = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(screenWidth / 2 - 20, screenHeight / 2, 40, 40)];
+    [loadingView addSubview:indicator];
+    indicator.hidesWhenStopped = YES;
+    indicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhiteLarge;
+    indicator.color = [UIColor yellowColor];
+    [indicator startAnimating];
+    
+    UILabel* loadL = [[UILabel alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(indicator.frame), screenWidth, 20)];
+    loadL.text = @"加载中...";
+    loadL.textColor = [UIColor yellowColor];
+    loadL.textAlignment = NSTextAlignmentCenter;
+    [loadingView addSubview:loadL];
+    
+}
+
+#pragma mark -network进入回复页面
+- (void)intoReplyViewNet:(NeighborData*) neighborData
+{
+    NSLog(@"进入回复页面");
+    NSInteger topicId = [[neighborData valueForKey:@"topicId"] integerValue];
+    NSInteger senderId = [[neighborData valueForKey:@"senderId"] integerValue];
+    NSInteger num = [neighborData.viewCount integerValue] + 1;
+    neighborData.viewCount = [NSString stringWithFormat:@"%ld",num];
+    
+    
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSString* communityId = [defaults stringForKey:@"communityId"];
+    NSString* userId = [defaults stringForKey:@"userId"];
+    
+    // 获取帖子状态网络请求
+    AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
+    manager.securityPolicy.allowInvalidCertificates = YES;
+    [manager.securityPolicy setValidatesDomainName:NO];
+    NSString* MD5String = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"user_id%@community_id%@topic_id%ldsender_id%ld",userId,communityId,topicId,senderId]];
+    NSString* hashString = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"%@1", MD5String]];
+    
+    NSDictionary* parameter = @{@"user_id" : userId,
+                                @"community_id" : communityId,
+                                @"topic_id" : [NSNumber numberWithInteger:topicId],
+                                @"sender_id" : [NSNumber numberWithInteger:senderId],
+                                @"apitype" : @"comm",
+                                @"tag" : @"delstatus",
+                                @"salt" : @"1",
+                                @"hash" : hashString,
+                                @"keyset" : @"user_id:community_id:topic_id:sender_id:",
+                                };
+    
+    [manager POST:POST_URL parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+        
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSLog(@"获取帖子状态网络请求:%@", responseObject);
+        NSString* flag = [responseObject valueForKey:@"flag"];
+        if([flag isEqualToString:@"ok"])
+        {
+            NeighborDetailTVC* neighborDetailVC = [[NeighborDetailTVC alloc] init];
+            UIBarButtonItem* detailItem = [[UIBarButtonItem alloc] initWithTitle:@"详情" style:UIBarButtonItemStylePlain target:nil action:nil];
+            [self.parentViewController.navigationItem setBackBarButtonItem:detailItem];
+            neighborDetailVC.neighborData = neighborData;
+            [neighborDetailVC getReplyNet];
+            [self finishNoticeBar];
+            [self.navigationController pushViewController:neighborDetailVC animated:YES];
+        }
+        else
+        {
+            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"帖子信息" message:@"此贴已不可见" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:nil, nil];
+            [alert show];
+            [loadingView removeFromSuperview];
+            return;
+            
+        }
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"请求失败:%@", error.description);
+        [self finishNoticeBar];
+        NSData* data = error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey];
+        ErrorVC* errorVC = [[ErrorVC alloc] init];
+        errorVC.error = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+        [self.navigationController pushViewController:errorVC animated:YES];
+        return;
+    }];    
+}
+
+
 
 @end

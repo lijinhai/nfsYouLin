@@ -279,28 +279,30 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
         [alert show];
     }
     
-    NSInteger communityId = [[userInfo valueForKey:@"communityId"] integerValue];
-    
-    // 转成json字符串存储
-    NSError *err = nil;
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:userInfo options:NSJSONWritingPrettyPrinted error:&err];
-    NSString *jsonStr = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-    FMDatabase* db = self.db;
-    if ([db open])
-    {
-        [db executeUpdate:@"insert into table_push_record (type,content,community_id) values(?,?,?)",[NSNumber numberWithInteger:1],jsonStr,[NSNumber numberWithInteger:communityId]];
-    }
-    else
-    {
-        NSLog(@"didReceiveRemoteNotification 数据库打开失败");
-    }
-    [db close];
-    
-    // 消息刷新
-    if([ChatDemoHelper shareHelper].mainVC)
-    {
-        [[ChatDemoHelper shareHelper].mainVC refreshData];
-    }
+    [self pushDataSql:userInfo];
+//    NSInteger communityId = [[userInfo valueForKey:@"communityId"] integerValue];
+//    NSInteger recordId = [[userInfo valueForKey:@"_j_msgid"] integerValue];
+//    // 转成json字符串存储
+//    // record_id
+//    NSError *err = nil;
+//    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:userInfo options:NSJSONWritingPrettyPrinted error:&err];
+//    NSString *jsonStr = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+//    FMDatabase* db = self.db;
+//    if ([db open])
+//    {
+//        [db executeUpdate:@"insert into table_push_record (type,content,community_id,record_id) values(?,?,?,?)",[NSNumber numberWithInteger:1],jsonStr,[NSNumber numberWithInteger:communityId],[NSNumber numberWithInteger:recordId]];
+//    }
+//    else
+//    {
+//        NSLog(@"didReceiveRemoteNotification 数据库打开失败");
+//    }
+//    [db close];
+//    
+//    // 消息刷新
+//    if([ChatDemoHelper shareHelper].mainVC)
+//    {
+//        [[ChatDemoHelper shareHelper].mainVC refreshData];
+//    }
     
     NSLog(@"收到o通知:%@", [self logDic:userInfo]);
     completionHandler(UIBackgroundFetchResultNewData);
@@ -311,6 +313,83 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
         [_friendVC jumpToChatList:fromId];
     }
 }
+
+#pragma mark -极光推送数据更新
+- (void) pushDataSql:(NSDictionary *)userInfo
+{
+    // 转成json字符串存储
+    // record_id
+    NSError *err = nil;
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:userInfo options:NSJSONWritingPrettyPrinted error:&err];
+    NSString *jsonStr = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    FMDatabase* db = self.db;
+    NSInteger communityId = [[userInfo valueForKey:@"communityId"] integerValue];
+    NSInteger recordId = [[userInfo valueForKey:@"_j_msgid"] integerValue];
+    NSInteger pushType = [[userInfo valueForKey:@"pushType"] integerValue];
+    NSInteger userId = 0;
+    NSInteger topicId = 0;
+    NSLog(@"pushType = %ld", pushType);
+    if ([db open])
+    {
+        switch (pushType) {
+            // 回复通知处理
+            case 6:
+            {
+                userId = [[userInfo valueForKey:@"userId"] integerValue];
+                topicId = [[userInfo valueForKey:@"topicId"] integerValue];
+                FMResultSet *resultSet = [db executeQuery:@"SELECT * FROM table_push_record where topic_id = ? and user_id = ?",[NSNumber numberWithInteger:topicId],[NSNumber numberWithInteger:userId]];
+                
+                if([resultSet next])
+                {
+                    NSLog(@"db: push data execute success!");
+                    NSString* updateSql = [NSString stringWithFormat:@"UPDATE table_push_record SET type = '1', content = '%@' ,community_id = '%ld' ,record_id = '%ld' where topic_id = '%ld'",jsonStr,communityId,recordId,topicId];
+                    
+                    BOOL isSuccess =  [db executeUpdate:updateSql];
+                    if(isSuccess)
+                    {
+                        NSLog(@"db: push data update success!");
+                    }
+                    else
+                    {
+                        NSLog(@"db: push data update failed!");
+                    }
+
+                }
+                else
+                {
+                    NSLog(@"db: push data execute failed!");
+                    BOOL isSuccess = [db executeUpdate:@"insert into table_push_record (type,content,community_id,record_id,topic_id,user_id) values(?,?,?,?,?,?)",[NSNumber numberWithInteger:1],jsonStr,[NSNumber numberWithInteger:communityId],[NSNumber numberWithInteger:recordId],[NSNumber numberWithInteger:topicId],[NSNumber numberWithInteger:userId]];
+                    if(isSuccess)
+                    {
+                        NSLog(@"db: push 回复 insert success!");
+                    }
+                    else
+                    {
+                        NSLog(@"db: push 回复 insert failed!");
+                    }
+
+                }
+                
+                
+                break;
+            }
+                
+            default:
+                break;
+        }
+
+    }
+    
+    [db close];
+    
+    // 消息刷新
+    if([ChatDemoHelper shareHelper].mainVC)
+    {
+        [[ChatDemoHelper shareHelper].mainVC refreshData];
+    }
+
+}
+
 //处理URL请求
 - (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url
 {
@@ -339,7 +418,7 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
     NSFileManager *fileManager = [NSFileManager defaultManager];
     self.db = [FMDatabase databaseWithPath:self.dbPath];
 
-    [fileManager removeItemAtPath:self.dbPath error:nil];
+//    [fileManager removeItemAtPath:self.dbPath error:nil];
 
     if (![fileManager fileExistsAtPath:self.dbPath]) {
         NSLog(@"还未创建数据库，现在正在创建数据库");

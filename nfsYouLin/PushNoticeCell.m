@@ -69,7 +69,10 @@
     {
         [badge removeFromSuperview];
     }
-
+    else
+    {
+        [self.contentView addSubview:badge];
+    }
     
     NSString* contentStr = [_noticeDict valueForKey:@"content"];
     NSDictionary* content =  (NSDictionary*)[contentStr objectFromJSONString];

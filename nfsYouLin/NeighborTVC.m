@@ -782,6 +782,26 @@ static BOOL upState = YES;
     [self lookApplyNet:activityId];
 }
 
+
+#pragma mark -public 查看全文
+- (NeighborData*) readInformation:(NSInteger)topicId
+{
+    
+    NeighborData* neighborData;
+    for(int i = 0; i < [self.neighborDataArray count]; i++)
+    {
+        NeighborDataFrame* frame = [self.neighborDataArray objectAtIndex:i];
+        NeighborData* data = frame.neighborData;
+        if(topicId == [[data valueForKey:@"topicId"] integerValue])
+        {
+            neighborData = data;
+            break;
+        }
+        
+    }
+    return neighborData;
+}
+
 #pragma mark -查看全文 cellDelegate回调
 // 查看全文回调事件
 - (void)readTotalInformation:(NSInteger)sectionNum

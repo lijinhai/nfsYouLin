@@ -35,7 +35,7 @@ static NSString * const TABLE_NEWS_RECEIVE         = @"table_news_receive";
 
 #define CREATE_INDEX_NEWS_RECEIVE_LA  [NSString stringWithFormat:@"%@%@%@",@"CREATE INDEX news_belongs_index on ", TABLE_NEWS_RECEIVE,@"(news_belongs)"]
 
-#define CREATE_TABLE_PUSH_RECORD [NSString stringWithFormat:@"%@%@%@%@%@%@%@%@%@%@%@%@%@%@",@"CREATE TABLE if not exists ", TABLE_PUSH_RECORD,@" (",@"_id integer primary key autoincrement, ",@"user_id bigint, ",@"type integer, ",@"content_type integer, ",@"record_id bigint, ",@"content text, ",@"click_url text, ",@"push_time bigint, ",@"login_account bigint, ",@"community_id bigint, ",@"table_version integer)"]
+#define CREATE_TABLE_PUSH_RECORD [NSString stringWithFormat:@"%@%@%@%@%@%@%@%@%@%@%@%@%@%@%@",@"CREATE TABLE if not exists ", TABLE_PUSH_RECORD,@" (",@"_id integer primary key autoincrement, ",@"user_id bigint, ",@"type integer, ",@"content_type integer, ",@"record_id bigint, ",@"content text, ",@"click_url text, ",@"push_time bigint, ",@"topic_id integer, ",@"login_account bigint, ",@"community_id bigint, ",@"table_version integer)"]
 
 #define CREATE_INDEX_PUSH_LA [NSString stringWithFormat:@"%@%@%@",@"CREATE INDEX push_record_index on ",TABLE_PUSH_RECORD,@"(login_account)"]
 
