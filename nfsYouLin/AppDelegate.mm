@@ -322,65 +322,26 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
     NSError *err = nil;
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:userInfo options:NSJSONWritingPrettyPrinted error:&err];
     NSString *jsonStr = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-    FMDatabase* db = self.db;
-    NSInteger communityId = [[userInfo valueForKey:@"communityId"] integerValue];
-    NSInteger recordId = [[userInfo valueForKey:@"_j_msgid"] integerValue];
     NSInteger pushType = [[userInfo valueForKey:@"pushType"] integerValue];
-    NSInteger userId = 0;
-    NSInteger topicId = 0;
     NSLog(@"pushType = %ld", pushType);
-    if ([db open])
-    {
-        switch (pushType) {
-            // 回复通知处理
-            case 6:
-            {
-                userId = [[userInfo valueForKey:@"userId"] integerValue];
-                topicId = [[userInfo valueForKey:@"topicId"] integerValue];
-                FMResultSet *resultSet = [db executeQuery:@"SELECT * FROM table_push_record where topic_id = ? and user_id = ?",[NSNumber numberWithInteger:topicId],[NSNumber numberWithInteger:userId]];
-                
-                if([resultSet next])
-                {
-                    NSLog(@"db: push data execute success!");
-                    NSString* updateSql = [NSString stringWithFormat:@"UPDATE table_push_record SET type = '1', content = '%@' ,community_id = '%ld' ,record_id = '%ld' where topic_id = '%ld'",jsonStr,communityId,recordId,topicId];
-                    
-                    BOOL isSuccess =  [db executeUpdate:updateSql];
-                    if(isSuccess)
-                    {
-                        NSLog(@"db: push data update success!");
-                    }
-                    else
-                    {
-                        NSLog(@"db: push data update failed!");
-                    }
-
-                }
-                else
-                {
-                    NSLog(@"db: push data execute failed!");
-                    BOOL isSuccess = [db executeUpdate:@"insert into table_push_record (type,content,community_id,record_id,topic_id,user_id) values(?,?,?,?,?,?)",[NSNumber numberWithInteger:1],jsonStr,[NSNumber numberWithInteger:communityId],[NSNumber numberWithInteger:recordId],[NSNumber numberWithInteger:topicId],[NSNumber numberWithInteger:userId]];
-                    if(isSuccess)
-                    {
-                        NSLog(@"db: push 回复 insert success!");
-                    }
-                    else
-                    {
-                        NSLog(@"db: push 回复 insert failed!");
-                    }
-
-                }
-                
-                
-                break;
-            }
-                
-            default:
-                break;
+    switch (pushType) {
+        // 地址审核通知处理
+        case 2:
+        {
+            [self addressPushNotificationDataHandle:userInfo json:jsonStr];
+            break;
         }
-
+        // 回复通知处理
+        case 6:
+        {
+            [self replyPushNotificationDataHandle:userInfo json:jsonStr];
+            break;
+        }
+            
+        default:
+            break;
     }
     
-    [db close];
     
     // 消息刷新
     if([ChatDemoHelper shareHelper].mainVC)
@@ -388,6 +349,80 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
         [[ChatDemoHelper shareHelper].mainVC refreshData];
     }
 
+}
+
+#pragma mark -地址审核通知处理
+- (void) addressPushNotificationDataHandle:(NSDictionary*) userInfo json:(NSString*)jsonStr
+{
+    NSLog(@"addressPushNotificationDataHandle");
+    FMDatabase* db = self.db;
+    NSInteger communityId = [[userInfo valueForKey:@"communityId"] integerValue];
+    NSInteger recordId = [[userInfo valueForKey:@"_j_msgid"] integerValue];
+    NSInteger userId = [[userInfo valueForKey:@"userId"] integerValue];
+    if([db open])
+    {
+        BOOL isSuccess = [db executeUpdate:@"insert into table_push_record (type,content,community_id,record_id,user_id) values(?,?,?,?,?)",[NSNumber numberWithInteger:1],jsonStr,[NSNumber numberWithInteger:communityId],[NSNumber numberWithInteger:recordId],[NSNumber numberWithInteger:userId]];
+        if(isSuccess)
+        {
+            NSLog(@"db: push 地址 insert success!");
+        }
+        else
+        {
+            NSLog(@"db: push 地址 insert failed!");
+        }
+
+    }
+    [db close];
+}
+
+#pragma mark -回复通知处理
+- (void) replyPushNotificationDataHandle:(NSDictionary*) userInfo json:(NSString*)jsonStr
+{
+    FMDatabase* db = self.db;
+
+    NSInteger communityId = [[userInfo valueForKey:@"communityId"] integerValue];
+    NSInteger recordId = [[userInfo valueForKey:@"_j_msgid"] integerValue];
+    NSInteger userId = [[userInfo valueForKey:@"userId"] integerValue];
+    NSInteger topicId = [[userInfo valueForKey:@"topicId"] integerValue];
+    
+    if([db open])
+    {
+        FMResultSet *resultSet = [db executeQuery:@"SELECT * FROM table_push_record where topic_id = ? and user_id = ?",[NSNumber numberWithInteger:topicId],[NSNumber numberWithInteger:userId]];
+        
+        if([resultSet next])
+        {
+            NSLog(@"db: push data execute success!");
+            NSString* updateSql = [NSString stringWithFormat:@"UPDATE table_push_record SET type = '1', content = '%@' ,community_id = '%ld' ,record_id = '%ld' where topic_id = '%ld'",jsonStr,communityId,recordId,topicId];
+            
+            BOOL isSuccess =  [db executeUpdate:updateSql];
+            if(isSuccess)
+            {
+                NSLog(@"db: push data update success!");
+            }
+            else
+            {
+                NSLog(@"db: push data update failed!");
+            }
+            
+        }
+        else
+        {
+            NSLog(@"db: push data execute failed!");
+            BOOL isSuccess = [db executeUpdate:@"insert into table_push_record (type,content,community_id,record_id,topic_id,user_id) values(?,?,?,?,?,?)",[NSNumber numberWithInteger:1],jsonStr,[NSNumber numberWithInteger:communityId],[NSNumber numberWithInteger:recordId],[NSNumber numberWithInteger:topicId],[NSNumber numberWithInteger:userId]];
+            if(isSuccess)
+            {
+                NSLog(@"db: push 回复 insert success!");
+            }
+            else
+            {
+                NSLog(@"db: push 回复 insert failed!");
+            }
+            
+        }
+
+    }
+    
+    [db close];
 }
 
 //处理URL请求

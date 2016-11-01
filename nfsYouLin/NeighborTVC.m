@@ -936,7 +936,7 @@ static BOOL upState = YES;
     
     NSString* MD5String = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"user_id%@community_id%@topic_id0",userId,communityId]];
     NSString* hashString = [StringMD5 stringAddMD5:[NSString stringWithFormat:@"%@1", MD5String]];
-    
+    NSLog(@"userId = %@,commnityId = %@ tag = %@",userId, communityId,Tag);
     NSDictionary* parameter = @{@"user_id" : userId,
                                 @"community_id" : communityId,
                                 @"topic_id" : @"0",

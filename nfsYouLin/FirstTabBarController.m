@@ -670,10 +670,7 @@
             NSString *commnityId = [set stringForColumn:@"community_id"];
             NSString *type = [set stringForColumn:@"type"];
             NSString* recordId = [set stringForColumn:@"record_id"];
-            NSString* topicId = [set stringForColumn:@"topic_id"];
-            NSString* userId = [set stringForColumn:@"user_id"];
-            NSLog(@"topic_id = %@ userId = %@", topicId, userId);
-            
+        
             if([type integerValue]== 1)
             {
                 point = false;
