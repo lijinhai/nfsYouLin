@@ -30,6 +30,7 @@
 #import "StringMD5.h"
 #import "NeighborDetailTVC.h"
 #import "ErrorVC.h"
+#import "SystemVC.h"
 
 @implementation FirstTabBarController
 {
@@ -506,6 +507,23 @@
     NSDictionary* content =  (NSDictionary*)[contentStr objectFromJSONString];
     NSInteger pushType = [[content valueForKey:@"pushType"] integerValue];
     switch (pushType) {
+        case 2:
+        {
+            SystemVC* systemVC = [[SystemVC alloc] init];
+            NSInteger internal = [[content valueForKey:@"pushTime"] integerValue];
+            NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+            formatter.dateFormat = @"MM月dd日 hh:mm";
+            NSDate* date = [NSDate dateWithTimeIntervalSince1970:internal / 1000];
+            NSString *dateStr = [formatter stringFromDate:date];
+            systemVC.dateStr = dateStr;
+            systemVC.message = [content valueForKey:@"content"];
+            [self updateDataSqlAndArr:row];
+            [self finishNoticeBar];
+            UIBarButtonItem* item = [[UIBarButtonItem alloc] initWithTitle:@"系统信息" style:UIBarButtonItemStylePlain target:nil action:nil];
+            [self.navigationItem setBackBarButtonItem:item];
+            [self.navigationController pushViewController:systemVC animated:YES];
+            break;
+        }
         case 6:
         {
             NSInteger topicId = [[content valueForKey:@"topicId"] integerValue];
@@ -683,7 +701,7 @@
                                   type, @"type",
                                   recordId, @"recordId",
                                   nil];
-            [dataArray addObject:dict];
+            [dataArray insertObject:dict atIndex:0];
         }
     }
     

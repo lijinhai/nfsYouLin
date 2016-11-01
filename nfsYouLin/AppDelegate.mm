@@ -331,6 +331,13 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
             [self addressPushNotificationDataHandle:userInfo json:jsonStr];
             break;
         }
+            
+        // 物业通知处理
+        case 3:
+        {
+            [self propertyPushNotificationDataHandle:userInfo json:jsonStr];
+            break;
+        }
         // 回复通知处理
         case 6:
         {
@@ -351,10 +358,43 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
 
 }
 
+#pragma mark -物业(公告通知、报修通知等)处理
+- (void) propertyPushNotificationDataHandle:(NSDictionary*) userInfo json:(NSString*)jsonStr
+{
+    FMDatabase* db = self.db;
+    NSInteger communityId = [[userInfo valueForKey:@"communityId"] integerValue];
+    NSInteger recordId = [[userInfo valueForKey:@"_j_msgid"] integerValue];
+    NSInteger userId = [[userInfo valueForKey:@"userId"] integerValue];
+    NSInteger topicId = [[userInfo valueForKey:@"topicId"] integerValue];
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSInteger myId = [[defaults stringForKey:@"userId"] integerValue];
+    
+    
+    if(myId != userId)
+    {
+        if([db open])
+        {
+            BOOL isSuccess = [db executeUpdate:@"insert into table_push_record (type,content,community_id,record_id,user_id,topic_id) values(?,?,?,?,?,?)",[NSNumber numberWithInteger:1],jsonStr,[NSNumber numberWithInteger:communityId],[NSNumber numberWithInteger:recordId],[NSNumber numberWithInteger:userId],[NSNumber numberWithInteger:topicId]];
+            if(isSuccess)
+            {
+                NSLog(@"db: push 物业 insert success!");
+            }
+            else
+            {
+                NSLog(@"db: push 物业 insert failed!");
+            }
+            
+        }
+        [db close];
+    }
+   
+
+}
+
+
 #pragma mark -地址审核通知处理
 - (void) addressPushNotificationDataHandle:(NSDictionary*) userInfo json:(NSString*)jsonStr
 {
-    NSLog(@"addressPushNotificationDataHandle");
     FMDatabase* db = self.db;
     NSInteger communityId = [[userInfo valueForKey:@"communityId"] integerValue];
     NSInteger recordId = [[userInfo valueForKey:@"_j_msgid"] integerValue];

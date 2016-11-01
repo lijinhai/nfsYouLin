@@ -11,6 +11,7 @@
 		8F060A691D6C20AA006F1B75 /* KMDatePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F060A631D6C20AA006F1B75 /* KMDatePicker.m */; };
 		8F060A6A1D6C20AA006F1B75 /* KMDatePickerDateModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F060A651D6C20AA006F1B75 /* KMDatePickerDateModel.m */; };
 		8F060A6B1D6C20AA006F1B75 /* NSDate+CalculateDay.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F060A671D6C20AA006F1B75 /* NSDate+CalculateDay.m */; };
+		8F07F4FC1DC87C2E000CC230 /* SystemVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F07F4FB1DC87C2E000CC230 /* SystemVC.m */; };
 		8F0F1B4E1D191F7E00404C46 /* SearchTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F0F1B4D1D191F7E00404C46 /* SearchTableViewController.m */; };
 		8F0F1B511D19247900404C46 /* SearchBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F0F1B501D19247900404C46 /* SearchBarView.m */; };
 		8F1497981D8932BC00ED707E /* NewShareView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F1497971D8932BC00ED707E /* NewShareView.m */; };
@@ -625,6 +626,8 @@
 		8F060A651D6C20AA006F1B75 /* KMDatePickerDateModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KMDatePickerDateModel.m; sourceTree = "<group>"; };
 		8F060A661D6C20AA006F1B75 /* NSDate+CalculateDay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+CalculateDay.h"; sourceTree = "<group>"; };
 		8F060A671D6C20AA006F1B75 /* NSDate+CalculateDay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+CalculateDay.m"; sourceTree = "<group>"; };
+		8F07F4FA1DC87C2E000CC230 /* SystemVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SystemVC.h; sourceTree = "<group>"; };
+		8F07F4FB1DC87C2E000CC230 /* SystemVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SystemVC.m; sourceTree = "<group>"; };
 		8F0F1B4C1D191F7E00404C46 /* SearchTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchTableViewController.h; sourceTree = "<group>"; };
 		8F0F1B4D1D191F7E00404C46 /* SearchTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchTableViewController.m; sourceTree = "<group>"; };
 		8F0F1B4F1D19247900404C46 /* SearchBarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchBarView.h; sourceTree = "<group>"; };
@@ -3475,6 +3478,8 @@
 				8F51E28F1D33C0080094A4E5 /* StartVC.m */,
 				8F51E28B1D33952F0094A4E5 /* LoginNC.h */,
 				8F51E28C1D33952F0094A4E5 /* LoginNC.m */,
+				8F07F4FA1DC87C2E000CC230 /* SystemVC.h */,
+				8F07F4FB1DC87C2E000CC230 /* SystemVC.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -4508,6 +4513,7 @@
 				8FC897A61D9915EF00C9B32C /* WeatherView.m in Sources */,
 				8F648D281D00547A00E3B155 /* PSTGridLayoutSection.m in Sources */,
 				8FD637E31D541F6900F500D9 /* CreateTopicVC.m in Sources */,
+				8F07F4FC1DC87C2E000CC230 /* SystemVC.m in Sources */,
 				8FA53CE91D7E85A800841B1D /* ReportCell.m in Sources */,
 				8F648D4C1D00547A00E3B155 /* EaseBubbleView+Voice.m in Sources */,
 				8F1FB6D41D6444A200676743 /* MASConstraint.m in Sources */,
