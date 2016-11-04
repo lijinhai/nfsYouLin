@@ -338,6 +338,13 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
             [self propertyPushNotificationDataHandle:userInfo json:jsonStr];
             break;
         }
+        // 新闻通知处理
+        case 5:
+        {
+            [self newsPushNotificationDataHandle:userInfo json:jsonStr];
+            break;
+        }
+            
         // 回复通知处理
         case 6:
         {
@@ -390,6 +397,30 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
    
 
 }
+
+#pragma mark -新闻通知处理
+- (void) newsPushNotificationDataHandle:(NSDictionary*) userInfo json:(NSString*)jsonStr
+{
+    FMDatabase* db = self.db;
+    NSInteger communityId = [[userInfo valueForKey:@"communityId"] integerValue];
+    NSInteger recordId = [[userInfo valueForKey:@"_j_msgid"] integerValue];
+    NSInteger userId = [[userInfo valueForKey:@"userId"] integerValue];
+    if([db open])
+    {
+        BOOL isSuccess = [db executeUpdate:@"insert into table_push_record (type,content,community_id,record_id,user_id) values(?,?,?,?,?)",[NSNumber numberWithInteger:1],jsonStr,[NSNumber numberWithInteger:communityId],[NSNumber numberWithInteger:recordId],[NSNumber numberWithInteger:userId]];
+        if(isSuccess)
+        {
+            NSLog(@"db: push 新闻 insert success!");
+        }
+        else
+        {
+            NSLog(@"db: push 新闻 insert failed!");
+        }
+        
+    }
+    [db close];
+}
+
 
 
 #pragma mark -地址审核通知处理

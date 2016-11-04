@@ -262,8 +262,9 @@
             [self.replyView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin];
              [lineView1 setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin];
 
-            [self.replyView addTarget:self action:@selector(touchDownReply) forControlEvents:UIControlEventTouchDown];
-            [self.replyView addTarget:self action:@selector(touchCancelReply) forControlEvents:UIControlEventTouchUpInside ];
+            [self.replyView addTarget:self action:@selector(touchDownReply) forControlEvents:UIControlEventTouchUpInside];
+            
+            [self.replyView addTarget:self action:@selector(touchCancelReply) forControlEvents:UIControlEventTouchCancel ];
             [self.contentView addSubview:self.replyView];
             [self.contentView addSubview:lineView1];
             
@@ -412,13 +413,13 @@
 - (void) touchDownReply
 {
     [_delegate readTotalInformation:self.sectionNum];
-    self.replyView.backgroundColor = [UIColor lightGrayColor];
+//    self.replyView.backgroundColor = [UIColor lightGrayColor];
 
 }
 
 - (void) touchCancelReply
 {
-    self.replyView.backgroundColor = [UIColor whiteColor];
+//    self.replyView.backgroundColor = [UIColor whiteColor];
 
 }
 

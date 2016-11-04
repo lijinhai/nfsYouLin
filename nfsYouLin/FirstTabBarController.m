@@ -509,21 +509,34 @@
     switch (pushType) {
         case 2:
         {
-            SystemVC* systemVC = [[SystemVC alloc] init];
-            NSInteger internal = [[content valueForKey:@"pushTime"] integerValue];
-            NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-            formatter.dateFormat = @"MM月dd日 hh:mm";
-            NSDate* date = [NSDate dateWithTimeIntervalSince1970:internal / 1000];
-            NSString *dateStr = [formatter stringFromDate:date];
-            systemVC.dateStr = dateStr;
-            systemVC.message = [content valueForKey:@"content"];
-            [self updateDataSqlAndArr:row];
-            [self finishNoticeBar];
-            UIBarButtonItem* item = [[UIBarButtonItem alloc] initWithTitle:@"系统信息" style:UIBarButtonItemStylePlain target:nil action:nil];
-            [self.navigationItem setBackBarButtonItem:item];
-            [self.navigationController pushViewController:systemVC animated:YES];
+            [self intoNoticeDetailViewController:content row:row key:@"content"];
             break;
         }
+        case 3:
+        {
+            NSString* title = [content valueForKey:@"pTitle"];
+            if([title isEqualToString:@"物业公告"])
+            {
+                NSInteger topicId = [[content valueForKey:@"topicId"] integerValue];
+                NeighborData* neighborData = [[ChatDemoHelper shareHelper].neighborVC readInformation:topicId];
+                [rootVC.view addSubview:loadingView];
+                [self updateDataSqlAndArr:row];
+                [self intoReplyViewNet:neighborData];
+            }
+            else
+            {
+                
+            }
+            
+            break;
+        }
+        case 5:
+        {
+            
+            [self intoNoticeDetailViewController:content row:row key:@"message"];
+            break;
+        }
+            
         case 6:
         {
             NSInteger topicId = [[content valueForKey:@"topicId"] integerValue];
@@ -585,6 +598,25 @@
     {
     
     }
+}
+
+#pragma mark -进入消息
+- (void) intoNoticeDetailViewController:(NSDictionary*) content row:(NSInteger)row key:(NSString*)key
+{
+    SystemVC* systemVC = [[SystemVC alloc] init];
+    NSInteger internal = [[content valueForKey:@"pushTime"] integerValue];
+    NSString* title = [content valueForKey:@"title"];
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    formatter.dateFormat = @"MM月dd日 hh:mm";
+    NSDate* date = [NSDate dateWithTimeIntervalSince1970:internal / 1000];
+    NSString *dateStr = [formatter stringFromDate:date];
+    systemVC.dateStr = dateStr;
+    systemVC.message = [content valueForKey:key];
+    [self updateDataSqlAndArr:row];
+    [self finishNoticeBar];
+    UIBarButtonItem* item = [[UIBarButtonItem alloc] initWithTitle:title style:UIBarButtonItemStylePlain target:nil action:nil];
+    [self.navigationItem setBackBarButtonItem:item];
+    [self.navigationController pushViewController:systemVC animated:YES];
 }
 
 #pragma mark -noticeView UIScrollViewDelegate
@@ -693,6 +725,8 @@
             {
                 point = false;
             }
+            
+            
             
             NSDictionary* dict = [NSDictionary
                                   dictionaryWithObjectsAndKeys:

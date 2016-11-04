@@ -103,7 +103,12 @@
         case 4:
             break;
         case 5:
+        {
+            titleL.text = [content valueForKey:@"title"];
+            contentL.text = [content valueForKey:@"message"];
+            pushTime = [[content valueForKey:@"pushTime"] integerValue];
             break;
+        }
         case 6:
         {
             titleL.text = [content valueForKey:@"title"];
