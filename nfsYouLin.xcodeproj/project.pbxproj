@@ -462,6 +462,7 @@
 		8FB6FA881D485AEC00E6C71A /* ChatDemoHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FB6FA861D485AEC00E6C71A /* ChatDemoHelper.m */; };
 		8FBCF9661D81497E0005F50A /* BlackListVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FBCF9651D81497E0005F50A /* BlackListVC.m */; };
 		8FBCF9691D818A460005F50A /* PeopleInfoVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FBCF9681D818A460005F50A /* PeopleInfoVC.m */; };
+		8FBD5A5D1DD04E13007B4C52 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8FBD5A5C1DD04E13007B4C52 /* Assets.xcassets */; };
 		8FC089D41DB49AAD00110646 /* NoticeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FC089D31DB49AAD00110646 /* NoticeView.m */; };
 		8FC089D71DB4A12500110646 /* NoticeBGView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FC089D61DB4A12500110646 /* NoticeBGView.m */; };
 		8FC8979F1D99159F00C9B32C /* WeatherDetailVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FC8979C1D99159F00C9B32C /* WeatherDetailVC.m */; };
@@ -572,7 +573,6 @@
 		AFD75EAB1D49E9FF006B5A4B /* IntegralRulesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AFD75EAA1D49E9FF006B5A4B /* IntegralRulesViewController.m */; };
 		AFD75EAE1D4AF3BF006B5A4B /* PopupExchangeTipView.m in Sources */ = {isa = PBXBuildFile; fileRef = AFD75EAD1D4AF3BF006B5A4B /* PopupExchangeTipView.m */; };
 		AFD75EB71D4E084E006B5A4B /* MyGiftsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AFD75EB61D4E084E006B5A4B /* MyGiftsViewController.m */; };
-		AFE5690C1CF2CB8000C0F745 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AFE5690B1CF2CB8000C0F745 /* Assets.xcassets */; };
 		AFE569111CF4440E00C0F745 /* LewPopupBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = AFE569101CF4440E00C0F745 /* LewPopupBackgroundView.m */; };
 		AFE569141CF4442500C0F745 /* LewPopupViewAnimationDrop.m in Sources */ = {isa = PBXBuildFile; fileRef = AFE569131CF4442500C0F745 /* LewPopupViewAnimationDrop.m */; };
 		AFE569171CF4443800C0F745 /* UIViewController+LewPopupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AFE569161CF4443800C0F745 /* UIViewController+LewPopupViewController.m */; };
@@ -1379,6 +1379,7 @@
 		8FBCF9651D81497E0005F50A /* BlackListVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BlackListVC.m; sourceTree = "<group>"; };
 		8FBCF9671D818A460005F50A /* PeopleInfoVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PeopleInfoVC.h; sourceTree = "<group>"; };
 		8FBCF9681D818A460005F50A /* PeopleInfoVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PeopleInfoVC.m; sourceTree = "<group>"; };
+		8FBD5A5C1DD04E13007B4C52 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8FC089D21DB49AAD00110646 /* NoticeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NoticeView.h; sourceTree = "<group>"; };
 		8FC089D31DB49AAD00110646 /* NoticeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NoticeView.m; sourceTree = "<group>"; };
 		8FC089D51DB4A12500110646 /* NoticeBGView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NoticeBGView.h; sourceTree = "<group>"; };
@@ -1591,7 +1592,6 @@
 		AFD75EAD1D4AF3BF006B5A4B /* PopupExchangeTipView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PopupExchangeTipView.m; sourceTree = "<group>"; };
 		AFD75EB51D4E084E006B5A4B /* MyGiftsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyGiftsViewController.h; sourceTree = "<group>"; };
 		AFD75EB61D4E084E006B5A4B /* MyGiftsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyGiftsViewController.m; sourceTree = "<group>"; };
-		AFE5690B1CF2CB8000C0F745 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		AFE5690E1CF443FE00C0F745 /* LewPopupViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LewPopupViewController.h; sourceTree = "<group>"; };
 		AFE5690F1CF4440500C0F745 /* LewPopupBackgroundView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LewPopupBackgroundView.h; sourceTree = "<group>"; };
 		AFE569101CF4440E00C0F745 /* LewPopupBackgroundView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LewPopupBackgroundView.m; sourceTree = "<group>"; };
@@ -3772,6 +3772,7 @@
 		AFCE1F931CDAD1B20085F10F /* nfsYouLin */ = {
 			isa = PBXGroup;
 			children = (
+				8FBD5A5C1DD04E13007B4C52 /* Assets.xcassets */,
 				8F1C11A11DACB655005FEFB2 /* nfsYouLin.entitlements */,
 				AFCE1FA51CDAD1B20085F10F /* Info.plist */,
 				AF7850071CFFC587009F6982 /* FMDB */,
@@ -3791,7 +3792,6 @@
 		AFCE1F941CDAD1B20085F10F /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				AFE5690B1CF2CB8000C0F745 /* Assets.xcassets */,
 				AFE5693F1CFE652A00C0F745 /* dog.png */,
 				AFE569401CFE652A00C0F745 /* duck.png */,
 				AFE569411CFE652A00C0F745 /* elephant.png */,
@@ -4137,7 +4137,6 @@
 				8F1FB6D21D6444A200676743 /* Info.plist in Resources */,
 				8F648DBB1D00549E00E3B155 /* chatBar_record@2x.png in Resources */,
 				8F648DAC1D00549E00E3B155 /* chatBar_colorMore_cameraSelected@2x.png in Resources */,
-				AFE5690C1CF2CB8000C0F745 /* Assets.xcassets in Resources */,
 				8F648DC21D00549E00E3B155 /* group@2x.png in Resources */,
 				8F7539671D48A4620090A7C2 /* account.png in Resources */,
 				8F648DA91D00549E00E3B155 /* chatBar_colorMore_audioCall@2x.png in Resources */,
@@ -4247,6 +4246,7 @@
 				8F7539371D48A4620090A7C2 /* imageDownloadFail@2x.png in Resources */,
 				8F7539871D48A4620090A7C2 /* tabbarBackground.png in Resources */,
 				AFE569201CF699BB00C0F745 /* floor.plist in Resources */,
+				8FBD5A5D1DD04E13007B4C52 /* Assets.xcassets in Resources */,
 				8F1FB5C51D5C025800676743 /* photo_delete@2x.png in Resources */,
 				8F648DDB1D00549E00E3B155 /* VoiceSearchFeedback016@2x.png in Resources */,
 				8F7539641D48A4620090A7C2 /* icon_035_cover.png in Resources */,

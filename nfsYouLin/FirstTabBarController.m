@@ -43,6 +43,7 @@
     NSString* nowAddressStr;
     
     UITableView* noticeTView;
+    UIView* noMessageView;
     NoticeMessageView* noticeView;
     UIPageControl* noticePControl;
     UIView* noticeBgV;
@@ -324,6 +325,28 @@
     noticePControl.userInteractionEnabled = NO;
     noticePControl.backgroundColor = [UIColor blackColor];
     [self.view addSubview:noticePControl];
+    
+    noMessageView = [[UIView alloc] init];
+    noMessageView.backgroundColor = [UIColor whiteColor];
+    
+    UIImageView* iv = [[UIImageView alloc] initWithFrame:CGRectMake(CGRectGetWidth(self.view.frame) * 0.2 + 20, 40, 80, 80)];
+    iv.layer.masksToBounds = YES;
+    iv.layer.cornerRadius = 40;
+    iv.image = [UIImage imageNamed:@"wutongzhi.png"];
+    [noMessageView addSubview:iv];
+    
+    UILabel* l1 = [[UILabel alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(iv.frame) + 20, screenWidth - 110, 20)];
+    l1.text = @"暂无任何通知";
+    l1.textAlignment = NSTextAlignmentCenter;
+    l1.font = [UIFont systemFontOfSize:18];
+    l1.enabled = NO;
+    [noMessageView addSubview:l1];
+    
+    UILabel* l2 = [[UILabel alloc] initWithFrame:CGRectMake(10, CGRectGetMaxY(l1.frame) + 40, screenWidth - 120,80)];
+    l2.text = @"在这里您可以看到地址的审核信息，物业的推送信息(公告、报修、建议)，新闻的推送信息.点击后可以跳转到对应的界面.";
+    l2.numberOfLines = 0;
+    l2.font = [UIFont systemFontOfSize:13];
+    [noMessageView addSubview:l2];
 }
 
 #pragma mark -加号点击视图
@@ -335,6 +358,16 @@
 
 #pragma mark -加载消息视图
 - (IBAction)noticeBar:(id)sender {
+    
+    if([dataArray count] == 0)
+    {
+        [noticeTView addSubview:noMessageView];
+    }
+    else
+    {
+        [noMessageView removeFromSuperview];
+    }
+    
     [noticeView scrollRectToVisible:CGRectMake(CGRectGetWidth(self.view.frame) , 0,
                                                CGRectGetWidth(self.view.frame),
                                                CGRectGetHeight(self.view.frame)) animated:NO];
@@ -349,9 +382,11 @@
     }];
     
     noticeTView.frame = CGRectMake(CGRectGetMaxX(self.view.frame) * 2 - 100, 20, 0, CGRectGetHeight(self.view.frame) - 10);
+    noMessageView.frame = noticeTView.bounds;
     [UIView transitionWithView:noticeTView duration:0.3	 options:UIViewAnimationOptionCurveEaseInOut animations:^{
         noticeView.alpha = 0.8;
         noticeTView.frame = CGRectMake(CGRectGetMaxX(self.view.frame), 20, CGRectGetWidth(self.view.frame) - 100, CGRectGetHeight(self.view.frame) - 10);
+        noMessageView.frame = noticeTView.bounds;
         noticeBgV.frame = CGRectMake(100, 20, CGRectGetWidth(self.view.frame) - 100,
                                      CGRectGetHeight(self.view.frame));
     } completion:^(BOOL finished) {
@@ -369,9 +404,15 @@
 #pragma -mark 结束加载和取消消息视图
 - (void) finishNoticeBar
 {
-    [loadingView removeFromSuperview];
-    [noticeView removeFromSuperview];
-    [noticeBgV removeFromSuperview];
+    [UIView transitionWithView:noticeView duration:0.2 options:UIViewAnimationOptionCurveEaseInOut
+                    animations:^{
+                        noticeView.alpha = 0.0;
+                        noticeBgV.frame = CGRectMake(CGRectGetWidth(self.view.frame), 20,0,CGRectGetHeight(self.view.frame));
+                    } completion:^(BOOL finished) {
+                        [loadingView removeFromSuperview];
+                        [noticeView removeFromSuperview];
+                        [noticeBgV removeFromSuperview];
+                    }];
 }
 
 
@@ -589,9 +630,16 @@
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         NSDictionary* dict = [dataArray objectAtIndex:indexPath.row];
         [self deleteDataSql:[[dict valueForKey:@"recordId"] integerValue]];
+        NSLog(@"xx222[dataArray count] = %ld",[dataArray count]);
         [dataArray removeObjectAtIndex:indexPath.row];
         [noticeTView deleteRowsAtIndexPaths:
                 [NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        if([dataArray count] == 0)
+        {
+            [self finishNoticeBar];
+            [self cancelRedPoint];
+        }
+        
         
     }
     else if (editingStyle == UITableViewCellEditingStyleInsert)
@@ -726,8 +774,7 @@
                 point = false;
             }
             
-            
-            
+                        
             NSDictionary* dict = [NSDictionary
                                   dictionaryWithObjectsAndKeys:
                                   content, @"content",
