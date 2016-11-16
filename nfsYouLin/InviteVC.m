@@ -105,7 +105,9 @@
     inviteBtn.layer.cornerRadius = 5;
     [inviteBtn setTitle:@"立即邀请" forState:UIControlStateNormal];
     [inviteBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [inviteBtn setBackgroundColor:MainColor];
+//    [inviteBtn setBackgroundColor:MainColor];
+    [inviteBtn setBackgroundImage:[UIImage imageNamed:@"btn_chakanyaoqingjilu_n.png"] forState:UIControlStateNormal];
+    [inviteBtn setBackgroundImage:[UIImage imageNamed:@"btn_chakanyaoqingjilu_h.png"] forState:UIControlStateHighlighted];
     [inviteBtn addTarget:self action:@selector(inviteClicked:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:inviteBtn];
     
@@ -113,7 +115,9 @@
     recordBtn.layer.cornerRadius = 5;
     [recordBtn setTitle:@"邀请记录" forState:UIControlStateNormal];
     [recordBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [recordBtn setBackgroundColor:MainColor];
+//    [recordBtn setBackgroundColor:MainColor];
+    [recordBtn setBackgroundImage:[UIImage imageNamed:@"btn_chakanyaoqingjilu_n.png"] forState:UIControlStateNormal];
+    [recordBtn setBackgroundImage:[UIImage imageNamed:@"btn_chakanyaoqingjilu_h.png"] forState:UIControlStateHighlighted];
     [recordBtn addTarget:self action:@selector(recordClicked:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:recordBtn];
 
@@ -121,7 +125,9 @@
     shareBtn.layer.cornerRadius = 5;
     [shareBtn setTitle:@"分享" forState:UIControlStateNormal];
     [shareBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [shareBtn setBackgroundColor:MainColor];
+//    [shareBtn setBackgroundColor:MainColor];
+    [shareBtn setBackgroundImage:[UIImage imageNamed:@"btn_chakanyaoqingjilu_n.png"] forState:UIControlStateNormal];
+    [shareBtn setBackgroundImage:[UIImage imageNamed:@"btn_chakanyaoqingjilu_h.png"] forState:UIControlStateHighlighted];
     [shareBtn addTarget:self action:@selector(shareClicked:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:shareBtn];
     
